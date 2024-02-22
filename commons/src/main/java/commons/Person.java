@@ -51,12 +51,13 @@ public class Person {
 		this.lastName = lastName;
 	}
 
-	public Person(String firstName, String lastName, String email,
-				  double totalExpenses, List<Double> expenseList, String IBAN) {
+	public Person(String firstName, String lastName,
+				  String email, String IBAN) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.totalExpenses = totalExpenses;
-		this.expenseList = expenseList;
+		this.email = email;
+		this.totalExpenses = 0.0;
+		this.expenseList = new ArrayList<>();
 		this.IBAN = IBAN;
 	}
 
