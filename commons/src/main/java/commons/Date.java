@@ -47,6 +47,104 @@ public class Date {
     }
 
 
+    /**
+     *
+     * @return the ID of the Date
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @return The Day of the Date
+     */
+    public int getDay() {
+        return day;
+    }
+
+    /**
+     *
+     * @return The month of the Date
+     */
+    public int getMonth() {
+        return month;
+    }
+
+    /**
+     *
+     * @return The year of the Date
+     */
+    public int getYear() {
+        return year;
+    }
+
+    /**
+     *
+     * @return The hour of the Date
+     */
+    public int getHour() {
+        return hour;
+    }
+
+    /**
+     *
+     * @return The Minute of the Date
+     */
+    public int getMinute() {
+        return minute;
+    }
+
+
+    /**
+     * Sets the id of the Date
+     * @param id
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
+     * Sets the Day of the Date
+     * @param day
+     */
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    /**
+     * Sets the month of the Date
+     * @param month
+     */
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    /**
+     * Sets the year of the Date
+     * @param year
+     */
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    /**
+     * Sets the Hour of the Date
+     * @param hour
+     */
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    /**
+     * Sets the Minute of the Date
+     * @param minute
+     */
+    public void setMinute(int minute) {
+        this.minute = minute;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
