@@ -34,26 +34,30 @@ public class Person {
 	private String firstName;
 	private String lastName;
 
-	private int totalExpenses;
+	private String IBAN;
+	private double totalExpenses;
 	@ElementCollection
-	private List<Integer> expenseList;
+	private List<Double> expenseList;
 
+	private String email;
+	private Currency preferredCurrency;
 	@SuppressWarnings("unused")
 	protected Person() {
 		// for object mapper
 	}
 
 	public Person(String firstName, String lastName) {
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
-	public Person(String firstName, String lastName, int totalExpenses,
-				  List<Integer> expenseList) {
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
-		this.setTotalExpenses(totalExpenses);
-		this.setExpenseList(expenseList);
+	public Person(String firstName, String lastName, String email,
+				  double totalExpenses, List<Double> expenseList, String IBAN) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.totalExpenses = totalExpenses;
+		this.expenseList = expenseList;
+		this.IBAN = IBAN;
 	}
 
 	public long getId() {
@@ -80,32 +84,53 @@ public class Person {
 		this.lastName = lastName;
 	}
 
-	public int getTotalExpenses() {
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public double getTotalExpenses() {
 		return totalExpenses;
 	}
 
-	public void setTotalExpenses(int totalExpenses) {
+	public void setTotalExpenses(double totalExpenses) {
 		this.totalExpenses = totalExpenses;
 	}
 
-	public List<Integer> getExpenseList() {
+	public List<Double> getExpenseList() {
 		return expenseList;
 	}
 
-	public void setExpenseList(List<Integer> expenseList) {
+	public void setExpenseList(List<Double> expenseList) {
 		this.expenseList = expenseList;
 	}
 
-	public void addExpense(int expense) {
+	public String getIBAN() {
+		return IBAN;
+	}
+
+	public void setIBAN(String IBAN) {
+		this.IBAN = IBAN;
+	}
+	public void addExpense(double expense) {
 		totalExpenses += expense;
 		expenseList.add(expense);
 	}
 
-	public void removeExpense(int expense) {
+	public void removeExpense(double expense) {
 		totalExpenses -= expense;
 		expenseList.remove(expense);
 	}
 
+	public Currency getPreferredCurrency() {
+		return preferredCurrency;
+	}
+
+	public void setPreferredCurrency(Currency currency) {
+		this.preferredCurrency = currency;
+	}
 	@Override
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);

@@ -28,37 +28,39 @@ public class PersonTest {
 
 	@Test
 	public void checkConstructor() {
-		var p = new Person("f", "l", 15,
-				new ArrayList<>(List.of(7, 8)));
+		var p = new Person("f", "l", "email@email.com",
+				15.0, List.of(7.0, 8.0),"NL32323232423");
 		assertEquals("f", p.getFirstName());
 		assertEquals("l", p.getLastName());
-		assertEquals(15, p.getTotalExpenses());
+		assertEquals(15.0, p.getTotalExpenses());
+		assertEquals(List.of(7.0, 8.0), p.getExpenseList());
+		assertEquals("NL32323232423", p.getIBAN());
 	}
 
 	@Test
 	public void equalsHashCode() {
-		var a = new Person("a", "b", 15,
-				new ArrayList<>(List.of(7, 8)));
-		var b = new Person("a", "b", 15,
-				new ArrayList<>(List.of(7, 8)));
+		var a = new Person("a", "b","email@email.com",
+				15.0, List.of(7.0, 8.0), "NL32323232423");
+		var b = new Person("a", "b", "email@email.com",
+				15.0, List.of(7.0, 8.0), "NL32323232423");
 		assertEquals(a, b);
 		assertEquals(a.hashCode(), b.hashCode());
 	}
 
 	@Test
 	public void notEqualsHashCode() {
-		var a = new Person("a", "b", 15,
-				new ArrayList<>(List.of(7, 8)));
-		var b = new Person("a", "c", 15,
-				new ArrayList<>(List.of(7, 8)));
+		var a = new Person("a", "b", "email@email.com",
+				15.0, List.of(7.0, 8.0), "NL32323232423");
+		var b = new Person("a", "c", "email@email.com",
+				15.0, List.of(7.0, 8.0), "NL32323232423");
 		assertNotEquals(a, b);
 		assertNotEquals(a.hashCode(), b.hashCode());
 	}
 
 	@Test
 	public void hasToString() {
-		var actual = new Person("a", "b", 15,
-				new ArrayList<>(List.of(7, 8))).toString();
+		var actual = new Person("a", "b", "email@email.com",
+				15.0, List.of(7.0, 8.0), "NL32323232423").toString();
 		assertTrue(actual.contains(Person.class.getSimpleName()));
 		assertTrue(actual.contains("\n"));
 		assertTrue(actual.contains("firstName"));
