@@ -17,27 +17,32 @@ package commons;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
+import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.util.*;
 
 @Entity
 public class Person {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public long id;
+	private long id;
 
-	public String firstName;
-	public String lastName;
+	private String firstName;
+	private String lastName;
 
+	private String IBAN;
+	private double totalExpenses;
+	@ElementCollection
+	private List<Double> expenseList;
+
+	private String email;
+	private Currency preferredCurrency;
 	@SuppressWarnings("unused")
-	private Person() {
+	protected Person() {
 		// for object mapper
 	}
 
@@ -46,6 +51,87 @@ public class Person {
 		this.lastName = lastName;
 	}
 
+	public Person(String firstName, String lastName,
+				  String email, String IBAN) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.totalExpenses = 0.0;
+		this.expenseList = new ArrayList<>();
+		this.IBAN = IBAN;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public double getTotalExpenses() {
+		return totalExpenses;
+	}
+
+	public void setTotalExpenses(double totalExpenses) {
+		this.totalExpenses = totalExpenses;
+	}
+
+	public List<Double> getExpenseList() {
+		return expenseList;
+	}
+
+	public void setExpenseList(List<Double> expenseList) {
+		this.expenseList = expenseList;
+	}
+
+	public String getIBAN() {
+		return IBAN;
+	}
+
+	public void setIBAN(String IBAN) {
+		this.IBAN = IBAN;
+	}
+	public void addExpense(double expense) {
+		totalExpenses += expense;
+		expenseList.add(expense);
+	}
+
+	public void removeExpense(double expense) {
+		totalExpenses -= expense;
+		expenseList.remove(expense);
+	}
+
+	public Currency getPreferredCurrency() {
+		return preferredCurrency;
+	}
+
+	public void setPreferredCurrency(Currency currency) {
+		this.preferredCurrency = currency;
+	}
 	@Override
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);
