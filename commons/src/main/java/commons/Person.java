@@ -17,33 +17,93 @@ package commons;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
+import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.util.*;
 
 @Entity
 public class Person {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public long id;
+	private long id;
 
-	public String firstName;
-	public String lastName;
+	private String firstName;
+	private String lastName;
+
+	private int totalExpenses;
+	@ElementCollection
+	private List<Integer> expenseList;
 
 	@SuppressWarnings("unused")
-	private Person() {
+	protected Person() {
 		// for object mapper
 	}
 
 	public Person(String firstName, String lastName) {
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
+	}
+
+	public Person(String firstName, String lastName, int totalExpenses,
+				  List<Integer> expenseList) {
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
+		this.setTotalExpenses(totalExpenses);
+		this.setExpenseList(expenseList);
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public int getTotalExpenses() {
+		return totalExpenses;
+	}
+
+	public void setTotalExpenses(int totalExpenses) {
+		this.totalExpenses = totalExpenses;
+	}
+
+	public List<Integer> getExpenseList() {
+		return expenseList;
+	}
+
+	public void setExpenseList(List<Integer> expenseList) {
+		this.expenseList = expenseList;
+	}
+
+	public void addExpense(int expense) {
+		totalExpenses += expense;
+		expenseList.add(expense);
+	}
+
+	public void removeExpense(int expense) {
+		totalExpenses -= expense;
+		expenseList.remove(expense);
 	}
 
 	@Override
