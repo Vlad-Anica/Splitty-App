@@ -10,11 +10,36 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
 
-    public User() {
+    /**
+     * Constructor for User
+     */
+    public User(long id) {
+        this.id = id;
     }
 
+    /**
+     * Constructor without arguments
+     */
+    public User() {
+
+    }
+
+    /**
+     * gets the id
+     *
+     * @return returns the id
+     */
     public long getId() {
         return id;
+    }
+
+    /**
+     * Sets the id
+     *
+     * @param id the id you want it to have
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override
