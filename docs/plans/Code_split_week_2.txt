@@ -1,0 +1,18 @@
+Code split week 2:
+
+Classes:
+-Person:
+ 	fields: id (long), email (Email), IBAN (String), (firstName (String), lastName (String), totalExpense (double), expenses (List<Expense>), preferredCurrency (Currency)
+ 	methods: addExpense, settleDebt, sendPayment
+-Event: 
+	fields: id (long), name (String), tag (Tag) description (String), date (Date), participants (List<Person>), expenses (List<Expense>)
+	methods: addExpense, removeExpense, addParticipant
+-Expense: 
+	fields: id (long), date (Date), receiver (Person), givers (List<Person>), currency (Currency - enum), amount (double), description (String)
+	methods: convertCurrency
+-Date: (long) id, (int) day, (int) month, (int) year, (int) hour, (int) minute
+-User: id (long)
+   -Admin: id (long), password (String) 
+-Email: id (long)
+-Tag: id (long), color (String - hexcode), type (String) 
+
