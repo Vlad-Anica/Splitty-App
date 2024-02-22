@@ -17,7 +17,6 @@ public class Date {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
-
     public int day;
 
     public int month;
@@ -43,7 +42,7 @@ public class Date {
         this.minute = minute;
     }
 
-    private Date(){
+    public Date() {
 
     }
 
