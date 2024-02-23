@@ -32,7 +32,6 @@ public class Event {
 
     /**
      * Constructor for event. inviteCode is left out as it is separately generated.
-     * @param id
      * @param name
      * @param description
      * @param tag
@@ -40,9 +39,8 @@ public class Event {
      * @param participants
      * @param expenses
      */
-    public Event(long id, String name, String description, String tag, Date date, List<Person> participants,
+    public Event(String name, String description, String tag, Date date, List<Person> participants,
                  List<String> expenses) {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.tag = tag;
@@ -66,7 +64,7 @@ public class Event {
 
     /**
      * Setter for an Event's id
-     * @param id
+     * @return
      */
     public void setId(long id) {
         this.id = id;
