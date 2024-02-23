@@ -8,8 +8,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Scanner;
+
+/***
+ * import java.util.Objects;
+ * import java.util.Scanner;
+ * imports that were not working
+ */
+
 
 @Entity
 public class Expenses {
