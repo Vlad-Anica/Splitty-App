@@ -97,6 +97,6 @@ public class Tag {
      */
     @Override
     public String toString() {
-        return "Tag: " + id + ", " + color + ", " + type;
+        return "Tag: " + color + ", " + type + "; " + id;
     }
 }
