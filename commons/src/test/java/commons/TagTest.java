@@ -52,7 +52,7 @@ class TagTest {
 
     @Test
     void testEqualsTrue() {
-        assertFalse(tag1.equals(tag1));
+        assertTrue(tag1.equals(tag1));
     }
 
     @Test

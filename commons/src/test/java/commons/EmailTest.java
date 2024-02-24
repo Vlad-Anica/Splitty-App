@@ -35,7 +35,7 @@ class EmailTest {
 
     @Test
     void testEqualsTrue() {
-        assertFalse(email1.equals(email1));
+        assertTrue(email1.equals(email1));
     }
 
     @Test
