@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.util.Objects;
+
 @Entity
 public class Email {
     @Id
@@ -69,6 +71,18 @@ public class Email {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    /**
+     * checks if its fields are equal to that of another object, without looking at the ids
+     * @param o object to check
+     * @return true if equal, false otherwise
+     */
+    public boolean equalsWithoutId(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Email email = (Email) o;
+        return Objects.equals(address, email.address);
     }
 
     /**

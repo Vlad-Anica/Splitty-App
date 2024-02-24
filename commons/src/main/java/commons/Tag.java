@@ -92,6 +92,19 @@ public class Tag {
     }
 
     /**
+     * checks if its fields are equal to that of another object, without looking at the ids
+     * @param o object to check
+     * @return true if equal, false otherwise
+     */
+    public boolean equalsWithoutId(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tag tag = (Tag) o;
+        return Objects.equals(color, tag.color) && Objects.equals(type, tag.type);
+    }
+
+
+    /**
      * turns the object into a readable string
      * @return a human readable string
      */
