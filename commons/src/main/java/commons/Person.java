@@ -30,27 +30,22 @@ public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-
 	private String firstName;
 	private String lastName;
-
 	private String IBAN;
 	private double totalExpenses;
 	@ElementCollection
 	private List<Double> expenseList;
-
 	private String email;
 	private Currency preferredCurrency;
 	@SuppressWarnings("unused")
 	protected Person() {
 		// for object mapper
 	}
-
 	public Person(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
-
 	public Person(String firstName, String lastName,
 				  String email, String IBAN) {
 		this.firstName = firstName;
@@ -59,59 +54,47 @@ public class Person {
 		this.totalExpenses = 0.0;
 		this.expenseList = new ArrayList<>();
 		this.IBAN = IBAN;
+		this.preferredCurrency = Currency.EUR;
 	}
-
 	public long getId() {
 		return id;
 	}
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
 	public String getFirstName() {
 		return firstName;
 	}
-
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-
 	public String getLastName() {
 		return lastName;
 	}
-
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	public double getTotalExpenses() {
 		return totalExpenses;
 	}
-
 	public void setTotalExpenses(double totalExpenses) {
 		this.totalExpenses = totalExpenses;
 	}
-
 	public List<Double> getExpenseList() {
 		return expenseList;
 	}
-
 	public void setExpenseList(List<Double> expenseList) {
 		this.expenseList = expenseList;
 	}
-
 	public String getIBAN() {
 		return IBAN;
 	}
-
 	public void setIBAN(String IBAN) {
 		this.IBAN = IBAN;
 	}
@@ -119,16 +102,13 @@ public class Person {
 		totalExpenses += expense;
 		expenseList.add(expense);
 	}
-
 	public void removeExpense(double expense) {
 		totalExpenses -= expense;
 		expenseList.remove(expense);
 	}
-
 	public Currency getPreferredCurrency() {
 		return preferredCurrency;
 	}
-
 	public void setPreferredCurrency(Currency currency) {
 		this.preferredCurrency = currency;
 	}
@@ -136,12 +116,10 @@ public class Person {
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}
-
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
-
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
