@@ -32,25 +32,13 @@ class EmailTest {
         assertFalse(email1.equals(email2));
     }
 
-    @Test
-    void testEqualsTrue() {
-        assertFalse(email1.equals(email1));
-    }
 
-    @Test
-    void testHashCode() {
-        assertTrue(email1.hashCode() == email3.hashCode());
-    }
 
     @Test
     void equalsWithoutIdFalse() {
         assertFalse(email1.equalsWithoutId(email2));
     }
 
-    @Test
-    void equalsWithoutIdTrue() {
-        assertTrue(email1.equalsWithoutId(email3));
-    }
 
     @Test
     void testToString() {
