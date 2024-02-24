@@ -11,6 +11,12 @@ class EmailTest {
     private static String beginEmail1 = "Email: 1; ";
 
     @Test
+    void testConstructor() {
+        Email email = new Email("emailname");
+        assertTrue(email.getAddress().equals("emailname"));
+    }
+
+    @Test
     void getAddress() {
         assertTrue(email1.getAddress().equals("1"));
     }
@@ -24,6 +30,11 @@ class EmailTest {
     @Test
     void testEquals() {
         assertFalse(email1.equals(email2));
+    }
+
+    @Test
+    void testEqualsTrue() {
+        assertFalse(email1.equals(email1));
     }
 
     @Test

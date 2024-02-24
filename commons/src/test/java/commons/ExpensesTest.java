@@ -12,6 +12,8 @@ class ExpensesTest {
     ArrayList<Person> pl = new ArrayList<Person>();
     Date d = new Date(0,0,0,0,0,0);
     Expenses e = new Expenses("test", 2.5, d, p, pl, Expenses.Currency.EURO );
+    Expenses e2 = new Expenses("test3", 2.5, d, p, pl, Expenses.Currency.EURO );
+    Expenses e3 = new Expenses("test", 2.5, d, p, pl, Expenses.Currency.EURO );
     @Test
     void getId() {
     }
@@ -28,6 +30,7 @@ class ExpensesTest {
 
     @Test
     void getDate() {
+        assertTrue(d.equals(e.getDate()));
     }
 
     @Test
@@ -68,10 +71,12 @@ class ExpensesTest {
 
     @Test
     void testEquals() {
+        assertFalse(e.equals(e2));
     }
 
     @Test
     void testHashCode() {
+        assertTrue(e.hashCode() == e3.hashCode());
     }
 
     @Test
