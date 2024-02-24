@@ -15,7 +15,7 @@ class TagTest {
         Tag tag = new Tag("color1", "type1");
         assertTrue(tag.getType().equals("type1"));
         assertTrue(tag.getColor().equals("color1"));
-    }d
+    }
 
     @Test
     void setColor() {
