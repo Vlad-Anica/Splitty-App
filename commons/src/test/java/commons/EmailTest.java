@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EmailTest {
-    private static Email email1 = new Email("1");
-    private static Email email2 = new Email("2");
-    private static Email email3 = new Email("3");
-    private static String beginEmail1 = "Email: 1; ";
+    private static final Email email1 = new Email("1");
+    private static final Email email2 = new Email("2");
+    private static final Email email3 = new Email("3");
+    private static final String beginEmail1 = "Email: 1; ";
 
     @Test
     void testConstructor() {

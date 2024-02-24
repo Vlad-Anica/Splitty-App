@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TagTest {
-    private static Tag tag1 = new Tag("aaaaaa", "t1");
-    private static String beginTag1 = "Tag: aaaaaa, t1; ";
-    private static Tag tag2 = new Tag("bbbbbb", "t2");
-    private static Tag tag3 = new Tag("aaaaaa", "t1");
+    private static final Tag tag1 = new Tag("aaaaaa", "t1");
+    private static final String beginTag1 = "Tag: aaaaaa, t1; ";
+    private static final Tag tag2 = new Tag("bbbbbb", "t2");
+    private static final Tag tag3 = new Tag("aaaaaa", "t1");
 
     @Test
     void checkConstructor() {

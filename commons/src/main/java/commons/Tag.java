@@ -19,8 +19,8 @@ public class Tag {
 
     /**
      * constructor for Tag class
-     * @param color
-     * @param type
+     * @param color color of the tag
+     * @param type type of the tag
      */
     public Tag(String color, String type) {
         this.color = color;
@@ -34,7 +34,7 @@ public class Tag {
 
     /**
      * getter for id
-     * @param id
+     * @param id id of object
      */
     public void getId(long id) {
         this.id = id;
@@ -50,7 +50,7 @@ public class Tag {
 
     /**
      * setter for color
-     * @param color
+     * @param color new color
      */
     public void setColor(String color) {
         this.color = color;
@@ -58,7 +58,7 @@ public class Tag {
 
     /**
      * getter for type
-     * @return type
+     * @return type new type
      */
     public String getType() {
         return type;
@@ -66,7 +66,7 @@ public class Tag {
 
     /**
      * setter for type
-     * @param type
+     * @param type new type
      */
     public void setType(String type) {
         this.type = type;
