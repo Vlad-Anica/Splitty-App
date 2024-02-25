@@ -17,8 +17,10 @@ public class Event {
 
     //change once Tag class gets created
     private String tag;
+
+    @OneToOne
     private Date date;
-    @ElementCollection
+    @OneToMany
     private List<Person> participants;
     //change once Expense class gets created
     @ElementCollection

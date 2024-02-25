@@ -24,15 +24,13 @@ public class Expenses {
     public long id;
     public String description;
     public double amount;
+    @OneToOne
     public Date date;
-    @ElementCollection
+    @OneToOne
     public Person receiver;
-    @ElementCollection
+    @OneToMany
     public ArrayList<Person> givers;
-    enum Currency{
-        EURO,
-        DOLLAR
-    }
+
     public Currency currency;
 
     /***
