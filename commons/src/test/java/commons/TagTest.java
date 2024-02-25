@@ -9,6 +9,7 @@ class TagTest {
     private static final String beginTag1 = "Tag: aaaaaa, t1; ";
     private static final Tag tag2 = new Tag("bbbbbb", "t2");
     private static final Tag tag3 = new Tag("aaaaaa", "t1");
+    private static final Tag dummyTag = new Tag("a", "b");
 
     @Test
     void checkConstructor() {
@@ -19,8 +20,8 @@ class TagTest {
 
     @Test
     void setColor() {
-        tag1.setColor("b");
-        assertTrue(tag1.getColor().equals("b"));
+        dummyTag.setColor("b");
+        assertTrue(dummyTag.getColor().equals("b"));
     }
 
     @Test
@@ -30,8 +31,8 @@ class TagTest {
 
     @Test
     void setType() {
-        tag1.setType("t5");
-        assertTrue(tag1.getType().equals("t5"));
+        dummyTag.setType("t5");
+        assertTrue(dummyTag.getType().equals("t5"));
     }
 
     @Test
@@ -45,6 +46,10 @@ class TagTest {
         assertFalse(tag1.equals(tag2));
     }
 
+    @Test
+    void testEqualsTrue() {
+        assertTrue(tag1.equals(tag1));
+    }
 
     @Test
     void testEqualsWithoutIdFalse() {

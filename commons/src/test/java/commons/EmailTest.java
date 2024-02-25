@@ -7,7 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class EmailTest {
     private static final Email email1 = new Email("1");
     private static final Email email2 = new Email("2");
-    private static final Email email3 = new Email("3");
+    private static final Email email3 = new Email("1");
+    private static final Email dummyEmail = new Email("1");
     private static final String beginEmail1 = "Email: 1; ";
 
     @Test
@@ -23,8 +24,8 @@ class EmailTest {
 
     @Test
     void setAddress() {
-        email1.setAddress("4");
-        assertTrue(email1.getAddress().equals("4"));
+        dummyEmail.setAddress("4");
+        assertTrue(dummyEmail.getAddress().equals("4"));
     }
 
     @Test
@@ -32,6 +33,10 @@ class EmailTest {
         assertFalse(email1.equals(email2));
     }
 
+    @Test
+    void testEqualsTrue() {
+        assertTrue(email1.equals(email1));
+    }
 
 
     @Test
