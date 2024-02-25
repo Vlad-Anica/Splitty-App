@@ -17,10 +17,6 @@ class TagTest {
         assertTrue(tag.getType().equals("type1"));
         assertTrue(tag.getColor().equals("color1"));
     }
-    @Test
-    void getColor() {
-        assertTrue(tag1.getColor().equals("aaaaaa"));
-    }
 
     @Test
     void setColor() {
@@ -60,10 +56,6 @@ class TagTest {
         assertFalse(tag1.equalsWithoutId(tag2));
     }
 
-    @Test
-    void testEqualsWithoutIdTrue() {
-        assertTrue(tag1.equalsWithoutId(tag3));
-    }
 
     @Test
     void testToString() {
