@@ -6,27 +6,37 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.*;
 public class EventTest {
 
     Event ev;
     Person p1;
     Person p2;
+    Date date;
+    ArrayList<Person> persons1;
+    ArrayList<Person> persons2;
     @BeforeEach
     public void createStartup() {
         p1 = new Person("Adam", "James",
                 "email@email.com", "NL33");
         p2 = new Person("John", "Doe",
                 "email2@email.com", "RO420");
-        String e1 = "food";
-        String e2 = "waiters";
         ArrayList<Person> persons = new ArrayList<>();
         persons.add(p1);
         persons.add(p2);
-        ArrayList<String> expenses = new ArrayList<>();
+        ArrayList<Expenses> expenses = new ArrayList<>();
+        persons1 = new ArrayList<>();
+        persons2 = new ArrayList<>();
+        persons1.add(p1);
+        persons2.add(p2);
+        date = new Date(0,0,0,0,0,0);
+        Expenses e1 = new Expenses("test1", 2.5, date, p1, persons2, Expenses.Currency.EURO );
+        Expenses e2 = new Expenses("test2", 2.5, date, p2, persons1, Expenses.Currency.EURO );
         expenses.add(e1);
         expenses.add(e2);
-        ev = new Event("Dinner Party", "Bob's Celebration Dinner", "celebration", new Date(1, 14, 5, 2006, 4, 30 ), persons, expenses);
+        Tag tag = new Tag("red", "food");
+        ev = new Event("Dinner Party", "Bob's Celebration Dinner", tag, new Date(1, 14, 5, 2006, 4, 30 ), persons, expenses);
     }
 
     @Test
@@ -53,13 +63,13 @@ public class EventTest {
 
     @Test
     public void testTagGetter() {
-        assertEquals("celebration", ev.getTag());
+        assertEquals(new Tag("red", "food"), ev.getTag());
     }
 
     @Test
     public void testTagSetter() {
-        ev.setTag("cowabunga");
-        assertEquals("cowabunga", ev.getTag());
+        ev.setTag(new Tag("cowabunga", "food"));
+        assertEquals(new Tag("cowabunga", "food"), ev.getTag());
     }
 
     @Test
@@ -100,9 +110,9 @@ public class EventTest {
 
     @Test
     public void testExpensesGetter() {
-        String ex1 = "food";
-        String ex2 = "waiters";
-        ArrayList<String> expenseList = new ArrayList<>();
+        ArrayList<Expenses> expenseList = new ArrayList<>();
+        Expenses ex1 = new Expenses("test1", 2.5, date, p1, persons2, Expenses.Currency.EURO );
+        Expenses ex2 = new Expenses("test2", 2.5, date, p2, persons1, Expenses.Currency.EURO );
         expenseList.add(ex1);
         expenseList.add(ex2);
         assertEquals(expenseList, ev.getExpenses());
@@ -110,9 +120,9 @@ public class EventTest {
 
     @Test
     public void testExpensesSetter() {
-        String ex1 = "water";
-        String ex2 = "Valeriu Albu";
-        ArrayList<String> expenseList = new ArrayList<>();
+        ArrayList<Expenses> expenseList = new ArrayList<>();
+        Expenses ex1 = new Expenses("test1", 2.5, date, p1, persons2, Expenses.Currency.EURO );
+        Expenses ex2 = new Expenses("test2", 2.5, date, p2, persons1, Expenses.Currency.EURO );
         expenseList.add(ex1);
         expenseList.add(ex2);
         ev.setExpenses(expenseList);

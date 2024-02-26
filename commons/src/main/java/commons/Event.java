@@ -11,19 +11,16 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
-
     private String name;
     private String description;
-
-    //change once Tag class gets created
-    private String tag;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private Tag tag;
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Date date;
-    @ElementCollection
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Person> participants;
-    //change once Expense class gets created
-    @ElementCollection
-    private List<String> expenses;
-
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Expenses> expenses;
     private String inviteCode;
 
     @SuppressWarnings("Unused")
@@ -34,13 +31,13 @@ public class Event {
      * Constructor for event. inviteCode is left out as it is separately generated.
      * @param name String representing the Event's name
      * @param description String representing the Event's description
-     * @param tag String representing the Event's tag
+     * @param tag Tag representing the Event's tag
      * @param date Date representing the Event's date
      * @param participants List of Persons representing the Event's participants
      * @param expenses List of Expenses representing the Event's expenses
      */
-    public Event(String name, String description, String tag, Date date, List<Person> participants,
-                 List<String> expenses) {
+    public Event(String name, String description, Tag tag, Date date, List<Person> participants,
+                 List<Expenses> expenses) {
         this.name = name;
         this.description = description;
         this.tag = tag;
@@ -92,18 +89,18 @@ public class Event {
     }
 
     /**
-     * Getter for an Event's tag. Placeholder.
-     * @return String representing the Event's tag
+     * Getter for an Event's tag.
+     * @return Tag representing the Event's tag
      */
-    public String getTag() {
+    public Tag getTag() {
         return tag;
     }
 
     /**
-     * Setter for an Event's tag. Placeholder.
-     * @param tag String representing the new tag
+     * Setter for an Event's tag.
+     * @param tag Tag representing the new tag
      */
-    public void setTag(String tag) {
+    public void setTag(Tag tag) {
         this.tag = tag;
     }
 
@@ -141,9 +138,9 @@ public class Event {
 
     /**
      * Getter for an Event's expenses. Placeholder.
-     * @return List of Strings representing the Event's logged expenses.
+     * @return List of Expenses representing the Event's logged expenses.
      */
-    public List<String> getExpenses() {
+    public List<Expenses> getExpenses() {
         return expenses;
     }
 
@@ -151,7 +148,7 @@ public class Event {
      * Setter for an Event's expenses. Placeholder.
      * @param expenses List of Expenses representing the new List of Expenses
      */
-    public void setExpenses(List<String> expenses) {
+    public void setExpenses(List<Expenses> expenses) {
         this.expenses = expenses;
     }
 
@@ -200,10 +197,10 @@ public class Event {
     /**
      * Adds an expense to the list of expenses for an event. Returns true if successful.
      * Cannot add duplicate Expenses. Placeholder.
-     * @param expense String representing the Expense to add to the Event.
+     * @param expense Expense representing the Expense to add to the Event.
      * @return boolean, true if the Expense was sucessfully added, false otherwise.
      */
-    public boolean addExpense(String expense) {
+    public boolean addExpense(Expenses expense) {
         if(expense == null || this.getExpenses().contains(expense)) {
             return false;
         }
@@ -214,10 +211,10 @@ public class Event {
     /**
      * Removes an expense from the list of expenses for an event. Returns false if
      * the expense is not within the list. Placeholder.
-     * @param expense String representing the Expense to remove from the Event.
+     * @param expense Expense representing the Expense to remove from the Event.
      * @return boolean, true if the Expense was successfully removed, false otherwise.
      */
-    public boolean removeExpense(String expense) {
+    public boolean removeExpense(Expenses expense) {
         if(expense == null || !this.getExpenses().contains(expense)) {
             return false;
         }
