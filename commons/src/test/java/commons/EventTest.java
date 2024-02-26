@@ -30,12 +30,6 @@ public class EventTest {
     }
 
     @Test
-    public void testID() {
-        ev.setId(143);
-        assertEquals(143, ev.getId());
-    }
-
-    @Test
     public void testNameGetter() {
         assertEquals("Dinner Party", ev.getName());
     }
@@ -148,10 +142,9 @@ public class EventTest {
         expenseList.add(e1);
         expenseList.add(e2);
         Event ev2 = new Event("Dinner Party", "Bob's Celebration Dinner", "celebration", new Date(1, 14, 5, 2006, 4, 30 ), personList, expenseList);
-        ev.setId(14);
-        ev2.setId(14);
         assertEquals(ev2, ev);
     }
-     */
+    */
+
 
 }
