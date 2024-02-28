@@ -20,15 +20,12 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-//import client.scenes.AddParticipantCtrl;
 import com.google.inject.Injector;
 
 import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.QuoteOverviewCtrl;
 import javafx.application.Application;
-
-//import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -49,12 +46,5 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add);
-
-//        var page = FXML.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
-//        var ctrl = INJECTOR.getInstance(AddParticipantCtrl.class);
-//
-//        Scene scene = new Scene(page.getValue());
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
     }
 }
