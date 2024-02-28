@@ -24,10 +24,11 @@ public class Expenses {
     public long id;
     public String description;
     public double amount;
+    @ManyToOne(cascade = CascadeType.PERSIST)
     public Date date;
-    @ElementCollection
+    @ManyToOne(cascade = CascadeType.PERSIST)
     public Person receiver;
-    @ElementCollection
+    @ManyToMany(cascade = CascadeType.PERSIST)
     public ArrayList<Person> givers;
     enum Currency{
         EURO,

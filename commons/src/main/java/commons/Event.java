@@ -13,7 +13,7 @@ public class Event {
     public long id;
     private String name;
     private String description;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Tag tag;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Date date;
