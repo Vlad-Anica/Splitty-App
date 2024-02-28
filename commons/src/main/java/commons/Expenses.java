@@ -30,10 +30,7 @@ public class Expenses {
     public Person receiver;
     @ManyToMany(cascade = CascadeType.PERSIST)
     public ArrayList<Person> givers;
-    enum Currency{
-        EURO,
-        DOLLAR
-    }
+
     public Currency currency;
 
     /***
