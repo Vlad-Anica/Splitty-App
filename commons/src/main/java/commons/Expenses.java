@@ -30,7 +30,10 @@ public class Expenses {
     public Person receiver;
     @OneToMany
     public ArrayList<Person> givers;
-
+    enum Currency{
+        EURO,
+        DOLLAR
+    }
     public Currency currency;
 
     /***

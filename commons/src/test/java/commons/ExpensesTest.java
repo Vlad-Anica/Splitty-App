@@ -11,10 +11,9 @@ class ExpensesTest {
     Person p = new Person("a","b");
     ArrayList<Person> pl = new ArrayList<Person>();
     Date d = new Date(0,0,0,0,0,0);
-    Expenses e = new Expenses("test", 2.5, d, p, pl,  Currency.EUR);
-    Expenses e2 = new Expenses("test3", 2.5, d, p, pl,  Currency.EUR);
-    Expenses e3 = new Expenses("test", 2.5, d, p, pl,  Currency.EUR);
-
+    Expenses e = new Expenses("test", 2.5, d, p, pl, Expenses.Currency.EURO );
+    Expenses e2 = new Expenses("test3", 2.5, d, p, pl, Expenses.Currency.EURO );
+    Expenses e3 = new Expenses("test", 2.5, d, p, pl, Expenses.Currency.EURO );
     @Test
     void getId() {
     }

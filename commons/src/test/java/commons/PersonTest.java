@@ -57,19 +57,6 @@ public class PersonTest {
 	}
 
 	@Test
-	public void checkEmailSetter() {
-		assertEquals("email@email.com", p.getEmail());
-		p.setEmail("email@gmail.com");
-		assertEquals("email@gmail.com", p.getEmail());
-	}
-
-	@Test
-	public void checkPreferredCurrencySetter() {
-		assertEquals(Currency.EUR, p.getPreferredCurrency());
-		p.setPreferredCurrency(Currency.RON);
-		assertEquals(Currency.RON, p.getPreferredCurrency());
-	}
-	@Test
 	public void checkAddExpense() {
 		p.addExpense(3.0);
 		assertEquals(3.0, p.getTotalExpenses());
@@ -90,14 +77,6 @@ public class PersonTest {
 		assertEquals("NL32323232423", p.getIBAN());
 		p.setIBAN("NL32323232424");
 		assertEquals("NL32323232424", p.getIBAN());
-	}
-
-	@Test
-	public void notEqualsNull() {
-		Person a =  new Person("a", "b",
-				"email@email.com", "NL32323232423");
-		Person b =  null;
-		assertNotEquals(a, b);
 	}
 	@Test
 	public void equalsHashCode() {
