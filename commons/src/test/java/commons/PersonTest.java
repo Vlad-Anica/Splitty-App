@@ -30,16 +30,17 @@ public class PersonTest {
 	@BeforeEach
 	public void createGenericPerson() {
 		p = new Person("f", "l",
-				"email@email.com", "NL32323232423");
+				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
 	}
 	@Test
 	public void checkConstructor() {
 		assertEquals("f", p.getFirstName());
 		assertEquals("l", p.getLastName());
 		assertEquals("email@email.com", p.getEmail());
-		assertEquals(0.0, p.getTotalExpenses());
-		assertEquals(new ArrayList<>(), p.getExpenseList());
+		assertEquals(0.0, p.getTotalDebt());
+		assertEquals(new ArrayList<>(), p.getDebtList());
 		assertEquals("NL32323232423", p.getIBAN());
+		assertEquals("MIDLGB22", p.getBIC());
 	}
 
 	@Test
@@ -57,33 +58,76 @@ public class PersonTest {
 	}
 
 	@Test
-	public void checkAddExpense() {
-		p.addExpense(3.0);
-		assertEquals(3.0, p.getTotalExpenses());
-		assertEquals(1, p.getExpenseList().size());
+	public void checkEmailSetter() {
+		assertEquals("email@email.com", p.getEmail());
+		p.setEmail("email@gmail.com");
+		assertEquals("email@gmail.com", p.getEmail());
 	}
 
 	@Test
-	public void checkRemoveExpense() {
-		p.addExpense(3.0);
-		p.addExpense(7.0);
-        p.removeExpense(3.0);
-		assertEquals(7.0, p.getTotalExpenses());
-		assertEquals(1, p.getExpenseList().size());
+	public void checkPreferredCurrencySetter() {
+		assertEquals(Currency.EUR, p.getPreferredCurrency());
+		p.setPreferredCurrency(Currency.RON);
+		assertEquals(Currency.RON, p.getPreferredCurrency());
+	}
+	@Test
+	public void checkAddDebt() {
+		Debt debt = new Debt(null, null, null, 3.0);
+		Debt debt2 = new Debt(null, null, null, 7.0);
+		p.addDebt(debt);
+		p.addDebt(debt2);
+		assertEquals(10.0, p.getTotalDebt());
+		assertEquals(2, p.getDebtList().size());
 	}
 
+	@Test
+	public void checkRemoveDebt() {
+		Debt debt = new Debt(null, null, null, 3.0);
+		Debt debt2 = new Debt(null, null, null, 7.0);
+		p.addDebt(debt);
+		p.addDebt(debt2);
+		p.removeDebt(debt);
+		assertEquals(7.0, p.getTotalDebt());
+		assertEquals(1, p.getDebtList().size());
+	}
+
+	@Test
+	public void checkNotRemoveDebt() {
+		Debt debt = new Debt(null, null, null, 3.0);
+		Debt debt2 = new Debt(null, null, null, 7.0);
+		p.addDebt(debt);
+		p.removeDebt(debt2);
+		assertEquals(3.0, p.getTotalDebt());
+		assertEquals(1, p.getDebtList().size());
+	}
+
+	@Test
+	public void checkRemoveDebtEmpty() {
+		Debt debt = new Debt(null, null, null, 3.0);
+		p.removeDebt(debt);
+		assertEquals(0.0, p.getTotalDebt());
+		assertEquals(0, p.getDebtList().size());
+	}
 	@Test
 	public void checkIBANSetter() {
 		assertEquals("NL32323232423", p.getIBAN());
 		p.setIBAN("NL32323232424");
 		assertEquals("NL32323232424", p.getIBAN());
 	}
+
+	@Test
+	public void notEqualsNull() {
+		Person a =  new Person("a", "b",
+				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
+		Person b =  null;
+		assertNotEquals(a, b);
+	}
 	@Test
 	public void equalsHashCode() {
 		var a = new Person("a", "b",
-				"email@email.com", "NL32323232423");
+				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
 		var b =  new Person("a", "b",
-				"email@email.com", "NL32323232423");
+				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
 		assertEquals(a, b);
 		assertEquals(a.hashCode(), b.hashCode());
 	}
@@ -91,9 +135,9 @@ public class PersonTest {
 	@Test
 	public void notEqualsHashCode() {
 		var a =  new Person("a", "b",
-				"email@email.com", "NL32323232423");
+				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
 		var b =  new Person("a", "c",
-				"email@email.com", "NL32323232423");
+				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
 		assertNotEquals(a, b);
 		assertNotEquals(a.hashCode(), b.hashCode());
 	}
@@ -101,7 +145,7 @@ public class PersonTest {
 	@Test
 	public void hasToString() {
 		var actual =  new Person("a", "b",
-				"email@email.com", "NL32323232423").toString();
+				"email@email.com", "NL32323232423", "MIDLGB22", new Event()).toString();
 		assertTrue(actual.contains(Person.class.getSimpleName()));
 		assertTrue(actual.contains("\n"));
 		assertTrue(actual.contains("firstName"));
