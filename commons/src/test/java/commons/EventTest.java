@@ -18,9 +18,8 @@ public class EventTest {
     @BeforeEach
     public void createStartup() {
         p1 = new Person("Adam", "James",
-                "email@email.com", "NL33");
-        p2 = new Person("John", "Doe",
-                "email2@email.com", "RO420");
+                "email@email.com", "NL33", "MIDLGB22");
+        p2 = new Person("John", "Doe", "email2@email.com", "RO420", "MIDLGB22");
         ArrayList<Person> persons = new ArrayList<>();
         persons.add(p1);
         persons.add(p2);
@@ -85,9 +84,9 @@ public class EventTest {
     @Test
     public void testPersonsGetter() {
         Person pe1 = new Person("Adam", "James",
-                "email@email.com", "NL33");
+                "email@email.com", "NL33", "MIDLGB22");
         Person pe2 = new Person("John", "Doe",
-                "email2@email.com", "RO420");
+                "email2@email.com", "RO420", "MIDLGB22");
         ArrayList<Person> personList = new ArrayList<>();
         personList.add(pe1);
         personList.add(pe2);
@@ -97,9 +96,9 @@ public class EventTest {
     @Test
     public void testPersonsSetter() {
         Person pe1 = new Person("Adam", "Connor",
-                "exxmail@email.com", "NL33");
+                "exxmail@email.com", "NL33", "MIDLGB22");
         Person pe2 = new Person("John", "Does",
-                "emaidkddl2@email.com", "RO4424220");
+                "emaidkddl2@email.com", "RO4424220", "MIDLGB22");
         ArrayList<Person> personList = new ArrayList<>();
         personList.add(pe1);
         personList.add(pe2);
@@ -141,7 +140,7 @@ public class EventTest {
         Person pe1 = new Person("Adam", "James",
                 "email@email.com", "NL33");
         Person pe2 = new Person("John", "Doe",
-                "email2@email.com", "RO420");
+                "email2@email.com", "RO420", "MIDLGB22");
         String e1 = "food";
         String e2 = "waiters";
         ArrayList<Person> personList = new ArrayList<>();

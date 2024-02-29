@@ -35,12 +35,14 @@ public class Person {
 	private String lastName;
 
 	private String IBAN;
-	private double totalExpenses;
-	@ElementCollection
-	private List<Double> expenseList;
-
+	private String BIC;
+	private double totalDebt;
+	@OneToMany
+	private List<Debt> debtList;
 	private String email;
 	private Currency preferredCurrency;
+	@ManyToOne
+	private Event event;
 	@SuppressWarnings("unused")
 	protected Person() {
 		// for object mapper
@@ -52,13 +54,28 @@ public class Person {
 	}
 
 	public Person(String firstName, String lastName,
-				  String email, String IBAN) {
+				  String email, String IBAN, String BIC, Event event) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.totalExpenses = 0.0;
-		this.expenseList = new ArrayList<>();
+		this.totalDebt = 0.0;
+		this.debtList = new ArrayList<>();
 		this.IBAN = IBAN;
+		this.BIC = BIC;
+		this.event = event;
+		this.preferredCurrency = Currency.EUR;
+	}
+	public Person(String firstName, String lastName,
+				  String email, String IBAN, String BIC) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.totalDebt = 0.0;
+		this.debtList = new ArrayList<>();
+		this.IBAN = IBAN;
+		this.BIC = BIC;
+		this.event = new Event();
+		this.preferredCurrency = Currency.EUR;
 	}
 
 	public long getId() {
@@ -92,20 +109,17 @@ public class Person {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public double getTotalExpenses() {
-		return totalExpenses;
+	public double getTotalDebt() {
+		return totalDebt;
 	}
-
-	public void setTotalExpenses(double totalExpenses) {
-		this.totalExpenses = totalExpenses;
+	public void setTotalDebt(double totalDebt) {
+		this.totalDebt = totalDebt;
 	}
-
-	public List<Double> getExpenseList() {
-		return expenseList;
+	public List<Debt> getDebtList() {
+		return debtList;
 	}
-
-	public void setExpenseList(List<Double> expenseList) {
-		this.expenseList = expenseList;
+	public void setDebtList(List<Debt> debtList) {
+		this.debtList = debtList;
 	}
 
 	public String getIBAN() {
@@ -115,14 +129,28 @@ public class Person {
 	public void setIBAN(String IBAN) {
 		this.IBAN = IBAN;
 	}
-	public void addExpense(double expense) {
-		totalExpenses += expense;
-		expenseList.add(expense);
+	public String getBIC() {
+		return BIC;
 	}
-
-	public void removeExpense(double expense) {
-		totalExpenses -= expense;
-		expenseList.remove(expense);
+	public void setBIC(String BIC) {
+		this.BIC = BIC;
+	}
+	public void addDebt(Debt debt) {
+		totalDebt += debt.getAmount();
+		debtList.add(debt);
+		debt.setGiver(this);
+	}
+	public void removeDebt(Debt debt) {
+		if (!debtList.contains(debt))
+			return;
+		totalDebt -= debt.getAmount();
+		debtList.remove(debt);
+	}
+	public Event getEvent() {
+		return event;
+	}
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 	public Currency getPreferredCurrency() {
@@ -146,4 +174,6 @@ public class Person {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
 	}
+
+
 }
