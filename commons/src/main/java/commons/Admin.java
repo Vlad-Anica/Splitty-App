@@ -38,6 +38,10 @@ public class Admin extends User {
         this.password = password;
     }
 
+    public boolean isCorrectPassword(String attemptedPassword){
+        return this.password.equals(attemptedPassword);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

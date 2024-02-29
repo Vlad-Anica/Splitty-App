@@ -78,4 +78,15 @@ public class AdminTest {
         Admin b = new Admin(13, ":P");
         assertNotEquals(a.hashCode(), b.hashCode());
     }
+
+    @Test
+    public void testCorrectPassword(){
+        Admin a = new Admin(13, "correctPassword");
+        assertTrue(a.isCorrectPassword("correctPassword"));
+    }
+    @Test
+    public void testWrongPassword(){
+        Admin a = new Admin(13, "correctPassword");
+        assertFalse(a.isCorrectPassword("wrongPassword"));
+    }
 }
