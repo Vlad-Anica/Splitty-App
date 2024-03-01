@@ -1,0 +1,12 @@
+2024-03-01 11:28:39.783975+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
+create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-01 11:28:39.824244+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]user (dtype varchar(31) not null, id bigint not null, password varchar(255), primary key (id))"; expected "identifier"; SQL statement:
+create table user (dtype varchar(31) not null, id bigint not null, password varchar(255), primary key (id)) [42001-224]
+2024-03-01 11:28:39.864302+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign key (date_id) references date [42102-224]
+2024-03-01 11:28:39.872302+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists expenses add constraint FKm6379odciysf11kgud3g2ffl5 foreign key (date_id) references date [42102-224]
