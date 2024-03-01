@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ExpensesTest {
+class ExpenseTest {
 
     Person p = new Person("a","b");
     ArrayList<Person> pl = new ArrayList<Person>();
     Date d = new Date(0,0,0,0,0,0);
-    Expenses e = new Expenses("test", 2.5, d, p, pl, Expenses.Currency.EURO );
-    Expenses e2 = new Expenses("test3", 2.5, d, p, pl, Expenses.Currency.EURO );
-    Expenses e3 = new Expenses("test", 2.5, d, p, pl, Expenses.Currency.EURO );
+    Expense e = new Expense("test", 2.5, d, p, pl, Expense.Currency.EURO );
+    Expense e2 = new Expense("test3", 2.5, d, p, pl, Expense.Currency.EURO );
+    Expense e3 = new Expense("test", 2.5, d, p, pl, Expense.Currency.EURO );
     @Test
     void getId() {
     }
