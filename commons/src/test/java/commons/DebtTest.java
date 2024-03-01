@@ -10,7 +10,7 @@ class DebtTest {
     Debt debt;
     Person John;
     Person Bob;
-    Expenses expense;
+    Expense expense;
     @BeforeEach
     public void initialise() {
         Event event = new Event();
@@ -18,7 +18,7 @@ class DebtTest {
                 "NL2322220000121242", "MIDLGB22", event);
         Bob = new Person("Bob", "Bob", "bob@email.com",
                 "NL2322220000121243", "MIDLGB23", event);
-        expense = new Expenses();
+        expense = new Expense();
         debt = new Debt(John, Bob, expense, 3.0);
         John.addDebt(debt);
     }

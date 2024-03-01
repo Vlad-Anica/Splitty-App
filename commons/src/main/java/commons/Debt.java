@@ -18,9 +18,9 @@ public class Debt {
     @ManyToOne
     private Person receiver;
     @ManyToOne
-    private Expenses expense;
+    private Expense expense;
     private double amount;
-    public Debt(Person giver, Person receiver, Expenses expense, double amount) {
+    public Debt(Person giver, Person receiver, Expense expense, double amount) {
         this.giver = giver;
         this.receiver = receiver;
         this.expense = expense;
@@ -38,7 +38,7 @@ public class Debt {
     public Person getReceiver() {
         return receiver;
     }
-    public Expenses getExpense() {
+    public Expense getExpense() {
         return expense;
     }
     public double getAmount() {
@@ -50,7 +50,7 @@ public class Debt {
     public void setReceiver(Person receiver) {
         this.receiver = receiver;
     }
-    public void setExpense(Expenses expense) {
+    public void setExpense(Expense expense) {
         this.expense = expense;
     }
     public void setAmount(double amount) {

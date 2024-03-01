@@ -23,14 +23,14 @@ public class EventTest {
         ArrayList<Person> persons = new ArrayList<>();
         persons.add(p1);
         persons.add(p2);
-        ArrayList<Expenses> expenses = new ArrayList<>();
+        ArrayList<Expense> expenses = new ArrayList<>();
         persons1 = new ArrayList<>();
         persons2 = new ArrayList<>();
         persons1.add(p1);
         persons2.add(p2);
         date = new Date(0,0,0,0,0,0);
-        Expenses e1 = new Expenses("test1", 2.5, date, p1, persons2, Expenses.Currency.EURO );
-        Expenses e2 = new Expenses("test2", 2.5, date, p2, persons1, Expenses.Currency.EURO );
+        Expense e1 = new Expense("test1", 2.5, date, p1, persons2, Expense.Currency.EURO );
+        Expense e2 = new Expense("test2", 2.5, date, p2, persons1, Expense.Currency.EURO );
         expenses.add(e1);
         expenses.add(e2);
         Tag tag = new Tag("red", "food");
@@ -108,9 +108,9 @@ public class EventTest {
 
     @Test
     public void testExpensesGetter() {
-        ArrayList<Expenses> expenseList = new ArrayList<>();
-        Expenses ex1 = new Expenses("test1", 2.5, date, p1, persons2, Expenses.Currency.EURO );
-        Expenses ex2 = new Expenses("test2", 2.5, date, p2, persons1, Expenses.Currency.EURO );
+        ArrayList<Expense> expenseList = new ArrayList<>();
+        Expense ex1 = new Expense("test1", 2.5, date, p1, persons2, Expense.Currency.EURO );
+        Expense ex2 = new Expense("test2", 2.5, date, p2, persons1, Expense.Currency.EURO );
         expenseList.add(ex1);
         expenseList.add(ex2);
         assertEquals(expenseList, ev.getExpenses());
@@ -118,9 +118,9 @@ public class EventTest {
 
     @Test
     public void testExpensesSetter() {
-        ArrayList<Expenses> expenseList = new ArrayList<>();
-        Expenses ex1 = new Expenses("test1", 2.5, date, p1, persons2, Expenses.Currency.EURO );
-        Expenses ex2 = new Expenses("test2", 2.5, date, p2, persons1, Expenses.Currency.EURO );
+        ArrayList<Expense> expenseList = new ArrayList<>();
+        Expense ex1 = new Expense("test1", 2.5, date, p1, persons2, Expense.Currency.EURO );
+        Expense ex2 = new Expense("test2", 2.5, date, p2, persons1, Expense.Currency.EURO );
         expenseList.add(ex1);
         expenseList.add(ex2);
         ev.setExpenses(expenseList);

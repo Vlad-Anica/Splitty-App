@@ -20,7 +20,7 @@ public class Event {
     @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Person> participants;
     @OneToMany(cascade = CascadeType.PERSIST)
-    private List<Expenses> expenses;
+    private List<Expense> expenses;
     private String inviteCode;
 
     @SuppressWarnings("Unused")
@@ -37,7 +37,7 @@ public class Event {
      * @param expenses List of Expenses representing the Event's expenses
      */
     public Event(String name, String description, Tag tag, Date date, List<Person> participants,
-                 List<Expenses> expenses) {
+                 List<Expense> expenses) {
         this.name = name;
         this.description = description;
         this.tag = tag;
@@ -140,7 +140,7 @@ public class Event {
      * Getter for an Event's expenses. Placeholder.
      * @return List of Expenses representing the Event's logged expenses.
      */
-    public List<Expenses> getExpenses() {
+    public List<Expense> getExpenses() {
         return expenses;
     }
 
@@ -148,7 +148,7 @@ public class Event {
      * Setter for an Event's expenses. Placeholder.
      * @param expenses List of Expenses representing the new List of Expenses
      */
-    public void setExpenses(List<Expenses> expenses) {
+    public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
     }
 
@@ -200,7 +200,7 @@ public class Event {
      * @param expense Expense representing the Expense to add to the Event.
      * @return boolean, true if the Expense was sucessfully added, false otherwise.
      */
-    public boolean addExpense(Expenses expense) {
+    public boolean addExpense(Expense expense) {
         if(expense == null || this.getExpenses().contains(expense)) {
             return false;
         }
@@ -214,7 +214,7 @@ public class Event {
      * @param expense Expense representing the Expense to remove from the Event.
      * @return boolean, true if the Expense was successfully removed, false otherwise.
      */
-    public boolean removeExpense(Expenses expense) {
+    public boolean removeExpense(Expense expense) {
         if(expense == null || !this.getExpenses().contains(expense)) {
             return false;
         }
