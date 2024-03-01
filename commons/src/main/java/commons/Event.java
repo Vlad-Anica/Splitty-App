@@ -168,12 +168,24 @@ public class Event {
     }
 
     /**
+     * Determines whether a person is currently attending an event.
+     * @param person Person representing the participant to check.
+     * @return boolean, true if the Person is currently attending the event, false otherwise.
+     */
+    public boolean isAttending(Person person) {
+        if(person == null) {
+            return false;
+        }
+        return this.participants.contains(person);
+    }
+
+    /**
      * Adds a person to the list of participants attending an event. Returns true if successful.
      * @param person Person representing the participant to add to the Event.
      * @return boolean, true if a Person was added successfully, false otherwise.
      */
     public boolean addParticipant(Person person) {
-        if(person == null || this.getParticipants().contains(person)) {
+        if(this.isAttending(person)) {
             return false;
         }
         this.getParticipants().add(person);
