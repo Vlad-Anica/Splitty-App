@@ -144,6 +144,33 @@ public class EventTest {
         assertTrue(ev.removeParticipant(p3));
         assertFalse(ev.isAttending(p3));
     }
+
+    @Test
+    public void addExpenseTest() {
+        Date dateTest = new Date(1,2,3,4,5,6);
+        Person p3 = new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42");
+        ArrayList<Person> givers = new ArrayList<>();
+        givers.add(p2);
+        Expense e3 = new Expense("amongUs", 5, dateTest, p2, givers, Expense.Currency.DOLLAR );
+        assertFalse(ev.containsExpense(e3));
+        assertTrue(ev.addExpense(e3));
+        assertTrue(ev.containsExpense(e3));
+    }
+
+    @Test
+    public void removeExpenseTest() {
+        Date dateTest = new Date(1,2,3,4,5,6);
+        Person p3 = new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42");
+        ArrayList<Person> givers = new ArrayList<>();
+        givers.add(p2);
+        Expense e3 = new Expense("amongUs", 5, dateTest, p2, givers, Expense.Currency.DOLLAR );
+        ev.addExpense(e3);
+        assertTrue(ev.removeExpense(e3));
+        assertFalse(ev.containsExpense(e3));
+    }
+
     @Test
     public void inviteCodeTest() {
         String previousCode = ev.getInviteCode();

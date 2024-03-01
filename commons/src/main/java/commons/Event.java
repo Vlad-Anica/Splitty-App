@@ -206,6 +206,18 @@ public class Event {
     }
 
     /**
+     * Determines whether an expense is part of an event.
+     * @param expense Expense to check.
+     * @return boolean, true if the Expense is in the event, false otherwise.
+     */
+    public boolean containsExpense(Expense expense) {
+        if(expense == null) {
+            return false;
+        }
+        return this.expenses.contains(expense);
+    }
+
+    /**
      * Adds an expense to the list of expenses for an event. Returns true if successful.
      * Cannot add duplicate Expenses. Placeholder.
      * @param expense Expense representing the Expense to add to the Event.
