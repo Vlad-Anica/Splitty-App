@@ -38,6 +38,12 @@ public class Admin extends User {
         this.password = password;
     }
 
+
+    /**
+     * checks if the password is correct
+     * @param attemptedPassword the password you want to attempt
+     * @return whether the password is correct
+     */
     public boolean isCorrectPassword(String attemptedPassword){
         return this.password.equals(attemptedPassword);
     }
