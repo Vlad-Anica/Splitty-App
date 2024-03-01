@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 
 @Entity
-public class Expenses {
+public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,8 +45,8 @@ public class Expenses {
      * @param givers list of people who need to pay
      * @param currency the type of currency used
      */
-    public Expenses(String description, double amount, Date date, Person receiver,
-                    ArrayList<Person> givers, Currency currency) {
+    public Expense(String description, double amount, Date date, Person receiver,
+                   ArrayList<Person> givers, Currency currency) {
         this.description = description;
         this.amount = amount;
         this.date = date;
@@ -58,7 +58,7 @@ public class Expenses {
     /***
      * empty constuctor
      */
-    public Expenses(){
+    public Expense(){
 
     }
 
