@@ -11,21 +11,16 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
-
     private String name;
     private String description;
-
-    //change once Tag class gets created
-    private String tag;
-
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Tag tag;
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Date date;
-    @OneToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Person> participants;
-    //change once Expense class gets created
-    @ElementCollection
-    private List<String> expenses;
-
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Expenses> expenses;
     private String inviteCode;
 
     @SuppressWarnings("Unused")
@@ -34,111 +29,100 @@ public class Event {
 
     /**
      * Constructor for event. inviteCode is left out as it is separately generated.
-     * @param name
-     * @param description
-     * @param tag
-     * @param date
-     * @param participants
-     * @param expenses
+     * @param name String representing the Event's name
+     * @param description String representing the Event's description
+     * @param tag Tag representing the Event's tag
+     * @param date Date representing the Event's date
+     * @param participants List of Persons representing the Event's participants
+     * @param expenses List of Expenses representing the Event's expenses
      */
-    public Event(String name, String description, String tag, Date date, List<Person> participants,
-                 List<String> expenses) {
+    public Event(String name, String description, Tag tag, Date date, List<Person> participants,
+                 List<Expenses> expenses) {
         this.name = name;
         this.description = description;
         this.tag = tag;
         this.date = date;
-        if(participants == null) {
-            this.participants = new ArrayList<Person>();
-        } else {
-            this.participants = participants;
-        }
+        this.participants = Objects.requireNonNullElseGet(participants, ArrayList::new);
+        this.expenses = Objects.requireNonNullElseGet(expenses, ArrayList::new);
         this.expenses = expenses;
         this.inviteCode = generateInviteCode();
     }
 
     /**
-     * Getter for an Event's id
-     * @return
+     * Getter for an Event's id.
+     * @return long representing the Event's id
      */
     public long getId() {
         return id;
     }
 
     /**
-     * Setter for an Event's id
-     * @return
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /**
-     * Getter for an Event's name
-     * @return
+     * Getter for an Event's name.
+     * @return String representing the Event's name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Setter for an Event's name
-     * @return
+     * Setter for an Event's name.
+     * @param name String representing the new name
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Getter for an Event's description
-     * @return
+     * Getter for an Event's description.
+     * @return String representing the Event's description
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Setter for an Event's description
-     * @return
+     * Setter for an Event's description.
+     * @param description String representing the new description
      */
     public void setDescription(String description) {
         this.description = description;
     }
 
     /**
-     * Getter for an Event's tag. Placeholder.
-     * @return
+     * Getter for an Event's tag.
+     * @return Tag representing the Event's tag
      */
-    public String getTag() {
+    public Tag getTag() {
         return tag;
     }
 
     /**
-     * Setter for an Event's tag. Placeholder.
-     * @return
+     * Setter for an Event's tag.
+     * @param tag Tag representing the new tag
      */
-    public void setTag(String tag) {
+    public void setTag(Tag tag) {
         this.tag = tag;
     }
 
     /**
-     * Getter for an Event's date
-     * @return
+     * Getter for an Event's date.
+     * @return Date representing the Event's date
      */
     public Date getDate() {
         return date;
     }
 
     /**
-     * Setter for an Event's date
-     * @return
+     * Setter for an Event's date.
+     * @param date Date representing the Event's new date.
      */
     public void setDate(Date date) {
         this.date = date;
     }
 
     /**
-     * Getter for an Event's participants
-     * @return
+     * Getter for an Event's participants.
+     * @return List of Persons representing the Event's participants
      */
     public List<Person> getParticipants() {
         return participants;
@@ -146,7 +130,7 @@ public class Event {
 
     /**
      * Setter for an Event's participants
-     * @return
+     * @param participants List of Persons representing the Event's new List of participants
      */
     public void setParticipants(List<Person> participants) {
         this.participants = participants;
@@ -154,30 +138,30 @@ public class Event {
 
     /**
      * Getter for an Event's expenses. Placeholder.
-     * @return
+     * @return List of Expenses representing the Event's logged expenses.
      */
-    public List<String> getExpenses() {
+    public List<Expenses> getExpenses() {
         return expenses;
     }
 
     /**
      * Setter for an Event's expenses. Placeholder.
-     * @return
+     * @param expenses List of Expenses representing the new List of Expenses
      */
-    public void setExpenses(List<String> expenses) {
+    public void setExpenses(List<Expenses> expenses) {
         this.expenses = expenses;
     }
 
     /**
-     * Getter for an Event's unique inviteCode
-     * @return
+     * Getter for an Event's unique inviteCode.
+     * @return String representing the Event's invite code
      */
     public String getInviteCode() {
         return inviteCode;
     }
 
     /**
-     * Refresh for an Event's unique inviteCode
+     * Refresh for an Event's unique inviteCode. Creates a new randomly assigned inviteCode.
      */
     public void refreshInviteCode() {
         this.inviteCode = generateInviteCode();
@@ -185,8 +169,8 @@ public class Event {
 
     /**
      * Adds a person to the list of participants attending an event. Returns true if successful.
-     * @param person
-     * @return
+     * @param person Person representing the participant to add to the Event.
+     * @return boolean, true if a Person was added successfully, false otherwise.
      */
     public boolean addParticipant(Person person) {
         if(person == null || this.getParticipants().contains(person)) {
@@ -199,8 +183,8 @@ public class Event {
     /**
      * Removes a person from the list of participants attending an event. Returns false if
      * the person does not attend it.
-     * @param person
-     * @return
+     * @param person Person representing the participant to remove from the Event.
+     * @return boolean, true if a Person was successfully removed, false otherwise.
      */
     public boolean removeParticipant(Person person) {
         if(person == null || !this.getParticipants().contains(person)) {
@@ -211,11 +195,12 @@ public class Event {
     }
 
     /**
-     * Adds an expense to the list of expenses for an event. Returns true if successful. Placeholder.
-     * @param expense
-     * @return
+     * Adds an expense to the list of expenses for an event. Returns true if successful.
+     * Cannot add duplicate Expenses. Placeholder.
+     * @param expense Expense representing the Expense to add to the Event.
+     * @return boolean, true if the Expense was sucessfully added, false otherwise.
      */
-    public boolean addExpense(String expense) {
+    public boolean addExpense(Expenses expense) {
         if(expense == null || this.getExpenses().contains(expense)) {
             return false;
         }
@@ -226,10 +211,10 @@ public class Event {
     /**
      * Removes an expense from the list of expenses for an event. Returns false if
      * the expense is not within the list. Placeholder.
-     * @param expense
-     * @return
+     * @param expense Expense representing the Expense to remove from the Event.
+     * @return boolean, true if the Expense was successfully removed, false otherwise.
      */
-    public boolean removeExpense(String expense) {
+    public boolean removeExpense(Expenses expense) {
         if(expense == null || !this.getExpenses().contains(expense)) {
             return false;
         }
@@ -238,25 +223,24 @@ public class Event {
     }
 
     /**
-     * Generated an invite code for the event.
+     * Generated an invitation code for the event.
      * @return String representing the invite code.
      */
     private static String generateInviteCode() {
         String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         StringBuilder string = new StringBuilder();
-        Random rndm = new Random();
+        Random random = new Random();
         while(string.length() < 8) {
-            int i = (int) (rndm.nextFloat() * characters.length());
+            int i = (int) (random.nextFloat() * characters.length());
             string.append(characters.charAt(i));
         }
-        String code = string.toString();
-        return code;
+        return string.toString();
     }
 
     /**
      * Equals method for the Event class. Placeholder.
      * @param o Object to compare with.
-     * @return
+     * @return boolean, true if o is equal with this.
      */
     @Override
     public boolean equals(Object o) {
@@ -268,7 +252,7 @@ public class Event {
 
     /**
      * Hashcode method for the Event class.
-     * @return
+     * @return int representing the hashCode of the respective Event object
      */
     @Override
     public int hashCode() {
