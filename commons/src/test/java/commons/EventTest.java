@@ -128,6 +128,23 @@ public class EventTest {
     }
 
     @Test
+    public void addParticipantTest() {
+        Person p3 = new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42");
+        assertFalse(ev.isAttending(p3));
+        assertTrue(ev.addParticipant(p3));
+        assertTrue(ev.isAttending(p3));
+    }
+
+    @Test
+    public void removeParticipantTest() {
+        Person p3 = new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42");
+        ev.addParticipant(p3);
+        assertTrue(ev.removeParticipant(p3));
+        assertFalse(ev.isAttending(p3));
+    }
+    @Test
     public void inviteCodeTest() {
         String previousCode = ev.getInviteCode();
         ev.refreshInviteCode();

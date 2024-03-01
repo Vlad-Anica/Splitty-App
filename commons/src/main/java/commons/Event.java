@@ -44,7 +44,6 @@ public class Event {
         this.date = date;
         this.participants = Objects.requireNonNullElseGet(participants, ArrayList::new);
         this.expenses = Objects.requireNonNullElseGet(expenses, ArrayList::new);
-        this.expenses = expenses;
         this.inviteCode = generateInviteCode();
     }
 
