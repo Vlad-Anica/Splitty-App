@@ -21,13 +21,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 //import client.scenes.AddParticipantCtrl;
+import client.scenes.*;
 import com.google.inject.Injector;
 
-import client.scenes.AddQuoteCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.QuoteOverviewCtrl;
 import javafx.application.Application;
 //import javafx.scene.Scene;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -43,11 +42,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
-
-        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add);
+//        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
+//        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
+//
+//        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+//        mainCtrl.initialize(primaryStage, overview, add);
 
 //        var page = FXML.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
 //        var ctrl = INJECTOR.getInstance(AddParticipantCtrl.class);
@@ -56,5 +55,12 @@ public class Main extends Application {
 //        primaryStage.setScene(scene);
 //        primaryStage.show();
 
+        var HomePage = FXML.load((HomeCtrl.class), "client", "scenes", "Home.fxml");
+        var HomeCtrl = INJECTOR.getInstance(client.scenes.HomeCtrl.class);
+
+        Scene scene = new Scene(HomePage.getValue());
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
+
 }
