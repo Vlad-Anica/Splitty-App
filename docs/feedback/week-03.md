@@ -50,5 +50,3 @@ Feedback: For the first week the thing you had looked reasonable. For the next w
 Mark: Good/Very Good
 
 Feedback: It does not really seem that there is an unfair work contribution. A tip is to note down the todo's per person per week somewhere so someone can easily can be held accountable if they to not meet their deadlines. Lucca you were more up to date then last week, but are still not fully on track with what was discussed in lectures etc. It is no problem in this way as long as the team carries but if they get irritated then this might become a problem.
-
-

@@ -27,7 +27,6 @@ import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.QuoteOverviewCtrl;
 import javafx.application.Application;
-
 //import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -56,5 +55,6 @@ public class Main extends Application {
 //        Scene scene = new Scene(page.getValue());
 //        primaryStage.setScene(scene);
 //        primaryStage.show();
+
     }
 }
