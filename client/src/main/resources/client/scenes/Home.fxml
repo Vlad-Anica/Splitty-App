@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
+<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
       <children>
         <Button fx:id="addParticipantButton" layoutX="125.0" layoutY="59.0" mnemonicParsing="false" onAction="#goToAddParticipant" text="Add Participant" />
         <Label fx:id="MainPageTestLabel" alignment="CENTER" layoutX="194.0" layoutY="23.0" style="&#10;" text="Welcome To Splitty!" textAlignment="CENTER" wrapText="false">
