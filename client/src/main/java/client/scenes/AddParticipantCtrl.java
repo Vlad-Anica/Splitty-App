@@ -1,6 +1,8 @@
 package client.scenes;
 
+import commons.Event;
 import commons.Person;
+import commons.User;
 import javafx.fxml.FXML;
 
 import javafx.event.ActionEvent;
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class AddParticipantCtrl {
 
@@ -47,13 +50,37 @@ public class AddParticipantCtrl {
     public void addParticipant(ActionEvent event) {
 
         if (isValidInput()) {
-            participantAdded.setText("Sent invite to " + firstName.getText() + "!");
+            Person p;
+            if (email == null || email.getText().isEmpty())
+            {
+                p = new Person(firstName.getText(), lastName.getText(),
+                        IBAN.getText(), BIC.getText(), new Event(), new User());
+            }
+            else
+            {
+                p = new Person(firstName.getText(), lastName.getText(), email.getText(),
+                        IBAN.getText(), BIC.getText(), new Event(), new User());
+            }
+
+            if (participants.contains(p))
+            {
+                participantAdded.setText(p.getFirstName() + " was already added");
+                participantAdded.setTextFill(Color.RED);
+                participantAdded.setStyle("-fx-font-weight: bold");
+                return;
+            }
+
+            participants.add(p);
+            Random random = new Random();
+            //generate a random alphanumeric code
+            String inviteCode = random.ints(48, 123)
+                    .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                    .limit(7)
+                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                    .toString();
+            participantAdded.setText("Sent invite to " + firstName.getText() + "! Invite code: " + inviteCode);
             participantAdded.setTextFill(Color.BLACK);
             participantAdded.setStyle("-fx-font-weight: light");
-
-            Person p = new Person(firstName.getText(), lastName.getText(),
-                    email.getText(), IBAN.getText(), BIC.getText());
-            participants.add(p);
             System.out.println(p);
         }
         else {
@@ -71,7 +98,8 @@ public class AddParticipantCtrl {
         if (lastName == null || lastName.getText().isEmpty())
             return false;
 
-        if (email == null || email.getText().isEmpty())
+        if (email != null && !email.getText().isEmpty() &&
+        !email.getText().contains("@") && !email.getText().contains(".com"))
             return false;
 
         if (IBAN == null || IBAN.getText().length() < 34)

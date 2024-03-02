@@ -43,8 +43,10 @@ public class Person {
 	private Currency preferredCurrency;
 	@ManyToOne
 	private Event event;
+	@ManyToOne
+	private User user;
 	@SuppressWarnings("unused")
-	protected Person() {
+	public Person() {
 		// for object mapper
 	}
 
@@ -54,7 +56,7 @@ public class Person {
 	}
 
 	public Person(String firstName, String lastName,
-				  String email, String IBAN, String BIC, Event event) {
+				  String email, String IBAN, String BIC, Event event, User user) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -64,6 +66,19 @@ public class Person {
 		this.BIC = BIC;
 		this.event = event;
 		this.preferredCurrency = Currency.EUR;
+		this.user = user;
+	}
+	public Person(String firstName, String lastName, String IBAN,
+				  String BIC, Event event, User user) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.totalDebt = 0.0;
+		this.debtList = new ArrayList<>();
+		this.IBAN = IBAN;
+		this.BIC = BIC;
+		this.event = event;
+		this.preferredCurrency = Currency.EUR;
+		this.user = user;
 	}
 	public Person(String firstName, String lastName,
 				  String email, String IBAN, String BIC) {
@@ -80,10 +95,6 @@ public class Person {
 
 	public long getId() {
 		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getFirstName() {
@@ -125,7 +136,6 @@ public class Person {
 	public String getIBAN() {
 		return IBAN;
 	}
-
 	public void setIBAN(String IBAN) {
 		this.IBAN = IBAN;
 	}
@@ -134,6 +144,12 @@ public class Person {
 	}
 	public void setBIC(String BIC) {
 		this.BIC = BIC;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	public void addDebt(Debt debt) {
 		totalDebt += debt.getAmount();
