@@ -14,9 +14,10 @@ class ExpenseTest {
     Expense e = new Expense("test", 2.5, d, p, pl, Expense.Currency.EURO );
     Expense e2 = new Expense("test3", 2.5, d, p, pl, Expense.Currency.EURO );
     Expense e3 = new Expense("test", 2.5, d, p, pl, Expense.Currency.EURO );
-    @Test
-    void getId() {
-    }
+
+    //public Expense(String description, double amount, Date date, Person receiver,
+    //                   ArrayList<Person> givers, Currency currency)
+
 
     @Test
     void getDescription() {
@@ -30,56 +31,102 @@ class ExpenseTest {
 
     @Test
     void getDate() {
-        assertTrue(d.equals(e.getDate()));
+        assertEquals(d, e.getDate());
     }
 
     @Test
     void getReceiver() {
+        assertEquals(p, e.getReceiver());
     }
 
     @Test
     void getGivers() {
+        assertEquals(pl, e.getGivers());
     }
 
     @Test
     void getCurrency() {
+        assertEquals(Currency.EUR, e.getCurrency());
     }
 
     @Test
     void setDescription() {
+        e.setDescription("e");
+        assertEquals("e",e.getDescription());
+
     }
 
     @Test
     void setAmount() {
+        e.setAmount(1.6);
+        assertEquals(1.6,e.getAmount());
     }
 
     @Test
     void setDate() {
+        Date da = new Date(1,1,1,1,1,1);
+        e.setDate(da);
+        assertEquals(da,e.getDate());
     }
 
     @Test
     void setReceiver() {
+        Person re = new Person("L","D");
+        e.setReceiver(re);
+        assertEquals(re,e.getReceiver());
     }
 
     @Test
     void setGivers() {
+        ArrayList<Person> giv = new ArrayList<Person>();
+        e.setGivers(giv);
+        assertEquals(giv,e.getGivers());
     }
 
     @Test
     void setCurrency() {
+        e.setCurrency(Expense.Currency.DOLLAR);
+        assertEquals(Expense.Currency.DOLLAR, e.getCurrency());
     }
 
     @Test
     void testEquals() {
-        assertFalse(e.equals(e2));
+        assertNotEquals(e, e2);
+        assertEquals(e, e3);
     }
 
     @Test
     void testHashCode() {
-        assertTrue(e.hashCode() == e3.hashCode());
+        assertEquals(e.hashCode(), e3.hashCode());
     }
 
     @Test
     void testToString() {
+        assertEquals(e.toString(), e3.toString());
+    }
+
+    @Test
+    void dateNotNull(){
+        assertNotNull(e.getDate());
+    }
+
+    @Test
+    void descriptionNotNull(){
+        assertNotNull(e.getDescription());
+    }
+
+    @Test
+    void receiverNotNull(){
+        assertNotNull(e.getReceiver());
+    }
+
+    @Test
+    void giversNotNull(){
+        assertNotNull(e.getGivers());
+    }
+
+    @Test
+    void currencyNotNull(){
+        assertNotNull(e.getCurrency());
     }
 }
