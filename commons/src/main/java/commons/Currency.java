@@ -1,6 +1,6 @@
 package commons;
 
-public enum Currency {
+public enum  Currency {
 
     EUR,
     USD,
