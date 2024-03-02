@@ -24,7 +24,7 @@ public class Event {
     private String inviteCode;
 
     @SuppressWarnings("Unused")
-    protected Event() {
+    public Event() {
     }
 
     /**

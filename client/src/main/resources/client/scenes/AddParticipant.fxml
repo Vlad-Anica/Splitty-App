@@ -14,7 +14,7 @@
         <Label alignment="CENTER" layoutX="292.0" layoutY="82.0" prefHeight="17.0" prefWidth="64.0" text="Last Name" />
         <Label alignment="CENTER" layoutX="117.0" layoutY="158.0" text="E-mail" />
         <Label layoutX="120.0" layoutY="227.0" text="IBAN" />
-        <Label fx:id="participantAdded" alignment="CENTER" contentDisplay="CENTER" layoutX="159.0" layoutY="343.0" prefHeight="17.0" prefWidth="230.0" />
+        <Label fx:id="participantAdded" alignment="CENTER" contentDisplay="CENTER" layoutX="159.0" layoutY="360.0" prefHeight="17.0" prefWidth="230.0" />
       <TextField fx:id="BIC" layoutX="292.0" layoutY="254.0" promptText="BIC" />
       <Label layoutX="300.0" layoutY="227.0" text="BIC" />
     </children>
