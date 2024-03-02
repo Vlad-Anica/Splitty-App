@@ -22,6 +22,10 @@ public class HomeCtrl  {
     @FXML
     private Button addParticipantButton;
     @FXML
+    private Button goDepthButton;
+    @FXML
+    private Button goHomeButton;
+    @FXML
     private Stage stage;
     @FXML
     private Scene scene;
@@ -32,6 +36,22 @@ public class HomeCtrl  {
 
     public void goToAddParticipant(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("AddParticipant.fxml"));
+        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void goToDepths(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("OpenDebts.fxml"));
+        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void goHome(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("Home.fxml"));
         stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
