@@ -44,7 +44,6 @@ public class Event {
         this.date = date;
         this.participants = Objects.requireNonNullElseGet(participants, ArrayList::new);
         this.expenses = Objects.requireNonNullElseGet(expenses, ArrayList::new);
-        this.expenses = expenses;
         this.inviteCode = generateInviteCode();
     }
 
@@ -168,12 +167,24 @@ public class Event {
     }
 
     /**
+     * Determines whether a person is currently attending an event.
+     * @param person Person representing the participant to check.
+     * @return boolean, true if the Person is currently attending the event, false otherwise.
+     */
+    public boolean isAttending(Person person) {
+        if(person == null) {
+            return false;
+        }
+        return this.participants.contains(person);
+    }
+
+    /**
      * Adds a person to the list of participants attending an event. Returns true if successful.
      * @param person Person representing the participant to add to the Event.
      * @return boolean, true if a Person was added successfully, false otherwise.
      */
     public boolean addParticipant(Person person) {
-        if(person == null || this.getParticipants().contains(person)) {
+        if(this.isAttending(person)) {
             return false;
         }
         this.getParticipants().add(person);
@@ -192,6 +203,18 @@ public class Event {
         }
         this.getParticipants().remove(person);
         return true;
+    }
+
+    /**
+     * Determines whether an expense is part of an event.
+     * @param expense Expense to check.
+     * @return boolean, true if the Expense is in the event, false otherwise.
+     */
+    public boolean containsExpense(Expense expense) {
+        if(expense == null) {
+            return false;
+        }
+        return this.expenses.contains(expense);
     }
 
     /**

@@ -1,12 +1,12 @@
 package commons;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class EventTest {
 
     Event ev;
@@ -125,6 +125,50 @@ public class EventTest {
         expenseList.add(ex2);
         ev.setExpenses(expenseList);
         assertEquals(expenseList, ev.getExpenses());
+    }
+
+    @Test
+    public void addParticipantTest() {
+        Person p3 = new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42");
+        assertFalse(ev.isAttending(p3));
+        assertTrue(ev.addParticipant(p3));
+        assertTrue(ev.isAttending(p3));
+    }
+
+    @Test
+    public void removeParticipantTest() {
+        Person p3 = new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42");
+        ev.addParticipant(p3);
+        assertTrue(ev.removeParticipant(p3));
+        assertFalse(ev.isAttending(p3));
+    }
+
+    @Test
+    public void addExpenseTest() {
+        Date dateTest = new Date(1,2,3,4,5,6);
+        Person p3 = new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42");
+        ArrayList<Person> givers = new ArrayList<>();
+        givers.add(p2);
+        Expense e3 = new Expense("amongUs", 5, dateTest, p2, givers, Expense.Currency.DOLLAR );
+        assertFalse(ev.containsExpense(e3));
+        assertTrue(ev.addExpense(e3));
+        assertTrue(ev.containsExpense(e3));
+    }
+
+    @Test
+    public void removeExpenseTest() {
+        Date dateTest = new Date(1,2,3,4,5,6);
+        Person p3 = new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42");
+        ArrayList<Person> givers = new ArrayList<>();
+        givers.add(p2);
+        Expense e3 = new Expense("amongUs", 5, dateTest, p2, givers, Expense.Currency.DOLLAR );
+        ev.addExpense(e3);
+        assertTrue(ev.removeExpense(e3));
+        assertFalse(ev.containsExpense(e3));
     }
 
     @Test
