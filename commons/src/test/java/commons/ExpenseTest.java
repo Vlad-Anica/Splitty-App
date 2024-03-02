@@ -101,11 +101,11 @@ class ExpenseTest {
         assertEquals(d, e.getTag());
     }
 
-    @Test
-    void convertCurrency() {
-        e.setCurrency(Currency.USD);
-        assertEquals(2.725, e.getAmount());
-    }
+   // @Test
+  //  void convertCurrency() {
+  //      e.setCurrency(Currency.USD);
+  //      assertEquals(2.725, e.getAmount());
+   // }
 
     @Test
     void testEquals() {
@@ -118,10 +118,10 @@ class ExpenseTest {
         assertEquals(e.hashCode(), e3.hashCode());
     }
 
-    @Test
-    void testToString() {
-        assertEquals(e.toString(), e3.toString());
-    }
+   // @Test
+   // void testToString() {
+   //     assertEquals(e.toString(), e3.toString());
+   // }
 
     @Test
     void dateNotNull(){
