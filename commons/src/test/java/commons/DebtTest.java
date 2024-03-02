@@ -60,6 +60,18 @@ class DebtTest {
     }
 
     @Test
+    void getSettled() {
+        assertFalse(debt.getSettled());
+    }
+
+    @Test
+    void setSettled() {
+        assertFalse(debt.getSettled());
+        debt.setSettled(true);
+        assertTrue(debt.getSettled());
+    }
+
+    @Test
     public void hasToString() {
         var actual =  debt.toString();
         assertTrue(actual.contains("\n"));
