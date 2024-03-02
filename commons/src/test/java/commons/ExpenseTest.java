@@ -10,10 +10,11 @@ class ExpenseTest {
 
     Person p = new Person("a","b");
     ArrayList<Person> pl = new ArrayList<Person>();
+    Tag t = new Tag("blue", "food");
     Date d = new Date(0,0,0,0,0,0);
-    Expense e = new Expense("test", 2.5, d, p, pl, Expense.Currency.EURO );
-    Expense e2 = new Expense("test3", 2.5, d, p, pl, Expense.Currency.EURO );
-    Expense e3 = new Expense("test", 2.5, d, p, pl, Expense.Currency.EURO );
+    Expense e = new Expense("test", 2.5, d, p, pl, Currency.EUR, t );
+    Expense e2 = new Expense("test3", 2.5, d, p, pl, Currency.EUR, t );
+    Expense e3 = new Expense("test", 2.5, d, p, pl, Currency.EUR, t );
 
     //public Expense(String description, double amount, Date date, Person receiver,
     //                   ArrayList<Person> givers, Currency currency)
@@ -47,6 +48,10 @@ class ExpenseTest {
     @Test
     void getCurrency() {
         assertEquals(Currency.EUR, e.getCurrency());
+    }
+
+    void getTag() {
+        assertEquals(t, e.getTag());
     }
 
     @Test
@@ -85,8 +90,21 @@ class ExpenseTest {
 
     @Test
     void setCurrency() {
-        e.setCurrency(Expense.Currency.DOLLAR);
-        assertEquals(Expense.Currency.DOLLAR, e.getCurrency());
+        e.setCurrency(Currency.USD);
+        assertEquals(Currency.USD, e.getCurrency());
+    }
+
+    @Test
+    void setTag() {
+        Tag d = new Tag("red", "trip");
+        e.setTag(d);
+        assertEquals(d, e.getTag());
+    }
+
+    @Test
+    void convertCurrency() {
+        e.setCurrency(Currency.USD);
+        assertEquals(2.725, e.getAmount());
     }
 
     @Test
