@@ -46,16 +46,10 @@ public class MainCtrl {
     private Scene openDebtsScene;
 
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add, Pair<SettingsCtrl, Parent> settings,
+    public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
                            Pair<OpenDebtsCtrl, Parent> openDebts) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
-
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
 
         this.settingsCtrl = settings.getKey();
         this.settingsScene = new Scene(settings.getValue());

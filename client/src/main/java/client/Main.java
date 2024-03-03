@@ -46,7 +46,7 @@ public class Main extends Application {
 //        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
 //
 //        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-//        mainCtrl.initialize(primaryStage, overview, add);
+//        mainCtrl.initialize(primaryStage);
 
 //        var page = FXML.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
 //        var ctrl = INJECTOR.getInstance(AddParticipantCtrl.class);
@@ -56,7 +56,7 @@ public class Main extends Application {
 //        primaryStage.show();
 
         var HomePage = FXML.load((HomeCtrl.class), "client", "scenes", "Home.fxml");
-        var HomeCtrl = INJECTOR.getInstance(client.scenes.HomeCtrl.class);
+        var HomeCtrl = INJECTOR.getInstance(HomeCtrl.class);
 
         Scene scene = new Scene(HomePage.getValue());
         primaryStage.setScene(scene);
