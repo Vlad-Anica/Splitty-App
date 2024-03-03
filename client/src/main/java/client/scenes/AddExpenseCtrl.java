@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class AddExpenseCrtl {
+public class AddExpenseCtrl {
 
     @FXML
     private Stage stage;
@@ -51,7 +51,7 @@ public class AddExpenseCrtl {
 
     private MainCtrl mainCtrl;
     @Inject
-    public AddExpenseCrtl(MainCtrl mainCtrl) {
+    public AddExpenseCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
     }
 
