@@ -29,8 +29,9 @@ public class EventTest {
         persons1.add(p1);
         persons2.add(p2);
         date = new Date(0,0,0,0,0,0);
-        Expense e1 = new Expense("test1", 2.5, date, p1, persons2, Expense.Currency.EURO );
-        Expense e2 = new Expense("test2", 2.5, date, p2, persons1, Expense.Currency.EURO );
+        Tag t = new Tag("blue", "food");
+        Expense e1 = new Expense("test1", 2.5, date, p1, persons2, Currency.EUR, t  );
+        Expense e2 = new Expense("test2", 2.5, date, p2, persons1, Currency.EUR, t );
         expenses.add(e1);
         expenses.add(e2);
         Tag tag = new Tag("red", "food");
@@ -109,8 +110,9 @@ public class EventTest {
     @Test
     public void testExpensesGetter() {
         ArrayList<Expense> expenseList = new ArrayList<>();
-        Expense ex1 = new Expense("test1", 2.5, date, p1, persons2, Expense.Currency.EURO );
-        Expense ex2 = new Expense("test2", 2.5, date, p2, persons1, Expense.Currency.EURO );
+        Tag t = new Tag("blue", "food");
+        Expense ex1 = new Expense("test1", 2.5, date, p1, persons2, Currency.EUR, t );
+        Expense ex2 = new Expense("test2", 2.5, date, p2, persons1, Currency.EUR, t  );
         expenseList.add(ex1);
         expenseList.add(ex2);
         assertEquals(expenseList, ev.getExpenses());
@@ -119,8 +121,9 @@ public class EventTest {
     @Test
     public void testExpensesSetter() {
         ArrayList<Expense> expenseList = new ArrayList<>();
-        Expense ex1 = new Expense("test1", 2.5, date, p1, persons2, Expense.Currency.EURO );
-        Expense ex2 = new Expense("test2", 2.5, date, p2, persons1, Expense.Currency.EURO );
+        Tag t = new Tag("blue", "food");
+        Expense ex1 = new Expense("test1", 2.5, date, p1, persons2, Currency.EUR, t  );
+        Expense ex2 = new Expense("test2", 2.5, date, p2, persons1, Currency.EUR, t  );
         expenseList.add(ex1);
         expenseList.add(ex2);
         ev.setExpenses(expenseList);
@@ -152,7 +155,8 @@ public class EventTest {
                 "usa@email.com", "AM420", "NITUL42");
         ArrayList<Person> givers = new ArrayList<>();
         givers.add(p2);
-        Expense e3 = new Expense("amongUs", 5, dateTest, p2, givers, Expense.Currency.DOLLAR );
+        Tag t = new Tag("blue", "food");
+        Expense e3 = new Expense("amongUs", 5, dateTest, p2, givers, Currency.USD, t  );
         assertFalse(ev.containsExpense(e3));
         assertTrue(ev.addExpense(e3));
         assertTrue(ev.containsExpense(e3));
@@ -165,7 +169,8 @@ public class EventTest {
                 "usa@email.com", "AM420", "NITUL42");
         ArrayList<Person> givers = new ArrayList<>();
         givers.add(p2);
-        Expense e3 = new Expense("amongUs", 5, dateTest, p2, givers, Expense.Currency.DOLLAR );
+        Tag t = new Tag("blue", "food");
+        Expense e3 = new Expense("amongUs", 5, dateTest, p2, givers, Currency.USD, t  );
         ev.addExpense(e3);
         assertTrue(ev.removeExpense(e3));
         assertFalse(ev.containsExpense(e3));

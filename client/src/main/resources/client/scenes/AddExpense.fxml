@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCrtl">
+   <children>
+      <Label layoutX="236.0" layoutY="37.0" text="add/edit expense">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <MenuButton fx:id="paidByMenu" layoutX="149.0" layoutY="73.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="178.0" text="person1">
+         <items>
+            <MenuItem fx:id="paidByOption1" mnemonicParsing="false" text="person1" />
+         </items>
+      </MenuButton>
+      <Label layoutX="72.0" layoutY="77.0" text="Who paid?" />
+      <Label layoutX="72.0" layoutY="112.0" text="What for?" />
+      <TextField fx:id="descriptionField" layoutX="148.0" layoutY="108.0" prefHeight="25.0" prefWidth="178.0" />
+      <Label layoutX="72.0" layoutY="146.0" text="How much?" />
+      <TextField fx:id="amountField" layoutX="148.0" layoutY="142.0" prefHeight="25.0" prefWidth="105.0" />
+      <MenuButton fx:id="currencyMenu" layoutX="269.0" layoutY="142.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="EUR">
+        <items>
+          <MenuItem fx:id="currencyOption1" mnemonicParsing="false" text="EUR" />
+        </items>
+      </MenuButton>
+      <Label layoutX="68.0" layoutY="173.0" text="How to split?" />
+      <RadioButton fx:id="splitEvenButton" layoutX="68.0" layoutY="191.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="89.0" text="Split evenly" />
+      <RadioButton fx:id="splitButton" layoutX="68.0" layoutY="208.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="98.0" selected="true" text="Some people" />
+      <ScrollPane layoutX="66.0" layoutY="232.0" prefHeight="83.0" prefWidth="200.0">
+        <content>
+          <AnchorPane fx:id="splitPersonsPane" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <CheckBox fx:id="splitPersonBox1" mnemonicParsing="false" text="person1" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <Label layoutX="67.0" layoutY="346.0" text="Expense Type" />
+      <MenuButton fx:id="typeMenu" layoutX="147.0" layoutY="342.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="178.0" text="type1">
+        <items>
+          <MenuItem fx:id="typeOption1" mnemonicParsing="false" text="type1" />
+        </items>
+      </MenuButton>
+      <Button fx:id="addButton" layoutX="497.0" layoutY="342.0" mnemonicParsing="false" text="Add" />
+      <Button fx:id="cancelButton" layoutX="427.0" layoutY="342.0" mnemonicParsing="false" text="Cancel" />
+       <Button fx:id="goHomeButton" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
+   </children>
+</AnchorPane>

@@ -20,11 +20,13 @@ public class Debt {
     @ManyToOne
     private Expense expense;
     private double amount;
+    private boolean settled;
     public Debt(Person giver, Person receiver, Expense expense, double amount) {
         this.giver = giver;
         this.receiver = receiver;
         this.expense = expense;
         this.amount = amount;
+        this.settled = false;
     }
     public Debt() {
 
@@ -44,6 +46,9 @@ public class Debt {
     public double getAmount() {
         return amount;
     }
+    public boolean getSettled(){
+        return settled;
+    }
     public void setGiver(Person giver) {
         this.giver = giver;
     }
@@ -55,6 +60,9 @@ public class Debt {
     }
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+    public void setSettled(Boolean value){
+        settled = value;
     }
 
     @Override

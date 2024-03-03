@@ -30,7 +30,8 @@ public class PersonTest {
 	@BeforeEach
 	public void createGenericPerson() {
 		p = new Person("f", "l",
-				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
+				"email@email.com", "NL32323232423", "MIDLGB22",
+				new Event(), new User());
 	}
 	@Test
 	public void checkConstructor() {
@@ -67,8 +68,8 @@ public class PersonTest {
 	@Test
 	public void checkPreferredCurrencySetter() {
 		assertEquals(Currency.EUR, p.getPreferredCurrency());
-		p.setPreferredCurrency(Currency.RON);
-		assertEquals(Currency.RON, p.getPreferredCurrency());
+		p.setPreferredCurrency(Currency.CHF);
+		assertEquals(Currency.CHF, p.getPreferredCurrency());
 	}
 	@Test
 	public void checkAddDebt() {
@@ -118,16 +119,19 @@ public class PersonTest {
 	@Test
 	public void notEqualsNull() {
 		Person a =  new Person("a", "b",
-				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
+				"email@email.com", "NL32323232423", "MIDLGB22",
+				new Event(), new User());
 		Person b =  null;
 		assertNotEquals(a, b);
 	}
 	@Test
 	public void equalsHashCode() {
 		var a = new Person("a", "b",
-				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
+				"email@email.com", "NL32323232423", "MIDLGB22",
+				new Event(), new User());
 		var b =  new Person("a", "b",
-				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
+				"email@email.com", "NL32323232423", "MIDLGB22",
+				new Event(), new User());
 		assertEquals(a, b);
 		assertEquals(a.hashCode(), b.hashCode());
 	}
@@ -135,9 +139,11 @@ public class PersonTest {
 	@Test
 	public void notEqualsHashCode() {
 		var a =  new Person("a", "b",
-				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
+				"email@email.com", "NL32323232423", "MIDLGB22",
+				new Event(), new User());
 		var b =  new Person("a", "c",
-				"email@email.com", "NL32323232423", "MIDLGB22", new Event());
+				"email@email.com", "NL32323232423", "MIDLGB22",
+				new Event(), new User());
 		assertNotEquals(a, b);
 		assertNotEquals(a.hashCode(), b.hashCode());
 	}
@@ -145,7 +151,8 @@ public class PersonTest {
 	@Test
 	public void hasToString() {
 		var actual =  new Person("a", "b",
-				"email@email.com", "NL32323232423", "MIDLGB22", new Event()).toString();
+				"email@email.com", "NL32323232423", "MIDLGB22",
+				new Event(), new User()).toString();
 		assertTrue(actual.contains(Person.class.getSimpleName()));
 		assertTrue(actual.contains("\n"));
 		assertTrue(actual.contains("firstName"));

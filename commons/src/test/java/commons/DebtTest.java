@@ -15,9 +15,9 @@ class DebtTest {
     public void initialise() {
         Event event = new Event();
         John = new Person("John", "Doe", "john@email.com",
-                "NL2322220000121242", "MIDLGB22", event);
+                "NL2322220000121242", "MIDLGB22", event, new User());
         Bob = new Person("Bob", "Bob", "bob@email.com",
-                "NL2322220000121243", "MIDLGB23", event);
+                "NL2322220000121243", "MIDLGB23", event, new User());
         expense = new Expense();
         debt = new Debt(John, Bob, expense, 3.0);
         John.addDebt(debt);
@@ -36,7 +36,7 @@ class DebtTest {
     void setGiverTest() {
         assertEquals(John, debt.getGiver());
         Person newPerson = new Person("Jane", "Doe", "jane@email.com",
-                "NL2322220000121242", "MIDLGB22", new Event());
+                "NL2322220000121242", "MIDLGB22", new Event(), new User());
         debt.setGiver(newPerson);
         newPerson.addDebt(debt);
         assertEquals(newPerson, debt.getGiver());
@@ -47,7 +47,7 @@ class DebtTest {
     void setReceiver() {
         assertEquals(Bob, debt.getReceiver());
         Person newPerson = new Person("Jane", "Doe", "jane@email.com",
-                "NL2322220000121242", "MIDLGB22", new Event());
+                "NL2322220000121242", "MIDLGB22", new Event(), new User());
         debt.setReceiver(newPerson);
         assertEquals(newPerson, debt.getReceiver());
     }
@@ -57,6 +57,18 @@ class DebtTest {
         assertEquals(3.0, debt.getAmount());
         debt.setAmount(7.0);
         assertEquals(7.0, debt.getAmount());
+    }
+
+    @Test
+    void getSettled() {
+        assertFalse(debt.getSettled());
+    }
+
+    @Test
+    void setSettled() {
+        assertFalse(debt.getSettled());
+        debt.setSettled(true);
+        assertTrue(debt.getSettled());
     }
 
     @Test
