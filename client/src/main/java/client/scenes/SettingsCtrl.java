@@ -10,7 +10,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.List;
-import java.util.Set;
 
 public class SettingsCtrl {
     @FXML

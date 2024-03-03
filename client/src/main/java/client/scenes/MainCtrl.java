@@ -20,8 +20,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-import java.util.Set;
-
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -31,22 +29,63 @@ public class MainCtrl {
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
+    //scene and controller for settings
     private SettingsCtrl settingsCtrl;
     private Scene settingsScene;
 
+    //scene and controller for AddParticipant
+    private AddParticipantCtrl addParticipantCtrl;
+    private Scene addParticipantScene;
+
+    //scene and controller for Home
+    private HomeCtrl homeCtrl;
+    private Scene homeScene;
+
+    //open debts scene and controller
+    private OpenDebtsCtrl openDebtsCtrl;
+    private Scene openDebtsScene;
+
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add, Pair<SettingsCtrl, Parent> settings) {
+                           Pair<AddQuoteCtrl, Parent> add, Pair<SettingsCtrl, Parent> settings,
+                           Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
+                           Pair<OpenDebtsCtrl, Parent> openDebts) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
-        this.settingsCtrl = settings.getKey();
-        this.settingsScene = new Scene(settings.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
+        this.settingsCtrl = settings.getKey();
+        this.settingsScene = new Scene(settings.getValue());
+
+        this.addParticipantCtrl = addParticipant.getKey();
+        this.addParticipantScene = new Scene(addParticipant.getValue());
+
+        this.homeCtrl = home.getKey();
+        this.homeScene = new Scene(home.getValue());
+
+        this.openDebtsCtrl = openDebts.getKey();
+        this.openDebtsScene = new Scene(openDebts.getValue());
+
         showOverview();
         primaryStage.show();
+    }
+
+    public void showAddParticipant() {
+        primaryStage.setTitle("Show Participants");
+        primaryStage.setScene(addParticipantScene);
+    }
+
+    public void showHome() {
+        primaryStage.setTitle("Home");
+        primaryStage.setScene(homeScene);
+    }
+
+    public void showOpenDebts() {
+        primaryStage.setTitle("Open Debts");
+        primaryStage.setScene(openDebtsScene);
     }
 
     public void showSettings() {
