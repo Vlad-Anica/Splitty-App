@@ -50,7 +50,7 @@ public class Main extends Application {
 //        var HomeCtrl = INJECTOR.getInstance(HomeCtrl.class);
 
         var home = FXML.load(HomeCtrl.class, "client", "scenes", "Home.fxml");
-        var addExpense = FXML.load(AddExpenseCrtl.class, "client", "scenes", "AddExpense.fxml");
+        var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
         var addParticipant = FXML.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");

@@ -46,13 +46,13 @@ public class MainCtrl {
     private Scene openDebtsScene;
 
     //scene and controller for addExpense
-    private AddExpenseCrtl addExpenseCrtl;
+    private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpenseScene;
 
 
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
-                           Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCrtl, Parent> addExpense) {
+                           Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense) {
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
@@ -67,8 +67,8 @@ public class MainCtrl {
         this.openDebtsCtrl = openDebts.getKey();
         this.openDebtsScene = new Scene(openDebts.getValue());
 
-        this.addExpenseCrtl = addExpense.getKey();
-        this.addParticipantScene = new Scene(addExpense.getValue());
+        this.addExpenseCtrl = addExpense.getKey();
+        this.addExpenseScene = new Scene(addExpense.getValue());
 
         showHome();
         primaryStage.show();

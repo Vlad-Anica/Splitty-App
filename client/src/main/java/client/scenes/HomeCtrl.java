@@ -22,7 +22,8 @@ public class HomeCtrl  {
     @FXML
     private Button addExpenseButton;
     @FXML
-    private Button goDepthButton;
+    private Button goDebtsButton;
+
     @FXML
     private Button goHomeButton;
     @FXML
@@ -39,7 +40,7 @@ public class HomeCtrl  {
         this.mainCtrl = mainCtrl;
     }
 
-    public void clickBtnSettings() {
+    public void goToSettings() {
         mainCtrl.showSettings();
     }
 
@@ -52,7 +53,7 @@ public class HomeCtrl  {
         mainCtrl.showAddExpense();
     }
 
-    public void goToDepths(ActionEvent event) throws IOException {
+    public void goToDebts(ActionEvent event) throws IOException {
         mainCtrl.showOpenDebts();
     }
 
