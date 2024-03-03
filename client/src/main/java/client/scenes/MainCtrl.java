@@ -20,6 +20,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Set;
+
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -29,18 +31,28 @@ public class MainCtrl {
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
+    private SettingsCtrl settingsCtrl;
+    private Scene settingsScene;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+                           Pair<AddQuoteCtrl, Parent> add, Pair<SettingsCtrl, Parent> settings) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
+        this.settingsCtrl = settings.getKey();
+        this.settingsScene = new Scene(settings.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
         showOverview();
         primaryStage.show();
+    }
+
+    public void showSettings() {
+        primaryStage.setTitle("Settings");
+        primaryStage.setScene(settingsScene);
+        settingsCtrl.setup();
     }
 
     public void showOverview() {

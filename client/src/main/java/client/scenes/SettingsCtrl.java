@@ -1,5 +1,6 @@
 package client.scenes;
 
+import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,21 +10,26 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.List;
+import java.util.Set;
 
 public class SettingsCtrl {
     @FXML
-    ComboBox pickedLanguage;
-
+    private ComboBox pickedLanguage;
     @FXML
-    ComboBox selectedCurrency;
+    private ComboBox selectedCurrency;
     @FXML
-    TextField publicUsername;
+    private TextField publicUsername;
     @FXML
-    Button btnUpdPublicUsername;
+    private Button btnUpdPublicUsername;
     @FXML
-    Text settingsTitle;
+    private Text settingsTitle;
     @FXML
-    Button btnHome;
+    private Button btnHome;
+    private MainCtrl mainCtrl;
+    @Inject
+    public SettingsCtrl(MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+    }
 
     public void setup() {
         pickedLanguage.setItems(FXCollections.observableList(List.of("English", "Dutch")));
