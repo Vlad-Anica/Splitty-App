@@ -2,9 +2,8 @@ package client.scenes;
 
 import commons.Person;
 import jakarta.inject.Inject;
-import javafx.fxml.FXML;
-
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -16,7 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.charset.MalformedInputException;
 import java.util.ArrayList;
 import java.util.List;
 
