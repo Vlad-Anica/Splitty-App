@@ -1,6 +1,7 @@
 package client.scenes;
 
 
+import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 
 import javafx.event.ActionEvent;
@@ -32,6 +33,16 @@ public class HomeCtrl  {
     @FXML
     private Parent root;
 
+    private MainCtrl mainCtrl;
+
+    @Inject
+    public HomeCtrl(MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+    }
+
+    public void clickBtnSettings() {
+        mainCtrl.showSettings();
+    }
 
 
     public void goToAddParticipant(ActionEvent event) throws IOException {

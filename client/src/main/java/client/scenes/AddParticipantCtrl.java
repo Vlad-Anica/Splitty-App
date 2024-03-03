@@ -1,6 +1,7 @@
 package client.scenes;
 
 import commons.Person;
+import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.charset.MalformedInputException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,14 @@ public class AddParticipantCtrl {
     @FXML
     Label participantAdded;
     List<Person> participants = new ArrayList<>();
+
+    private MainCtrl mainCtrl;
+
+    @Inject
+    public AddParticipantCtrl(MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+    }
+
     @FXML
     public void addParticipant(ActionEvent event) {
 

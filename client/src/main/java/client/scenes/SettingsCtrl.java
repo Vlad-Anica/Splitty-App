@@ -46,6 +46,6 @@ public class SettingsCtrl {
     }
 
     public void clickBtnHome() {
-        //TODO: add a home button functionality
+        mainCtrl.showHome();
     }
 }
