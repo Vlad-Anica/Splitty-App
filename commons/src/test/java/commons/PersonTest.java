@@ -68,8 +68,8 @@ public class PersonTest {
 	@Test
 	public void checkPreferredCurrencySetter() {
 		assertEquals(Currency.EUR, p.getPreferredCurrency());
-		p.setPreferredCurrency(Currency.RON);
-		assertEquals(Currency.RON, p.getPreferredCurrency());
+		p.setPreferredCurrency(Currency.CHF);
+		assertEquals(Currency.CHF, p.getPreferredCurrency());
 	}
 	@Test
 	public void checkAddDebt() {

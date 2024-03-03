@@ -30,11 +30,8 @@ public class Expense {
     public Person receiver;
     @ManyToMany(cascade = CascadeType.PERSIST)
     public ArrayList<Person> givers;
-    enum Currency{
-        EURO,
-        DOLLAR
-    }
     public Currency currency;
+    public Tag tag;
 
     /***
      *
@@ -44,15 +41,17 @@ public class Expense {
      * @param receiver who is receiving the money
      * @param givers list of people who need to pay
      * @param currency the type of currency used
+     * @param tag the tag of the expense
      */
     public Expense(String description, double amount, Date date, Person receiver,
-                   ArrayList<Person> givers, Currency currency) {
+                   ArrayList<Person> givers, Currency currency, Tag tag) {
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.receiver = receiver;
         this.givers = givers;
         this.currency = currency;
+        this.tag = tag;
     }
 
     /***
@@ -119,6 +118,14 @@ public class Expense {
     }
 
     /***
+     * returns the expense's tag
+     * @return
+     */
+    public Tag getTag() {
+        return tag;
+    }
+
+    /***
      * updates description
      * @param description new description
      */
@@ -164,13 +171,58 @@ public class Expense {
      */
     public void setCurrency(Currency currency) {
         this.currency = currency;
+        convertCurrency(currency);
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
     /***
-     * method to be finished later that changes the amount to match the currency
-     * might join this method with set currency to update amount automatically
+     * updates the amount number depending on the currency
      */
-    public void convertCurrency(){
+    public void convertCurrency(Currency newCurrency){
+        switch (this.currency){
+            case EUR: {
+                switch(newCurrency){
+                    case EUR: {
+                        break;
+                    }
+                    case USD: {
+                        this.amount = this.amount * 1.09;
+                    }
+                    case CHF:{
+                        this.amount = this.amount * 0.96;
+                    }
+                }
+            }
+            case USD: {
+                switch(newCurrency){
+                    case EUR: {
+                        this.amount = this.amount * 0.92;
+                    }
+                    case USD: {
+                        break;
+                    }
+                    case CHF:{
+                        this.amount = this.amount * 0.88;
+                    }
+                }
+            }
+            case CHF:{
+                switch(newCurrency){
+                    case EUR: {
+                        this.amount = this.amount * 1.04;
+                    }
+                    case USD: {
+                        this.amount = this.amount * 1.13;
+                    }
+                    case CHF:{
+                        break;
+                    }
+                }
+            }
+        }
 
     }
 
