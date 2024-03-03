@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /***
  * import java.util.Objects;
@@ -28,8 +28,8 @@ public class Expense {
     public Date date;
     @ManyToOne(cascade = CascadeType.PERSIST)
     public Person receiver;
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    public ArrayList<Person> givers;
+    @OneToMany
+    public List<Debt> debtList;
     public Currency currency;
     public Tag tag;
 
@@ -39,17 +39,17 @@ public class Expense {
      * @param amount how much people need to pay
      * @param date when is the expense from
      * @param receiver who is receiving the money
-     * @param givers list of people who need to pay
+     * @param debtList list of debts split between the participants
      * @param currency the type of currency used
      * @param tag the tag of the expense
      */
     public Expense(String description, double amount, Date date, Person receiver,
-                   ArrayList<Person> givers, Currency currency, Tag tag) {
+                   List<Debt> debtList, Currency currency, Tag tag) {
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.receiver = receiver;
-        this.givers = givers;
+        this.debtList = debtList;
         this.currency = currency;
         this.tag = tag;
     }
@@ -105,8 +105,8 @@ public class Expense {
      * returns the list of people who need to pay
      * @return
      */
-    public ArrayList<Person> getGivers() {
-        return givers;
+    public List<Debt> getDebtList() {
+        return debtList;
     }
 
     /***
@@ -159,11 +159,11 @@ public class Expense {
 
     /***
      * updates givers
-     * @param givers new arraylist of givers
+     * @param debtList new arraylist of debts
      */
-    public void setGivers(ArrayList<Person> givers) {
-        this.givers = givers;
-    }
+    public void setDebtList(List<Debt> debtList) {
+        this.debtList = debtList;
+    };
 
     /***
      * updates currency
