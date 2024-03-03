@@ -2,6 +2,7 @@ package client.scenes;
 
 import commons.Event;
 import commons.Person;
+import commons.User;
 import jakarta.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
