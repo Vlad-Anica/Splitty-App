@@ -14,6 +14,6 @@
         </Label>
       <Button fx:id="goDepthButton" layoutX="251.0" layoutY="59.0" mnemonicParsing="false" onAction="#goToDepths" text="goToDepths" />
       <Button fx:id="goHomeButton" layoutX="537.0" layoutY="23.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
-      <Button fx:id="addExpenseButton" layoutX="361.0" layoutY="59.0" mnemonicParsing="false" onAction="#goToAddExpense" text="Add Expense" />
+      <Button fx:id="btnSettings" layoutX="536.0" layoutY="59.0" mnemonicParsing="false" onAction="#clickBtnSettings" text="Settings" />
       </children>
     </AnchorPane>

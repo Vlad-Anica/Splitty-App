@@ -3,9 +3,9 @@ package client.scenes;
 import commons.Event;
 import commons.Person;
 import commons.User;
-import javafx.fxml.FXML;
-
+import jakarta.inject.Inject;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -46,6 +46,14 @@ public class AddParticipantCtrl {
     @FXML
     Label participantAdded;
     List<Person> participants = new ArrayList<>();
+
+    private MainCtrl mainCtrl;
+
+    @Inject
+    public AddParticipantCtrl(MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+    }
+
     @FXML
     public void addParticipant(ActionEvent event) {
 

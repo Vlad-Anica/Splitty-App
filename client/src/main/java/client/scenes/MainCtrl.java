@@ -29,18 +29,63 @@ public class MainCtrl {
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
+    //scene and controller for settings
+    private SettingsCtrl settingsCtrl;
+    private Scene settingsScene;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+    //scene and controller for AddParticipant
+    private AddParticipantCtrl addParticipantCtrl;
+    private Scene addParticipantScene;
+
+    //scene and controller for Home
+    private HomeCtrl homeCtrl;
+    private Scene homeScene;
+
+    //open debts scene and controller
+    private OpenDebtsCtrl openDebtsCtrl;
+    private Scene openDebtsScene;
+
+
+    public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
+                           Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
+                           Pair<OpenDebtsCtrl, Parent> openDebts) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+        this.settingsCtrl = settings.getKey();
+        this.settingsScene = new Scene(settings.getValue());
+
+        this.addParticipantCtrl = addParticipant.getKey();
+        this.addParticipantScene = new Scene(addParticipant.getValue());
+
+        this.homeCtrl = home.getKey();
+        this.homeScene = new Scene(home.getValue());
+
+        this.openDebtsCtrl = openDebts.getKey();
+        this.openDebtsScene = new Scene(openDebts.getValue());
 
         showOverview();
         primaryStage.show();
+    }
+
+    public void showAddParticipant() {
+        primaryStage.setTitle("Show Participants");
+        primaryStage.setScene(addParticipantScene);
+    }
+
+    public void showHome() {
+        primaryStage.setTitle("Home");
+        primaryStage.setScene(homeScene);
+    }
+
+    public void showOpenDebts() {
+        primaryStage.setTitle("Open Debts");
+        primaryStage.setScene(openDebtsScene);
+    }
+
+    public void showSettings() {
+        primaryStage.setTitle("Settings");
+        primaryStage.setScene(settingsScene);
+        settingsCtrl.setup();
     }
 
     public void showOverview() {

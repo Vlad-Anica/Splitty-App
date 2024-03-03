@@ -1,5 +1,6 @@
 package client.scenes;
 
+import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 
 import javafx.event.ActionEvent;
@@ -33,6 +34,13 @@ public class OpenDebtsCtrl {
     private Parent root;
     @FXML
     private Button backButton;
+
+    private MainCtrl mainCtrl;
+
+    @Inject
+    public OpenDebtsCtrl(MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+    }
 
     //need a way to show open debts from the database
 
