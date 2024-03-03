@@ -1,11 +1,8 @@
 package client.scenes;
 
 import jakarta.inject.Inject;
-import javafx.fxml.FXML;
-
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -48,20 +45,11 @@ public class OpenDebtsCtrl {
     //For Now, the back button is the same as the home button, this needs changing in the future!
     @FXML
     public void goBack(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("Home.fxml"));
-        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-        System.out.println("go back to prevoius scene");
+        mainCtrl.showHome();
     }
 
     public void goHome(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("Home.fxml"));
-        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        mainCtrl.showHome();
     }
 
 }
