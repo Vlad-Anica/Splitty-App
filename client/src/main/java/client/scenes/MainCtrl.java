@@ -49,10 +49,14 @@ public class MainCtrl {
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpenseScene;
 
+    //Scene and controller for EventOverview
+    private EventOverviewCtrl eventOverviewCtrl;
+    private Scene eventOverviewScene;
+
 
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
-                           Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense) {
+                           Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense, Pair<EventOverviewCtrl, Parent> eventOverview) {
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
@@ -69,6 +73,9 @@ public class MainCtrl {
 
         this.addExpenseCtrl = addExpense.getKey();
         this.addExpenseScene = new Scene(addExpense.getValue());
+
+        this.eventOverviewCtrl = eventOverview.getKey();
+        this.eventOverviewScene = new Scene(eventOverview.getValue());
 
         showHome();
         primaryStage.show();
@@ -99,6 +106,11 @@ public class MainCtrl {
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpenseScene);
         addExpenseCtrl.initializePage();
+    }
+
+    public void showEventOverview() {
+        primaryStage.setTitle("Event Overview");
+        primaryStage.setScene(eventOverviewScene);
     }
 
     public void showOverview() {

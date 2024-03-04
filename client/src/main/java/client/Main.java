@@ -32,8 +32,6 @@ public class Main extends Application {
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch();
     }
-    //Test made by Emanuel
-    int oneFour = 10 + 4;
     @Override
     public void start(Stage primaryStage) throws IOException {
 
@@ -54,9 +52,10 @@ public class Main extends Application {
         var addParticipant = FXML.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
+        var eventOverview = FXML.load(EventOverviewCtrl.class, "client", "scenes", "EventOverview.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense);
+        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview);
     }
 
 }
