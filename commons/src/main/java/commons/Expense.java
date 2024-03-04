@@ -31,6 +31,7 @@ public class Expense {
     @OneToMany
     public List<Debt> debtList;
     public Currency currency;
+    @ManyToOne
     public Tag tag;
 
     /***

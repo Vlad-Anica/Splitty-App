@@ -82,3 +82,33 @@ alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign k
 2024-03-02 23:46:04.914551+01:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
 alter table if exists expense add constraint FK1o972kom405r23ipc65tqbxv1 foreign key (date_id) references date [42102-224]
+2024-03-04 21:07:21.792976+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
+create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-04 21:07:21.868684+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]user (dtype varchar(31) not null, id bigint not null, password varchar(255), primary key (id))"; expected "identifier"; SQL statement:
+create table user (dtype varchar(31) not null, id bigint not null, password varchar(255), primary key (id)) [42001-224]
+2024-03-04 21:07:21.889906+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign key (date_id) references date [42102-224]
+2024-03-04 21:07:21.893901+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists expense add constraint FK1o972kom405r23ipc65tqbxv1 foreign key (date_id) references date [42102-224]
+2024-03-04 21:07:21.901901+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists person add constraint FK2is3ph79mqcwtkd724syhtjbi foreign key (user_id) references [*]user"; expected "identifier"; SQL statement:
+alter table if exists person add constraint FK2is3ph79mqcwtkd724syhtjbi foreign key (user_id) references user [42001-224]
+2024-03-04 21:09:10.215519+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
+create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-04 21:09:10.223520+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]user (dtype varchar(31) not null, id bigint not null, password varchar(255), primary key (id))"; expected "identifier"; SQL statement:
+create table user (dtype varchar(31) not null, id bigint not null, password varchar(255), primary key (id)) [42001-224]
+2024-03-04 21:09:10.243518+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign key (date_id) references date [42102-224]
+2024-03-04 21:09:10.248674+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists expense add constraint FK1o972kom405r23ipc65tqbxv1 foreign key (date_id) references date [42102-224]
+2024-03-04 21:09:10.253519+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists person add constraint FK2is3ph79mqcwtkd724syhtjbi foreign key (user_id) references [*]user"; expected "identifier"; SQL statement:
+alter table if exists person add constraint FK2is3ph79mqcwtkd724syhtjbi foreign key (user_id) references user [42001-224]
