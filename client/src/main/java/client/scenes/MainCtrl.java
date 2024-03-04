@@ -105,6 +105,7 @@ public class MainCtrl {
     public void showAddExpense() {
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpenseScene);
+        addExpenseCtrl.initializePage();
     }
 
     public void showEventOverview() {
