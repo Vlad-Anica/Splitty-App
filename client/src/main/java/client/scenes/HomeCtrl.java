@@ -61,6 +61,10 @@ public class HomeCtrl  {
         mainCtrl.showHome();
     }
 
+    public void goToEventOverview(ActionEvent event) throws IOException {
+        mainCtrl.showEventOverview();
+    }
+
 
 
 }
