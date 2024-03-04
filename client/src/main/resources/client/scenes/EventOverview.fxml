@@ -17,7 +17,7 @@
         <Button fx:id="showAllExpensesFromPerson" layoutX="344.0" layoutY="131.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="121.0" style="-fx-border-color: rgb(128,128,128);" text="From &lt;&lt;PERSON&gt;&gt;" />
         <Button fx:id="showAllExpensesWithPerson" layoutX="465.0" layoutY="131.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="121.0" style="-fx-border-color: rgb(128,128,128);" text="Including &lt;&lt;PERSON&gt;" />
         <Button fx:id="showAllParticipantsInEvent" layoutX="139.0" layoutY="106.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="24.0" text="..." />
-        <Button fx:id="goToAddExpense" layoutX="163.0" layoutY="106.0" maxHeight="25.0" mnemonicParsing="false" onAction="#goToAddExpense" prefHeight="25.0" prefWidth="133.0" style="-fx-border-color: gray;" text="Add Expense" />
+        <Button fx:id="goToAddExpense" layoutX="163.0" layoutY="106.0" maxHeight="25.0" mnemonicParsing="false" onAction="#goToAddExpense" prefHeight="25.0" prefWidth="133.0" style="-fx-border-color: rgb(128,128,128);" text="Add Expense" />
         <Label alignment="CENTER" layoutX="14.0" layoutY="106.0" prefHeight="27.0" prefWidth="149.0" style="-fx-border-color: rgb(128,128,128);" text="Participants">
             <opaqueInsets>
                 <Insets />
@@ -32,8 +32,8 @@
             </AnchorPane>
         </content>
       </ScrollPane>
-        <Label alignment="CENTER" layoutX="296.0" layoutY="106.0" prefHeight="27.0" prefWidth="289.0" style="-fx-border-color: gray;" text="Expenses" />
-        <Label alignment="CENTER" layoutX="225.0" layoutY="45.0" prefHeight="25.0" prefWidth="150.0" style="-FX-BORDER-COLOR: gray;" text="&lt;&lt;EVENT&gt;&gt;" />
+        <Label alignment="CENTER" layoutX="296.0" layoutY="106.0" prefHeight="27.0" prefWidth="289.0" style="-fx-border-color: rgb(128,128,128);" text="Expenses" />
+        <Label alignment="CENTER" layoutX="225.0" layoutY="45.0" prefHeight="25.0" prefWidth="150.0" style="-FX-BORDER-COLOR: rgb(128,128,128);" text="&lt;&lt;EVENT&gt;&gt;" />
         <Label alignment="CENTER" layoutX="225.0" layoutY="8.0" prefHeight="36.0" prefWidth="150.0" text="OVERVIEW">
             <font>
                 <Font size="24.0" />
