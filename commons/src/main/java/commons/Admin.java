@@ -14,11 +14,9 @@ public class Admin extends User {
 
     /**
      * The constructor that sets the id and password of an Admin
-     * @param id the id
      * @param password the password
      */
-    public Admin(long id, String password) {
-        super(id);
+    public Admin(String password) {
         this.password = password;
     }
 
