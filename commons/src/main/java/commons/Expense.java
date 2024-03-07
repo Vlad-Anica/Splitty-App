@@ -21,18 +21,18 @@ public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
-    public String description;
-    public double amount;
+    private long id;
+    private String description;
+    private double amount;
     @ManyToOne(cascade = CascadeType.PERSIST)
-    public Date date;
+    private Date date;
     @ManyToOne(cascade = CascadeType.PERSIST)
-    public Person receiver;
+    private Person receiver;
     @OneToMany
-    public List<Debt> debtList;
-    public Currency currency;
+    private List<Debt> debtList;
+    private Currency currency;
     @ManyToOne
-    public Tag tag;
+    private Tag tag;
 
     /***
      *

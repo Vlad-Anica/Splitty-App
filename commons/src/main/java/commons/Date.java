@@ -97,14 +97,6 @@ public class Date {
 
 
     /**
-     * Sets the id of the Date
-     * @param id
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /**
      * Sets the Day of the Date
      * @param day
      */

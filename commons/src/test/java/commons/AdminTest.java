@@ -17,29 +17,14 @@ public class AdminTest {
     }
 
     @Test
-    public void testGetId(){
-        Admin a = new Admin(13, "very secret!");
-        assertEquals(13, a.getId());
-
-    }
-
-    @Test
     public void testGetPassword(){
-        Admin a = new Admin(13, "very secret!");
+        Admin a = new Admin("very secret!");
         assertEquals("very secret!", a.getPassword());
     }
 
     @Test
-    public void testSetId(){
-        Admin a = new Admin(13, "very secret!");
-        assertEquals(13, a.getId());
-        a.setId(69);
-        assertEquals(69,a.getId());
-    }
-
-    @Test
     public void testSetPassword(){
-        Admin a = new Admin(13, "very secret!");
+        Admin a = new Admin("very secret!");
         assertEquals("very secret!", a.getPassword());
         a.setPassword("I forgot my first one D:");
         assertEquals("I forgot my first one D:", a.getPassword());
@@ -47,46 +32,51 @@ public class AdminTest {
 
     @Test
     public void testEquals(){
-        Admin a = new Admin(13, "very secret!");
-        Admin b = new Admin(13, "very secret!");
-        assertEquals(a,b);
+        Admin a = new Admin("very secret!");
+        assertEquals(a,a);
     }
 
     @Test
     public void testIdNotEquals(){
-        Admin a = new Admin(13, "very secret!");
-        Admin b = new Admin(12, "very secret!");
+        Admin a = new Admin("very secret!");
+        Admin b = new Admin("very secret!");
         assertNotEquals(a,b);
     }
 
     @Test
     public void testPasswordNotEquals(){
-        Admin a = new Admin(13, "very secret!");
-        Admin b = new Admin(13, "verysecret!");
+        Admin a = new Admin("very secret!");
+        Admin b = new Admin("verysecret!");
         assertNotEquals(a,b);
     }
     @Test
     public void testHashcode1() {
-        Admin a = new Admin(1 ,"");
-        Admin b = new Admin(1, "");
-        assertEquals(a.hashCode(), b.hashCode());
+        Admin a = new Admin("");
+        assertEquals(a.hashCode(), a.hashCode());
     }
 
     @Test
     public void testHashCode2() {
-        Admin a = new Admin(1, ":P");
-        Admin b = new Admin(13, ":P");
+        Admin a = new Admin(":P");
+        Admin b = new Admin(":PS");
+        assertNotEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    public void testHashcode3() {
+        Admin a = new Admin("");
+        Admin b = new Admin("");
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void testCorrectPassword(){
-        Admin a = new Admin(13, "correctPassword");
+        Admin a = new Admin("correctPassword");
         assertTrue(a.isCorrectPassword("correctPassword"));
     }
     @Test
     public void testWrongPassword(){
-        Admin a = new Admin(13, "correctPassword");
+        Admin a = new Admin("correctPassword");
         assertFalse(a.isCorrectPassword("wrongPassword"));
     }
 }
