@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SettingsCtrl {
     @FXML
-    private ComboBox selectedLanguage;
+    private ComboBox<String> selectedLanguage;
     @FXML
     private ComboBox selectedCurrency;
     @FXML
