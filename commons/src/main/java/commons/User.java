@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Entity
+@Table(name = "user_entity")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

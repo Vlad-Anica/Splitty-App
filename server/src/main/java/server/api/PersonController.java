@@ -12,14 +12,15 @@ import java.util.List;
 @RequestMapping("/api/persons")
 public class PersonController {
 
-    private PersonRepository db;
+    private final PersonRepository db;
     public PersonController(PersonRepository db) {
 
        this.db = db;
     }
 
-    @GetMapping(path={"", "/"})
+    @GetMapping(path = { "", "/" })
     public List<Person> getAll() {
+        System.out.println("Find people...");
         return db.findAll();
     }
 

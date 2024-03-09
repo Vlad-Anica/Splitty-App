@@ -67,7 +67,7 @@ public class ServerUtils {
 				.target(SERVER).path("api/persons") //
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
-				.get(new GenericType<List<Person>>() {});
+				.get(new GenericType<List<Person>>(){});
 	}
 
 	public Person addPerson(Person person) {

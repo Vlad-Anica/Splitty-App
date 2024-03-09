@@ -1,7 +1,9 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.*;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -61,9 +64,11 @@ public class AddExpenseCtrl {
     private List<Expense> expenses;
 
     private MainCtrl mainCtrl;
+    private ServerUtils server;
     @Inject
-    public AddExpenseCtrl(MainCtrl mainCtrl) {
+    public AddExpenseCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
+        this.server = server;
     }
 
     public void createExpense(ActionEvent event) throws RuntimeException  {
@@ -206,20 +211,34 @@ public class AddExpenseCtrl {
     }
     public void initializePage() {
 
-        participants = new ArrayList<>();
+        try {
+            participants = server.getPersons();
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+
         participants.addAll(List.of(
                 new Person("John", "Wick", "john@email.com",
-                        "NL32323232322232322342", "MIGBL233", new Event(), new User()),
+                        "NL32323232322232322342", "MIGBL233",
+                        Currency.EUR, 0.0, new Event(), new User()),
                 new Person("Bruce", "Wayne", "batman@email.com",
-                        "NL32323232322232322344", "MIGBL233", new Event(), new User()),
+                        "NL32323232322232322344", "MIGBL233",
+                        Currency.EUR, 0.0, new Event(), new User()),
                 new Person("Donnie", "Brasco", "brasco@email.com",
-                        "NL32323232322232322343", "MIGBL233", new Event(), new User())
+                        "NL32323232322232322343", "MIGBL233",
+                        Currency.EUR, 0.0, new Event(), new User())
         ));
 
         checkBoxes = splitPersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
 
         payerComboBox.setItems(FXCollections.observableArrayList(
-                "John Wick", "Bruce Wayne", "Donnie Brasco"));
+                participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
+        ));
         typeComboBox.setItems(FXCollections.observableArrayList(
                 "type1", "type2", "type3"));
         currencyComboBox.setItems(FXCollections.observableList(

@@ -31,7 +31,7 @@ public class PersonTest {
 	public void createGenericPerson() {
 		p = new Person("f", "l",
 				"email@email.com", "NL32323232423", "MIDLGB22",
-				new Event(), new User());
+				Currency.EUR, 0.0, new Event(), new User());
 	}
 	@Test
 	public void checkConstructor() {
@@ -120,7 +120,7 @@ public class PersonTest {
 	public void notEqualsNull() {
 		Person a =  new Person("a", "b",
 				"email@email.com", "NL32323232423", "MIDLGB22",
-				new Event(), new User());
+				Currency.EUR, 0.0, new Event(), new User());
 		Person b =  null;
 		assertNotEquals(a, b);
 	}
@@ -128,10 +128,10 @@ public class PersonTest {
 	public void equalsHashCode() {
 		var a = new Person("a", "b",
 				"email@email.com", "NL32323232423", "MIDLGB22",
-				new Event(), new User());
+				Currency.EUR, 0.0, new Event(), new User());
 		var b =  new Person("a", "b",
 				"email@email.com", "NL32323232423", "MIDLGB22",
-				new Event(), new User());
+				Currency.EUR, 0.0, new Event(), new User());
 		assertEquals(a, b);
 		assertEquals(a.hashCode(), b.hashCode());
 	}
@@ -140,10 +140,10 @@ public class PersonTest {
 	public void notEqualsHashCode() {
 		var a =  new Person("a", "b",
 				"email@email.com", "NL32323232423", "MIDLGB22",
-				new Event(), new User());
+				Currency.EUR, 0.0, new Event(), new User());
 		var b =  new Person("a", "c",
 				"email@email.com", "NL32323232423", "MIDLGB22",
-				new Event(), new User());
+				Currency.EUR, 0.0, new Event(), new User());
 		assertNotEquals(a, b);
 		assertNotEquals(a.hashCode(), b.hashCode());
 	}
@@ -152,7 +152,7 @@ public class PersonTest {
 	public void hasToString() {
 		var actual =  new Person("a", "b",
 				"email@email.com", "NL32323232423", "MIDLGB22",
-				new Event(), new User()).toString();
+				Currency.EUR, 0.0, new Event(), new User()).toString();
 		assertTrue(actual.contains(Person.class.getSimpleName()));
 		assertTrue(actual.contains("\n"));
 		assertTrue(actual.contains("firstName"));
