@@ -1,9 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Event;
 import commons.Person;
-import commons.User;
 import commons.Currency;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
