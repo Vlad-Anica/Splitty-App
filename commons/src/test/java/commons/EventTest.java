@@ -17,6 +17,10 @@ public class EventTest {
     ArrayList<Person> persons2;
     List<Debt> debts;
     Debt debt1, debt2;
+    Tag t;
+    ArrayList<Tag> tags;
+    Expense e1;
+    Expense e2;
     @BeforeEach
     public void createStartup() {
         p1 = new Person("Adam", "James",
@@ -34,15 +38,16 @@ public class EventTest {
         persons1.add(p1);
         persons2.add(p2);
         date = new Date(0,0,0,0,0,0);
-        Tag t = new Tag("blue", "food");
-        Expense e1 = new Expense("test1", 2.5, date, p1, List.of(debt1), Currency.EUR, t  );
-        Expense e2 = new Expense("test2", 2.5, date, p2, List.of(debt2), Currency.EUR, t );
+        t = new Tag("blue", "food");
+        tags = new ArrayList<>();
+        tags.add(t);
+        e1 = new Expense("test1", 2.5, date, p1, List.of(debt1), Currency.EUR, t );
+        e2 = new Expense("test2", 2.5, date, p2, List.of(debt2), Currency.EUR, t );
         expenses.add(e1);
         expenses.add(e2);
         debt1.setExpense(e1);
         debt2.setExpense(e2);
-        Tag tag = new Tag("red", "food");
-        ev = new Event("Dinner Party", "Bob's Celebration Dinner", tag,
+        ev = new Event("Dinner Party", "Bob's Celebration Dinner", tags,
                 new Date(1, 14, 5, 2006, 4, 30 ),
                 persons, expenses);
     }
@@ -71,13 +76,24 @@ public class EventTest {
 
     @Test
     public void testTagGetter() {
-        assertEquals(new Tag("red", "food"), ev.getTag());
+        ArrayList<Tag> tags2 = new ArrayList<>();
+        tags2.add(t);
+        tags2.add(Event.foodTag);
+        tags2.add(Event.entranceFeesTag);
+        tags2.add(Event.travelTag);
+        assertEquals(tags2, ev.getTags());
     }
 
     @Test
-    public void testTagSetter() {
-        ev.setTag(new Tag("cowabunga", "food"));
-        assertEquals(new Tag("cowabunga", "food"), ev.getTag());
+    public void testTagsSetter() {
+        ArrayList<Tag> tags2 = new ArrayList<>();
+        Tag t = new Tag("cowabunga", "food");
+        tags2.add(t);
+        tags2.add(Event.foodTag);
+        tags2.add(Event.entranceFeesTag);
+        tags2.add(Event.travelTag);
+        ev.setTags(tags2);
+        assertEquals(tags2, ev.getTags());
     }
 
     @Test
@@ -120,7 +136,7 @@ public class EventTest {
     public void testExpensesGetter() {
         ArrayList<Expense> expenseList = new ArrayList<>();
         Tag t = new Tag("blue", "food");
-        Expense ex1 = new Expense("test1", 2.5, date, p1, List.of(debt1), Currency.EUR, t  );
+        Expense ex1 = new Expense("test1", 2.5, date, p1, List.of(debt1), Currency.EUR, t );
         Expense ex2 = new Expense("test2", 2.5, date, p2, List.of(debt2), Currency.EUR, t );
         expenseList.add(ex1);
         expenseList.add(ex2);
