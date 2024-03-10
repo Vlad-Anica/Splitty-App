@@ -44,55 +44,121 @@ public class User {
         return id;
     }
 
+
+    /**
+     * getter for firstName
+     *
+     * @return the firstName
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * setter for firstName
+     *
+     * @param firstName the new firstName
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    /**
+     * getter for lastName
+     *
+     * @return the lastName
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * setter for lastName
+     *
+     * @param lastName the new lastName
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    /**
+     * getter for IBAN
+     *
+     * @return the IBAN
+     */
     public String getIBAN() {
         return IBAN;
     }
 
+    /**
+     * setter for IBAN
+     *
+     * @param IBAN the new IBAN
+     */
     public void setIBAN(String IBAN) {
         this.IBAN = IBAN;
     }
 
+    /**
+     * getter for BIC
+     *
+     * @return the BIC
+     */
     public String getBIC() {
         return BIC;
     }
 
+    /**
+     * setter for BIC
+     *
+     * @param BIC the new BIC
+     */
     public void setBIC(String BIC) {
         this.BIC = BIC;
     }
 
+    /**
+     * getter for email
+     *
+     * @return the email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * setter for email
+     *
+     * @param email the new email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * getter for preferredCurrency
+     *
+     * @return the preferredCurrency
+     */
     public Currency getPreferredCurrency() {
         return preferredCurrency;
     }
 
+    /**
+     * setter for preferredCurrency
+     *
+     * @param preferredCurrency the new preferredCurrency
+     */
     public void setPreferredCurrency(Currency preferredCurrency) {
         this.preferredCurrency = preferredCurrency;
     }
 
 
+    /**
+     * checks whether it is equal to the object
+     * @param o the object to check equality with
+     * @return whether it is equal
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -109,6 +175,10 @@ public class User {
         return preferredCurrency == user.preferredCurrency;
     }
 
+    /**
+     * generates a hashcode
+     * @return the hashcode
+     */
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
@@ -121,6 +191,10 @@ public class User {
         return result;
     }
 
+    /**
+     * generate a readable string
+     * @return the readable string
+     */
     @Override
     public String toString() {
         return "User{" +
