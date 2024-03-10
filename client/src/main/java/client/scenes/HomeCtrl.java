@@ -65,6 +65,10 @@ public class HomeCtrl  {
         mainCtrl.showEventOverview();
     }
 
+    public void goToStatsTest(ActionEvent event) throws IOException{
+        mainCtrl.showStatsTest();
+    }
+
 
 
 }
