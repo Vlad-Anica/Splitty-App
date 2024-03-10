@@ -12,6 +12,11 @@ public class Admin extends User {
 
     }
 
+    public Admin(String firstName, String lastName, String IBAN, String BIC, String email, Currency preferredCurrency, String password) {
+        super(firstName, lastName, IBAN, BIC, email, preferredCurrency);
+        this.password = password;
+    }
+
     /**
      * The constructor that sets the id and password of an Admin
      * @param password the password
