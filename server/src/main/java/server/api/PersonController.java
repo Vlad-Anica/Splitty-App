@@ -1,6 +1,8 @@
 package server.api;
 
 import commons.Person;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.PersonRepository;
@@ -12,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/persons")
 public class PersonController {
 
+    @Autowired
     private final PersonRepository db;
     public PersonController(PersonRepository db) {
 
@@ -33,18 +36,19 @@ public class PersonController {
         return ResponseEntity.ok(db.findById(id).get());
     }
 
-    @GetMapping("/{firstName}")
-    public ResponseEntity<List<Person>> getByName(@PathVariable("firstName") String firstName,
-                                                  @RequestParam("lastName") String lastName) {
-        if (isNullOrEmpty(firstName) || isNullOrEmpty(lastName))
-            return ResponseEntity.badRequest().build();
+//    @GetMapping("/{firstName}")
+//    public ResponseEntity<List<Person>> getByName(@PathVariable("firstName") String firstName,
+//                                                  @RequestParam("lastName") String lastName) {
+//        if (isNullOrEmpty(firstName) || isNullOrEmpty(lastName))
+//            return ResponseEntity.badRequest().build();
+//
+//        return ResponseEntity.ok(db.findByFirstName(firstName));
+//    }
 
-        return ResponseEntity.ok(db.findByFirstName(firstName));
-    }
 
-
-    @PostMapping("/")
+    @PostMapping(path = { "", "/" })
     public ResponseEntity<Person> add(@RequestBody Person person) {
+        System.out.println("Received Person object: " + person);
 
         if (person == null || isNullOrEmpty(person.getFirstName()) ||
                 isNullOrEmpty(person.getLastName())
@@ -54,7 +58,7 @@ public class PersonController {
         }
 
         Person saved = db.save(person);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     private static boolean isNullOrEmpty(String s) {

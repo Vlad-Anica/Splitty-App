@@ -70,8 +70,8 @@ public class AddParticipantCtrl {
                     return;
                 }
 
-                participants.add(p);
                 server.addPerson(p);
+                participants.add(p);
                 System.out.println(p);
             } catch (WebApplicationException e) {
 

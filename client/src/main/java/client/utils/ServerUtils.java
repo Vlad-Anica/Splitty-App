@@ -24,7 +24,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Person;
+import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -71,10 +74,20 @@ public class ServerUtils {
 	}
 
 	public Person addPerson(Person person) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/persons")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(person, APPLICATION_JSON), Person.class);
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonPerson = objectMapper.writeValueAsString(person);
+			System.out.println("Received Person object: " + jsonPerson);
+
+			return ClientBuilder.newClient(new ClientConfig())//
+					.target(SERVER).path("api/persons")//
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.post(Entity.entity(jsonPerson, MediaType.APPLICATION_JSON), Person.class);
+
+		} catch (JsonProcessingException e) {
+            e.printStackTrace();
+			return null;
+        }
 	}
 }

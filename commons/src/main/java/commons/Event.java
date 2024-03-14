@@ -10,6 +10,7 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="EVENT_ID")
     public long id;
     private String name;
     private String description;

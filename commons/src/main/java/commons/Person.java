@@ -32,19 +32,19 @@ public class Person {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private long id;
-	@Column(name = "BIC")
+	@Column(name = "bic")
 	private String BIC;
-	@Column(name = "IBAN")
+	@Column(name = "iban")
 	private String IBAN;
-	@Column(name = "EMAIL")
+	@Column(name = "email")
 	private String email;
-	@Column(name = "FIRST_NAME")
+	@Column(name = "firstName")
 	private String firstName;
-	@Column(name = "LAST_NAME")
+	@Column(name = "lastName")
 	private String lastName;
-	@Column(name = "PREFERRED_CURRENCY")
+	@Column(name = "preferredCurrency")
 	private Currency preferredCurrency;
-	@Column(name = "TOTAL_DEBT")
+	@Column(name = "totalDebt")
 	private double totalDebt;
 	@ManyToOne
 	@JoinColumn(name = "EVENT_ID")
@@ -53,7 +53,7 @@ public class Person {
 	@JoinColumn(name = "USER_ID")
 	private User user;
 	@Transient
-    @OneToMany
+    @OneToMany(targetEntity = Debt.class)
 	private List<Debt> debtList;
 	@SuppressWarnings("unused")
 	public Person() {
