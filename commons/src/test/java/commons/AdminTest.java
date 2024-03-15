@@ -35,7 +35,19 @@ public class AdminTest {
         Admin a = new Admin("very secret!");
         assertEquals(a,a);
     }
+    @Test
+    public void testEquals2(){
+        Admin a = new Admin("first","last", "INGB 0001234567", "INGBNL2A", "test@email.com", Currency.EUR, "very secret!");
+        Admin b = new Admin("first","last", "INGB 0001234567", "INGBNL2A", "test@email.com", Currency.EUR, "very secret!");
+        assertEquals(a,b);
+    }
 
+    @Test
+    public void testNotEquals(){
+        Admin a = new Admin("first","last", "INGB 0001234567", "INGBNL2A", "test@email.com", Currency.EUR, "very secret!");
+        Admin b = new Admin("first","last", "INGB 6901234567", "INGBNL2A", "test@email.com", Currency.EUR, "very secret!");
+        assertNotEquals(a,b);
+    }
     /*
     @Test
     public void testIdNotEquals(){
@@ -64,14 +76,18 @@ public class AdminTest {
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
-    /*
     @Test
     public void testHashcode3() {
-        Admin a = new Admin("");
-        Admin b = new Admin("");
+        Admin a = new Admin("first","last", "INGB 0001234567", "INGBNL2A", "test@email.com", Currency.EUR, "very secret!");
+        Admin b = new Admin("first","last", "INGB 0001234567", "INGBNL2A", "test@email.com", Currency.EUR, "very secret!");
+        assertEquals(a.hashCode(), b.hashCode());
+    }
+    @Test
+    public void testHashcode4() {
+        Admin a = new Admin("first","last", "INGB 0001234567", "INGBNL2A", "test@email.com", Currency.EUR, "very secret!");
+        Admin b = new Admin("first","last", "INGB 0001234567", "INGBNL2A", "test@email.net", Currency.EUR, "very secret!");
         assertNotEquals(a.hashCode(), b.hashCode());
     }
-    */
 
     @Test
     public void testCorrectPassword(){
