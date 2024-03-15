@@ -116,7 +116,7 @@ public class AddParticipantCtrl {
         return true;
     }
 
-    public void goHome(ActionEvent event) throws IOException {
+    public void igoHome(ActionEvent event) throws IOException {
         mainCtrl.showHome();
     }
 

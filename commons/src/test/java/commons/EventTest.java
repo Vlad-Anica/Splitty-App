@@ -163,6 +163,15 @@ public class EventTest {
         assertTrue(ev.addParticipant(p3));
         assertTrue(ev.isAttending(p3));
     }
+    @Test
+    public void addParticipantNullTest() {
+        assertFalse(ev.addParticipant(null));
+    }
+
+    @Test
+    public void isAttendingNullTest() {
+        assertFalse(ev.isAttending(null));
+    }
 
     @Test
     public void removeParticipantTest() {
@@ -171,6 +180,17 @@ public class EventTest {
         ev.addParticipant(p3);
         assertTrue(ev.removeParticipant(p3));
         assertFalse(ev.isAttending(p3));
+    }
+
+    @Test
+    public void removeNullParticipantTest() {
+        assertFalse(ev.removeParticipant(null));
+    }
+
+    @Test
+    public void removeNonParticipantTest() {
+        assertFalse(ev.removeParticipant(new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42")));
     }
 
     @Test
