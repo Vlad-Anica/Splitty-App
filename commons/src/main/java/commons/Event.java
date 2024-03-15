@@ -14,8 +14,11 @@ public class Event {
     public long id;
     private String name;
     private String description;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Tag tag;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private List<Tag> tags;
+    public static final Tag foodTag= new Tag("green", "Food");
+    public static final Tag entranceFeesTag = new Tag("blue", "Entrance Fees");
+    public static final Tag travelTag = new Tag("red", "Travel");
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Date date;
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -32,16 +35,19 @@ public class Event {
      * Constructor for event. inviteCode is left out as it is separately generated.
      * @param name String representing the Event's name
      * @param description String representing the Event's description
-     * @param tag Tag representing the Event's tag
+     * @param tags Tags representing the Events' tags
      * @param date Date representing the Event's date
      * @param participants List of Persons representing the Event's participants
      * @param expenses List of Expenses representing the Event's expenses
      */
-    public Event(String name, String description, Tag tag, Date date, List<Person> participants,
+    public Event(String name, String description, List<Tag> tags, Date date, List<Person> participants,
                  List<Expense> expenses) {
         this.name = name;
         this.description = description;
-        this.tag = tag;
+        this.tags = Objects.requireNonNullElseGet(tags, ArrayList::new);
+        this.addTag(foodTag);
+        this.addTag(entranceFeesTag);
+        this.addTag(travelTag);
         this.date = date;
         this.participants = Objects.requireNonNullElseGet(participants, ArrayList::new);
         this.expenses = Objects.requireNonNullElseGet(expenses, ArrayList::new);
@@ -90,18 +96,34 @@ public class Event {
 
     /**
      * Getter for an Event's tag.
-     * @return Tag representing the Event's tag
+     * @return List of Tags representing the Events' tags
      */
-    public Tag getTag() {
-        return tag;
+    public List<Tag> getTags() {
+        return this.tags;
     }
 
     /**
      * Setter for an Event's tag.
-     * @param tag Tag representing the new tag
+     * @param tags List of Tags representing the new tags for the event
      */
-    public void setTag(Tag tag) {
-        this.tag = tag;
+    public void setTags(List<Tag> tags) {
+        this.tags = Objects.requireNonNullElseGet(tags, ArrayList::new);
+        this.addTag(foodTag);
+        this.addTag(entranceFeesTag);
+        this.addTag(travelTag);
+    }
+
+    /**
+     * Method that adds a Tag to an Event's list of Tags if not already present.
+     * @param tag Tag to add to the event.
+     * @return boolean, true if the Tag was added successfully, false otherwise.
+     */
+    public boolean addTag(Tag tag) {
+        if(tag == null || this.tags.contains(tag)) {
+            return false;
+        }
+        this.tags.add(tag);
+        return true;
     }
 
     /**
@@ -133,7 +155,7 @@ public class Event {
      * @param participants List of Persons representing the Event's new List of participants
      */
     public void setParticipants(List<Person> participants) {
-        this.participants = participants;
+        this.participants = Objects.requireNonNullElseGet(participants, ArrayList::new);
     }
 
     /**
@@ -182,10 +204,10 @@ public class Event {
     /**
      * Adds a person to the list of participants attending an event. Returns true if successful.
      * @param person Person representing the participant to add to the Event.
-     * @return boolean, true if a Person was added successfully, false otherwise.
+     * @return boolean, true if the Person was added successfully, false otherwise.
      */
     public boolean addParticipant(Person person) {
-        if(this.isAttending(person)) {
+        if(person == null || this.isAttending(person)) {
             return false;
         }
         this.getParticipants().add(person);
@@ -271,7 +293,7 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return id == event.id && Objects.equals(name, event.name) && Objects.equals(description, event.description) && Objects.equals(tag, event.tag) && Objects.equals(date, event.date) && Objects.equals(participants, event.participants) && Objects.equals(expenses, event.expenses) && Objects.equals(inviteCode, event.inviteCode);
+        return id == event.id && Objects.equals(name, event.name) && Objects.equals(description, event.description) && Objects.equals(tags, event.tags) && Objects.equals(date, event.date) && Objects.equals(participants, event.participants) && Objects.equals(expenses, event.expenses) && Objects.equals(inviteCode, event.inviteCode);
     }
 
     /**
@@ -280,6 +302,6 @@ public class Event {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, tag, date, participants, expenses, inviteCode);
+        return Objects.hash(id, name, description, tags, date, participants, expenses, inviteCode);
     }
 }
