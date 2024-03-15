@@ -13,13 +13,6 @@ public class User {
     long id;
 
     /**
-     * Constructor for User
-     */
-    public User(long id) {
-        this.id = id;
-    }
-
-    /**
      * Constructor without arguments
      */
     public User() {
@@ -33,15 +26,6 @@ public class User {
      */
     public long getId() {
         return id;
-    }
-
-    /**
-     * Sets the id
-     *
-     * @param id the id you want it to have
-     */
-    public void setId(long id) {
-        this.id = id;
     }
 
     @Override
