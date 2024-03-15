@@ -302,6 +302,6 @@ public class Event {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, tags, date, participants, expenses, inviteCode);
+        return Objects.hash(id, name, description, tags, date, participants, expenses);
     }
 }

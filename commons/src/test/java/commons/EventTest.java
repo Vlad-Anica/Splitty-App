@@ -199,7 +199,7 @@ public class EventTest {
     @Test
     public void removeNonParticipantTest() {
         assertFalse(ev.removeParticipant(new Person("Senator", "Armstrong",
-                "usa@email.com", "AM420", "NITUL42")));
+                "usa@email.com", "AM420", "NITUL42",Currency.EUR, 0.0, new Event(), new User())));
     }
 
     @Test
@@ -217,6 +217,16 @@ public class EventTest {
     }
 
     @Test
+    public void addExpenseNullTest() {
+        assertFalse(ev.addExpense(null));
+    }
+
+    @Test
+    public void containsExpenseNullTest() {
+        assertFalse(ev.containsExpense(null));
+    }
+
+    @Test
     public void removeExpenseTest() {
         Date dateTest = new Date(1,2,3,4,5,6);
         Person p3 = new Person("Senator", "Armstrong",
@@ -228,6 +238,11 @@ public class EventTest {
         ev.addExpense(e3);
         assertTrue(ev.removeExpense(e3));
         assertFalse(ev.containsExpense(e3));
+    }
+
+    @Test
+    public void removeExpenseNullTest() {
+        assertFalse(ev.removeExpense(null));
     }
 
     @Test
@@ -256,6 +271,11 @@ public class EventTest {
         assertEquals(ev2, ev);
     }
     */
+
+    @Test
+    public void eventHashCodeEqualsSameTest() {
+        assertEquals(ev.hashCode(), ev.hashCode());
+    }
 
 
 }
