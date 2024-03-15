@@ -1,17 +1,20 @@
 package client.scenes;
 
-import commons.Event;
+import client.utils.ServerUtils;
 import commons.Person;
-import commons.User;
+import commons.Currency;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,37 +48,40 @@ public class AddParticipantCtrl {
     List<Person> participants = new ArrayList<>();
 
     private MainCtrl mainCtrl;
+    private ServerUtils server;
 
     @Inject
-    public AddParticipantCtrl(MainCtrl mainCtrl) {
+    public AddParticipantCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
+        this.server = server;
     }
 
     @FXML
     public void addParticipant(ActionEvent event) {
 
         if (isValidInput()) {
-            Person p;
-            if (email == null || email.getText().isEmpty())
-            {
-                p = new Person(firstName.getText(), lastName.getText(),
-                        IBAN.getText(), BIC.getText(), new Event(), new User());
-            }
-            else
-            {
-                p = new Person(firstName.getText(), lastName.getText(), email.getText(),
-                        IBAN.getText(), BIC.getText(), new Event(), new User());
-            }
+            try {
+                Person p = getParticipant();
+                if (participants.contains(p))
+                {
+                    participantAdded.setText(p.getFirstName() + " was already added");
+                    participantAdded.setTextFill(Color.RED);
+                    participantAdded.setStyle("-fx-font-weight: bold");
+                    return;
+                }
 
-            if (participants.contains(p))
-            {
-                participantAdded.setText(p.getFirstName() + " was already added");
-                participantAdded.setTextFill(Color.RED);
-                participantAdded.setStyle("-fx-font-weight: bold");
+                server.addPerson(p);
+                participants.add(p);
+                System.out.println(p);
+            } catch (WebApplicationException e) {
+
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
                 return;
             }
 
-            participants.add(p);
             Random random = new Random();
             //generate a random alphanumeric code
             String inviteCode = random.ints(48, 123)
@@ -86,7 +92,6 @@ public class AddParticipantCtrl {
             participantAdded.setText("Sent invite to " + firstName.getText() + "! Invite code: " + inviteCode);
             participantAdded.setTextFill(Color.BLACK);
             participantAdded.setStyle("-fx-font-weight: light");
-            System.out.println(p);
         }
         else {
             participantAdded.setText("Please fill out all fields correctly!");
@@ -94,6 +99,22 @@ public class AddParticipantCtrl {
             participantAdded.setStyle("-fx-font-weight: bold");
         }
 
+    }
+
+    public Person getParticipant() {
+        Person p;
+        if (email == null || email.getText().isEmpty())
+        {
+            p = new Person(firstName.getText(), lastName.getText(), null,
+                    IBAN.getText(), BIC.getText(), Currency.EUR, 0.0, null, null);
+        }
+        else
+        {
+            p = new Person(firstName.getText(), lastName.getText(), email.getText(),
+                    IBAN.getText(), BIC.getText(), Currency.EUR, 0.0, null, null);
+        }
+
+        return p;
     }
     public boolean isValidInput() {
 

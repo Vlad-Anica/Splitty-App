@@ -5,9 +5,11 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "user_entity")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="USER_ID")
     private long id;
     private String firstName;
     private String lastName;

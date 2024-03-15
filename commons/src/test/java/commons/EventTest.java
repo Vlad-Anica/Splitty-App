@@ -20,8 +20,11 @@ public class EventTest {
     @BeforeEach
     public void createStartup() {
         p1 = new Person("Adam", "James",
-                "email@email.com", "NL33", "MIDLGB22");
-        p2 = new Person("John", "Doe", "email2@email.com", "RO420", "MIDLGB22");
+                "email@email.com", "NL33", "MIDLGB22",
+                Currency.EUR, 0.0, new Event(), new User());
+        p2 = new Person("John", "Doe",
+                "email2@email.com", "RO420", "MIDLGB22",
+                Currency.EUR, 0.0, new Event(), new User());
         ArrayList<Person> persons = new ArrayList<>();
         debt1 = new Debt(p2, p1, null, 2.5);
         debt2 = new Debt(p1, p2, null, 2.5);
@@ -94,9 +97,11 @@ public class EventTest {
     @Test
     public void testPersonsGetter() {
         Person pe1 = new Person("Adam", "James",
-                "email@email.com", "NL33", "MIDLGB22");
+                "email@email.com", "NL33", "MIDLGB22",
+                Currency.EUR, 0.0, new Event(), new User());
         Person pe2 = new Person("John", "Doe",
-                "email2@email.com", "RO420", "MIDLGB22");
+                "email2@email.com", "RO420", "MIDLGB22",
+                Currency.EUR, 0.0, new Event(), new User());
         ArrayList<Person> personList = new ArrayList<>();
         personList.add(pe1);
         personList.add(pe2);
@@ -106,9 +111,11 @@ public class EventTest {
     @Test
     public void testPersonsSetter() {
         Person pe1 = new Person("Adam", "Connor",
-                "exxmail@email.com", "NL33", "MIDLGB22");
+                "exxmail@email.com", "NL33", "MIDLGB22",
+                Currency.EUR, 0.0, new Event(), new User());
         Person pe2 = new Person("John", "Does",
-                "emaidkddl2@email.com", "RO4424220", "MIDLGB22");
+                "emaidkddl2@email.com", "RO4424220", "MIDLGB22",
+                Currency.EUR, 0.0, new Event(), new User());
         ArrayList<Person> personList = new ArrayList<>();
         personList.add(pe1);
         personList.add(pe2);
@@ -142,7 +149,8 @@ public class EventTest {
     @Test
     public void addParticipantTest() {
         Person p3 = new Person("Senator", "Armstrong",
-                "usa@email.com", "AM420", "NITUL42");
+                "usa@email.com", "AM420", "NITUL42",
+                Currency.EUR, 0.0, new Event(), new User());
         assertFalse(ev.isAttending(p3));
         assertTrue(ev.addParticipant(p3));
         assertTrue(ev.isAttending(p3));
@@ -151,7 +159,8 @@ public class EventTest {
     @Test
     public void removeParticipantTest() {
         Person p3 = new Person("Senator", "Armstrong",
-                "usa@email.com", "AM420", "NITUL42");
+                "usa@email.com", "AM420", "NITUL42",
+                Currency.EUR, 0.0, new Event(), new User());
         ev.addParticipant(p3);
         assertTrue(ev.removeParticipant(p3));
         assertFalse(ev.isAttending(p3));
@@ -161,7 +170,8 @@ public class EventTest {
     public void addExpenseTest() {
         Date dateTest = new Date(1,2,3,4,5,6);
         Person p3 = new Person("Senator", "Armstrong",
-                "usa@email.com", "AM420", "NITUL42");
+                "usa@email.com", "AM420", "NITUL42",
+                Currency.EUR, 0.0, new Event(), new User());
         debts.add(debt2);
         Tag t = new Tag("blue", "food");
         Expense e3 = new Expense("amongUs", 5, dateTest, p3, debts, Currency.USD, t  );
@@ -174,7 +184,8 @@ public class EventTest {
     public void removeExpenseTest() {
         Date dateTest = new Date(1,2,3,4,5,6);
         Person p3 = new Person("Senator", "Armstrong",
-                "usa@email.com", "AM420", "NITUL42");
+                "usa@email.com", "AM420", "NITUL42",
+                Currency.EUR, 0.0, new Event(), new User());
         debts.add(debt2);
         Tag t = new Tag("blue", "food");
         Expense e3 = new Expense("amongUs", 5, dateTest, p3, debts, Currency.USD, t  );

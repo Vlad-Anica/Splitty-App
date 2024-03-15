@@ -25,26 +25,36 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.util.*;
 
 @Entity
+@Table(name = "PERSON")
 public class Person {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID")
 	private long id;
-
-	private String firstName;
-	private String lastName;
-
-	private String IBAN;
+	@Column(name = "bic")
 	private String BIC;
-	private double totalDebt;
-	@OneToMany
-	private List<Debt> debtList;
+	@Column(name = "iban")
+	private String IBAN;
+	@Column(name = "email")
 	private String email;
+	@Column(name = "firstName")
+	private String firstName;
+	@Column(name = "lastName")
+	private String lastName;
+	@Column(name = "preferredCurrency")
 	private Currency preferredCurrency;
+	@Column(name = "totalDebt")
+	private double totalDebt;
 	@ManyToOne
+	@JoinColumn(name = "EVENT_ID")
 	private Event event;
 	@ManyToOne
+	@JoinColumn(name = "USER_ID")
 	private User user;
+	@Transient
+    @OneToMany(targetEntity = Debt.class)
+	private List<Debt> debtList;
 	@SuppressWarnings("unused")
 	public Person() {
 		// for object mapper
@@ -55,42 +65,18 @@ public class Person {
 		this.lastName = lastName;
 	}
 
-	public Person(String firstName, String lastName,
-				  String email, String IBAN, String BIC, Event event, User user) {
+	public Person(String firstName, String lastName, String email, String IBAN, String BIC,
+				  Currency preferredCurrency, double totalDebt, Event event, User user) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.totalDebt = 0.0;
+		this.totalDebt = totalDebt;
 		this.debtList = new ArrayList<>();
 		this.IBAN = IBAN;
 		this.BIC = BIC;
 		this.event = event;
-		this.preferredCurrency = Currency.EUR;
+		this.preferredCurrency = preferredCurrency;
 		this.user = user;
-	}
-	public Person(String firstName, String lastName, String IBAN,
-				  String BIC, Event event, User user) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.totalDebt = 0.0;
-		this.debtList = new ArrayList<>();
-		this.IBAN = IBAN;
-		this.BIC = BIC;
-		this.event = event;
-		this.preferredCurrency = Currency.EUR;
-		this.user = user;
-	}
-	public Person(String firstName, String lastName,
-				  String email, String IBAN, String BIC) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.totalDebt = 0.0;
-		this.debtList = new ArrayList<>();
-		this.IBAN = IBAN;
-		this.BIC = BIC;
-		this.event = new Event();
-		this.preferredCurrency = Currency.EUR;
 	}
 
 	public long getId() {
