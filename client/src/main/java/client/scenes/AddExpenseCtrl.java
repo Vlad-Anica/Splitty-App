@@ -171,14 +171,15 @@ public class AddExpenseCtrl {
     public Person getPayerData() {
         Person p = null;
         if (payerComboBox.getValue() != null) {
-            switch (payerComboBox.getValue()) {
-                case "John Wick" -> p = participants.get(0);
-                case "Bruce Wayne" -> p = participants.get(1);
-                case "Donnie Brasco" -> p = participants.get(2);
-                default -> p = null;
-            };
+            String fullName = payerComboBox.getValue();
+            for (Person participant : participants)
+            {
+                String participantName = participant.getFirstName() +" " +
+                        participant.getLastName();
+                if (participantName.equals(fullName))
+                    p = participant;
+            }
         }
-
         return p;
     }
 
@@ -212,7 +213,42 @@ public class AddExpenseCtrl {
     public void initializePage() {
 
         try {
-            participants = server.getPersons();
+            participants = new ArrayList<>();
+            participants.addAll(server.getPersons());
+            participants.addAll(List.of(
+                    new Person("John", "Wick", "john@email.com",
+                            "NL32323232322232322342", "MIGBL233",
+                            Currency.EUR, 0.0, new Event(), new User()),
+                    new Person("Bruce", "Wayne", "batman@email.com",
+                            "NL32323232322232322344", "MIGBL233",
+                            Currency.EUR, 0.0, new Event(), new User()),
+                    new Person("Donnie", "Brasco", "brasco@email.com",
+                            "NL32323232322232322343", "MIGBL233",
+                            Currency.EUR, 0.0, new Event(), new User())
+            ));
+            int y = 5;
+            for (Person p : participants) {
+                CheckBox newBox = new CheckBox(
+                        p.getFirstName() + " " + p.getLastName());
+                splitPersonsPane.getChildren().add(newBox);
+                newBox.setLayoutY(y);
+                y += 25;
+            }
+            payerComboBox.setItems(FXCollections.observableArrayList(
+                    participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
+            ));
+
+            checkBoxes = splitPersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
+
+
+            typeComboBox.setItems(FXCollections.observableArrayList(
+                    "type1", "type2", "type3"));
+            currencyComboBox.setItems(FXCollections.observableList(
+                    List.of(Currency.EUR, Currency.USD,
+                            Currency.CHF, Currency.GBP)));
+            currencyComboBox.getSelectionModel().selectFirst();
+            checkPersonBoxes(new ActionEvent());
+            expenses = new ArrayList<>();
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -222,31 +258,7 @@ public class AddExpenseCtrl {
             return;
         }
 
-        participants.addAll(List.of(
-                new Person("John", "Wick", "john@email.com",
-                        "NL32323232322232322342", "MIGBL233",
-                        Currency.EUR, 0.0, new Event(), new User()),
-                new Person("Bruce", "Wayne", "batman@email.com",
-                        "NL32323232322232322344", "MIGBL233",
-                        Currency.EUR, 0.0, new Event(), new User()),
-                new Person("Donnie", "Brasco", "brasco@email.com",
-                        "NL32323232322232322343", "MIGBL233",
-                        Currency.EUR, 0.0, new Event(), new User())
-        ));
 
-        checkBoxes = splitPersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
-
-        payerComboBox.setItems(FXCollections.observableArrayList(
-                participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
-        ));
-        typeComboBox.setItems(FXCollections.observableArrayList(
-                "type1", "type2", "type3"));
-        currencyComboBox.setItems(FXCollections.observableList(
-                List.of(Currency.EUR, Currency.USD,
-                        Currency.CHF, Currency.GBP)));
-        currencyComboBox.getSelectionModel().selectFirst();
-        checkPersonBoxes(new ActionEvent());
-        expenses = new ArrayList<>();
     }
     public void goHome(ActionEvent event) throws IOException {
         mainCtrl.showHome();
