@@ -73,6 +73,14 @@ public class PersonController {
         return db.findById(id).get().getDebtList();
     }
 
+    @GetMapping("events/{id}")
+    public Event getEventsById(@PathVariable("id") long id){
+        if (id < 0 || !db.existsById(id)) {
+            return null;
+        }
+        return db.findById(id).get().getEvent();
+    }
+
     @GetMapping("/debts/{USER_ID}")
     public Map<Event, Double> getTotalDebtsById(@PathVariable("USER_ID") User user){
         List<Person> allUsers = getAll();
