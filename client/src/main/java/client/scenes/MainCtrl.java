@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -132,7 +133,9 @@ public class MainCtrl {
     }
 
     public void showStatsTest() {
+        String name = eventOverviewCtrl.getEventName();
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statisticsScene);
+        statisticsCtrl.PieChartExpenses.setTitle(name);
     }
 }

@@ -34,10 +34,11 @@
       </ScrollPane>
         <Label alignment="CENTER" layoutX="296.0" layoutY="106.0" prefHeight="27.0" prefWidth="289.0" style="-fx-border-color: rgb(128,128,128);" text="Expenses" />
         <Label alignment="CENTER" layoutX="225.0" layoutY="45.0" prefHeight="25.0" prefWidth="150.0" style="-FX-BORDER-COLOR: rgb(128,128,128);" text="&lt;&lt;EVENT&gt;&gt;" />
-        <Label alignment="CENTER" layoutX="225.0" layoutY="8.0" prefHeight="36.0" prefWidth="150.0" text="OVERVIEW">
+        <Label fx:id="overviewLabel" alignment="CENTER" layoutX="225.0" layoutY="8.0" prefHeight="36.0" prefWidth="150.0" text="OVERVIEW">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
+      <Button fx:id="goToStatsButton" layoutX="14.0" layoutY="322.0" mnemonicParsing="false" onAction="#goToStats" prefHeight="52.0" prefWidth="52.0" text="GoStats" />
     </children>
 </Pane>

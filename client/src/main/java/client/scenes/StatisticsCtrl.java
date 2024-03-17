@@ -1,16 +1,23 @@
 package client.scenes;
+import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.*;
+import javafx.scene.control.Button;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
 public class StatisticsCtrl implements Initializable {
+
+
+private final EventOverviewCtrl eventController;
+
+@FXML
+Button temporaryButton;
 
 @FXML
 PieChart PieChartExpenses;
@@ -23,7 +30,14 @@ ObservableList<PieChart.Data> pieChartExpensesData =
                 new PieChart.Data("Pears", 22),
                 new PieChart.Data("Apples", 30));
 
-@Override
+    @Inject
+    public StatisticsCtrl(EventOverviewCtrl eventController){
+        this.eventController = eventController;
+    }
+
+
+
+    @Override
 public void initialize(URL location, ResourceBundle resources) {
     PieChartExpenses.setData(pieChartExpensesData);
 }

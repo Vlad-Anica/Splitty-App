@@ -19,7 +19,5 @@
           <Button fx:id="addExpenseButton" layoutX="384.0" layoutY="83.0" mnemonicParsing="false" onAction="#goToAddExpense" text="Add Expense" />
           <Button fx:id="goSettingsButton" layoutX="527.0" layoutY="351.0" mnemonicParsing="false" onAction="#goToSettings" text="Settings" />
       <Button fx:id="eventOverviewButton" layoutX="249.0" layoutY="129.0" mnemonicParsing="false" onAction="#goToEventOverview" prefHeight="25.0" prefWidth="80.0" text="&lt;&lt;Event&gt;&gt;" />
-      <Button fx:id="StatisticsButton" layoutX="417.0" layoutY="351.0" mnemonicParsing="false" onAction="#goToStatsTest" text="GOTOSTATSTEST" />
-
       </children>
     </AnchorPane>
