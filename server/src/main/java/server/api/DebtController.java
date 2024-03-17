@@ -1,9 +1,11 @@
 package server.api;
 
-import commons.Person;
-import org.springframework.web.bind.annotation.*;
-import server.database.DebtRepository;
 import commons.Debt;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import server.database.DebtRepository;
 import server.database.ExpenseRepository;
 import server.database.PersonRepository;
 

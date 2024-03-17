@@ -2,8 +2,6 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
-import javax.swing.plaf.ColorUIResource;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
