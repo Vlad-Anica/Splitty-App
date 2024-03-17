@@ -26,7 +26,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import commons.Event;
 import commons.Person;
+import commons.User;
 import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -89,5 +91,13 @@ public class ServerUtils {
             e.printStackTrace();
 			return null;
         }
+	}
+
+	public List<Event> getEvents(User user) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("user/events") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Event>>(){});
 	}
 }
