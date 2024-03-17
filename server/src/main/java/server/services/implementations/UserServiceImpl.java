@@ -16,9 +16,9 @@ public class UserServiceImpl implements UserService {
         Event e1 = new Event();
         e1.setName("event1");
         Event e2 = new Event();
-        e1.setName("event2");
+        e2.setName("event2");
         Event e3 = new Event();
-        e1.setName("event3");
+        e3.setName("event3");
 
         return List.of(e1, e2, e3);
     }
