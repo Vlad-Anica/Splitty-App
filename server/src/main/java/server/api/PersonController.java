@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Debt;
 import commons.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,6 @@ public class PersonController {
         if (id < 0 || !db.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        ResponseEntity<Person> p = getById(id);
         return db.findById(id).get().getIBAN();
     }
 
@@ -61,6 +61,16 @@ public class PersonController {
         }
         return db.findById(id).get().getIBAN() + ", " + db.findById(id).get().getIBAN();
     }
+
+    @GetMapping("debts/{id}")
+    public List<Debt> getDebtsById(@PathVariable("id") long id){
+        if (id < 0 || !db.existsById(id)) {
+            return null;
+        }
+        return db.findById(id).get().getDebtList();
+    }
+
+
 
 //    @GetMapping("/{firstName}")
 //    public ResponseEntity<List<Person>> getByName(@PathVariable("firstName") String firstName,
