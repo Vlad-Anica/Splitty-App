@@ -2,10 +2,7 @@ package server.api;
 
 import commons.Currency;
 import commons.User;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.database.EmaiRepository;
 import server.database.UserRepository;
 
@@ -40,6 +37,8 @@ public class UserController {
         userRep.save(user);
         return user;
     }
+
+
 
 
 }

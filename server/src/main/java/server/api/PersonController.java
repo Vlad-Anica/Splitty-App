@@ -1,14 +1,17 @@
 package server.api;
 
 import commons.Debt;
+import commons.Event;
 import commons.Person;
+import commons.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.PersonRepository;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -69,6 +72,21 @@ public class PersonController {
         }
         return db.findById(id).get().getDebtList();
     }
+
+    @GetMapping("/debts/{USER_ID}")
+    public Map<Event, Double> getTotalDebtsById(@PathVariable("USER_ID") User user){
+        List<Person> allUsers = getAll();
+        Map<Event, Double> allDepts = new HashMap<>();
+        for (Person p : allUsers){
+            if (p.getUser().equals(user)){
+                Event event = p.getEvent();
+                Double eventDept = p.getTotalDebt();
+                allDepts.put(event, eventDept);
+            }
+        }
+        return allDepts;
+    }
+
 
 
 
