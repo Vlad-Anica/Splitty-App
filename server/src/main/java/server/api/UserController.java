@@ -1,28 +1,31 @@
 package server.api;
 
 import commons.Currency;
+import commons.Event;
 import commons.User;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.database.EmaiRepository;
 import server.database.UserRepository;
+import server.services.implementations.UserServiceImpl;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private EmaiRepository emailRep;
     private UserRepository userRep;
+    private UserServiceImpl userService;
 
     /**
      * constructor for a User
      * @param emailRep email repository to work with the db
      * @param userRep user repository to work with the db
      */
-    public UserController(EmaiRepository emailRep, UserRepository userRep) {
+    public UserController(EmaiRepository emailRep, UserRepository userRep, UserServiceImpl userService) {
         this.emailRep = emailRep;
         this.userRep = userRep;
+        this.userService = userService;
     }
 
     /**
@@ -39,6 +42,11 @@ public class UserController {
         User user = new User(firstName, lastName, email, preferredCurency);
         userRep.save(user);
         return user;
+    }
+
+    @GetMapping("/events")
+    public List<Event> getEvents(@RequestParam("userId") Long userId) {
+        return userService.getEvents(userId);
     }
 
 

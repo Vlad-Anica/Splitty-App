@@ -40,6 +40,7 @@ public class HomeCtrl  {
         this.mainCtrl = mainCtrl;
     }
 
+
     public void goToSettings() {
         mainCtrl.showSettings();
     }
