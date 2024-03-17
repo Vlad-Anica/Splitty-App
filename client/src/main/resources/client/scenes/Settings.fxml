@@ -13,6 +13,6 @@
         <TextField fx:id="publicUsername" layoutX="14.0" layoutY="166.0" text="Cristian Sapunaru #01" />
         <Button fx:id="btnSubmitAll" layoutX="13.0" layoutY="207.0" mnemonicParsing="false" onAction="#clickBtnSubmitAll" text="Submit" />
         <Text fx:id="settingsTitle" layoutX="251.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" />
-        <Button fx:id="btnHome" layoutX="522.0" layoutY="30.0" mnemonicParsing="false" onAction="#clickBtnHome" text="Home" />
+        <Button fx:id="btnHome" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickBtnHome" text="Home" />
     </children>
 </AnchorPane>

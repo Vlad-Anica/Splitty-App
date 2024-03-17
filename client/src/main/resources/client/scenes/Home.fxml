@@ -16,7 +16,7 @@
           </font>
         </Label>
           <Button fx:id="goDebtsButton" layoutX="249.0" layoutY="83.0" mnemonicParsing="false" onAction="#goToDebts" text="Open Debts" />
-          <Button fx:id="goHomeButton" layoutX="532.0" layoutY="28.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
+          <Button fx:id="goHomeButton" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
           <Button fx:id="addExpenseButton" layoutX="384.0" layoutY="83.0" mnemonicParsing="false" onAction="#goToAddExpense" text="Add Expense" />
           <Button fx:id="goSettingsButton" layoutX="527.0" layoutY="351.0" mnemonicParsing="false" onAction="#goToSettings" text="Settings" />
       <Button fx:id="btnSelectEvent" layoutX="401.0" layoutY="167.0" mnemonicParsing="false" text="Submit" />
