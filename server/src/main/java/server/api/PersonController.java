@@ -36,6 +36,32 @@ public class PersonController {
         return ResponseEntity.ok(db.findById(id).get());
     }
 
+
+    @GetMapping("/iban/{id}")
+    public String getIbanById(@PathVariable("id") long id){
+        if (id < 0 || !db.existsById(id)) {
+            return "Error, PERSON NOT FOUND";
+        }
+        ResponseEntity<Person> p = getById(id);
+        return db.findById(id).get().getIBAN();
+    }
+
+    @GetMapping("/bic/{id}")
+    public String getBicById(@PathVariable("id") long id){
+        if (id < 0 || !db.existsById(id)) {
+            return "Error, PERSON NOT FOUND";
+        }
+        return db.findById(id).get().getIBAN();
+    }
+
+    @GetMapping("/bank/{id}")
+    public String getBankById(@PathVariable("id") long id){
+        if (id < 0 || !db.existsById(id)) {
+            return "Error, PERSON NOT FOUND";
+        }
+        return db.findById(id).get().getIBAN() + ", " + db.findById(id).get().getIBAN();
+    }
+
 //    @GetMapping("/{firstName}")
 //    public ResponseEntity<List<Person>> getByName(@PathVariable("firstName") String firstName,
 //                                                  @RequestParam("lastName") String lastName) {
