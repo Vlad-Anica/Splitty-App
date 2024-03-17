@@ -42,6 +42,8 @@ public class EventOverviewCtrl {
     private Button showExpensesFromPersonButton;
     @FXML
     private Button showExpensesWithPersonButton;
+    @FXML
+    private Button goToStatsButton;
 
     private MainCtrl mainCtrl;
 
@@ -57,4 +59,15 @@ public class EventOverviewCtrl {
     public void goToAddExpense(ActionEvent event) throws IOException {
         mainCtrl.showAddExpense();
     }
+
+    public void goToStats(ActionEvent event) throws IOException {
+        mainCtrl.showStatsTest();
+    }
+
+    //Will use this method to get the name of the event,
+    // so i can pass it to the stats page. Idk of this is the correct label tho.
+    public String getEventName(){
+        return overviewLabel.getText();
+    }
+
 }
