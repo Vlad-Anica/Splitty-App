@@ -2,11 +2,15 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
+import javax.swing.plaf.ColorUIResource;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
     @Test
     public void testNotNull() {
+        Currency c = Currency.EUR;
+        assertTrue(c.equals(Currency.EUR));
         User u = new User();
         assertNotNull(u);
     }
