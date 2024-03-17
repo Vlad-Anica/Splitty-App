@@ -15,13 +15,28 @@ public class DebtController {
     private DebtRepository debtRep;
     private PersonRepository personRep;
     private ExpenseRepository expenseRep;
+
+    /**
+     * constructor for DebtController
+     * @param debtRep repository for debts
+     * @param personRep repository for debts
+     * @param expenseRep repository for debts
+     */
     public DebtController(DebtRepository debtRep, PersonRepository personRep, ExpenseRepository expenseRep) {
         this.debtRep = debtRep;
         this.personRep = personRep;
         this.expenseRep = expenseRep;
     }
 
-    @PostMapping("create")
+    /**
+     * endpoint for creating a user
+     * @param giverId id of the giver
+     * @param receiverId id of receiver
+     * @param expenseId id of expense
+     * @param amount amount to be paid
+     * @return a Debt
+     */
+    @PostMapping("/")
     public Debt createDebt(@RequestParam("giver") Long giverId,
                            @RequestParam("receiver") Long receiverId, @RequestParam("expense") Long expenseId,
                            @RequestParam("amount") Double amount) {
