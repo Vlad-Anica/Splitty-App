@@ -26,6 +26,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import commons.Debt;
 import commons.Person;
 import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
@@ -73,6 +74,13 @@ public class ServerUtils {
 				.get(new GenericType<List<Person>>(){});
 	}
 
+	public Person getPersonById(long id) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/persons/" + id) //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<Person>(){});
+	}
 	public Person addPerson(Person person) {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -89,5 +97,54 @@ public class ServerUtils {
             e.printStackTrace();
 			return null;
         }
+	}
+
+	public List<Debt> getDebts() {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/debts") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Debt>>(){});
+	}
+
+	public Debt addDebt(Debt debt) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonDebt = objectMapper.writeValueAsString(debt);
+			System.out.println("Received object: " + jsonDebt);
+
+			return ClientBuilder.newClient(new ClientConfig())//
+					.target(SERVER).path("api/debts")//
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.post(Entity.entity(jsonDebt, MediaType.APPLICATION_JSON), Debt.class);
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Debt settleDebt(long id) {
+		try {
+			Debt debt = ClientBuilder.newClient(new ClientConfig())//
+					.target(SERVER).path("api/debts/" + id)//
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.get(new GenericType<Debt>(){});
+			debt.setSettled(true);
+			debt.getGiver().getDebtList().remove(debt);
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonDebt = objectMapper.writeValueAsString(debt);
+			return ClientBuilder.newClient(new ClientConfig())//
+					.target(SERVER).path("api/debts")//
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.put(Entity.entity(jsonDebt, MediaType.APPLICATION_JSON), Debt.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 }

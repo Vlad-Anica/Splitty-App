@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.PersonRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -28,12 +29,15 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Person> getById(@PathVariable("id") long id) {
+    public ResponseEntity<Person> getById(@PathVariable long id) {
 
         if (id < 0 || !db.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(db.findById(id).get());
+        Optional<Person> person = db.findById(id);
+        if (person.isPresent())
+            return ResponseEntity.ok(person.get());
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 //    @GetMapping("/{firstName}")

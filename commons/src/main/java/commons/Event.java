@@ -20,6 +20,7 @@ public class Event {
     public static final Tag entranceFeesTag = new Tag("blue", "Entrance Fees");
     public static final Tag travelTag = new Tag("red", "Travel");
     @ManyToOne(cascade = CascadeType.PERSIST)
+    @Transient
     private Date date;
     @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Person> participants;
