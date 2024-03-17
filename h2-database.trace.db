@@ -133,3 +133,48 @@ alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign k
 2024-03-17 16:56:52.674612+01:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
 alter table if exists expense add constraint FK1o972kom405r23ipc65tqbxv1 foreign key (date_id) references date [42102-224]
+2024-03-17 20:25:44.061012+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
+create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-17 20:25:44.088009+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign key (date_id) references date [42102-224]
+2024-03-17 20:25:44.094002+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists expense add constraint FK1o972kom405r23ipc65tqbxv1 foreign key (date_id) references date [42102-224]
+2024-03-17 20:27:40.710548+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
+create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-17 20:27:40.725557+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign key (date_id) references date [42102-224]
+2024-03-17 20:27:40.728558+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists expense add constraint FK1o972kom405r23ipc65tqbxv1 foreign key (date_id) references date [42102-224]
+2024-03-17 20:30:33.621456+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
+create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-17 20:30:33.634448+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign key (date_id) references date [42102-224]
+2024-03-17 20:30:33.637449+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists expense add constraint FK1o972kom405r23ipc65tqbxv1 foreign key (date_id) references date [42102-224]
+2024-03-17 20:48:10.645403+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
+create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-17 20:48:10.658401+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign key (date_id) references date [42102-224]
+2024-03-17 20:48:10.661395+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists expense add constraint FK1o972kom405r23ipc65tqbxv1 foreign key (date_id) references date [42102-224]
+2024-03-17 20:50:33.912632+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
+create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-17 20:50:33.926142+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists event add constraint FKpqanw85j9cmqrerlmv7dv73mq foreign key (date_id) references date [42102-224]
+2024-03-17 20:50:33.929141+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATE" not found; SQL statement:
+alter table if exists expense add constraint FK1o972kom405r23ipc65tqbxv1 foreign key (date_id) references date [42102-224]
