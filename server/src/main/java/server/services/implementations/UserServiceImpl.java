@@ -1,7 +1,6 @@
 package server.services.implementations;
 
 import commons.Event;
-import commons.User;
 import org.springframework.stereotype.Service;
 import server.services.interfaces.UserService;
 
