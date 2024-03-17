@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpenseCtrl">
    <children>
-      <Label layoutX="236.0" layoutY="37.0" text="add/edit expense">
+      <Label layoutX="236.0" layoutY="37.0" text="Add/Edit expense">
          <font>
             <Font size="16.0" />
          </font>
@@ -28,9 +28,9 @@
             <ToggleGroup fx:id="split" />
          </toggleGroup></RadioButton>
       <RadioButton fx:id="splitButton" layoutX="68.0" layoutY="208.0" mnemonicParsing="false" onAction="#checkPersonBoxes" prefHeight="17.0" prefWidth="98.0" text="Some people" toggleGroup="$split" />
-      <ScrollPane layoutX="66.0" layoutY="232.0" prefHeight="93.0" prefWidth="200.0">
+      <ScrollPane layoutX="66.0" layoutY="232.0" prefHeight="101.0" prefWidth="200.0">
         <content>
-          <AnchorPane fx:id="splitPersonsPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="200.0" />
+          <AnchorPane fx:id="splitPersonsPane" minHeight="0.0" minWidth="0.0" prefHeight="194.0" prefWidth="200.0" />
         </content>
       </ScrollPane>
       <Label layoutX="67.0" layoutY="346.0" text="Expense Type" />
@@ -40,5 +40,21 @@
       <ComboBox fx:id="payerComboBox" layoutX="148.0" layoutY="73.0" onAction="#checkPersonBoxes" prefWidth="150.0" promptText="Choose a payer" />
       <ComboBox fx:id="currencyComboBox" layoutX="273.0" layoutY="142.0" prefHeight="10.0" prefWidth="75.0" />
       <ComboBox fx:id="typeComboBox" layoutX="157.0" layoutY="342.0" prefWidth="150.0" promptText="Choose a type" />
+      <Button fx:id="addTagButton" alignment="CENTER" layoutX="323.0" layoutY="342.0" mnemonicParsing="false" onAction="#showAddTag" text="Add Tag" />
+      <AnchorPane fx:id="tagPane" disable="true" layoutX="135.0" layoutY="87.0" prefHeight="189.0" prefWidth="326.0" style="-fx-background-color: lightgrey;" visible="false" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+         <children>
+            <Label alignment="CENTER" layoutX="27.0" layoutY="109.0" prefHeight="17.0" prefWidth="51.0" text="Color" />
+            <Label alignment="CENTER" layoutX="32.0" layoutY="64.0" prefHeight="17.0" prefWidth="42.0" text="Name" />
+            <TextField fx:id="tagNameField" layoutX="89.0" layoutY="60.0" />
+            <TextField fx:id="tagClrField" layoutX="89.0" layoutY="105.0" />
+            <Button fx:id="okButton" layoutX="185.0" layoutY="147.0" mnemonicParsing="false" onAction="#saveTag" prefHeight="25.0" prefWidth="51.0" text="OK" />
+            <Button fx:id="tagCancelButton" layoutX="248.0" layoutY="147.0" mnemonicParsing="false" onAction="#hideAddTag" text="Cancel" />
+            <Label alignment="CENTER" layoutX="89.0" layoutY="14.0" prefHeight="17.0" prefWidth="125.0" text="New Tag">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
