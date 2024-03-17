@@ -4,6 +4,7 @@ import commons.Person;
 import org.springframework.web.bind.annotation.*;
 import server.database.DebtRepository;
 import commons.Debt;
+import server.database.ExpenseRepository;
 import server.database.PersonRepository;
 
 @RestController
@@ -23,7 +24,7 @@ public class DebtController {
                            @RequestParam("receiver") Long receiverId, @RequestParam("expense") Long expenseId,
                            @RequestParam("amount") Double amount) {
         Debt debt = new Debt(personRep.getReferenceById(giverId), personRep.getReferenceById(receiverId),
-                expenseRep,getReferenceById(expenseId), amount);
+                expenseRep.getReferenceById(expenseId), amount);
         debtRep.save(debt);
         return debt;
     }
