@@ -44,6 +44,7 @@ public class EventController {
         if (id < 0 || !db.existsById(id)) {
             return null;
         }
+
         return ResponseEntity.ok(db.findById(id).get());
     }
 
