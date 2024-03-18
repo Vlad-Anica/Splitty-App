@@ -63,9 +63,9 @@ public class Event {
         return id;
     }
 
-    public Event getSelf() {
-        return this;
-    }
+//    public Event getSelf() {
+//        return this;
+//    }
 
     /**
      * Getter for an Event's name.

@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/event")
+@RequestMapping("/api/events")
 public class EventController {
 
     @Autowired
@@ -40,11 +40,11 @@ public class EventController {
 
 
     @GetMapping("event/{id}")
-    public Event getEventById(@PathVariable("id") long id){
+    public ResponseEntity<Event> getEventById(@PathVariable("id") long id){
         if (id < 0 || !db.existsById(id)) {
             return null;
         }
-        return db.findById(id).get().getSelf();
+        return ResponseEntity.ok(db.findById(id).get());
     }
 
     private static boolean isNullOrEmpty(String s) {

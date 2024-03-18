@@ -21,9 +21,11 @@ public class PersonController {
 
     @Autowired
     private final PersonRepository db;
-    public PersonController(PersonRepository db) {
+    private DebtController debtCtrl;
+    public PersonController(PersonRepository db, DebtController debtCtrl) {
 
        this.db = db;
+       this.debtCtrl = debtCtrl;
     }
 
     @GetMapping(path = { "", "/" })
@@ -69,7 +71,7 @@ public class PersonController {
         return db.findById(id).get().getIBAN() + ", " + db.findById(id).get().getIBAN();
     }
 
-    @GetMapping("debts/{id}")
+    @GetMapping("/{id}/debts")
     public List<Debt> getDebtsById(@PathVariable("id") long id){
         if (id < 0 || !db.existsById(id)) {
             return null;
@@ -85,7 +87,7 @@ public class PersonController {
         return db.findById(id).get().getEvent();
     }
 
-    @GetMapping("/debts/{USER_ID}")
+    @GetMapping("/{USER_ID}/debts")
     public Map<Event, Double> getTotalDebtsById(@PathVariable("USER_ID") User user){
         List<Person> allUsers = getAll();
         Map<Event, Double> allDepts = new HashMap<>();
@@ -126,7 +128,69 @@ public class PersonController {
         Person saved = db.save(person);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody Person updatedPerson) {
 
+        if (updatedPerson.getId() != id)
+           return ResponseEntity.badRequest().build();
+        if (!db.existsById(id))
+            return add(updatedPerson);
+        return ResponseEntity.ok(db.save(updatedPerson));
+    }
+    @PutMapping("/{id}/newDebt")
+    public ResponseEntity<Person> addDebt(@PathVariable Long id, @RequestBody Debt debt) {
+        Person person = getById(id).getBody();
+        if (person == null)
+            return ResponseEntity.badRequest().build();
+
+        debtCtrl.add(debt);
+        person.getDebtList().add(debt);
+        double totalDebt = person.getTotalDebt() + debt.getAmount();
+        person.setTotalDebt(totalDebt);
+        return ResponseEntity.ok(db.save(person));
+    }
+    @PutMapping("/{id}/debtSettlement/{debtId}")
+    public ResponseEntity<Person> settleDebt(@PathVariable Long id, @PathVariable Long debtId) {
+
+        Person person = getById(id).getBody();
+        Debt debt = debtCtrl.getById(debtId).getBody();
+        if (person == null || debt == null || !person.getDebtList().contains(debt))
+            return ResponseEntity.badRequest().build();
+
+        debt.setSettled(true);
+        debtCtrl.update(debtId, debt);
+
+        person.getDebtList().remove(debt);
+        double totalDebt = person.getTotalDebt() - debt.getAmount();
+        person.setTotalDebt(totalDebt >= 0 ? totalDebt : 0);
+
+        return update(id, person);
+    }
+
+    @PutMapping("/{id}/partialPayment/{debtId}")
+    public ResponseEntity<Person> payDebtPartially(@PathVariable Long id, @PathVariable Long debtId,
+                                  @RequestParam(value = "amount") double amount) {
+
+        Person person = getById(id).getBody();
+        Debt debt = debtCtrl.getById(debtId).getBody();
+        if (person == null || debt == null || !person.getDebtList().contains(debt)
+        || amount < 0)
+            return ResponseEntity.badRequest().build();
+
+        double totalAmount = debt.getAmount() - amount;
+        debt.setAmount(totalAmount >= 0 ? totalAmount : 0);
+
+        if (debt.getAmount() <= 0)
+            return settleDebt(id, debtId);
+
+        debtCtrl.update(debtId, debt);
+
+        double totalDebt = person.getTotalDebt() - amount;
+        person.setTotalDebt(totalDebt >= 0 ? totalDebt : 0);
+
+        return update(id, person);
+
+    }
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }

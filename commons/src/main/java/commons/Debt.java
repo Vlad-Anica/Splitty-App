@@ -18,11 +18,11 @@ public class Debt {
     private long id;
     @ManyToOne
     @JoinColumn(name = "GIVER_ID")
-    @JsonBackReference
+    @JsonBackReference(value = "giver")
     private Person giver;
     @ManyToOne
     @JoinColumn(name = "RECEIVER_ID")
-    @JsonBackReference
+    @JsonBackReference()
     private Person receiver;
     @ManyToOne
     @JoinColumn(name = "EXPENSE_ID")
