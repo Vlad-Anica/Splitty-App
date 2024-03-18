@@ -15,10 +15,14 @@
  */
 package client.scenes;
 
+import client.utils.ServerUtils;
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
+import java.util.List;
 
 public class MainCtrl {
 
@@ -53,10 +57,17 @@ public class MainCtrl {
     private EventOverviewCtrl eventOverviewCtrl;
     private Scene eventOverviewScene;
 
+    private StatisticsCtrl statisticsCtrl;
+    private Scene statisticsScene;
+
+    private ServerUtils server;
+
 
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
-                           Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense, Pair<EventOverviewCtrl, Parent> eventOverview) {
+                           Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
+                           Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
+                           ServerUtils server) {
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
@@ -77,6 +88,11 @@ public class MainCtrl {
         this.eventOverviewCtrl = eventOverview.getKey();
         this.eventOverviewScene = new Scene(eventOverview.getValue());
 
+        this.statisticsCtrl = statistics.getKey();
+        this.statisticsScene = new Scene(statistics.getValue());
+
+        this.server = server;
+
         showHome();
         primaryStage.show();
     }
@@ -89,6 +105,7 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Home");
         primaryStage.setScene(homeScene);
+        homeCtrl.setup();
     }
 
     public void showOpenDebts() {
@@ -123,5 +140,16 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showStatsTest() {
+        String name = eventOverviewCtrl.getEventName();
+        primaryStage.setTitle("Statistics");
+        primaryStage.setScene(statisticsScene);
+        statisticsCtrl.PieChartExpenses.setTitle(name);
+    }
+
+    public List<Event> getEvents(Long userId) {
+        return server.getEvents(userId);
     }
 }

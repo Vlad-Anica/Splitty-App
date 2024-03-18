@@ -25,6 +25,12 @@ public class User {
     public User() {
 
     }
+    public User(String firstName, String lastName, String email, Currency preferredCurrency) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.preferredCurrency = preferredCurrency;
+    }
 
     public User(String firstName, String lastName, String IBAN, String BIC, String email, Currency preferredCurrency) {
         this.firstName = firstName;

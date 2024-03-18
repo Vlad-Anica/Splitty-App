@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.*;
+import client.utils.ServerUtils;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -53,9 +54,11 @@ public class Main extends Application {
         var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
         var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
         var eventOverview = FXML.load(EventOverviewCtrl.class, "client", "scenes", "EventOverview.fxml");
+        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview);
+        ServerUtils server = INJECTOR.getInstance(ServerUtils.class);
+        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, server);
     }
 
 }

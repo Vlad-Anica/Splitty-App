@@ -27,6 +27,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Debt;
+import commons.Event;
 import commons.Person;
 import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
@@ -131,7 +132,8 @@ public class ServerUtils {
 					.target(SERVER).path("api/debts/" + id)//
 					.request(APPLICATION_JSON)//
 					.accept(APPLICATION_JSON)//
-					.get(new GenericType<Debt>(){});
+					.get(new GenericType<Debt>() {
+					});
 			debt.setSettled(true);
 			debt.getGiver().getDebtList().remove(debt);
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -145,6 +147,13 @@ public class ServerUtils {
 			e.printStackTrace();
 			return null;
 		}
-
+	}
+	public List<Event> getEvents(Long userId) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("user/events")
+				.queryParam("userId", userId)//
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Event>>(){});
 	}
 }
