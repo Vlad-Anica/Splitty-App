@@ -62,10 +62,6 @@ public class Event {
         return id;
     }
 
-    public Event getSelf() {
-        return this;
-    }
-
     /**
      * Getter for an Event's name.
      * @return String representing the Event's name

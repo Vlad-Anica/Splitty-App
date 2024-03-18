@@ -44,7 +44,7 @@ public class EventController {
         if (id < 0 || !db.existsById(id)) {
             return null;
         }
-        return db.findById(id).get().getSelf();
+        return db.findById(id).get();
     }
 
     private static boolean isNullOrEmpty(String s) {
