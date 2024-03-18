@@ -47,6 +47,20 @@ public class EventController {
         return db.findById(id).get();
     }
 
+    /**
+     * Gets Event by inviteCode
+     * @param inviteCode the inviteCode
+     * @return the ResponseEntity
+     */
+    @GetMapping("/inviteCode/{inviteCode}")
+    public ResponseEntity<Event> getEventByInviteCode(@PathVariable("inviteCode") String inviteCode){
+        Event event = db.findByInviteCode(inviteCode);
+        if (event == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(event);
+    }
+
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
