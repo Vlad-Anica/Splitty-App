@@ -57,6 +57,29 @@ public class DebtController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
+    /**
+     * endpoint for creating a user
+     * @param giverId id of the giver
+     * @param receiverId id of receiver
+     * @param expenseId id of expense
+     * @param amount amount to be paid
+     * @return a Debt
+     */
+    @PostMapping("/")
+    public Debt createDebt(@RequestParam("giver") Long giverId,
+                           @RequestParam("receiver") Long receiverId, @RequestParam("expense") Long expenseId,
+                           @RequestParam("amount") Double amount) {
+        Debt debt = new Debt(personRep.getReferenceById(giverId), personRep.getReferenceById(receiverId),
+                expenseRep.getReferenceById(expenseId), amount);
+        debtRep.save(debt);
+        return debt;
+    }
+    /**
+    * endpoint for udating debt
+    * @param id id of debt to update
+     * @param updatedDebt debt with updated properties
+     * @return updated debt
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Debt> update(@PathVariable("id") long id,
                                        @RequestBody Debt updatedDebt) {
