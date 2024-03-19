@@ -1,5 +1,7 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
+import commons.Debt;
 import jakarta.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,14 +43,20 @@ public class OpenDebtsCtrl {
     private Parent root;
 
     private MainCtrl mainCtrl;
+    private ServerUtils server;
 
     @Inject
-    public OpenDebtsCtrl(MainCtrl mainCtrl) {
+    public OpenDebtsCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
+        this.server = server;
     }
 
     public void setup() {
         setTextLanguage();
+        List<Debt> debts = server.getDebts();
+        for (Debt debt:debts) {
+            System.out.println(debt.toString());
+        }
     }
     public void setTextLanguage() {
         int languageIndex = mainCtrl.getLanguageIndex();
