@@ -67,12 +67,13 @@ public class EventController {
      * @return ResponseEntity that tells that it worked/didn't work
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") long id) {
+    public ResponseEntity<Event> deleteById(@PathVariable("id") long id) {
         if (!db.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
+        Event deletedEvent = db.findById(id).get();
         db.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(deletedEvent);
     }
 
     private static boolean isNullOrEmpty(String s) {
