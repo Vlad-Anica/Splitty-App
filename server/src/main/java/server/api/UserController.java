@@ -4,7 +4,7 @@ import commons.Currency;
 import commons.Event;
 import commons.User;
 import org.springframework.web.bind.annotation.*;
-import server.database.EmaiRepository;
+import server.database.EmailRepository;
 import server.database.UserRepository;
 import server.services.implementations.UserServiceImpl;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    private EmaiRepository emailRep;
+    private EmailRepository emailRep;
     private UserRepository userRep;
     private UserServiceImpl userService;
 
@@ -22,7 +22,7 @@ public class UserController {
      * @param emailRep email repository to work with the db
      * @param userRep user repository to work with the db
      */
-    public UserController(EmaiRepository emailRep, UserRepository userRep, UserServiceImpl userService) {
+    public UserController(EmailRepository emailRep, UserRepository userRep, UserServiceImpl userService) {
         this.emailRep = emailRep;
         this.userRep = userRep;
         this.userService = userService;
