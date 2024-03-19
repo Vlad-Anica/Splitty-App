@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,11 +57,28 @@ public class ExpenseController {
                                  @RequestParam("debts") List<Long> debtIDs,
                                  @RequestParam("currency") Currency currency,
                                  @RequestParam("tag") Tag tag) {
-        ArrayList<Debt> debts = new ArrayList<>();
-        for (Long dID : debtIDs) {
-            debts.add(debtRep.getReferenceById(dID));
+        if(description == null || amount == null || date == null || currency == null || tag == null) {
+            System.out.println("Process aborted, null arguments received.");
+            return null;
         }
-        Expense expense = new Expense(description, amount, date, personRep.getReferenceById(receiverID), debts, currency, tag);
+        ArrayList<Debt> debts = new ArrayList<>();
+        Expense expense = null;
+        try {
+            personRep.getReferenceById(receiverID);
+        }
+        catch (EntityNotFoundException e) {
+            System.out.println("Invalid ID, no Person found.");
+        }
+        try {
+            for (Long dID : debtIDs) {
+                debtRep.getReferenceById(dID);
+                debts.add(debtRep.getReferenceById(dID));
+            }
+        }
+        catch (EntityNotFoundException e) {
+            System.out.println("Invalid ID, no Debt found.");
+        }
+        expense = new Expense(description, amount, date, personRep.getReferenceById(receiverID), debts, currency, tag);
         expenseRep.save(expense);
         return expense;
     }
