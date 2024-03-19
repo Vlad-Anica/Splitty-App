@@ -118,6 +118,9 @@ public class HomeCtrl  {
         adminPasswordField.setPromptText(adminLoginFieldText.get(languageIndex));
         adminLogInLabel.setText(adminLogInLabelText.get(languageIndex));
         adminLogInButton.setText(adminLogInButtonText.get(languageIndex));
+        if(!adminPasswordMessage.getText().isEmpty()){
+            adminPasswordMessage.setText(adminPasswordMessageText.get(languageIndex));
+        }
     }
 
     public void goToEvent() {
