@@ -21,10 +21,12 @@ public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "EXPENSE_ID")
     private long id;
     private String description;
     private double amount;
     @ManyToOne(cascade = CascadeType.PERSIST)
+    @Transient
     private Date date;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Person receiver;
