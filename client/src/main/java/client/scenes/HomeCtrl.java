@@ -2,10 +2,10 @@ package client.scenes;
 
 
 import client.utils.ServerUtils;
+import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import commons.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,25 +16,32 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 public class HomeCtrl  {
 
 
     @FXML
-    private Label MainPageTestLabel;
-    @FXML
-    private Button addParticipantButton;
-    @FXML
-    private Button addExpenseButton;
+    private Label mainPageTestLabel;
+    private List<String> mainPageTestLabelText = new ArrayList<>(List.of("Welcom To Splitty",
+            "Welcome to splitty! (in Dutch)"));
     @FXML
     private Button goDebtsButton;
+    private List<String> goDebtsButtonText = new ArrayList<>(List.of("Open Debts",
+            "Open Debts (in Ducth)"));
 
     @FXML
     private Button goHomeButton;
+    private List<String> goHomeButtonText = new ArrayList<>(List.of("Home", "Home (in Dutch)"));
+
+    @FXML
+    private Button goSettingsButton;
+    private List<String> goSettingsButtonText = new ArrayList<>(List.of("Settings",
+            "Settings (in Dutch)"));
+    @FXML
+    private Button goEventButton;
+    private List<String> goEventButtonText = new ArrayList<>(List.of("Submit, ",
+            "Submit (in Dutch)"));
     @FXML
     private Stage stage;
     @FXML
@@ -45,11 +52,10 @@ public class HomeCtrl  {
     private ComboBox<String> languageList;
     @FXML
     private ComboBox<String> eventList;
-    @FXML
-    private Button btnSelectEvent;
 
-    Map<String, Long> mapTitleToId;
-
+    List<String> languages;
+    List<String> eventNames;
+    List<Long> eventIds;
     private MainCtrl mainCtrl;
 
     private ServerUtils server;
@@ -64,19 +70,38 @@ public class HomeCtrl  {
      * set up the home page
      */
     public void setup() {
-        languageList.setItems(FXCollections.observableList(Stream.of("English", "Dutch").toList()));
-        mapTitleToId = new HashMap<>();
+        languages = new ArrayList<>(List.of("English", "Nederlands"));
+        languageList.setItems(FXCollections.observableList(languages.stream().toList()));
+        languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
+        languageList.setOnAction(event -> {
+            mainCtrl.setLanguageIndex(languageList.getSelectionModel().getSelectedIndex());
+            changeTextLanguage();
+        });
         List<Event> events = server.getEvents(1L);
-        List<String> eventNames = new ArrayList<>();
+        eventNames = new ArrayList<>();
+        eventIds = new ArrayList<>();
         for (Event event: events) {
             eventNames.add(event.getName());
-            mapTitleToId.put(event.getName(), event.getId());
+            eventIds.add(event.getId());
         }
-        //System.out.println(events.toString());
 
         eventList.setItems(FXCollections.observableList(eventNames.stream().toList()));
     }
 
+    public void changeTextLanguage() {
+        int languageIndex = mainCtrl.getLanguageIndex();
+        mainPageTestLabel.setText(mainPageTestLabelText.get(languageIndex));
+        goDebtsButton.setText(goDebtsButtonText.get(languageIndex));
+        goHomeButton.setText(goHomeButtonText.get(languageIndex));
+        goSettingsButton.setText(goSettingsButtonText.get(languageIndex));
+        goEventButton.setText(goEventButtonText.get(languageIndex));
+    }
+
+    public void goToEvent() {
+        int index = eventList.getSelectionModel().getSelectedIndex();
+        Long eventId = eventIds.get(index);
+        //TODO: go to the event based on its id
+    }
 
     public void goToSettings() {
         mainCtrl.showSettings();

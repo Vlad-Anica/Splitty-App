@@ -61,6 +61,7 @@ public class MainCtrl {
     private Scene statisticsScene;
 
     private ServerUtils server;
+    private int languageIndex;
 
 
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
@@ -68,6 +69,7 @@ public class MainCtrl {
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
                            ServerUtils server) {
+        languageIndex = 0;
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
@@ -95,6 +97,14 @@ public class MainCtrl {
 
         showHome();
         primaryStage.show();
+    }
+
+    public int getLanguageIndex() {
+        return languageIndex;
+    }
+
+    public void setLanguageIndex(int languageIndex) {
+        this.languageIndex = languageIndex;
     }
 
     public void showAddParticipant() {
