@@ -10,7 +10,7 @@
 <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
       <children>
         <Button fx:id="addParticipantButton" layoutX="96.0" layoutY="83.0" mnemonicParsing="false" onAction="#goToAddParticipant" text="Add Participant" />
-        <Label fx:id="MainPageTestLabel" alignment="CENTER" layoutX="194.0" layoutY="23.0" style="&#10;" text="Welcome To Splitty!" textAlignment="CENTER" wrapText="false">
+        <Label fx:id="mainPageTestLabel" alignment="CENTER" layoutX="194.0" layoutY="23.0" style="&#10;" text="Welcome To Splitty!" textAlignment="CENTER" wrapText="false">
           <font>
             <Font name="Calibri Light" size="31.0" />
           </font>
@@ -19,7 +19,7 @@
           <Button fx:id="goHomeButton" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
           <Button fx:id="addExpenseButton" layoutX="384.0" layoutY="83.0" mnemonicParsing="false" onAction="#goToAddExpense" text="Add Expense" />
           <Button fx:id="goSettingsButton" layoutX="527.0" layoutY="351.0" mnemonicParsing="false" onAction="#goToSettings" text="Settings" />
-      <Button fx:id="btnSelectEvent" layoutX="401.0" layoutY="167.0" mnemonicParsing="false" text="Submit" />
+      <Button fx:id="goEventButton" layoutX="401.0" layoutY="167.0" mnemonicParsing="false" onAction="#goToEvent" text="Submit" />
       <ComboBox fx:id="eventList" layoutX="214.0" layoutY="167.0" prefWidth="150.0" promptText="Select Event" />
       <ComboBox fx:id="languageList" layoutX="14.0" layoutY="16.0" prefWidth="150.0" />
       </children>

@@ -6,9 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /***
  * Unused imports:
@@ -23,20 +26,35 @@ import java.io.IOException;
 public class OpenDebtsCtrl {
     @FXML
     private Button goHomeButton;
+    List<String> goHomeButtonText = new ArrayList<>(List.of("Home", "Home (in Dutch)"));
+    @FXML
+    private Button goBackButton;
+    List<String> goBackButtonText = new ArrayList<>(List.of("Back", "Back (in Dutch)"));
+    @FXML
+    private Text openDebtsTitle;
+    List<String> openDebtsTitleText = new ArrayList<>(List.of("Open Debts", "Open Debts (in Dutch)"));
     @FXML
     private Stage stage;
     @FXML
     private Scene scene;
     @FXML
     private Parent root;
-    @FXML
-    private Button backButton;
 
     private MainCtrl mainCtrl;
 
     @Inject
     public OpenDebtsCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
+    }
+
+    public void setup() {
+        setTextLanguage();
+    }
+    public void setTextLanguage() {
+        int languageIndex = mainCtrl.getLanguageIndex();
+        goHomeButton.setText(goBackButtonText.get(languageIndex));
+        goBackButton.setText(goBackButtonText.get(languageIndex));
+        openDebtsTitle.setText(openDebtsTitleText.get(languageIndex));
     }
 
     //need a way to show open debts from the database
