@@ -2,7 +2,6 @@ package client.scenes;
 
 
 import client.utils.ServerUtils;
-import commons.Admin;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
