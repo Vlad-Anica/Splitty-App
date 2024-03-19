@@ -2,6 +2,7 @@ package client.scenes;
 
 
 import client.utils.ServerUtils;
+import commons.Admin;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
@@ -12,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -52,6 +55,10 @@ public class HomeCtrl  {
     private ComboBox<String> languageList;
     @FXML
     private ComboBox<String> eventList;
+    @FXML
+    private PasswordField adminPasswordField;
+    @FXML
+    private Label adminPasswordMessage;
 
     List<String> languages;
     List<String> eventNames;
@@ -131,6 +138,21 @@ public class HomeCtrl  {
 
     public void goToEventOverview(ActionEvent event) throws IOException {
         mainCtrl.showEventOverview();
+    }
+
+    /**
+     * checks with the server whether the password is correct and displays if it is correct
+     * @param event event
+     */
+    public void adminLogIn(ActionEvent event) {
+        if (adminPasswordField.getText().isEmpty() || !server.checkAdminPassword(adminPasswordField.getText())) {
+            adminPasswordMessage.setText("Your password is incorrect!");
+            adminPasswordMessage.setTextFill(Color.rgb(210, 39, 30));
+        } else {
+            adminPasswordMessage.setText("Your password has been confirmed");
+            adminPasswordMessage.setTextFill(Color.rgb(21, 117, 84));
+        }
+        adminPasswordField.clear();
     }
 
 
