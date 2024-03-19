@@ -11,12 +11,12 @@
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
          <children>
-            <Text layoutX="174.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts">
+            <Text fx:id="openDebtsTitle" layoutX="174.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts">
                <font>
                   <Font name="Arial" size="47.0" />
                </font>
             </Text>
-            <Button layoutX="14.0" layoutY="27.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+            <Button fx:id="goBackButton" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
             <Button fx:id="goHomeButton" layoutX="536.0" layoutY="13.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">

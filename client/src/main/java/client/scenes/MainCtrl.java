@@ -121,6 +121,7 @@ public class MainCtrl {
     public void showOpenDebts() {
         primaryStage.setTitle("Open Debts");
         primaryStage.setScene(openDebtsScene);
+        openDebtsCtrl.setup();
     }
 
     public void showSettings() {

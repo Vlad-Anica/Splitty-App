@@ -75,7 +75,7 @@ public class HomeCtrl  {
         languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
         languageList.setOnAction(event -> {
             mainCtrl.setLanguageIndex(languageList.getSelectionModel().getSelectedIndex());
-            changeTextLanguage();
+            setTextLanguage();
         });
         List<Event> events = server.getEvents(1L);
         eventNames = new ArrayList<>();
@@ -88,7 +88,7 @@ public class HomeCtrl  {
         eventList.setItems(FXCollections.observableList(eventNames.stream().toList()));
     }
 
-    public void changeTextLanguage() {
+    public void setTextLanguage() {
         int languageIndex = mainCtrl.getLanguageIndex();
         mainPageTestLabel.setText(mainPageTestLabelText.get(languageIndex));
         goDebtsButton.setText(goDebtsButtonText.get(languageIndex));
