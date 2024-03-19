@@ -3,5 +3,5 @@ package server.database;
 import commons.Email;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EmaiRepository extends JpaRepository<Email, Long> {
+public interface EmailRepository extends JpaRepository<Email, Long> {
 }

@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -8,18 +9,27 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
+@Table(name = "DEBT")
 public class Debt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private long id;
     @ManyToOne
+    @JoinColumn(name = "GIVER_ID")
+    @JsonBackReference(value = "giver")
     private Person giver;
     @ManyToOne
+    @JoinColumn(name = "RECEIVER_ID")
+    @JsonBackReference()
     private Person receiver;
     @ManyToOne
+    @JoinColumn(name = "EXPENSE_ID")
     private Expense expense;
+    @Column(name = "amount")
     private double amount;
+    @Column(name = "settled")
     private boolean settled;
     public Debt(Person giver, Person receiver, Expense expense, double amount) {
         this.giver = giver;
