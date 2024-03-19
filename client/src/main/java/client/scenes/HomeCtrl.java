@@ -90,6 +90,8 @@ public class HomeCtrl  {
 
     public void setTextLanguage() {
         int languageIndex = mainCtrl.getLanguageIndex();
+        if(languageIndex < 0)
+            languageIndex = 0;
         mainPageTestLabel.setText(mainPageTestLabelText.get(languageIndex));
         goDebtsButton.setText(goDebtsButtonText.get(languageIndex));
         goHomeButton.setText(goHomeButtonText.get(languageIndex));
@@ -99,6 +101,9 @@ public class HomeCtrl  {
 
     public void goToEvent() {
         int index = eventList.getSelectionModel().getSelectedIndex();
+        if (index < 0) {
+            return;
+        }
         Long eventId = eventIds.get(index);
         //TODO: go to the event based on its id
     }

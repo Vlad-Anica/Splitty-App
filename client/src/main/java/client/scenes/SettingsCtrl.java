@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class SettingsCtrl {
     @FXML
@@ -36,7 +37,7 @@ public class SettingsCtrl {
     }
 
     public void setup() {
-        selectedCurrency.setItems(FXCollections.observableList(List.of("EUR", "USD", "CHF", "GBP")));
+        selectedCurrency.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "CHF", "GBP").toList()));
         selectedCurrency.getSelectionModel().select(currency);
         publicUsername.setText(currentUsername);
         settingsTitle.setFont(Font.font("Verdana", 30));

@@ -69,7 +69,7 @@ public class MainCtrl {
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
                            ServerUtils server) {
-        languageIndex = 0;
+        this.languageIndex = 0;
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
