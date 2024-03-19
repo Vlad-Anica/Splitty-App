@@ -20,8 +20,8 @@
       <ComboBox fx:id="eventList" layoutX="214.0" layoutY="167.0" prefWidth="150.0" promptText="Select Event" />
       <ComboBox fx:id="languageList" layoutX="14.0" layoutY="16.0" prefWidth="150.0" />
       <PasswordField fx:id="adminPasswordField" layoutX="22.0" layoutY="351.0" onAction="#adminLogIn" promptText="admin password" />
-      <Button fx:id="AdminLogInButton" layoutX="179.0" layoutY="351.0" mnemonicParsing="false" onAction="#adminLogIn" text="Submit" />
-      <Label layoutX="54.0" layoutY="334.0" prefHeight="17.0" prefWidth="117.0" text="admin log in" textAlignment="CENTER" />
+      <Button fx:id="adminLogInButton" layoutX="179.0" layoutY="351.0" mnemonicParsing="false" onAction="#adminLogIn" text="Log in" />
+      <Label fx:id="adminLogInLabel" layoutX="54.0" layoutY="334.0" prefHeight="17.0" prefWidth="117.0" text="admin log in" textAlignment="CENTER" />
       <Label fx:id="adminPasswordMessage" layoutX="75.0" layoutY="378.0" />
       </children>
     </AnchorPane>

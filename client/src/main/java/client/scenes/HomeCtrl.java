@@ -56,8 +56,20 @@ public class HomeCtrl  {
     private ComboBox<String> eventList;
     @FXML
     private PasswordField adminPasswordField;
+    private List<String> adminLoginFieldText = new ArrayList<>(List.of("admin password",
+            "beheerders wachtwoord"));
     @FXML
     private Label adminPasswordMessage;
+    private List<String> adminPasswordMessageText = new ArrayList<>(List.of("Your password is incorrect!",
+            "Uw wachtwoord is incorrect!"));
+    @FXML
+    private Label adminLogInLabel;
+    private List<String> adminLogInLabelText = new ArrayList<>(List.of("admin log in",
+            "beheerder log in"));
+    @FXML
+    private Button adminLogInButton;
+    private List<String> adminLogInButtonText = new ArrayList<>(List.of("Log in",
+            "Log in"));
 
     List<String> languages;
     List<String> eventNames;
@@ -103,6 +115,9 @@ public class HomeCtrl  {
         goHomeButton.setText(goHomeButtonText.get(languageIndex));
         goSettingsButton.setText(goSettingsButtonText.get(languageIndex));
         goEventButton.setText(goEventButtonText.get(languageIndex));
+        adminPasswordField.setPromptText(adminLoginFieldText.get(languageIndex));
+        adminLogInLabel.setText(adminLogInLabelText.get(languageIndex));
+        adminLogInButton.setText(adminLogInButtonText.get(languageIndex));
     }
 
     public void goToEvent() {
@@ -145,11 +160,10 @@ public class HomeCtrl  {
      */
     public void adminLogIn(ActionEvent event) {
         if (adminPasswordField.getText().isEmpty() || !server.checkAdminPassword(adminPasswordField.getText())) {
-            adminPasswordMessage.setText("Your password is incorrect!");
+            adminPasswordMessage.setText(adminPasswordMessageText.get(mainCtrl.getLanguageIndex()));
             adminPasswordMessage.setTextFill(Color.rgb(210, 39, 30));
         } else {
-            adminPasswordMessage.setText("Your password has been confirmed");
-            adminPasswordMessage.setTextFill(Color.rgb(21, 117, 84));
+            mainCtrl.showManagementOverview();
         }
         adminPasswordField.clear();
     }
