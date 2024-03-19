@@ -15,9 +15,12 @@
  */
 package server;
 
+import commons.Admin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+
+import java.util.Random;
 
 @SpringBootApplication
 @EntityScan(basePackages = { "commons", "server" })
@@ -25,5 +28,6 @@ public class Main {
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
+        System.out.println("The password for admin is: '" + Admin.generateRandomPassword(new Random()) + "' (without the '')");
     }
 }

@@ -1,4 +1,5 @@
 HELP.md
+h2-database.trace.db
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
