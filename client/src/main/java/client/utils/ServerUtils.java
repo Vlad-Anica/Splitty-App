@@ -240,4 +240,17 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<List<Event>>(){});
 	}
+
+	/**
+	 * sends a request to the server to check if the password is correct
+	 * @param password the password
+	 * @return if the password is correct
+	 */
+	public boolean checkAdminPassword(String password) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("api/admin/checkPassword")
+				.request(APPLICATION_JSON)
+				.post(Entity.entity(password, APPLICATION_JSON), Boolean.class);
+	}
 }
