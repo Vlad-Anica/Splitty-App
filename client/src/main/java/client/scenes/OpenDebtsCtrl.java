@@ -7,7 +7,6 @@ import commons.Person;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -96,7 +95,7 @@ public class OpenDebtsCtrl {
 
     public void setup() {
         setTextLanguage();
-        List<Debt> debts = server.getDebts();
+        List<Debt> debts = server.getDebts(); //gets debt from server but for now uses debts from list created below for testing
         Expense e = new Expense();
         e.setDescription("We do that stuff");
         List<Debt> testDebts = List.of(new Debt(new Person("Frank", "Verkoren"), new Person("Duco", "Lam"), e, 2.50), new Debt(new Person("Duco", "Lam"), new Person("Frank", "Verkoren"), new Expense(), 404));
@@ -207,10 +206,6 @@ public class OpenDebtsCtrl {
 
     public void goHome(ActionEvent event) throws IOException {
         mainCtrl.showHome();
-    }
-
-    public void buttonPress() {
-        System.out.println("pressed");
     }
 
 }
