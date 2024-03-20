@@ -2,12 +2,22 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Debt;
+import commons.Expense;
+import commons.Person;
 import jakarta.inject.Inject;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -41,6 +51,16 @@ public class OpenDebtsCtrl {
     private Scene scene;
     @FXML
     private Parent root;
+    @FXML
+    private AnchorPane debtsPane;
+    @FXML
+    private TableColumn<Debt, String> columnC1;
+
+    @FXML
+    private TableColumn<Debt, Integer> columnC2;
+
+    @FXML
+    private TableView<Debt> table;
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
@@ -54,13 +74,25 @@ public class OpenDebtsCtrl {
     public void setup() {
         setTextLanguage();
         List<Debt> debts = server.getDebts();
-        for (Debt debt:debts) {
-            System.out.println(debt.toString());
+        ObservableList<Debt> testDebts = FXCollections.observableArrayList(new Debt(new Person("Joe", "Biden"), new Person("Donald", "Trump"), new Expense(), 69), new Debt(new Person("Donald", "Trump"), new Person("Joe", "Biden"), new Expense(), 420));
+        for (Debt debt:testDebts) {
+            int height = 0;
+//            debtsPane.getChildren().add();
+            columnC1.setCellValueFactory(cellData -> {
+                // Assuming receiver is of type Person
+                SimpleStringProperty property = new SimpleStringProperty();
+                if (cellData.getValue() != null && cellData.getValue().getReceiver() != null) {
+                    property.set(cellData.getValue().getReceiver().getFirstName()+" "+cellData.getValue().getReceiver().getLastName());
+                }
+                return property;
+            });
+            columnC2.setCellValueFactory(new PropertyValueFactory<Debt, Integer>("amount"));
+            table.setItems(testDebts);
         }
     }
     public void setTextLanguage() {
         int languageIndex = mainCtrl.getLanguageIndex();
-        goHomeButton.setText(goBackButtonText.get(languageIndex));
+        goHomeButton.setText(goHomeButtonText.get(languageIndex));
         goBackButton.setText(goBackButtonText.get(languageIndex));
         openDebtsTitle.setText(openDebtsTitleText.get(languageIndex));
     }
