@@ -24,8 +24,13 @@
          <children>
             <TableView fx:id="table" prefHeight="313.0" prefWidth="600.0">
               <columns>
-                <TableColumn fx:id="columnC2" minWidth="0.0" prefWidth="307.5" text="C2" />
-                <TableColumn fx:id="columnC1" prefWidth="289.0" text="C1" />
+                <TableColumn fx:id="columnId" minWidth="0.0" prefWidth="52.0" text="id" />
+                <TableColumn fx:id="columnGiver" prefWidth="125.0" text="Giver" />
+                  <TableColumn fx:id="columnReceiver" prefWidth="125.0" text="Receiver" />
+                  <TableColumn fx:id="columnExpense" prefWidth="111.5" text="Expense" />
+                  <TableColumn fx:id="columnAmount" prefWidth="75.0" text="Amount" />
+                  <TableColumn fx:id="columnSettle" prefWidth="52.5" text="Settle" />
+                  <TableColumn fx:id="columnRemind" prefWidth="57.5" text="Remind" />
               </columns>
             </TableView>
          </children></AnchorPane>

@@ -19,29 +19,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeCtrl  {
-
+    private List<String> titleText = new ArrayList<>(List.of("Home",
+            "Thuis"));
 
     @FXML
     private Label mainPageTestLabel;
     private List<String> mainPageTestLabelText = new ArrayList<>(List.of("Welcom To Splitty",
-            "Welcome to splitty! (in Dutch)"));
+            "Welkom bij Splitty!"));
     @FXML
     private Button goDebtsButton;
     private List<String> goDebtsButtonText = new ArrayList<>(List.of("Open Debts",
-            "Open Debts (in Ducth)"));
+            "Open schulden"));
 
     @FXML
     private Button goHomeButton;
-    private List<String> goHomeButtonText = new ArrayList<>(List.of("Home", "Home (in Dutch)"));
+    private List<String> goHomeButtonText = new ArrayList<>(List.of("Home", "Thuis"));
 
     @FXML
     private Button goSettingsButton;
     private List<String> goSettingsButtonText = new ArrayList<>(List.of("Settings",
-            "Settings (in Dutch)"));
+            "Instellingen"));
     @FXML
     private Button goEventButton;
     private List<String> goEventButtonText = new ArrayList<>(List.of("Submit, ",
-            "Submit (in Dutch)"));
+            "Verstuur"));
     @FXML
     private Stage stage;
     @FXML
@@ -52,6 +53,8 @@ public class HomeCtrl  {
     private ComboBox<String> languageList;
     @FXML
     private ComboBox<String> eventList;
+    private List<String> eventListText = new ArrayList<>(List.of("Select Event",
+            "Kies Evenement"));
 
     List<String> languages;
     List<String> eventNames;
@@ -97,6 +100,8 @@ public class HomeCtrl  {
         goHomeButton.setText(goHomeButtonText.get(languageIndex));
         goSettingsButton.setText(goSettingsButtonText.get(languageIndex));
         goEventButton.setText(goEventButtonText.get(languageIndex));
+        eventList.setPromptText(eventListText.get(languageIndex));
+        mainCtrl.getPrimaryStage().setTitle(titleText.get(languageIndex));
     }
 
     public void goToEvent() {
