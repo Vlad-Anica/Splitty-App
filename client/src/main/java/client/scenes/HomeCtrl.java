@@ -12,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -55,6 +57,22 @@ public class HomeCtrl  {
     private ComboBox<String> eventList;
     private List<String> eventListText = new ArrayList<>(List.of("Select Event",
             "Kies Evenement"));
+    @FXML
+    private PasswordField adminPasswordField;
+    private List<String> adminLoginFieldText = new ArrayList<>(List.of("admin password",
+            "beheerders wachtwoord"));
+    @FXML
+    private Label adminPasswordMessage;
+    private List<String> adminPasswordMessageText = new ArrayList<>(List.of("Your password is incorrect!",
+            "Uw wachtwoord is incorrect!"));
+    @FXML
+    private Label adminLogInLabel;
+    private List<String> adminLogInLabelText = new ArrayList<>(List.of("admin log in",
+            "beheerder log in"));
+    @FXML
+    private Button adminLogInButton;
+    private List<String> adminLogInButtonText = new ArrayList<>(List.of("Log in",
+            "Log in"));
 
     List<String> languages;
     List<String> eventNames;
@@ -102,6 +120,12 @@ public class HomeCtrl  {
         goEventButton.setText(goEventButtonText.get(languageIndex));
         eventList.setPromptText(eventListText.get(languageIndex));
         mainCtrl.getPrimaryStage().setTitle(titleText.get(languageIndex));
+        adminPasswordField.setPromptText(adminLoginFieldText.get(languageIndex));
+        adminLogInLabel.setText(adminLogInLabelText.get(languageIndex));
+        adminLogInButton.setText(adminLogInButtonText.get(languageIndex));
+        if(!adminPasswordMessage.getText().isEmpty()){
+            adminPasswordMessage.setText(adminPasswordMessageText.get(languageIndex));
+        }
     }
 
     public void goToEvent() {
@@ -136,6 +160,20 @@ public class HomeCtrl  {
 
     public void goToEventOverview(ActionEvent event) throws IOException {
         mainCtrl.showEventOverview();
+    }
+
+    /**
+     * checks with the server whether the password is correct and displays if it is correct
+     * @param event event
+     */
+    public void adminLogIn(ActionEvent event) {
+        if (adminPasswordField.getText().isEmpty() || !server.checkAdminPassword(adminPasswordField.getText())) {
+            adminPasswordMessage.setText(adminPasswordMessageText.get(mainCtrl.getLanguageIndex()));
+            adminPasswordMessage.setTextFill(Color.rgb(210, 39, 30));
+        } else {
+            mainCtrl.showManagementOverview();
+        }
+        adminPasswordField.clear();
     }
 
 

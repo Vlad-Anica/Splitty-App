@@ -60,6 +60,10 @@ public class MainCtrl {
     private StatisticsCtrl statisticsCtrl;
     private Scene statisticsScene;
 
+    //Scene and controller for ManagementOverview
+    private ManagementOverviewCtrl managementOverviewCtrl;
+    private Scene managementOverview;
+
     private ServerUtils server;
     private int languageIndex;
 
@@ -68,6 +72,7 @@ public class MainCtrl {
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
+                           Pair<ManagementOverviewCtrl, Parent> managementOverview,
                            ServerUtils server) {
         this.languageIndex = 0;
         this.primaryStage = primaryStage;
@@ -92,6 +97,9 @@ public class MainCtrl {
 
         this.statisticsCtrl = statistics.getKey();
         this.statisticsScene = new Scene(statistics.getValue());
+
+        this.managementOverviewCtrl = managementOverview.getKey();
+        this.managementOverview = new Scene(managementOverview.getValue());
 
         this.server = server;
 
@@ -157,6 +165,11 @@ public class MainCtrl {
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statisticsScene);
         statisticsCtrl.PieChartExpenses.setTitle(name);
+    }
+    public void showManagementOverview(){
+        primaryStage.setTitle("Management Overview");
+        primaryStage.setScene(managementOverview);
+        managementOverviewCtrl.setUp();
     }
 
     public Stage getPrimaryStage(){
