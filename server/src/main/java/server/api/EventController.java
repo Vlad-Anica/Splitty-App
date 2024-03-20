@@ -117,7 +117,7 @@ public class EventController {
      */
     @GetMapping("/inviteCode/{inviteCode}")
     public ResponseEntity<Event> getEventByInviteCode(@PathVariable("inviteCode") String inviteCode){
-        Event event = db.findByInviteCode(inviteCode);
+        Event event = eventRep.findByInviteCode(inviteCode);
         if (event == null) {
             return ResponseEntity.notFound().build();
         }
@@ -131,11 +131,11 @@ public class EventController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Event> deleteById(@PathVariable("id") long id) {
-        if (!db.existsById(id)) {
+        if (!eventRep.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        Event deletedEvent = db.findById(id).get();
-        db.deleteById(id);
+        Event deletedEvent = eventRep.findById(id).get();
+        eventRep.deleteById(id);
         return ResponseEntity.ok(deletedEvent);
     }
 
