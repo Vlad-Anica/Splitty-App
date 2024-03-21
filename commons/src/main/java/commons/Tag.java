@@ -31,10 +31,10 @@ public class Tag {
 
     /**
      * getter for id
-     * @param id id of object
+     * @return id of object
      */
-    public void getId(long id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     /**

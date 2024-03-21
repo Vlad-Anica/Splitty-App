@@ -26,13 +26,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import commons.Debt;
-import commons.Event;
-import commons.Person;
+import commons.*;
 import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -252,5 +249,23 @@ public class ServerUtils {
 				.path("api/admin/checkPassword")
 				.request(APPLICATION_JSON)
 				.post(Entity.entity(password, APPLICATION_JSON), Boolean.class);
+	}
+
+	public Tag addTag(Tag tag) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonTag = objectMapper.writeValueAsString(tag);
+			System.out.println("Received object: " + jsonTag);
+
+			return ClientBuilder.newClient(new ClientConfig())//
+					.target(SERVER).path("api/debts")//
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.post(Entity.entity(jsonTag, MediaType.APPLICATION_JSON), Tag.class);
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
