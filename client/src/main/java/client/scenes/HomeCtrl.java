@@ -1,10 +1,12 @@
 package client.scenes;
 
 
+import client.sceneSupportClasses.LanguageListListCell;
 import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -53,6 +55,8 @@ public class HomeCtrl  {
     private Parent root;
     @FXML
     private ComboBox<String> languageList;
+    List<String> languageOptions = new ArrayList<>(List.of("English client/images/EnglishFlag.jpg",
+            "Nederlands client/images/DutchFlag.png"));
     @FXML
     private ComboBox<String> eventList;
     private List<String> eventListText = new ArrayList<>(List.of("Select Event",
@@ -91,13 +95,16 @@ public class HomeCtrl  {
      * set up the home page
      */
     public void setup() {
-        languages = new ArrayList<>(List.of("English", "Nederlands"));
-        languageList.setItems(FXCollections.observableList(languages.stream().toList()));
+        //set up the languages options and their images
+        languageList.setItems(FXCollections.observableList(languageOptions.stream().toList()));
         languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
         languageList.setOnAction(event -> {
             mainCtrl.setLanguageIndex(languageList.getSelectionModel().getSelectedIndex());
             setTextLanguage();
         });
+        languageList.setCellFactory(c -> new LanguageListListCell());
+        languageList.setButtonCell(new LanguageListListCell());
+
         List<Event> events = server.getEvents(1L);
         eventNames = new ArrayList<>();
         eventIds = new ArrayList<>();
