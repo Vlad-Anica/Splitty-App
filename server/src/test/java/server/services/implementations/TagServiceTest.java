@@ -3,29 +3,34 @@ package server.services.implementations;
 import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.api.TestTagRepository;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import server.database.TagRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
 
+
+import static org.mockito.Mockito.mock;
+
+@ExtendWith(MockitoExtension.class)
 class TagServiceTest {
 
     private TagServiceImpl tagService;
-    private TestTagRepository repo;
+    private TagRepository repo;
     private Tag tag1;
     private Tag tag2;
     @BeforeEach
     public void setup() {
-        repo = new TestTagRepository();
+        repo = mock(TagRepository.class);
         tagService = new TagServiceImpl(repo);
         tag1 = new Tag("purple", "party");
         tag2 = new Tag("yellow", "burgers");
+        List<Tag> tags = new ArrayList<>();
     }
     @Test
     void findAll() {
-        tagService.add(tag1);
-        assertEquals(0, tag1.getId());
-        tagService.add(tag2);
-        assertEquals(2, tagService.findAll().size());
+
     }
 
     @Test

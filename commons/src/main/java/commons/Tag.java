@@ -1,12 +1,19 @@
 package commons;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Objects;
 
 @Entity
+@Table(name = "TAG")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,11 +30,6 @@ public class Tag {
         this.color = color;
         this.type = type;
     }
-
-    /**
-     * constructor with no args
-     */
-    public Tag(){}
 
     /**
      * getter for id
