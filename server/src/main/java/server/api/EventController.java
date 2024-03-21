@@ -3,9 +3,11 @@ package server.api;
 import commons.*;
 import commons.Date;
 import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 //import server.database.PersonRepository;
 import server.database.EventRepository;
@@ -59,9 +61,9 @@ public class EventController {
             System.out.println("Process aborted, null arguments received.");
             return null;
         }
+        boolean badEntry = false;
         ArrayList<Person> participants = new ArrayList<>();
         ArrayList<Expense> expenses = new ArrayList<>();
-        Event event = null;
         try {
             for(Long pID : participantIDs) {
                 personRep.getReferenceById(pID);
@@ -70,6 +72,7 @@ public class EventController {
         }
         catch (EntityNotFoundException e) {
             System.out.println("Invalid ID, no Participant found.");
+            badEntry = true;
         }
         try {
             for(Long eID : expenseIDs) {
@@ -79,12 +82,55 @@ public class EventController {
         }
         catch (EntityNotFoundException e) {
             System.out.println("Invalid ID, no Expense found.");
+            badEntry = true;
         }
-
-        event = new Event(name, description, tags, date, participants, expenses);
-        eventRep.save(event);
-        return event;
+        if(badEntry) {
+            return null;
+        } else {
+         Event event = new Event(name, description, tags, date, participants, expenses);
+         eventRep.save(event);
+         return event;
+        }
     }
+
+    /**
+     * Method that only removed direct association between a given Event and Person. Other objects remain.
+     * @param eID Event ID associated with the Event
+     * @param pID Person ID associated with the Person
+     * @return boolean, true if the removal was successful, false otherwise
+     */
+    @Transactional
+    public boolean removePerson(@RequestParam("eventID") Long eID,
+                                @RequestParam("participantID") Long pID) {
+        boolean badEntry = false;
+        try {
+                eventRep.getReferenceById(eID);
+        }
+        catch (EntityNotFoundException e) {
+            System.out.println("Invalid ID, no Event found.");
+            badEntry = true;
+        }
+        try {
+            personRep.getReferenceById(pID);
+        }
+        catch (EntityNotFoundException e) {
+            System.out.println("Invalid ID, no Event found.");
+            badEntry = true;
+        }
+        if(badEntry) {
+            return false;
+        } else {
+            Event event = eventRep.getReferenceById((eID));
+            Person person = personRep.getReferenceById(pID);
+            if(!event.isAttending(person)) {
+                return false;
+            }
+            event.removeParticipant(person);
+            eventRep.save(event);
+            return true;
+        }
+    }
+
 
     @GetMapping(path = {"", "/"})
     public List<Event> getAll() {
