@@ -127,7 +127,6 @@ public class MainCtrl {
     }
 
     public void showOpenDebts() {
-        primaryStage.setTitle("Open Debts");
         primaryStage.setScene(openDebtsScene);
         openDebtsCtrl.setup();
     }
@@ -173,6 +172,9 @@ public class MainCtrl {
         managementOverviewCtrl.setUp();
     }
 
+    public Stage getPrimaryStage(){
+        return primaryStage;
+    }
     public List<Event> getEvents(Long userId) {
         return server.getEvents(userId);
     }
