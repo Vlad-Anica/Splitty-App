@@ -40,13 +40,14 @@ public class ExpenseController {
 
     /**
      * Creates a corresponding Expense based on the given parameters. In normal usage, debtIDs should be empty...
+     *
      * @param description description to use for the Expense
-     * @param amount amount spend on the Expense
-     * @param date date the Expense took place
-     * @param receiverID ID of the one who footed the bill
-     * @param debtIDs IDs of the respective debts associated with the Expense
-     * @param currency Currency the Expense was executed in
-     * @param tag Tag associated with the expense
+     * @param amount      amount spend on the Expense
+     * @param date        date the Expense took place
+     * @param receiverID  ID of the one who footed the bill
+     * @param debtIDs     IDs of the respective debts associated with the Expense
+     * @param currency    Currency the Expense was executed in
+     * @param tag         Tag associated with the expense
      * @return the Expense object created
      */
     @PostMapping("/")
@@ -57,30 +58,34 @@ public class ExpenseController {
                                  @RequestParam("debts") List<Long> debtIDs,
                                  @RequestParam("currency") Currency currency,
                                  @RequestParam("tag") Tag tag) {
-        if(description == null || amount == null || date == null || currency == null || tag == null) {
+        if (description == null || amount == null || date == null || currency == null || tag == null) {
             System.out.println("Process aborted, null arguments received.");
             return null;
         }
+        boolean badEntry = false;
         ArrayList<Debt> debts = new ArrayList<>();
-        Expense expense = null;
         try {
             personRep.getReferenceById(receiverID);
-        }
-        catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             System.out.println("Invalid ID, no Person found.");
+            badEntry = true;
         }
         try {
             for (Long dID : debtIDs) {
                 debtRep.getReferenceById(dID);
                 debts.add(debtRep.getReferenceById(dID));
             }
-        }
-        catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             System.out.println("Invalid ID, no Debt found.");
+            badEntry = true;
         }
-        expense = new Expense(description, amount, date, personRep.getReferenceById(receiverID), debts, currency, tag);
-        expenseRep.save(expense);
-        return expense;
+        if(badEntry) {
+            return null;
+        } else {
+            Expense expense = new Expense(description, amount, date, personRep.getReferenceById(receiverID), debts, currency, tag);
+            expenseRep.save(expense);
+            return expense;
+        }
     }
 
     @GetMapping(path = {"", "/"})
