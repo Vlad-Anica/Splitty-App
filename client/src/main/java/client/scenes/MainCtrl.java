@@ -49,6 +49,9 @@ public class MainCtrl {
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebtsScene;
 
+    private StartPageCtrl startPageCtrl;
+    private Scene startPageScene;
+
     //scene and controller for addExpense
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpenseScene;
@@ -72,7 +75,7 @@ public class MainCtrl {
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
-                           Pair<ManagementOverviewCtrl, Parent> managementOverview,
+                           Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<StartPageCtrl, Parent> startPage,
                            ServerUtils server) {
         this.languageIndex = 0;
         this.primaryStage = primaryStage;
@@ -100,6 +103,9 @@ public class MainCtrl {
 
         this.managementOverviewCtrl = managementOverview.getKey();
         this.managementOverview = new Scene(managementOverview.getValue());
+
+        this.startPageCtrl = startPage.getKey();
+        this.startPageScene = new Scene(startPage.getValue());
 
         this.server = server;
 
@@ -135,6 +141,12 @@ public class MainCtrl {
         primaryStage.setTitle("Settings");
         primaryStage.setScene(settingsScene);
         settingsCtrl.setup();
+    }
+
+    public void showStartPage() {
+        primaryStage.setTitle("Start Page");
+        primaryStage.setScene(startPageScene);
+        startPageCtrl.initializePage();
     }
 
     public void showAddExpense() {

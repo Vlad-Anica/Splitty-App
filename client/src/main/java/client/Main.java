@@ -56,10 +56,11 @@ public class Main extends Application {
         var eventOverview = FXML.load(EventOverviewCtrl.class, "client", "scenes", "EventOverview.fxml");
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var managementOverview = FXML.load(ManagementOverviewCtrl.class, "client", "scenes", "ManagementOverview.fxml");
+        var startPage = FXML.load(StartPageCtrl.class, "client", "scenes", "StartPage.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         ServerUtils server = INJECTOR.getInstance(ServerUtils.class);
-        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, managementOverview, server);
+        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, managementOverview, startPage,server);
     }
 
 }

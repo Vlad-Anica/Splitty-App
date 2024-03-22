@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Currency;
 import jakarta.inject.Inject;
