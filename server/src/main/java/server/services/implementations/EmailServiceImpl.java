@@ -4,12 +4,13 @@ import commons.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.EmailRepository;
-import server.services.interfaces.EmaiService;
+import server.services.interfaces.EmailService;
+
 
 import java.util.List;
 
 @Service
-public class EmailServiceImpl implements EmaiService {
+public class EmailServiceImpl implements EmailService {
     @Autowired
     EmailRepository emailRep;
 

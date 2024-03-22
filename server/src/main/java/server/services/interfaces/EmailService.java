@@ -5,7 +5,7 @@ import commons.Expense;
 
 import java.util.List;
 
-public interface EmaiService {
+public interface EmailService {
     public Email save(Email email);
     public List<Email> findAll();
     public boolean existsById(long id);
