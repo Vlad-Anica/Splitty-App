@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.PersonRepository;
+import server.services.interfaces.PersonService;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -20,27 +22,26 @@ import java.util.Map;
 public class PersonController {
 
     @Autowired
-    private final PersonRepository db;
+    private final PersonService personService;
     private DebtController debtCtrl;
-    public PersonController(PersonRepository db, DebtController debtCtrl) {
-
-       this.db = db;
+    public PersonController(PersonService personService, DebtController debtCtrl) {
+       this.personService = personService;
        this.debtCtrl = debtCtrl;
     }
 
     @GetMapping(path = { "", "/" })
     public List<Person> getAll() {
         System.out.println("Find people...");
-        return db.findAll();
+        return personService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Person> getById(@PathVariable long id) {
 
-        if (id < 0 || !db.existsById(id)) {
+        if (id < 0 || !personService.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        Optional<Person> person = db.findById(id);
+        Optional<Person> person = Optional.of(personService.findById(id));
         if (person.isPresent())
             return ResponseEntity.ok(person.get());
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -49,42 +50,42 @@ public class PersonController {
 
     @GetMapping("/iban/{id}")
     public String getIbanById(@PathVariable("id") long id){
-        if (id < 0 || !db.existsById(id)) {
+        if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return db.findById(id).get().getIBAN();
+        return personService.findById(id).getIBAN();
     }
 
     @GetMapping("/bic/{id}")
     public String getBicById(@PathVariable("id") long id){
-        if (id < 0 || !db.existsById(id)) {
+        if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return db.findById(id).get().getIBAN();
+        return personService.findById(id).getIBAN();
     }
 
     @GetMapping("/bank/{id}")
     public String getBankById(@PathVariable("id") long id){
-        if (id < 0 || !db.existsById(id)) {
+        if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return db.findById(id).get().getIBAN() + ", " + db.findById(id).get().getIBAN();
+        return personService.findById(id).getIBAN() + ", " + personService.findById(id).getIBAN();
     }
 
     @GetMapping("/{id}/debts")
     public List<Debt> getDebtsById(@PathVariable("id") long id){
-        if (id < 0 || !db.existsById(id)) {
+        if (id < 0 || !personService.existsById(id)) {
             return null;
         }
-        return db.findById(id).get().getDebtList();
+        return personService.findById(id).getDebtList();
     }
 
     @GetMapping("events/{id}")
     public Event getEventsById(@PathVariable("id") long id){
-        if (id < 0 || !db.existsById(id)) {
+        if (id < 0 || !personService.existsById(id)) {
             return null;
         }
-        return db.findById(id).get().getEvent();
+        return personService.findById(id).getEvent();
     }
 
     @GetMapping("/{USER_ID}/debts")
@@ -125,7 +126,7 @@ public class PersonController {
             return ResponseEntity.badRequest().build();
         }
 
-        Person saved = db.save(person);
+        Person saved = personService.save(person);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
     @PutMapping("/{id}")
@@ -133,9 +134,9 @@ public class PersonController {
 
         if (updatedPerson.getId() != id)
            return ResponseEntity.badRequest().build();
-        if (!db.existsById(id))
+        if (!personService.existsById(id))
             return add(updatedPerson);
-        return ResponseEntity.ok(db.save(updatedPerson));
+        return ResponseEntity.ok(personService.save(updatedPerson));
     }
     @PutMapping("/{id}/newDebt")
     public ResponseEntity<Person> addDebt(@PathVariable Long id, @RequestBody Debt debt) {
@@ -147,7 +148,7 @@ public class PersonController {
         person.getDebtList().add(debt);
         double totalDebt = person.getTotalDebt() + debt.getAmount();
         person.setTotalDebt(totalDebt);
-        return ResponseEntity.ok(db.save(person));
+        return ResponseEntity.ok(personService.save(person));
     }
     @PutMapping("/{id}/debtSettlement/{debtId}")
     public ResponseEntity<Person> settleDebt(@PathVariable Long id, @PathVariable Long debtId) {
