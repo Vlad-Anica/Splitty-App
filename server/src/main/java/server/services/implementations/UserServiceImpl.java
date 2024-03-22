@@ -21,4 +21,26 @@ public class UserServiceImpl implements UserService {
 
         return List.of(e1, e2, e3);
     }
+
+    @Override
+    public List<Event> findAll() {
+        return null;
+    }
+
+    @Override
+    public Event save(Event event) {
+        return null;
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return false;
+    }
+
+    @Override
+    public Event findById(long id) {
+        return null;
+    }
+
+
 }
