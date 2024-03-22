@@ -2,6 +2,7 @@ package server.api;
 
 import commons.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.implementations.EventServiceImpl;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
-
+    @Autowired
     private final EventService eventService;
     private PersonService personService;
     private ExpenseService expenseService;

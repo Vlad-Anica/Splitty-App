@@ -36,4 +36,9 @@ public class DebtServiceImpl implements DebtService {
     public boolean existsById(long id) {
         return debtRep.existsById(id);
     }
+
+    @Override
+    public Debt getReferenceById(long id) {
+        return debtRep.getReferenceById(id);
+    }
 }
