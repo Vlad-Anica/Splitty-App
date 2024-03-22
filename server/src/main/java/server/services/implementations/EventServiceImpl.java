@@ -42,4 +42,9 @@ public class EventServiceImpl implements EventService{
     public Event findByInviteCode(String inviteCode) {
         return null;
     }
+
+    @Override
+    public void deleteById(long id) {
+        eventRep.deleteById(id);
+    }
 }

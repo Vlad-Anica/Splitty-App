@@ -10,4 +10,5 @@ public interface EventService {
     public Event findById(long id);
     public boolean existsById(long id);
     public Event findByInviteCode(String inviteCode);
+    public void deleteById(long id);
 }

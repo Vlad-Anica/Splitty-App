@@ -7,15 +7,19 @@ import org.springframework.web.bind.annotation.*;
 import server.services.implementations.DebtServiceImpl;
 import server.services.implementations.ExpenseServiceImpl;
 import server.services.implementations.PersonServiceImpl;
+import server.services.interfaces.DebtService;
+import server.services.interfaces.ExpenseService;
+import server.services.interfaces.PersonService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/debts")
 public class DebtController {
-    private DebtServiceImpl debtService;
-    private PersonServiceImpl personService;
-    private ExpenseServiceImpl expenseService;
+
+    private DebtService debtService;
+    private PersonService personService;
+    private ExpenseService expenseService;
 
     /**
      * constructor for DebtController

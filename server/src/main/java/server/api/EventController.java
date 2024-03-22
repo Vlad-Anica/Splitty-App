@@ -1,41 +1,39 @@
 package server.api;
 
 import commons.*;
-import commons.Date;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-//import server.database.PersonRepository;
-import server.database.EventRepository;
-import server.database.ExpenseRepository;
-import server.database.PersonRepository;
+import server.services.implementations.EventServiceImpl;
+import server.services.implementations.PersonServiceImpl;
+import server.services.interfaces.EventService;
+import server.services.interfaces.ExpenseService;
+import server.services.interfaces.PersonService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
 
-    @Autowired
-    private final EventRepository eventRep;
-    private PersonRepository personRep;
-    private ExpenseRepository expenseRep;
+    private final EventService eventService;
+    private PersonService personService;
+    private ExpenseService expenseService;
     // private TagRepository tagRep
 
     /**
      * Constructor for an EventController
      *
-     * @param eventRep   repository for Event
-     * @param personRep  repository for Person
-     * @param expenseRep repository for Expense
+     * @param eventService service class for Event
+     * @param personService service class for Person
+     * @param expenseService service class for Expense
      */
-    public EventController(EventRepository eventRep, PersonRepository personRep, ExpenseRepository expenseRep) {
-        this.eventRep = eventRep;
-        this.personRep = personRep;
-        this.expenseRep = expenseRep;
+    public EventController(EventServiceImpl eventService, PersonServiceImpl personService, ExpenseService expenseService) {
+        this.eventService = eventService;
+        this.personService = personService;
+        this.expenseService = expenseService;
     }
 
     /**
@@ -64,8 +62,8 @@ public class EventController {
         Event event = null;
         try {
             for(Long pID : participantIDs) {
-                personRep.getReferenceById(pID);
-                participants.add(personRep.getReferenceById(pID));
+                personService.getReferenceById(pID);
+                participants.add(personService.getReferenceById(pID));
             }
         }
         catch (EntityNotFoundException e) {
@@ -73,8 +71,8 @@ public class EventController {
         }
         try {
             for(Long eID : expenseIDs) {
-                expenseRep.getReferenceById(eID);
-                expenses.add(expenseRep.getReferenceById(eID));
+                expenseService.getReferenceById(eID);
+                expenses.add(expenseService.getReferenceById(eID));
             }
         }
         catch (EntityNotFoundException e) {
@@ -82,32 +80,32 @@ public class EventController {
         }
 
         event = new Event(name, description, tags, date, participants, expenses);
-        eventRep.save(event);
+        eventService.save(event);
         return event;
     }
 
     @GetMapping(path = {"", "/"})
     public List<Event> getAll() {
         System.out.println("Find people...");
-        return eventRep.findAll();
+        return eventService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Event> getById(@PathVariable("id") long id) {
 
-        if (id < 0 || !eventRep.existsById(id)) {
+        if (id < 0 || !eventService.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(eventRep.findById(id).get());
+        return ResponseEntity.ok(eventService.findById(id));
     }
 
 
     @GetMapping("event/{id}")
     public Event getEventById(@PathVariable("id") long id) {
-        if (id < 0 || !eventRep.existsById(id)) {
+        if (id < 0 || !eventService.existsById(id)) {
             return null;
         }
-        return eventRep.findById(id).get();
+        return eventService.findById(id);
     }
 
     /**
@@ -117,7 +115,7 @@ public class EventController {
      */
     @GetMapping("/inviteCode/{inviteCode}")
     public ResponseEntity<Event> getEventByInviteCode(@PathVariable("inviteCode") String inviteCode){
-        Event event = eventRep.findByInviteCode(inviteCode);
+        Event event = eventService.findByInviteCode(inviteCode);
         if (event == null) {
             return ResponseEntity.notFound().build();
         }
@@ -131,11 +129,11 @@ public class EventController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Event> deleteById(@PathVariable("id") long id) {
-        if (!eventRep.existsById(id)) {
+        if (!eventService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        Event deletedEvent = eventRep.findById(id).get();
-        eventRep.deleteById(id);
+        Event deletedEvent = eventService.findById(id);
+        eventService.deleteById(id);
         return ResponseEntity.ok(deletedEvent);
     }
 
