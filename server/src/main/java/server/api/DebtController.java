@@ -9,9 +9,11 @@ import server.database.ExpenseRepository;
 import server.database.PersonRepository;
 
 import java.util.List;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 @RequestMapping("/api/debts")
 public class DebtController {
@@ -21,8 +23,9 @@ public class DebtController {
 
     /**
      * constructor for DebtController
-     * @param debtRep repository for debts
-     * @param personRep repository for debts
+     *
+     * @param debtRep    repository for debts
+     * @param personRep  repository for debts
      * @param expenseRep repository for debts
      */
     public DebtController(DebtRepository debtRep, PersonRepository personRep, ExpenseRepository expenseRep) {
@@ -43,13 +46,15 @@ public class DebtController {
         }
         return ResponseEntity.ok(debtRep.findById(id).get());
     }
+
     /**
      * endpoint for creating a debt
+     *
      * @param debt the given debt to add to the database
      * @return the debt in json format
      */
-    @PostMapping(path = { "", "/" })
-    public  ResponseEntity<Debt> add(@RequestBody Debt debt) {
+    @PostMapping(path = {"", "/"})
+    public ResponseEntity<Debt> add(@RequestBody Debt debt) {
         if (debt.getGiver() == null || debt.getReceiver() == null || debt.getAmount() < 0)
             return ResponseEntity.badRequest().build();
         Debt saved = debtRep.save(debt);
@@ -59,10 +64,11 @@ public class DebtController {
 
     /**
      * endpoint for creating a user
-     * @param giverId id of the giver
+     *
+     * @param giverId    id of the giver
      * @param receiverId id of receiver
-     * @param expenseId id of expense
-     * @param amount amount to be paid
+     * @param expenseId  id of expense
+     * @param amount     amount to be paid
      * @return a Debt
      */
     @PostMapping("/")
@@ -74,9 +80,11 @@ public class DebtController {
         debtRep.save(debt);
         return debt;
     }
+
     /**
-    * endpoint for udating debt
-    * @param id id of debt to update
+     * endpoint for udating debt
+     *
+     * @param id          id of debt to update
      * @param updatedDebt debt with updated properties
      * @return updated debt
      */
