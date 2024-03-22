@@ -93,7 +93,7 @@ public class ExpenseController {
         if (id < 0 || !expenseService.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(expenseService.findById(id));
+        return ResponseEntity.ok(expenseService.findById(id).get());
     }
 
 
@@ -102,7 +102,7 @@ public class ExpenseController {
         if (id < 0 || !expenseService.existsById(id)) {
             return null;
         }
-        return expenseService.findById(id).getDebtList();
+        return expenseService.findById(id).get().getDebtList();
     }
 
     private static boolean isNullOrEmpty(String s) {

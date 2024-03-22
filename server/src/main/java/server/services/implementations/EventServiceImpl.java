@@ -7,6 +7,7 @@ import server.database.EventRepository;
 import server.services.interfaces.EventService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EventServiceImpl implements EventService{
@@ -29,8 +30,8 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public Event findById(long id) {
-        return eventRep.findById(id).get();
+    public Optional<Event> findById(long id) {
+        return eventRep.findById(id);
     }
 
     @Override
@@ -40,7 +41,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public Event findByInviteCode(String inviteCode) {
-        return null;
+        return eventRep.findByInviteCode(inviteCode);
     }
 
     @Override

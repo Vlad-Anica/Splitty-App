@@ -40,7 +40,7 @@ public class PersonController {
         if (id < 0 || !personService.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        Optional<Person> person = Optional.of(personService.findById(id));
+        Optional<Person> person = Optional.of(personService.findById(id).get());
         if (person.isPresent())
             return ResponseEntity.ok(person.get());
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -52,7 +52,7 @@ public class PersonController {
         if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return personService.findById(id).getIBAN();
+        return personService.findById(id).get().getIBAN();
     }
 
     @GetMapping("/bic/{id}")
@@ -60,7 +60,7 @@ public class PersonController {
         if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return personService.findById(id).getIBAN();
+        return personService.findById(id).get().getIBAN();
     }
 
     @GetMapping("/bank/{id}")
@@ -68,7 +68,7 @@ public class PersonController {
         if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return personService.findById(id).getIBAN() + ", " + personService.findById(id).getIBAN();
+        return personService.findById(id).get().getIBAN() + ", " + personService.findById(id).get().getIBAN();
     }
 
     @GetMapping("/{id}/debts")
@@ -76,7 +76,7 @@ public class PersonController {
         if (id < 0 || !personService.existsById(id)) {
             return null;
         }
-        return personService.findById(id).getDebtList();
+        return personService.findById(id).get().getDebtList();
     }
 
     @GetMapping("events/{id}")
@@ -84,7 +84,7 @@ public class PersonController {
         if (id < 0 || !personService.existsById(id)) {
             return null;
         }
-        return personService.findById(id).getEvent();
+        return personService.findById(id).get().getEvent();
     }
 
     @GetMapping("/{USER_ID}/debts")

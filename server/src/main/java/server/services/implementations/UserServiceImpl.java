@@ -8,6 +8,7 @@ import server.database.UserRepository;
 import server.services.interfaces.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(long id) {
-        return userRep.findById(id).get();
+    public Optional<User> findById(long id) {
+        return userRep.findById(id);
     }
 }

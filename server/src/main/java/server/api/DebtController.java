@@ -44,7 +44,7 @@ public class DebtController {
         if (id < 0 || !debtService.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(debtService.findById(id));
+        return ResponseEntity.ok(debtService.findById(id).get());
     }
     /**
      * endpoint for creating a debt

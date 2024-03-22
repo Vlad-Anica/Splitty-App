@@ -7,6 +7,7 @@ import server.database.PersonRepository;
 import server.services.interfaces.PersonService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -34,8 +35,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person findById(long id) {
-        return personRep.findById(id).get();
+    public Optional<Person> findById(long id) {
+        return personRep.findById(id);
     }
 
     @Override

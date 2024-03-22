@@ -128,3 +128,6 @@ create table date (id bigint not null, day integer not null, hour integer not nu
 2024-03-21 18:17:15.868243+01:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
 create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-22 21:57:25.374746+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
+create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]

@@ -7,6 +7,7 @@ import server.database.ExpenseRepository;
 import server.services.interfaces.ExpenseService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -34,8 +35,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public Expense findById(long id) {
-        return expenseRep.findById(id).get();
+    public Optional<Expense> findById(long id) {
+        return expenseRep.findById(id);
     }
 
     @Override

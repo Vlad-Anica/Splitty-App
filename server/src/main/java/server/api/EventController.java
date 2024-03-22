@@ -97,7 +97,7 @@ public class EventController {
         if (id < 0 || !eventService.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(eventService.findById(id));
+        return ResponseEntity.ok(eventService.findById(id).get());
     }
 
 
@@ -106,7 +106,7 @@ public class EventController {
         if (id < 0 || !eventService.existsById(id)) {
             return null;
         }
-        return eventService.findById(id);
+        return eventService.findById(id).get();
     }
 
     /**
@@ -133,7 +133,7 @@ public class EventController {
         if (!eventService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        Event deletedEvent = eventService.findById(id);
+        Event deletedEvent = eventService.findById(id).get();
         eventService.deleteById(id);
         return ResponseEntity.ok(deletedEvent);
     }
