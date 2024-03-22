@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Debt;
 import commons.Event;
 import commons.Person;
+import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -252,5 +253,19 @@ public class ServerUtils {
 				.path("api/admin/checkPassword")
 				.request(APPLICATION_JSON)
 				.post(Entity.entity(password, APPLICATION_JSON), Boolean.class);
+	}
+
+	/**
+	 * Returns an Event Object associated with the iD if possible. TO-DO FINISH
+	 * @param eventID long, representing the Event's ID
+	 * @return Event associated with the ID
+	 */
+	public Event getEvent(Long eventID) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.queryParam("eventID", eventID)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<Event>(){});
 	}
 }
