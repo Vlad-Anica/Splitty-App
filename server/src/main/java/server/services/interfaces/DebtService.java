@@ -8,4 +8,5 @@ public interface DebtService {
     public List<Debt> findAll();
     public Debt findById(long id);
     public Debt save(Debt debt);
+    public boolean existsById(long id);
 }
