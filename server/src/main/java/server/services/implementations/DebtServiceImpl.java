@@ -2,11 +2,13 @@ package server.services.implementations;
 
 import commons.Debt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import server.database.DebtRepository;
 import server.services.interfaces.DebtService;
 
 import java.util.List;
 
+@Service
 public class DebtServiceImpl implements DebtService {
     @Autowired
     private DebtRepository debtRep;
