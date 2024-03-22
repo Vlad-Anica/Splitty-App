@@ -2,7 +2,6 @@ package server.services.interfaces;
 
 import commons.Event;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
