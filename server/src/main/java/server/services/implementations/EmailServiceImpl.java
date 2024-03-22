@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import server.database.EmailRepository;
 import server.services.interfaces.EmailService;
 
-
 import java.util.List;
 
 @Service

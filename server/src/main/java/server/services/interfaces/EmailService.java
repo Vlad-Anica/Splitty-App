@@ -1,7 +1,6 @@
 package server.services.interfaces;
 
 import commons.Email;
-import commons.Expense;
 
 import java.util.List;
 
