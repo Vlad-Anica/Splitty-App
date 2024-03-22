@@ -9,4 +9,5 @@ public interface ExpenseService {
     public List<Expense> findAll();
     public boolean existsById(long id);
     public Expense findById(long id);
+    public Expense getReferenceById(long id);
 }

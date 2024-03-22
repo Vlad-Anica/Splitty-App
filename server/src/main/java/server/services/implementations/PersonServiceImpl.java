@@ -37,4 +37,9 @@ public class PersonServiceImpl implements PersonService {
     public Person findById(long id) {
         return personRep.findById(id).get();
     }
+
+    @Override
+    public Person getReferenceById(long id) {
+        return personRep.getReferenceById(id);
+    }
 }

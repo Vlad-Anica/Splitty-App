@@ -9,4 +9,5 @@ public interface PersonService {
     public List<Person> findAll();
     public boolean existsById(long id);
     public Person findById(long id);
+    public Person getReferenceById(long id);
 }

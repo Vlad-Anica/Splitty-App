@@ -37,4 +37,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     public Expense findById(long id) {
         return expenseRep.findById(id).get();
     }
+
+    @Override
+    public Expense getReferenceById(long id) {
+        return expenseRep.getReferenceById(id);
+    }
 }
