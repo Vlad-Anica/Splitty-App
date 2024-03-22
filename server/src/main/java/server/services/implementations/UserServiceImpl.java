@@ -4,6 +4,7 @@ import commons.Event;
 import commons.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import server.database.EventRepository;
 import server.database.UserRepository;
 import server.services.interfaces.UserService;
 
@@ -26,21 +27,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return null;
+        return userRep.findAll();
     }
 
     @Override
     public User save(User user) {
-        return null;
+        userRep.save(user);
+        return user;
     }
 
     @Override
     public boolean existsById(long id) {
-        return false;
+        return userRep.existsById(id);
     }
 
     @Override
     public User findById(long id) {
-        return null;
+        return userRep.findById(id).get();
     }
 }
