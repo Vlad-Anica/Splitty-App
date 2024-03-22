@@ -1,90 +1,85 @@
 package server.api;
 
 import commons.Debt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.DebtRepository;
-import server.database.ExpenseRepository;
-import server.database.PersonRepository;
+import server.services.implementations.DebtServiceImpl;
+import server.services.implementations.ExpenseServiceImpl;
+import server.services.implementations.PersonServiceImpl;
+import server.services.interfaces.DebtService;
+import server.services.interfaces.ExpenseService;
+import server.services.interfaces.PersonService;
 
 import java.util.List;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/debts")
 public class DebtController {
-    private DebtRepository debtRep;
-    private PersonRepository personRep;
-    private ExpenseRepository expenseRep;
+    @Autowired
+    private DebtService debtService;
+    private PersonService personService;
+    private ExpenseService expenseService;
 
     /**
      * constructor for DebtController
-     *
-     * @param debtRep    repository for debts
-     * @param personRep  repository for debts
-     * @param expenseRep repository for debts
+     * @param debtService service class for debts
+     * @param personService service class for debts
+     * @param expenseService service class for debts
      */
-    public DebtController(DebtRepository debtRep, PersonRepository personRep, ExpenseRepository expenseRep) {
-        this.debtRep = debtRep;
-        this.personRep = personRep;
-        this.expenseRep = expenseRep;
+    public DebtController(DebtServiceImpl debtService, PersonServiceImpl personService, ExpenseServiceImpl expenseService) {
+        this.debtService = debtService;
+        this.personService = personService;
+        this.expenseService = expenseService;
     }
 
     @GetMapping(path = {"", "/"})
     public List<Debt> getAll() {
-        return debtRep.findAll();
+        return debtService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Debt> getById(@PathVariable("id") long id) {
-        if (id < 0 || !debtRep.existsById(id)) {
+        if (id < 0 || !debtService.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(debtRep.findById(id).get());
+        return ResponseEntity.ok(debtService.findById(id));
     }
-
     /**
      * endpoint for creating a debt
-     *
      * @param debt the given debt to add to the database
      * @return the debt in json format
      */
-    @PostMapping(path = {"", "/"})
-    public ResponseEntity<Debt> add(@RequestBody Debt debt) {
+    @PostMapping(path = { "", "/" })
+    public  ResponseEntity<Debt> add(@RequestBody Debt debt) {
         if (debt.getGiver() == null || debt.getReceiver() == null || debt.getAmount() < 0)
             return ResponseEntity.badRequest().build();
-        Debt saved = debtRep.save(debt);
+        Debt saved = debtService.save(debt);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     /**
      * endpoint for creating a user
-     *
-     * @param giverId    id of the giver
+     * @param giverId id of the giver
      * @param receiverId id of receiver
-     * @param expenseId  id of expense
-     * @param amount     amount to be paid
+     * @param expenseId id of expense
+     * @param amount amount to be paid
      * @return a Debt
      */
     @PostMapping("/")
     public Debt createDebt(@RequestParam("giver") Long giverId,
                            @RequestParam("receiver") Long receiverId, @RequestParam("expense") Long expenseId,
                            @RequestParam("amount") Double amount) {
-        Debt debt = new Debt(personRep.getReferenceById(giverId), personRep.getReferenceById(receiverId),
-                expenseRep.getReferenceById(expenseId), amount);
-        debtRep.save(debt);
+        Debt debt = new Debt(personService.getReferenceById(giverId), personService.getReferenceById(receiverId),
+                expenseService.getReferenceById(expenseId), amount);
+        debtService.save(debt);
         return debt;
     }
-
     /**
-     * endpoint for udating debt
-     *
-     * @param id          id of debt to update
+    * endpoint for udating debt
+    * @param id id of debt to update
      * @param updatedDebt debt with updated properties
      * @return updated debt
      */

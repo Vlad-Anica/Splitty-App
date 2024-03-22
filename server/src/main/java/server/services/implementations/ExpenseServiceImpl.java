@@ -1,0 +1,45 @@
+package server.services.implementations;
+
+import commons.Expense;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import server.database.ExpenseRepository;
+import server.services.interfaces.ExpenseService;
+
+import java.util.List;
+
+@Service
+public class ExpenseServiceImpl implements ExpenseService {
+    @Autowired
+    private ExpenseRepository expenseRep;
+
+    public ExpenseServiceImpl(ExpenseRepository expenseRep) {
+        this.expenseRep = expenseRep;
+    }
+
+    @Override
+    public Expense save(Expense expense) {
+        expenseRep.save(expense);
+        return expense;
+    }
+
+    @Override
+    public List<Expense> findAll() {
+        return expenseRep.findAll();
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return expenseRep.existsById(id);
+    }
+
+    @Override
+    public Expense findById(long id) {
+        return expenseRep.findById(id).get();
+    }
+
+    @Override
+    public Expense getReferenceById(long id) {
+        return expenseRep.getReferenceById(id);
+    }
+}
