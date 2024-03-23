@@ -20,8 +20,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person save(Person person) {
-        personRep.save(person);
-        return person;
+        return personRep.save(person);
     }
 
     @Override

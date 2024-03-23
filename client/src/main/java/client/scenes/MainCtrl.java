@@ -24,7 +24,11 @@ import javafx.util.Pair;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainCtrl {
 
@@ -51,6 +55,9 @@ public class MainCtrl {
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebtsScene;
 
+    private StartPageCtrl startPageCtrl;
+    private Scene startPageScene;
+
     //scene and controller for addExpense
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpenseScene;
@@ -73,7 +80,8 @@ public class MainCtrl {
     private ServerUtils server;
     private int languageIndex;
     private List<Pair<String, String>> languages;
-
+    //id of the user using this app
+    private long userId;
     private String language;
     private boolean restart = false;
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
@@ -81,7 +89,9 @@ public class MainCtrl {
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<AddLanguageCtrl, Parent> addLanguage,
+                           Pair<StartPageCtrl, Parent> startPage,
                            ServerUtils server) {
+        getLastKnownInfo();
         ArrayList<Pair<String, String>> languages = new ArrayList<>();
         languages.add(new Pair<>("English(US)", "en_US"));
         languages.add(new Pair<>("Nederlands", "nl_NL"));
@@ -122,11 +132,36 @@ public class MainCtrl {
         this.addLanguageCtrl = addLanguage.getKey();
         this.addLanguageScene = new Scene(addLanguage.getValue());
 
+        this.startPageCtrl = startPage.getKey();
+        this.startPageScene = new Scene(startPage.getValue());
+
         this.server = server;
 
-        showHome();
+        File file = new File("userConfig.txt");
+        if(!file.exists()){
+            showStartPage();
+        } else {
+            showHome();
+        }
         primaryStage.show();
         homeCtrl.setup();
+    }
+
+    public void getLastKnownInfo() {
+        File file = new File("userConfig.txt");
+        if (!file.exists()) {
+            languageIndex = 0;
+            userId = -1;
+        } else {
+            Scanner fileScanner = null;
+            try {
+                fileScanner = new Scanner(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();;
+            }
+            languageIndex = fileScanner.nextInt();
+            userId = fileScanner.nextLong();
+        }
     }
 
     public int getLanguageIndex() {
@@ -149,6 +184,17 @@ public class MainCtrl {
     }
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
+        File file = new File("userConfig.txt");
+
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        pw.println(this.languageIndex);
+        pw.println(this.userId);
+        pw.close();
     }
     public void setLanguage(String language){
         this.language = language;
@@ -191,6 +237,12 @@ public class MainCtrl {
         primaryStage.setTitle("Settings");
         primaryStage.setScene(settingsScene);
         settingsCtrl.setup();
+    }
+
+    public void showStartPage() {
+        primaryStage.setTitle("Start Page");
+        primaryStage.setScene(startPageScene);
+        startPageCtrl.initializePage();
     }
 
     public void showAddExpense() {

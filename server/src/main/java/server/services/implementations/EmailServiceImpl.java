@@ -20,8 +20,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public Email save(Email email) {
-        emailRep.save(email);
-        return email;
+        return emailRep.save(email);
     }
 
     @Override

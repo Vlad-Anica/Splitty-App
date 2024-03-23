@@ -20,8 +20,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public Event save(Event event) {
-        eventRep.save(event);
-        return event;
+        return eventRep.save(event);
     }
 
     @Override

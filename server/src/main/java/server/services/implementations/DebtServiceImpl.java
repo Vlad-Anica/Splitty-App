@@ -29,8 +29,7 @@ public class DebtServiceImpl implements DebtService {
 
     @Override
     public Debt save(Debt debt) {
-        debtRep.save(debt);
-        return debt;
+        return debtRep.save(debt);
     }
 
     @Override

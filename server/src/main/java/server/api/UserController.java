@@ -37,8 +37,7 @@ public class UserController {
     public User createUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
                            @RequestParam("email") String email, @RequestParam("currency") Currency preferredCurency) {
         User user = new User(firstName, lastName, email, preferredCurency);
-        userService.save(user);
-        return user;
+        return userService.save(user);
     }
 
     @GetMapping("/events")
