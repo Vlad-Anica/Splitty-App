@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.util.List;
 
 public class MainCtrl {
@@ -109,7 +110,12 @@ public class MainCtrl {
 
         this.server = server;
 
-        showHome();
+        File file = new File("userConfig.txt");
+        if(!file.exists()){
+            showStartPage();
+        } else {
+            showHome();
+        }
         primaryStage.show();
     }
 
