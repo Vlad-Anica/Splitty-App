@@ -23,7 +23,10 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainCtrl {
 
@@ -70,6 +73,9 @@ public class MainCtrl {
 
     private ServerUtils server;
     private int languageIndex;
+    //id of the user using this app
+    private long userId;
+
 
 
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
@@ -78,7 +84,8 @@ public class MainCtrl {
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<StartPageCtrl, Parent> startPage,
                            ServerUtils server) {
-        this.languageIndex = 0;
+        //initialize languageIndex and userId
+        getLastKnownInfo();
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
@@ -119,12 +126,40 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    public void getLastKnownInfo() {
+        File file = new File("userConfig.txt");
+        if (!file.exists()) {
+            languageIndex = 0;
+            userId = -1;
+        } else {
+            Scanner fileScanner = null;
+            try {
+                fileScanner = new Scanner(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();;
+            }
+            languageIndex = fileScanner.nextInt();
+            userId = fileScanner.nextLong();
+        }
+    }
+
     public int getLanguageIndex() {
         return languageIndex;
     }
 
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
+        File file = new File("userConfig.txt");
+
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        pw.println(this.languageIndex);
+        pw.println(this.userId);
+        pw.close();
     }
 
     public void showAddParticipant() {

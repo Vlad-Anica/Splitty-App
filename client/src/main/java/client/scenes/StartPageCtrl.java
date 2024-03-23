@@ -66,18 +66,13 @@ public class StartPageCtrl {
                 emailHolder = email.getText();
             User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
 
-            server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
+            u = server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
             File file = new File("userConfig.txt");
             if(!file.exists()){
                 file.createNewFile();
             }
             PrintWriter pw = new PrintWriter(file);
-            pw.println(firstname.getText());
-            pw.println(lastname.getText());
-            if(email.getText().isEmpty())
-                pw.println("no email");
-            pw.println(emailHolder);
-            pw.println(getCurrencyData());
+            pw.println(mainCtrl.getLanguageIndex());
             pw.println(u.getId());
             pw.close();
             System.out.println("User Created Successfully !!!");
