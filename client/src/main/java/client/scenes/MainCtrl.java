@@ -126,6 +126,9 @@ public class MainCtrl {
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
     }
+    public void setLanguage(String language){
+        this.language = language;
+    }
 
     public void showAddParticipant() {
         primaryStage.setTitle("Show Participants");

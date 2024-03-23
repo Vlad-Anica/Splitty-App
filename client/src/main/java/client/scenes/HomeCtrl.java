@@ -75,6 +75,7 @@ public class HomeCtrl  {
             "Log in"));
 
     List<String> languages;
+    List<String> languageCodes;
     List<String> eventNames;
     List<Long> eventIds;
     private MainCtrl mainCtrl;
@@ -92,10 +93,12 @@ public class HomeCtrl  {
      */
     public void setup() {
         languages = new ArrayList<>(List.of("English", "Nederlands"));
+        languageCodes = new ArrayList<>(List.of("en_US", "nl_NL"));
         languageList.setItems(FXCollections.observableList(languages.stream().toList()));
         languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
         languageList.setOnAction(event -> {
             mainCtrl.setLanguageIndex(languageList.getSelectionModel().getSelectedIndex());
+            mainCtrl.setLanguage(languageCodes.get(languageList.getSelectionModel().getSelectedIndex()));
             setTextLanguage();
         });
         List<Event> events = server.getEvents(1L);
