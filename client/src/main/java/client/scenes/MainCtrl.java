@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class MainCtrl {
 
@@ -62,18 +63,23 @@ public class MainCtrl {
 
     //Scene and controller for ManagementOverview
     private ManagementOverviewCtrl managementOverviewCtrl;
-    private Scene managementOverview;
+    private Scene managementOverviewScene;
+
+    //Scene and controller for AddLanguage
+    private AddLanguageCtrl addLanguageCtrl;
+    private Scene addLanguageScene;
 
     private ServerUtils server;
     private int languageIndex;
 
-
+    private String language;
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
-                           Pair<ManagementOverviewCtrl, Parent> managementOverview,
+                           Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<AddLanguageCtrl, Parent> addLanguage,
                            ServerUtils server) {
+        this.language = "en_US";
         this.languageIndex = 0;
         this.primaryStage = primaryStage;
 
@@ -99,7 +105,10 @@ public class MainCtrl {
         this.statisticsScene = new Scene(statistics.getValue());
 
         this.managementOverviewCtrl = managementOverview.getKey();
-        this.managementOverview = new Scene(managementOverview.getValue());
+        this.managementOverviewScene = new Scene(managementOverview.getValue());
+
+        this.addLanguageCtrl = addLanguage.getKey();
+        this.addLanguageScene = new Scene(addLanguage.getValue());
 
         this.server = server;
 
@@ -109,6 +118,9 @@ public class MainCtrl {
 
     public int getLanguageIndex() {
         return languageIndex;
+    }
+    public String getLanguage(){
+        return language;
     }
 
     public void setLanguageIndex(int languageIndex) {
@@ -168,8 +180,13 @@ public class MainCtrl {
     }
     public void showManagementOverview(){
         primaryStage.setTitle("Management Overview");
-        primaryStage.setScene(managementOverview);
+        primaryStage.setScene(managementOverviewScene);
         managementOverviewCtrl.setUp();
+    }
+    public void showAddLanguage(){
+        primaryStage.setTitle("Add Language");
+        primaryStage.setScene(addLanguageScene);
+        addLanguageCtrl.setUp();
     }
 
     public Stage getPrimaryStage(){

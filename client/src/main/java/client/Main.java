@@ -22,6 +22,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -35,6 +37,7 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws IOException {
+        ResourceBundle bundle = ResourceBundle.getBundle("languages.language", new Locale("nl_NL"));
 
 //        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
 //        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
@@ -48,18 +51,19 @@ public class Main extends Application {
 //        var HomePage = FXML.load((HomeCtrl.class), "client", "scenes", "Home.fxml");
 //        var HomeCtrl = INJECTOR.getInstance(HomeCtrl.class);
 
-        var home = FXML.load(HomeCtrl.class, "client", "scenes", "Home.fxml");
-        var addExpense = FXML.load(AddExpenseCtrl.class, "client", "scenes", "AddExpense.fxml");
-        var addParticipant = FXML.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
-        var openDebts = FXML.load(OpenDebtsCtrl.class, "client", "scenes", "OpenDebts.fxml");
-        var settings = FXML.load(SettingsCtrl.class, "client", "scenes", "Settings.fxml");
-        var eventOverview = FXML.load(EventOverviewCtrl.class, "client", "scenes", "EventOverview.fxml");
-        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
-        var managementOverview = FXML.load(ManagementOverviewCtrl.class, "client", "scenes", "ManagementOverview.fxml");
+        var home = FXML.load(HomeCtrl.class, bundle, "client", "scenes", "Home.fxml");
+        var addExpense = FXML.load(AddExpenseCtrl.class, bundle, "client", "scenes", "AddExpense.fxml");
+        var addParticipant = FXML.load(AddParticipantCtrl.class, bundle, "client", "scenes", "AddParticipant.fxml");
+        var openDebts = FXML.load(OpenDebtsCtrl.class, bundle, "client", "scenes", "OpenDebts.fxml");
+        var settings = FXML.load(SettingsCtrl.class, bundle, "client", "scenes", "Settings.fxml");
+        var eventOverview = FXML.load(EventOverviewCtrl.class, bundle, "client", "scenes", "EventOverview.fxml");
+        var statistics = FXML.load(StatisticsCtrl.class, bundle, "client", "scenes", "Statistics.fxml");
+        var managementOverview = FXML.load(ManagementOverviewCtrl.class, bundle, "client", "scenes", "ManagementOverview.fxml");
+        var addLanguage = FXML.load(AddLanguageCtrl.class, bundle, "client", "scenes", "AddLanguage.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         ServerUtils server = INJECTOR.getInstance(ServerUtils.class);
-        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, managementOverview, server);
+        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, managementOverview, addLanguage, server);
     }
 
 }

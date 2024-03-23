@@ -161,6 +161,9 @@ public class HomeCtrl  {
     public void goToEventOverview(ActionEvent event) throws IOException {
         mainCtrl.showEventOverview();
     }
+    public void goToAddLanguage(ActionEvent event) throws IOException {
+        mainCtrl.showAddLanguage();
+    }
 
     /**
      * checks with the server whether the password is correct and displays if it is correct

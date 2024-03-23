@@ -34,7 +34,6 @@ public class ManagementOverviewCtrl {
         int languageIndex = mainCtrl.getLanguageIndex();
         welcomeLabel.setText(welcomeLabelText.get(languageIndex));
         goHomeButton.setText(goHomeButtonText.get(languageIndex));
-
     }
     public void goHome(ActionEvent event) throws IOException {
         mainCtrl.showHome();
