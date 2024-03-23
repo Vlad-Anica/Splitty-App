@@ -61,7 +61,7 @@ public class StartPageCtrl {
                 System.out.println("Every field needs to filled properly");
                 return;
             }
-            String emailHolder = null;
+            String emailHolder = "-1";
             if(!(email.getText().isEmpty()))
                 emailHolder = email.getText();
             User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
