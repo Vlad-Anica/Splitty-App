@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,8 +59,7 @@ public class HomeCtrl {
     @FXML
     private Button adminLogInButton;
 
-    List<String> languages;
-    List<String> languageCodes;
+    List<Pair<String, String>> languages;
     List<String> eventNames;
     List<Long> eventIds;
     private MainCtrl mainCtrl;
@@ -76,19 +76,23 @@ public class HomeCtrl {
      * set up the home page
      */
     public void setup() {
-        languages = new ArrayList<>(List.of("English", "Nederlands"));
-        languageCodes = new ArrayList<>(List.of("en_US", "nl_NL"));
-        languageList.setItems(FXCollections.observableList(languages.stream().toList()));
+        languages = mainCtrl.getLanguages();
+        if(mainCtrl.getRestart()){
+            languageList.setItems(FXCollections.observableList(List.of("Restart")));
+            languageList.getSelectionModel().select(0);
+        }else{
+        languageList.setItems(FXCollections.observableList(languages.stream().map(Pair::getKey).toList()));
         languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
         languageList.setOnAction(event -> {
             int selection = languageList.getSelectionModel().getSelectedIndex();
             System.out.println(selection);
             if (selection >= 0) {
                 mainCtrl.setLanguageIndex(selection);
-                mainCtrl.setLanguage(languageCodes.get(languageList.getSelectionModel().getSelectedIndex()));
+                mainCtrl.setLanguage(languages.get(languageList.getSelectionModel().getSelectedIndex()).getValue());
+                MainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
             }
             setTextLanguage();
-        });
+        });}
         List<Event> events = server.getEvents(1L);
         eventNames = new ArrayList<>();
         eventIds = new ArrayList<>();
@@ -105,7 +109,6 @@ public class HomeCtrl {
         if (languageIndex < 0)
             languageIndex = 0;
         String language = mainCtrl.getLanguage();
-        System.out.println(language);
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
         mainPageTestLabel.setText(resourceBundle.getString("WelcomeText"));
         goDebtsButton.setText(resourceBundle.getString("OpenDebts"));

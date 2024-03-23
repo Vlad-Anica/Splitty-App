@@ -22,6 +22,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainCtrl {
@@ -70,16 +72,27 @@ public class MainCtrl {
 
     private ServerUtils server;
     private int languageIndex;
+    private List<Pair<String, String>> languages;
 
     private String language;
+    private boolean restart = false;
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<AddLanguageCtrl, Parent> addLanguage,
                            ServerUtils server) {
-        this.language = "en_US";
+        ArrayList<Pair<String, String>> languages = new ArrayList<>();
+        languages.add(new Pair<>("English(US)", "en_US"));
+        languages.add(new Pair<>("Nederlands", "nl_NL"));
+//        save(new Pair<Integer, List<Pair<String, String>>>(0,languages));
+        Pair<Integer, List<Pair<String, String>>> pair = readFromFile("client/src/main/resources/languages/languages.txt");
+        assert pair != null;
+//        this.languages = pair.getValue();
+//        this.languageIndex = pair.getKey();
+        this.languages = languages;
         this.languageIndex = 0;
+        this.language = languages.get(languageIndex).getValue();
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
@@ -113,6 +126,7 @@ public class MainCtrl {
 
         showHome();
         primaryStage.show();
+        homeCtrl.setup();
     }
 
     public int getLanguageIndex() {
@@ -122,11 +136,39 @@ public class MainCtrl {
         return language;
     }
 
+    public List<Pair<String, String>> getLanguages() {
+        return languages;
+    }
+
+    public void setRestart(boolean restart) {
+        this.restart = restart;
+    }
+
+    public boolean getRestart(){
+        return restart;
+    }
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
     }
     public void setLanguage(String language){
         this.language = language;
+    }
+    public static void save(Pair<Integer,List<Pair<String, String>>> list) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("client/src/main/resources/languages/languages.txt"))) {
+            oos.writeObject(list);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Pair<Integer,List<Pair<String, String>>> readFromFile(String filename) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            Pair<Integer,List<Pair<String, String>>> list = (Pair<Integer,List<Pair<String, String>>>) ois.readObject();
+            return list;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void showAddParticipant() {
