@@ -268,4 +268,17 @@ public class ServerUtils {
 			return null;
 		}
 	}
+
+	public User addUser(String firstName, String lastName, String email, Currency preferredCurency){
+
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("/user/")
+				.queryParam("firstName", firstName)
+				.queryParam("lastName", lastName)
+				.queryParam("email", email)
+				.queryParam("currency", preferredCurency)
+				.request(APPLICATION_JSON)
+				.post(Entity.entity(new User(firstName,lastName,email,preferredCurency), APPLICATION_JSON), User.class);
+	}
 }

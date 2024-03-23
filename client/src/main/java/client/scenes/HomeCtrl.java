@@ -91,6 +91,7 @@ public class HomeCtrl  {
      * set up the home page
      */
     public void setup() {
+        setTextLanguage();
         languages = new ArrayList<>(List.of("English", "Nederlands"));
         languageList.setItems(FXCollections.observableList(languages.stream().toList()));
         languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());

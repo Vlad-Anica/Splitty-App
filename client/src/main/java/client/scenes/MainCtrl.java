@@ -22,7 +22,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainCtrl {
 
@@ -49,6 +53,9 @@ public class MainCtrl {
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebtsScene;
 
+    private StartPageCtrl startPageCtrl;
+    private Scene startPageScene;
+
     //scene and controller for addExpense
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpenseScene;
@@ -66,15 +73,19 @@ public class MainCtrl {
 
     private ServerUtils server;
     private int languageIndex;
+    //id of the user using this app
+    private long userId;
+
 
 
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
-                           Pair<ManagementOverviewCtrl, Parent> managementOverview,
+                           Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<StartPageCtrl, Parent> startPage,
                            ServerUtils server) {
-        this.languageIndex = 0;
+        //initialize languageIndex and userId
+        getLastKnownInfo();
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
@@ -101,10 +112,35 @@ public class MainCtrl {
         this.managementOverviewCtrl = managementOverview.getKey();
         this.managementOverview = new Scene(managementOverview.getValue());
 
+        this.startPageCtrl = startPage.getKey();
+        this.startPageScene = new Scene(startPage.getValue());
+
         this.server = server;
 
-        showHome();
+        File file = new File("userConfig.txt");
+        if(!file.exists()){
+            showStartPage();
+        } else {
+            showHome();
+        }
         primaryStage.show();
+    }
+
+    public void getLastKnownInfo() {
+        File file = new File("userConfig.txt");
+        if (!file.exists()) {
+            languageIndex = 0;
+            userId = -1;
+        } else {
+            Scanner fileScanner = null;
+            try {
+                fileScanner = new Scanner(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();;
+            }
+            languageIndex = fileScanner.nextInt();
+            userId = fileScanner.nextLong();
+        }
     }
 
     public int getLanguageIndex() {
@@ -113,6 +149,17 @@ public class MainCtrl {
 
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
+        File file = new File("userConfig.txt");
+
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        pw.println(this.languageIndex);
+        pw.println(this.userId);
+        pw.close();
     }
 
     public void showAddParticipant() {
@@ -135,6 +182,12 @@ public class MainCtrl {
         primaryStage.setTitle("Settings");
         primaryStage.setScene(settingsScene);
         settingsCtrl.setup();
+    }
+
+    public void showStartPage() {
+        primaryStage.setTitle("Start Page");
+        primaryStage.setScene(startPageScene);
+        startPageCtrl.initializePage();
     }
 
     public void showAddExpense() {
