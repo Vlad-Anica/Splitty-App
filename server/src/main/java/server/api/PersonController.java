@@ -1,16 +1,19 @@
 package server.api;
 
-import commons.*;
-import jakarta.persistence.EntityNotFoundException;
+import commons.Debt;
+import commons.Event;
+import commons.Person;
+import commons.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.EventRepository;
-import server.database.PersonRepository;
-import server.database.UserRepository;
+import server.services.interfaces.PersonService;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -18,66 +21,26 @@ import java.util.*;
 public class PersonController {
 
     @Autowired
-    private final PersonRepository db;
+    private final PersonService personService;
     private DebtController debtCtrl;
-    private UserRepository userRep;
-    private EventRepository eventRep;
-
-    public PersonController(PersonRepository db, DebtController debtCtrl, UserRepository userRep, EventRepository eventRep) {
-
-        this.db = db;
-        this.debtCtrl = debtCtrl;
-        this.userRep = userRep;
-        this.eventRep = eventRep;
+    public PersonController(PersonService personService, DebtController debtCtrl) {
+       this.personService = personService;
+       this.debtCtrl = debtCtrl;
     }
 
-    /**
-     * Creates a corresponding Person based on the given User ID and associated Event.
-     *
-     * @param uID User ID to reference
-     * @param eID Event ID corresponding to the Event the person will be added to
-     * @return Person object, representing the created Person
-     */
-    @PostMapping("/")
-    public Person createPerson(@RequestParam("userID") Long uID,
-                               @RequestParam("eventID") Long eID) {
-        boolean badEntry = false;
-        try {
-            userRep.getReferenceById(uID);
-        } catch (EntityNotFoundException e) {
-            System.out.println("Invalid ID, no User found.");
-            badEntry = true;
-        }
-        User user = userRep.getReferenceById(uID);
-        try {
-            eventRep.getReferenceById(eID);
-        } catch (EntityNotFoundException e) {
-            System.out.println("Invalid ID, no Event found.");
-            badEntry = true;
-        }
-        Event event = eventRep.getReferenceById(eID);
-        if(badEntry) {
-            return null;
-        } else {
-            Person person = new Person(user.getFirstName(), user.getLastName(), user.getEmail(), user.getIBAN(), user.getBIC(), user.getPreferredCurrency(), 0, event, user);
-            db.save(person);
-            return person;
-        }
-    }
-
-    @GetMapping(path = {"", "/"})
+    @GetMapping(path = { "", "/" })
     public List<Person> getAll() {
         System.out.println("Find people...");
-        return db.findAll();
+        return personService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Person> getById(@PathVariable long id) {
 
-        if (id < 0 || !db.existsById(id)) {
+        if (id < 0 || !personService.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        Optional<Person> person = db.findById(id);
+        Optional<Person> person = Optional.of(personService.findById(id).get());
         if (person.isPresent())
             return ResponseEntity.ok(person.get());
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -85,51 +48,51 @@ public class PersonController {
 
 
     @GetMapping("/iban/{id}")
-    public String getIbanById(@PathVariable("id") long id) {
-        if (id < 0 || !db.existsById(id)) {
+    public String getIbanById(@PathVariable("id") long id){
+        if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return db.findById(id).get().getIBAN();
+        return personService.findById(id).get().getIBAN();
     }
 
     @GetMapping("/bic/{id}")
-    public String getBicById(@PathVariable("id") long id) {
-        if (id < 0 || !db.existsById(id)) {
+    public String getBicById(@PathVariable("id") long id){
+        if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return db.findById(id).get().getIBAN();
+        return personService.findById(id).get().getIBAN();
     }
 
     @GetMapping("/bank/{id}")
-    public String getBankById(@PathVariable("id") long id) {
-        if (id < 0 || !db.existsById(id)) {
+    public String getBankById(@PathVariable("id") long id){
+        if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return db.findById(id).get().getIBAN() + ", " + db.findById(id).get().getIBAN();
+        return personService.findById(id).get().getIBAN() + ", " + personService.findById(id).get().getIBAN();
     }
 
     @GetMapping("/{id}/debts")
-    public List<Debt> getDebtsById(@PathVariable("id") long id) {
-        if (id < 0 || !db.existsById(id)) {
+    public List<Debt> getDebtsById(@PathVariable("id") long id){
+        if (id < 0 || !personService.existsById(id)) {
             return null;
         }
-        return db.findById(id).get().getDebtList();
+        return personService.findById(id).get().getDebtList();
     }
 
     @GetMapping("events/{id}")
-    public Event getEventsById(@PathVariable("id") long id) {
-        if (id < 0 || !db.existsById(id)) {
+    public Event getEventsById(@PathVariable("id") long id){
+        if (id < 0 || !personService.existsById(id)) {
             return null;
         }
-        return db.findById(id).get().getEvent();
+        return personService.findById(id).get().getEvent();
     }
 
     @GetMapping("/{USER_ID}/debts")
-    public Map<Event, Double> getTotalDebtsById(@PathVariable("USER_ID") User user) {
+    public Map<Event, Double> getTotalDebtsById(@PathVariable("USER_ID") User user){
         List<Person> allUsers = getAll();
         Map<Event, Double> allDepts = new HashMap<>();
-        for (Person p : allUsers) {
-            if (p.getUser().equals(user)) {
+        for (Person p : allUsers){
+            if (p.getUser().equals(user)){
                 Event event = p.getEvent();
                 Double eventDept = p.getTotalDebt();
                 allDepts.put(event, eventDept);
@@ -137,6 +100,8 @@ public class PersonController {
         }
         return allDepts;
     }
+
+
 
 
 //    @GetMapping("/{firstName}")
@@ -149,7 +114,7 @@ public class PersonController {
 //    }
 
 
-    @PostMapping(path = {"", "/"})
+    @PostMapping(path = { "", "/" })
     public ResponseEntity<Person> add(@RequestBody Person person) {
         System.out.println("Received Person object: " + person);
 
@@ -160,20 +125,18 @@ public class PersonController {
             return ResponseEntity.badRequest().build();
         }
 
-        Person saved = db.save(person);
+        Person saved = personService.save(person);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody Person updatedPerson) {
 
         if (updatedPerson.getId() != id)
-            return ResponseEntity.badRequest().build();
-        if (!db.existsById(id))
+           return ResponseEntity.badRequest().build();
+        if (!personService.existsById(id))
             return add(updatedPerson);
-        return ResponseEntity.ok(db.save(updatedPerson));
+        return ResponseEntity.ok(personService.save(updatedPerson));
     }
-
     @PutMapping("/{id}/newDebt")
     public ResponseEntity<Person> addDebt(@PathVariable Long id, @RequestBody Debt debt) {
         Person person = getById(id).getBody();
@@ -184,9 +147,8 @@ public class PersonController {
         person.getDebtList().add(debt);
         double totalDebt = person.getTotalDebt() + debt.getAmount();
         person.setTotalDebt(totalDebt);
-        return ResponseEntity.ok(db.save(person));
+        return ResponseEntity.ok(personService.save(person));
     }
-
     @PutMapping("/{id}/debtSettlement/{debtId}")
     public ResponseEntity<Person> settleDebt(@PathVariable Long id, @PathVariable Long debtId) {
 
@@ -207,12 +169,12 @@ public class PersonController {
 
     @PutMapping("/{id}/partialPayment/{debtId}")
     public ResponseEntity<Person> payDebtPartially(@PathVariable Long id, @PathVariable Long debtId,
-                                                   @RequestParam(value = "amount") double amount) {
+                                  @RequestParam(value = "amount") double amount) {
 
         Person person = getById(id).getBody();
         Debt debt = debtCtrl.getById(debtId).getBody();
         if (person == null || debt == null || !person.getDebtList().contains(debt)
-                || amount < 0)
+        || amount < 0)
             return ResponseEntity.badRequest().build();
 
         double totalAmount = debt.getAmount() - amount;
@@ -229,7 +191,6 @@ public class PersonController {
         return update(id, person);
 
     }
-
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
