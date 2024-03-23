@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Currency;
+import commons.User;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -63,6 +64,7 @@ public class StartPageCtrl {
             String emailHolder = null;
             if(!(email.getText().isEmpty()))
                 emailHolder = email.getText();
+            User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
 
             server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
             File file = new File("userConfig.txt");
@@ -76,6 +78,7 @@ public class StartPageCtrl {
                 pw.println("no email");
             pw.println(emailHolder);
             pw.println(getCurrencyData());
+            pw.println(u.getId());
             pw.close();
             System.out.println("User Created Successfully !!!");
             mainCtrl.showHome();
