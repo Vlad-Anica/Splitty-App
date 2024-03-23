@@ -8,8 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class ManagementOverviewCtrl {

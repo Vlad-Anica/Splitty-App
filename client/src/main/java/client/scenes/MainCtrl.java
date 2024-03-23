@@ -23,7 +23,6 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class MainCtrl {
 
