@@ -59,13 +59,10 @@ public class UserServiceImpl implements UserService {
         for (Event event : events) {
             for (Expense expense : event.getExpenses())
             {
-                for (Debt debt : expense.getDebtList())
-                {
-                    if ((user.getParticipants().contains(debt.getReceiver()) ||
-                    user.getParticipants().contains(debt.getGiver())) &&
+                for (Person p : expense.getInvolved())
+                    if (user.getParticipants().contains(p) &&
                             !result.contains(expense))
                         result.add(expense);
-                }
             }
         }
 
