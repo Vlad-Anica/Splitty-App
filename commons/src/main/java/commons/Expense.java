@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /***
@@ -179,6 +180,28 @@ public class Expense {
 
     public void setTag(Tag tag) {
         this.tag = tag;
+    }
+
+    /**
+     * Returns a List of Persons representing all people involved with the given expense.
+     * @return List of Persons representing the involved parties.
+     */
+    public List<Person> getInvolved() {
+        ArrayList<Person> persons = new ArrayList<>();
+        if(this.getReceiver() != null) {
+            persons.add(this.getReceiver());
+        }
+        if(this.getDebtList() != null && !this.getDebtList().isEmpty()) {
+            for(Debt debt: debtList) {
+                if(!persons.contains(debt.getGiver()) && debt.getGiver() != null) {
+                    persons.add(debt.getGiver());
+                }
+                if(!persons.contains(debt.getReceiver()) && debt.getReceiver() != null) {
+                    persons.add(debt.getReceiver());
+                }
+            }
+        }
+        return persons;
     }
 
     /***
