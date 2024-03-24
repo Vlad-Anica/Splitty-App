@@ -26,7 +26,7 @@ public class HomeCtrl  {
 
     @FXML
     private Label mainPageTestLabel;
-    private List<String> mainPageTestLabelText = new ArrayList<>(List.of("Welcom To Splitty",
+    private List<String> mainPageTestLabelText = new ArrayList<>(List.of("Welcome To Splitty",
             "Welkom bij Splitty!"));
     @FXML
     private Button goDebtsButton;
