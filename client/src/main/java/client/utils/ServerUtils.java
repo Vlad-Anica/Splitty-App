@@ -255,6 +255,37 @@ public class ServerUtils {
 				.post(Entity.entity(password, APPLICATION_JSON), Boolean.class);
 	}
 
+	public Tag addTag(Tag tag) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonTag = objectMapper.writeValueAsString(tag);
+			System.out.println("Received object: " + jsonTag);
+
+			return ClientBuilder.newClient(new ClientConfig())//
+					.target(SERVER).path("api/debts")//
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.post(Entity.entity(jsonTag, MediaType.APPLICATION_JSON), Tag.class);
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public User addUser(String firstName, String lastName, String email, Currency preferredCurency){
+
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("/user/")
+				.queryParam("firstName", firstName)
+				.queryParam("lastName", lastName)
+				.queryParam("email", email)
+				.queryParam("currency", preferredCurency)
+				.request(APPLICATION_JSON)
+				.post(Entity.entity(new User(firstName,lastName,email,preferredCurency), APPLICATION_JSON), User.class);
+	}
+
 	/**
 	 * Returns an Event Object associated with the iD if possible. TO-DO FINISH
 	 * @param eventID long, representing the Event's ID
