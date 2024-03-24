@@ -289,4 +289,18 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.post(Entity.entity(new User(firstName,lastName,email,preferredCurency), APPLICATION_JSON), User.class);
 	}
+
+	/**
+	 * Returns an Event Object associated with the iD if possible. TO-DO FINISH
+	 * @param eventID long, representing the Event's ID
+	 * @return Event associated with the ID
+	 */
+	public Event getEvent(Long eventID) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.queryParam("eventID", eventID)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<Event>(){});
+	}
 }
