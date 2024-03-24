@@ -19,6 +19,7 @@ import client.utils.ServerUtils;
 import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -84,6 +85,9 @@ public class MainCtrl {
     private long userId;
     private String language;
     private boolean restart = false;
+
+    private final Image logo = new Image("/logos/splittyLogo256.png");
+
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
@@ -149,6 +153,8 @@ public class MainCtrl {
         }
         primaryStage.show();
         homeCtrl.setup();
+        primaryStage.getIcons().add(logo);
+
     }
 
     public void getLastKnownInfo() {
