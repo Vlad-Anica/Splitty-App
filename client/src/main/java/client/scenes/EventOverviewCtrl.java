@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.checkerframework.checker.units.qual.C;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,6 +79,17 @@ public class EventOverviewCtrl {
         showExpensesWithPersonButton.setText("Including <<PERSON>>");
     }
 
+    /**
+     * Method that resets the parameters of the filtering pane as needed.
+     */
+    private void resetFilteringPane() {
+        this.filteringExpensesPane.getChildren().removeAll();
+        this.filteringExpensesPane.setLayoutX(294);
+        this.filteringExpensesPane.setLayoutY(133);
+        this.filteringExpensesPane.setPrefHeight(200);
+        this.filteringExpensesPane.setPrefWidth(200);
+    }
+
     public void initializePage(Long eventID) {
 
         try {
@@ -120,23 +130,75 @@ public class EventOverviewCtrl {
     }
 
     public boolean validFiltering() {
-        if (this.selectedPerson == null) {
-            return false;
-        }
-        return true;
+        return this.selectedPerson != null;
     }
 
+    /**
+     * Method that shows all Expenses in selected Event, if applicable.
+     * @param event Event in the page currently viewed
+     */
     public void showAllExpensesInEvent(ActionEvent event) {
-        if (!validFiltering()) {
+        resetFilteringPane();
+        if (validFiltering()) {
             System.out.println("Cannot filter properly, no Person is selected");
             return;
         }
+        showAllExpensesFiltered(this.expenses);
+    }
+
+    /**
+     * Method that shows all Expenses made by the selected Person iof applicable.
+     * @param event Event in the page currently viewed
+     */
+    public void showAllExpensesFromPerson(ActionEvent event) {
+        resetFilteringPane();
+        if (validFiltering()) {
+            System.out.println("Cannot filter properly, no Person is selected");
+            return;
+        }
+        List<Expense> selectedExpenses = new ArrayList<>();
+        if(this.expenses == null) {
+            selectedExpenses = null;
+        } else {
+            for(Expense expense: this.expenses) {
+                if(expense.getReceiver().equals(selectedPerson)) {
+                    selectedExpenses.add(expense);
+                }
+            }
+        }
+        showAllExpensesFiltered(selectedExpenses);
+    }
+
+    /**
+     * Method that shows all Expenses associated with the selected Person if applicable.
+     * @param event Event in the page currently viewed
+     */
+    public void showAllExpensesWithPerson(ActionEvent event) {
+        resetFilteringPane();
+        if (validFiltering()) {
+            System.out.println("Cannot filter properly, no Person is selected");
+            return;
+        }
+        List<Expense> selectedExpenses = new ArrayList<>();
+        if(this.expenses == null) {
+            selectedExpenses = null;
+        } else {
+            for(Expense expense: this.expenses) {
+                if(expense.getInvolved().contains(selectedPerson)) {
+                    selectedExpenses.add(expense);
+                }
+            }
+        }
+        showAllExpensesFiltered(selectedExpenses);
+    }
+
+    public void showAllExpensesFiltered(List<Expense> selectedExpenses) {
         try {
-            if (this.expenses == null) {
+            if (selectedExpenses == null) {
                 System.out.println("Cannot filter properly, Expenses are null.");
                 return;
             }
-            if (this.expenses.isEmpty()) {
+            if (selectedExpenses.isEmpty()) {
                 System.out.println("The Event has no Expenses associated with it.");
                 CheckBox newBox = new CheckBox("There's nothing to display, silly!");
                 filteringExpensesPane.getChildren().add(newBox);
@@ -144,7 +206,7 @@ public class EventOverviewCtrl {
                 return;
             }
             int y = 5;
-            for (Expense e : expenses) {
+            for (Expense e : selectedExpenses) {
                 CheckBox newBox = new CheckBox(
                         e.getTag() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName());
                 filteringExpensesPane.getChildren().add(newBox);
@@ -152,7 +214,7 @@ public class EventOverviewCtrl {
                 y += 25;
             }
 
-            checkBoxes = choosePersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
+            checkBoxes = filteringExpensesPane.getChildren().stream().map(t -> (CheckBox) t).toList();
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -163,26 +225,7 @@ public class EventOverviewCtrl {
         }
     }
 
-    public void showAllExpensesFromPerson(ActionEvent event) {
-        if (!validFiltering()) {
-            System.out.println("Cannot filter properly, no Person is selected");
-            return;
-        }
-        List<Expense> FilteredExpenses = new ArrayList<>();
-        for (Expense expense : this.expenses) {
-            return;
-        }
-    }
-
-    public void showAllExpensesWithPerson(ActionEvent event) {
-        if (!validFiltering()) {
-            System.out.println("Cannot filter properly, no Person is selected");
-            return;
-        }
-
-    }
-
-    public void refreshFilters() {
+    public void renameFilters() {
         if (selectedPerson == null) {
             System.out.println("Selected Person is null!!! Filter refresh aborted.");
         }

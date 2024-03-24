@@ -106,7 +106,7 @@ public class TestQuoteRepository implements QuoteRepository {
 
     @Override
     public Quote getById(Long id) {
-        call("getById");
+        call("findById");
         return find(id).get();
     }
 

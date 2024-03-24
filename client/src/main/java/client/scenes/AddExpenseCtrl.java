@@ -278,7 +278,7 @@ public class AddExpenseCtrl {
         Tag tag = (new Tag(tagClrField.getText(), tagNameField.getText()));
         tags.add(tag);
         typeComboBox.getItems().add(tag.getType());
-
+        server.addTag(tag);
         tagClrField.clear();
         tagNameField.clear();
         tagPane.setDisable(true);
