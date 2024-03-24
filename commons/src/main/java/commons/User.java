@@ -1,6 +1,7 @@
 package commons;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.Objects;
@@ -8,6 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "user_entity")
 @Builder
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
