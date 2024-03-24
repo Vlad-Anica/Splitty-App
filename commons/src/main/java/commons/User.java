@@ -1,11 +1,13 @@
 package commons;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "user_entity")
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
