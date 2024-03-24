@@ -27,5 +27,6 @@
       <Button fx:id="adminLogInButton" layoutX="179.0" layoutY="351.0" mnemonicParsing="false" onAction="#adminLogIn" text="Log in" />
       <Label fx:id="adminLogInLabel" layoutX="54.0" layoutY="334.0" prefHeight="17.0" prefWidth="117.0" text="admin log in" textAlignment="CENTER" />
       <Label fx:id="adminPasswordMessage" layoutX="75.0" layoutY="378.0" />
+      <Button fx:id="addLanguageButton" layoutX="14.0" layoutY="47.0" mnemonicParsing="false" onAction="#goToAddLanguage" text="add language" />
       </children>
     </AnchorPane>

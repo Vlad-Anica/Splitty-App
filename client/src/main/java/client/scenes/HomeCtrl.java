@@ -15,36 +15,31 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class HomeCtrl  {
-    private List<String> titleText = new ArrayList<>(List.of("Home",
-            "Thuis"));
+public class HomeCtrl {
 
     @FXML
     private Label mainPageTestLabel;
-    private List<String> mainPageTestLabelText = new ArrayList<>(List.of("Welcome To Splitty",
-            "Welkom bij Splitty!"));
     @FXML
     private Button goDebtsButton;
-    private List<String> goDebtsButtonText = new ArrayList<>(List.of("Open Debts",
-            "Open schulden"));
-
     @FXML
     private Button goHomeButton;
-    private List<String> goHomeButtonText = new ArrayList<>(List.of("Home", "Thuis"));
-
     @FXML
     private Button goSettingsButton;
-    private List<String> goSettingsButtonText = new ArrayList<>(List.of("Settings",
-            "Instellingen"));
     @FXML
     private Button goEventButton;
-    private List<String> goEventButtonText = new ArrayList<>(List.of("Submit, ",
-            "Verstuur"));
+    @FXML
+    private Button addParticipantButton;
+    @FXML
+    private Button addExpenseButton;
+    @FXML
+    private Button addLanguageButton;
     @FXML
     private Stage stage;
     @FXML
@@ -55,24 +50,14 @@ public class HomeCtrl  {
     private ComboBox<String> languageList;
     @FXML
     private ComboBox<String> eventList;
-    private List<String> eventListText = new ArrayList<>(List.of("Select Event",
-            "Kies Evenement"));
     @FXML
     private PasswordField adminPasswordField;
-    private List<String> adminLoginFieldText = new ArrayList<>(List.of("admin password",
-            "beheerders wachtwoord"));
     @FXML
     private Label adminPasswordMessage;
-    private List<String> adminPasswordMessageText = new ArrayList<>(List.of("Your password is incorrect!",
-            "Uw wachtwoord is incorrect!"));
     @FXML
     private Label adminLogInLabel;
-    private List<String> adminLogInLabelText = new ArrayList<>(List.of("admin log in",
-            "beheerder log in"));
     @FXML
     private Button adminLogInButton;
-    private List<String> adminLogInButtonText = new ArrayList<>(List.of("Log in",
-            "Log in"));
 
     List<String> languages;
     List<String> eventNames;
@@ -91,18 +76,27 @@ public class HomeCtrl  {
      * set up the home page
      */
     public void setup() {
-        setTextLanguage();
-        languages = new ArrayList<>(List.of("English", "Nederlands"));
-        languageList.setItems(FXCollections.observableList(languages.stream().toList()));
+        languages = mainCtrl.getLanguages();
+        if(mainCtrl.getRestart()){
+            languageList.setItems(FXCollections.observableList(List.of("Restart")));
+            languageList.getSelectionModel().select(0);
+        }else{
+        languageList.setItems(FXCollections.observableList(languages));
         languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
         languageList.setOnAction(event -> {
-            mainCtrl.setLanguageIndex(languageList.getSelectionModel().getSelectedIndex());
+            int selection = languageList.getSelectionModel().getSelectedIndex();
+            System.out.println(selection);
+            if (selection >= 0) {
+                mainCtrl.setLanguageIndex(selection);
+                mainCtrl.setLanguage(languages.get(languageList.getSelectionModel().getSelectedIndex()));
+                MainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
+            }
             setTextLanguage();
-        });
+        });}
         List<Event> events = server.getEvents(1L);
         eventNames = new ArrayList<>();
         eventIds = new ArrayList<>();
-        for (Event event: events) {
+        for (Event event : events) {
             eventNames.add(event.getName());
             eventIds.add(event.getId());
         }
@@ -112,20 +106,25 @@ public class HomeCtrl  {
 
     public void setTextLanguage() {
         int languageIndex = mainCtrl.getLanguageIndex();
-        if(languageIndex < 0)
+        if (languageIndex < 0)
             languageIndex = 0;
-        mainPageTestLabel.setText(mainPageTestLabelText.get(languageIndex));
-        goDebtsButton.setText(goDebtsButtonText.get(languageIndex));
-        goHomeButton.setText(goHomeButtonText.get(languageIndex));
-        goSettingsButton.setText(goSettingsButtonText.get(languageIndex));
-        goEventButton.setText(goEventButtonText.get(languageIndex));
-        eventList.setPromptText(eventListText.get(languageIndex));
-        mainCtrl.getPrimaryStage().setTitle(titleText.get(languageIndex));
-        adminPasswordField.setPromptText(adminLoginFieldText.get(languageIndex));
-        adminLogInLabel.setText(adminLogInLabelText.get(languageIndex));
-        adminLogInButton.setText(adminLogInButtonText.get(languageIndex));
-        if(!adminPasswordMessage.getText().isEmpty()){
-            adminPasswordMessage.setText(adminPasswordMessageText.get(languageIndex));
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
+        mainPageTestLabel.setText(resourceBundle.getString("WelcomeText"));
+        goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
+        goHomeButton.setText(resourceBundle.getString("Home"));
+        goSettingsButton.setText(resourceBundle.getString("Settings"));
+        goEventButton.setText(resourceBundle.getString("AddExpense"));
+        eventList.setPromptText(resourceBundle.getString("SelectEvent"));
+        addParticipantButton.setText(resourceBundle.getString("AddParticipant"));
+        addExpenseButton.setText(resourceBundle.getString("AddExpense"));
+        addLanguageButton.setText(resourceBundle.getString("AddLanguage"));
+        mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("Home"));
+        adminPasswordField.setPromptText(resourceBundle.getString("AdminPassword"));
+        adminLogInLabel.setText(resourceBundle.getString("AdminLogIn"));
+        adminLogInButton.setText(resourceBundle.getString("LogIn"));
+        if (!adminPasswordMessage.getText().isEmpty()) {
+            adminPasswordMessage.setText(resourceBundle.getString("IncorrectPassword"));
         }
     }
 
@@ -163,21 +162,24 @@ public class HomeCtrl  {
         mainCtrl.showEventOverview();
     }
 
+    public void goToAddLanguage(ActionEvent event) throws IOException {
+        mainCtrl.showAddLanguage();
+    }
+
     /**
      * checks with the server whether the password is correct and displays if it is correct
+     *
      * @param event event
      */
     public void adminLogIn(ActionEvent event) {
         if (adminPasswordField.getText().isEmpty() || !server.checkAdminPassword(adminPasswordField.getText())) {
-            adminPasswordMessage.setText(adminPasswordMessageText.get(mainCtrl.getLanguageIndex()));
+            adminPasswordMessage.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("IncorrectPassword"));
             adminPasswordMessage.setTextFill(Color.rgb(210, 39, 30));
         } else {
             mainCtrl.showManagementOverview();
         }
         adminPasswordField.clear();
     }
-
-
 
 
 }
