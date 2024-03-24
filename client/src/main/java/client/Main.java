@@ -22,7 +22,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
