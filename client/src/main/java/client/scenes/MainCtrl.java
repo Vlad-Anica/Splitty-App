@@ -79,7 +79,7 @@ public class MainCtrl {
 
     private ServerUtils server;
     private int languageIndex;
-    private List<Pair<String, String>> languages;
+    private List<String> languages;
     //id of the user using this app
     private long userId;
     private String language;
@@ -92,17 +92,21 @@ public class MainCtrl {
                            Pair<StartPageCtrl, Parent> startPage,
                            ServerUtils server) {
         getLastKnownInfo();
-        ArrayList<Pair<String, String>> languages = new ArrayList<>();
-        languages.add(new Pair<>("English(US)", "en_US"));
-        languages.add(new Pair<>("Nederlands", "nl_NL"));
+        ArrayList<String> languages = new ArrayList<>();
+//        languages.add(new Pair<>("English(US)", "en_US"));
+        languages.add("English(US)");
+        languages.add("Nederlands");
 //        save(new Pair<Integer, List<Pair<String, String>>>(0,languages));
-        Pair<Integer, List<Pair<String, String>>> pair = readFromFile("client/src/main/resources/languages/languages.txt");
+        Pair<Integer, List<String>> pair = readFromFile("client/src/main/resources/languages/languages.txt");
         assert pair != null;
-//        this.languages = pair.getValue();
-//        this.languageIndex = pair.getKey();
-        this.languages = languages;
-        this.languageIndex = 0;
-        this.language = languages.get(languageIndex).getValue();
+
+        this.languages = pair.getValue();
+        this.languageIndex = pair.getKey();
+
+//        this.languages = languages;
+//        this.languageIndex = 0;
+
+        this.language = languages.get(languageIndex);
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
@@ -171,7 +175,7 @@ public class MainCtrl {
         return language;
     }
 
-    public List<Pair<String, String>> getLanguages() {
+    public List<String> getLanguages() {
         return languages;
     }
 
@@ -199,7 +203,7 @@ public class MainCtrl {
     public void setLanguage(String language){
         this.language = language;
     }
-    public static void save(Pair<Integer,List<Pair<String, String>>> list) {
+    public static void save(Pair<Integer,List<String>> list) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("client/src/main/resources/languages/languages.txt"))) {
             oos.writeObject(list);
         } catch (IOException e) {
@@ -207,9 +211,9 @@ public class MainCtrl {
         }
     }
 
-    public static Pair<Integer,List<Pair<String, String>>> readFromFile(String filename) {
+    public static Pair<Integer,List<String>> readFromFile(String filename) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            Pair<Integer,List<Pair<String, String>>> list = (Pair<Integer,List<Pair<String, String>>>) ois.readObject();
+            Pair<Integer,List<String>> list = (Pair<Integer,List<String>>) ois.readObject();
             return list;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

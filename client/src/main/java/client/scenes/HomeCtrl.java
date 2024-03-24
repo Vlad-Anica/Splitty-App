@@ -59,7 +59,7 @@ public class HomeCtrl {
     @FXML
     private Button adminLogInButton;
 
-    List<Pair<String, String>> languages;
+    List<String> languages;
     List<String> eventNames;
     List<Long> eventIds;
     private MainCtrl mainCtrl;
@@ -81,14 +81,14 @@ public class HomeCtrl {
             languageList.setItems(FXCollections.observableList(List.of("Restart")));
             languageList.getSelectionModel().select(0);
         }else{
-        languageList.setItems(FXCollections.observableList(languages.stream().map(Pair::getKey).toList()));
+        languageList.setItems(FXCollections.observableList(languages));
         languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
         languageList.setOnAction(event -> {
             int selection = languageList.getSelectionModel().getSelectedIndex();
             System.out.println(selection);
             if (selection >= 0) {
                 mainCtrl.setLanguageIndex(selection);
-                mainCtrl.setLanguage(languages.get(languageList.getSelectionModel().getSelectedIndex()).getValue());
+                mainCtrl.setLanguage(languages.get(languageList.getSelectionModel().getSelectedIndex()));
                 MainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
             }
             setTextLanguage();

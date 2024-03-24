@@ -37,7 +37,7 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws IOException {
-        ResourceBundle bundle = ResourceBundle.getBundle("languages.language", new Locale("nl_NL"));
+        ResourceBundle bundle = ResourceBundle.getBundle("languages.language_English(US)");
 
 //        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
 //        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");

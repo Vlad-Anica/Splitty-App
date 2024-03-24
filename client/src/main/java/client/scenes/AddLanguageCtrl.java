@@ -29,11 +29,7 @@ public class AddLanguageCtrl{
     @FXML
     private Button addButton;
     @FXML
-    private Label languageId;
-    @FXML
     private Label notFilledIn;
-    @FXML
-    private TextField idField;
     @FXML
     private TableView<String> table;
     @FXML
@@ -52,7 +48,7 @@ public class AddLanguageCtrl{
 
     @FXML
     void addLanguage(ActionEvent event) {
-        if (idField == null || idField.getText().isEmpty() || nameField == null || nameField.getText().isEmpty()){
+        if (nameField == null || nameField.getText().isEmpty() || nameField.getText().contains(" ")){
             notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("FillInIdName"));
             return;
     }
@@ -61,8 +57,13 @@ public class AddLanguageCtrl{
             notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("NotFilledIn"));
             return;
         }
-        System.out.println("Adding language... name: " + nameField.getText() + " id: " + idField.getText());
-        String filePath = "client/src/main/resources/languages/language_" + idField.getText() + ".properties";
+        System.out.println("Adding language... name: " + nameField.getText());
+        String filePath = "client/src/main/resources/languages/language_" + nameField.getText() + ".properties";
+        File f = new File(filePath);
+        if(f.exists()){
+            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("LanguageAlreadyExists"));
+            return;
+        }
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(filePath));
             for (String i: newLanguage.keySet()) {
@@ -77,7 +78,7 @@ public class AddLanguageCtrl{
             System.out.println("An error occurred while writing to the file: " + e.getMessage());
             e.printStackTrace();
         }
-        mainCtrl.getLanguages().add(new Pair<>(nameField.getText(), idField.getText()));
+        mainCtrl.getLanguages().add(nameField.getText());
         MainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
     }
     public void setUp(){
@@ -101,7 +102,6 @@ public class AddLanguageCtrl{
         languageName.setText(resourceBundle.getString("LanguageName"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         addButton.setText(resourceBundle.getString("Add"));
-        languageId.setText(resourceBundle.getString("LanguageId"));
         languageColumn.setText(mainCtrl.getLanguage());
         yourLanguageColumn.setText(resourceBundle.getString("YourLanguage"));
     }
