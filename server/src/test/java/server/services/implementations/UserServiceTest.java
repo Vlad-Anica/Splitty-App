@@ -121,5 +121,16 @@ public class UserServiceTest {
         assertFalse(doesNotExist);
     }
 
+    @Test
+    void getEventsTest(){
+
+        List<Event> result1 = userService.getEvents(1L);
+        List<Event> result2 = userService.getEvents(2L);
+
+        //This test doesn't make much sense because I believe the class it is testing also doesn't make much sense
+
+        assertEquals(result2, result1);
+
+    }
 
 }
