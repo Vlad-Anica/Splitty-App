@@ -22,7 +22,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Event> getEvents(Long userId) {
-        return null;
+        Event e = new Event();
+        e.setName("e1");
+        return List.of(e);
     }
 
     @Override

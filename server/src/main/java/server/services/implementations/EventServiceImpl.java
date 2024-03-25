@@ -7,6 +7,7 @@ import server.database.EventRepository;
 import server.services.interfaces.EventService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EventServiceImpl implements EventService{
@@ -29,8 +30,8 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public Event findById(long id) {
-        return eventRep.findById(id).get();
+    public Optional<Event> findById(long id) {
+        return eventRep.findById(id);
     }
 
     @Override
@@ -46,5 +47,20 @@ public class EventServiceImpl implements EventService{
     @Override
     public void deleteById(long id) {
         eventRep.deleteById(id);
+    }
+
+    @Override
+    public Optional<List<Event>> getEventsOrderedByName() {
+        return eventRep.findAllByOrderByNameDesc();
+    }
+
+    @Override
+    public Optional<List<Event>> getEventsOrderedByCreationDate() {
+        return eventRep.findAllByOrderByCreationDateDesc();
+    }
+
+    @Override
+    public Optional<List<Event>> getEventsOrderedByLastModifiedDate() {
+        return eventRep.findAllByOrderByLastModifiedDateDesc();
     }
 }
