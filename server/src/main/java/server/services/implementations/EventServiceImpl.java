@@ -69,5 +69,14 @@ public class EventServiceImpl implements EventService{
         return ResponseEntity.ok(event.getExpenses());
 
     }
+    public Optional<List<Event>> getEventsOrderedByLastModifiedDate() {
+        return eventRep.findAllByOrderByLastModifiedDateDesc();
+    }
+    public Optional<List<Event>> getEventsOrderedByCreationDate() {
+        return eventRep.findAllByOrderByCreationDateDesc();
+    }
+    public Optional<List<Event>> getEventsOrderedByName() {
+        return eventRep.findAllByOrderByNameDesc();
+    }
 
 }
