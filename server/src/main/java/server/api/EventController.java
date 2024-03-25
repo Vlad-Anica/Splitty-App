@@ -100,10 +100,6 @@ public class EventController {
         return ResponseEntity.ok(eventService.findById(id).get());
     }
 
-    @GetMapping("/{id}/expenses")
-    public ResponseEntity<List<Expense>> getExpenses(@PathVariable("id") long id) {
-        return null;
-    }
 
     @GetMapping("event/{id}")
     public Event getEventById(@PathVariable("id") long id) {

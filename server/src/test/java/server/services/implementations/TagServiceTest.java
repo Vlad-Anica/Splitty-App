@@ -77,6 +77,7 @@ class TagServiceTest {
     void findByIdNonExistentTest() {
 
         when(repo.save(tag1)).thenReturn(tag1);
+        when(repo.existsById(501L)).thenReturn(false);
         when(repo.existsById(503L)).thenReturn(false);
 
         tagService.add(tag1);
@@ -151,7 +152,8 @@ class TagServiceTest {
         when(repo.findById(501L)).thenReturn(Optional.of(tag1));
 
         response = tagService.add(tag1);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
 
         when(repo.findAll()).thenReturn(List.of(tag1));
         List<Tag> tags = tagService.findAll();

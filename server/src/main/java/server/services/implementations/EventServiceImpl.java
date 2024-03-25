@@ -1,13 +1,9 @@
 package server.services.implementations;
 
 import commons.Event;
-import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
-import server.database.ExpenseRepository;
-import server.database.PersonRepository;
 import server.services.interfaces.EventService;
 
 import java.util.List;
@@ -16,14 +12,10 @@ import java.util.Optional;
 @Service
 public class EventServiceImpl implements EventService{
     @Autowired
-    private EventRepository eventRep;
-    private PersonRepository personRep;
-    private ExpenseRepository expenseRep;
-    public EventServiceImpl(EventRepository eventRep, PersonRepository personRep,
-                            ExpenseRepository expenseRep) {
+    EventRepository eventRep;
+
+    public EventServiceImpl(EventRepository eventRep) {
         this.eventRep = eventRep;
-        this.expenseRep = expenseRep;
-        this.personRep = personRep;
     }
 
     @Override
@@ -55,19 +47,4 @@ public class EventServiceImpl implements EventService{
     public void deleteById(long id) {
         eventRep.deleteById(id);
     }
-
-    @Override
-    public ResponseEntity<List<Expense>> getExpenses(long id) {
-        if (id < 0 || existsById(id))
-            return ResponseEntity.badRequest().build();
-
-        if (findById(id).isEmpty())
-            return ResponseEntity.badRequest().build();
-
-        Event event = findById(id).get();
-
-        return ResponseEntity.ok(event.getExpenses());
-
-    }
-
 }

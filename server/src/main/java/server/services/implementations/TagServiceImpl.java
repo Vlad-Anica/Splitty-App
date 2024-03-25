@@ -46,7 +46,8 @@ public class TagServiceImpl implements TagService {
     public ResponseEntity<Tag> add(Tag tag) {
         if (tag == null || isNullOrEmpty(tag.getColor()) ||
                 isNullOrEmpty(tag.getType()) ||
-                defaultTags.contains(tag))
+                defaultTags.contains(tag) ||
+                db.existsById(tag.getId()))
             return ResponseEntity.badRequest().build();
 
         Tag saved = db.save(tag);
