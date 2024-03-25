@@ -7,6 +7,7 @@ import commons.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.interfaces.EmailService;
+import server.services.interfaces.EventService;
 import server.services.interfaces.UserService;
 
 import java.util.List;
@@ -16,15 +17,16 @@ import java.util.List;
 public class UserController {
     private EmailService emailService;
     private UserService userService;
-
+    private EventService eventService;
     /**
      * constructor for a User
      * @param emailService email repository to work with the db
      * @param userService user repository to work with the db
      */
-    public UserController(EmailService emailService, UserService userService) {
+    public UserController(EmailService emailService, UserService userService, EventService eventService) {
         this.emailService = emailService;
         this.userService = userService;
+        this.eventService = eventService;
     }
 
     /**
@@ -52,7 +54,29 @@ public class UserController {
         return userService.getExpenses(id);
     }
 
+    @GetMapping("/{id}/totalExpenses")
+    public ResponseEntity<Double> getTotalExpenses(@PathVariable("id") long id) {
 
+        if (id < 0 || !userService.existsById(id))
+            return ResponseEntity.badRequest().build();
 
+        if (userService.findById(id).isEmpty())
+            return ResponseEntity.badRequest().build();
 
+        User user = userService.findById(id).get();
+
+        List<Event> events = getEvents(id).getBody();
+        if (events == null)
+            return ResponseEntity.notFound().build();
+
+        double sum = 0;
+        for (Event event : events) {
+            if (!eventService.existsById(id) || eventService.findById(id).isEmpty())
+                continue;
+
+            sum += eventService.getExpensesSum(id).getBody();
+        }
+
+        return ResponseEntity.ok(sum);
+    }
 }
