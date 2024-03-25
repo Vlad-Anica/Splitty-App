@@ -269,6 +269,14 @@ public class ServerUtils {
 		}
 	}
 
+	public List<Expense> getExpensesForUser(long userId) {
+
+		return ClientBuilder.newClient(new ClientConfig())//
+				.target(SERVER).path("user/" + userId + "/expenses")//
+				.request(APPLICATION_JSON)//
+				.accept(APPLICATION_JSON)//
+				.get(new GenericType<List<Expense>>(){});
+	}
 	public User addUser(String firstName, String lastName, String email, Currency preferredCurency){
 
 		return ClientBuilder.newClient(new ClientConfig())
