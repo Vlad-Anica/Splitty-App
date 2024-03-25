@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import server.services.interfaces.DebtService;
 import server.services.interfaces.ExpenseService;
 import server.services.interfaces.PersonService;
+import server.services.interfaces.TagService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ExpenseController {
     private final ExpenseService expenseService;
     private PersonService personService;
     private DebtService debtService;
+    private TagService tagService;
 
     /**
      * Creates a new ExpenseController
@@ -29,11 +31,13 @@ public class ExpenseController {
      * @param expenseService service class for Expense
      * @param personService service class for Person
      * @param debtService service class for Debt
+     * @param tagService service class for Tag
      */
-    public ExpenseController(ExpenseService expenseService, PersonService personService, DebtService debtService) {
+    public ExpenseController(ExpenseService expenseService, PersonService personService, DebtService debtService, TagService tagService) {
         this.expenseService = expenseService;
         this.personService = personService;
         this.debtService = debtService;
+        this.tagService = tagService;
     }
 
     /**
@@ -44,7 +48,7 @@ public class ExpenseController {
      * @param receiverID ID of the one who footed the bill
      * @param debtIDs IDs of the respective debts associated with the Expense
      * @param currency Currency the Expense was executed in
-     * @param tag Tag associated with the expense
+     * @param tagID Tag ID associated with the expense
      * @return the Expense object created
      */
     @PostMapping("/")
@@ -54,18 +58,20 @@ public class ExpenseController {
                                  @RequestParam("receiver") Long receiverID,
                                  @RequestParam("debts") List<Long> debtIDs,
                                  @RequestParam("currency") Currency currency,
-                                 @RequestParam("tag") Tag tag) {
-        if(description == null || amount == null || date == null || currency == null || tag == null) {
+                                 @RequestParam("tag") Long tagID) {
+        if(description == null || amount == null || date == null || currency == null) {
             System.out.println("Process aborted, null arguments received.");
             return null;
         }
         ArrayList<Debt> debts = new ArrayList<>();
         Expense expense = null;
+        boolean validEntry = true;
         try {
             personService.getReferenceById(receiverID);
         }
         catch (EntityNotFoundException e) {
             System.out.println("Invalid ID, no Person found.");
+            validEntry = false;
         }
         try {
             for (Long dID : debtIDs) {
@@ -74,9 +80,20 @@ public class ExpenseController {
             }
         }
         catch (EntityNotFoundException e) {
-            System.out.println("Invalid ID, no Debt found.");
+            System.out.println("Invalid ID, no Debt found for an entry.");
+            validEntry = false;
         }
-        expense = new Expense(description, amount, date, personService.getReferenceById(receiverID), debts, currency, tag);
+        try {
+            tagService.getReferenceById(tagID);
+        }
+        catch (EntityNotFoundException e) {
+            System.out.println("Invalid ID, no Tag found.");
+            validEntry = false;
+        }
+        if(!validEntry) {
+            return null;
+        }
+        expense = new Expense(description, amount, date, personService.getReferenceById(receiverID), debts, currency, tagService.getReferenceById(tagID));
         expenseService.save(expense);
         return expense;
     }

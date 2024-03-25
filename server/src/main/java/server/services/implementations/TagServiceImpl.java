@@ -1,6 +1,8 @@
 package server.services.implementations;
 
 import commons.Tag;
+import jakarta.persistence.EntityNotFoundException;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,5 +75,13 @@ public class TagServiceImpl implements TagService {
     }
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
+    }
+
+    @Override
+    public Tag getReferenceById(long id) throws EntityNotFoundException{
+        if(id < 0) {
+            throw new EntityNotFoundException();
+        }
+        return this.db.getReferenceById(id);
     }
 }
