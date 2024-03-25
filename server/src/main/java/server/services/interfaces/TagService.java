@@ -1,7 +1,6 @@
 package server.services.interfaces;
 
 import commons.Tag;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
