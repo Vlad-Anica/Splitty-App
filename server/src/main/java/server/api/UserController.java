@@ -2,7 +2,9 @@ package server.api;
 
 import commons.Currency;
 import commons.Event;
+import commons.Expense;
 import commons.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.interfaces.EmailService;
 import server.services.interfaces.UserService;
@@ -41,8 +43,13 @@ public class UserController {
     }
 
     @GetMapping("/events")
-    public List<Event> getEvents(@RequestParam("userId") Long userId) {
+    public ResponseEntity<List<Event>> getEvents(@RequestParam("userId") Long userId) {
         return userService.getEvents(userId);
+    }
+
+    @GetMapping("/{id}/expenses")
+    public ResponseEntity<List<Expense>> getExpenses(@PathVariable("id") long id) {
+        return userService.getExpenses(id);
     }
 
 
