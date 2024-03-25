@@ -1,9 +1,13 @@
 package server.services.implementations;
 
 import commons.Event;
+import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
+import server.database.ExpenseRepository;
+import server.database.PersonRepository;
 import server.services.interfaces.EventService;
 
 import java.util.List;
@@ -12,16 +16,19 @@ import java.util.Optional;
 @Service
 public class EventServiceImpl implements EventService{
     @Autowired
-    EventRepository eventRep;
-
-    public EventServiceImpl(EventRepository eventRep) {
+    private EventRepository eventRep;
+    private PersonRepository personRep;
+    private ExpenseRepository expenseRep;
+    public EventServiceImpl(EventRepository eventRep, PersonRepository personRep,
+                            ExpenseRepository expenseRep) {
         this.eventRep = eventRep;
+        this.expenseRep = expenseRep;
+        this.personRep = personRep;
     }
 
     @Override
     public Event save(Event event) {
-        eventRep.save(event);
-        return event;
+        return eventRep.save(event);
     }
 
     @Override
@@ -41,7 +48,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public Event findByInviteCode(String inviteCode) {
-        return null;
+        return eventRep.findByInviteCode(inviteCode);
     }
 
     @Override
@@ -50,17 +57,17 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public Optional<List<Event>> getEventsOrderedByName() {
-        return eventRep.findAllByOrderByNameDesc();
+    public ResponseEntity<List<Expense>> getExpenses(long id) {
+        if (id < 0 || existsById(id))
+            return ResponseEntity.badRequest().build();
+
+        if (findById(id).isEmpty())
+            return ResponseEntity.badRequest().build();
+
+        Event event = findById(id).get();
+
+        return ResponseEntity.ok(event.getExpenses());
+
     }
 
-    @Override
-    public Optional<List<Event>> getEventsOrderedByCreationDate() {
-        return eventRep.findAllByOrderByCreationDateDesc();
-    }
-
-    @Override
-    public Optional<List<Event>> getEventsOrderedByLastModifiedDate() {
-        return eventRep.findAllByOrderByLastModifiedDateDesc();
-    }
 }

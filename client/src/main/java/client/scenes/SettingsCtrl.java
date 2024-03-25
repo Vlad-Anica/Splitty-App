@@ -9,8 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public class SettingsCtrl {
@@ -20,13 +19,10 @@ public class SettingsCtrl {
     private TextField publicUsername;
     @FXML
     private Button btnSubmitAll;
-    List<String> btnSubmitAllText = new ArrayList<>(List.of("Submit", "Submit (in Dutch)"));
     @FXML
     private Text settingsTitle;
-    List<String> settingsTitleText = new ArrayList<>(List.of("Settings", "Settings (in Dutch)"));
     @FXML
     private Button btnHome;
-    List<String> btnHomeText = new ArrayList<>(List.of("Home", "Home (in Dutch)"));
     private MainCtrl mainCtrl;
 
     private String currentUsername = "Sapunaru";
@@ -45,10 +41,11 @@ public class SettingsCtrl {
     }
 
     public void setLanguageText() {
-        int languageIndex = mainCtrl.getLanguageIndex();
-        btnSubmitAll.setText(btnSubmitAllText.get(languageIndex));
-        settingsTitle.setText(settingsTitleText.get(languageIndex));
-        btnHome.setText(btnHomeText.get(languageIndex));
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
+        btnSubmitAll.setText(resourceBundle.getString("Submit"));
+        settingsTitle.setText(resourceBundle.getString("Settings"));
+        btnHome.setText(resourceBundle.getString("Home"));
 
     }
     public void clickBtnSubmitAll() {

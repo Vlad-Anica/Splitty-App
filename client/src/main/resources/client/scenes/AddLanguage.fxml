@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddLanguageCtrl">
+   <children>
+       <TableView fx:id="table" layoutX="16.0" layoutY="71.0" prefHeight="257.0" prefWidth="568.0">
+           <columns>
+               <TableColumn fx:id="languageColumn" prefWidth="288.0" text="Language" />
+               <TableColumn fx:id="yourLanguageColumn" minWidth="0.0" prefWidth="279.0" text="Your language" />
+               <TableColumn prefWidth="75.0" text="Column X" />
+           </columns>
+       </TableView>
+      <Button fx:id="goHomeButton" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" text="%Home" />
+      <TextField fx:id="nameField" layoutX="226.0" layoutY="37.0" promptText="English(US)" />
+      <Label fx:id="languageName" layoutX="253.0" layoutY="16.0" text="%LanguageName" />
+      <Button fx:id="addButton" layoutX="273.0" layoutY="351.0" mnemonicParsing="false" onAction="#addLanguage" text="%Add" />
+      <Label fx:id="notFilledIn" layoutX="230.0" layoutY="378.0" textFill="RED" />
+   </children>
+</Pane>

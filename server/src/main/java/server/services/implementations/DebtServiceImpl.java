@@ -7,6 +7,7 @@ import server.database.DebtRepository;
 import server.services.interfaces.DebtService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DebtServiceImpl implements DebtService {
@@ -22,14 +23,13 @@ public class DebtServiceImpl implements DebtService {
     }
 
     @Override
-    public Debt findById(long id) {
-        return debtRep.findById(id).get();
+    public Optional<Debt> findById(long id) {
+        return debtRep.findById(id);
     }
 
     @Override
     public Debt save(Debt debt) {
-        debtRep.save(debt);
-        return debt;
+        return debtRep.save(debt);
     }
 
     @Override

@@ -23,8 +23,8 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /***
  * Unused imports:
@@ -35,16 +35,12 @@ import java.util.List;
 
 
 public class OpenDebtsCtrl {
-    List<String> titleText = new ArrayList<>(List.of("Open Debts", "Open Schulden"));
     @FXML
     private Button goHomeButton;
-    List<String> goHomeButtonText = new ArrayList<>(List.of("Home", "Thuis"));
     @FXML
     private Button goBackButton;
-    List<String> goBackButtonText = new ArrayList<>(List.of("Back", "terug"));
     @FXML
     private Text openDebtsTitle;
-    List<String> openDebtsTitleText = new ArrayList<>(List.of("Open Debts", "Open Schulden"));
     @FXML
     private Stage stage;
     @FXML
@@ -55,31 +51,24 @@ public class OpenDebtsCtrl {
     private AnchorPane debtsPane;
     @FXML
     private TableColumn<Debt, String> columnReceiver;
-    List<String> columnReceiverText = new ArrayList<>(List.of("Receiver", "Ontvanger"));
 
     @FXML
     private TableColumn<Debt, Integer> columnAmount;
-    List<String> columnAmountText = new ArrayList<>(List.of("Amount", "Aantal"));
 
     @FXML
     private TableColumn<Debt, String> columnGiver;
-    List<String> columnGiverText = new ArrayList<>(List.of("Giver", "gever"));
 
     @FXML
     private TableColumn<Debt, String> columnExpense;
-    List<String> columnExpenseText = new ArrayList<>(List.of("Expense", "Uitgave"));
 
     @FXML
     private TableColumn<Debt, Long> columnId;
-    List<String> columnIdText = new ArrayList<>(List.of("id", "id"));
 
     @FXML
     private TableColumn<Debt, String> columnRemind;
-    List<String> columnRemindText = new ArrayList<>(List.of("Remind", "Herinner"));
 
     @FXML
     private TableColumn<Debt, String> columnSettle;
-    List<String> columnSettleText = new ArrayList<>(List.of("Settle", "Betaal"));
 
     @FXML
     private TableView<Debt> table;
@@ -95,7 +84,7 @@ public class OpenDebtsCtrl {
 
     public void setup() {
         setTextLanguage();
-        List<Debt> debts = server.getDebts(); //gets debt from server but for now uses debts from list created below for testing
+//        List<Debt> debts = server.getDebts(); //gets debt from server but for now uses debts from list created below for testing
         Expense e = new Expense();
         e.setDescription("We do that stuff");
         List<Debt> testDebts = List.of(new Debt(new Person("Frank", "Verkoren"), new Person("Duco", "Lam"), e, 2.50), new Debt(new Person("Duco", "Lam"), new Person("Frank", "Verkoren"), new Expense(), 404));
@@ -128,7 +117,7 @@ public class OpenDebtsCtrl {
                 new Callback<>() {
                     public TableCell call(final TableColumn<Debt, String> param) {
                         final TableCell<Debt, String> cell = new TableCell<>() {
-                            Button btn = new Button(columnRemindText.get(mainCtrl.getLanguageIndex()));
+                            Button btn = new Button(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("Remind"));
 
                             public void updateItem(String item, boolean empty) {
                                 super.updateItem(item, empty);
@@ -156,7 +145,7 @@ public class OpenDebtsCtrl {
                 new Callback<>() {
                     public TableCell call(final TableColumn<Debt, String> param) {
                         final TableCell<Debt, String> cell = new TableCell<>() {
-                            Button btn = new Button(columnSettleText.get(mainCtrl.getLanguageIndex()));
+                            Button btn = new Button(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("Settle"));
 
                             public void updateItem(String item, boolean empty) {
                                 super.updateItem(item, empty);
@@ -181,18 +170,20 @@ public class OpenDebtsCtrl {
     }
 
     public void setTextLanguage() {
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
         int languageIndex = mainCtrl.getLanguageIndex();
-        goHomeButton.setText(goHomeButtonText.get(languageIndex));
-        goBackButton.setText(goBackButtonText.get(languageIndex));
-        openDebtsTitle.setText(openDebtsTitleText.get(languageIndex));
-        mainCtrl.getPrimaryStage().setTitle(titleText.get(languageIndex));
-        columnReceiver.setText(columnReceiverText.get(languageIndex));
-        columnAmount.setText(columnAmountText.get(languageIndex));
-        columnGiver.setText(columnGiverText.get(languageIndex));
-        columnExpense.setText(columnExpenseText.get(languageIndex));
-        columnId.setText(columnIdText.get(languageIndex));
-        columnRemind.setText(columnRemindText.get(languageIndex));
-        columnSettle.setText(columnSettleText.get(languageIndex));
+        goHomeButton.setText(resourceBundle.getString("Home"));
+        goBackButton.setText(resourceBundle.getString("Back"));
+        openDebtsTitle.setText(resourceBundle.getString("OpenDebts"));
+        mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("OpenDebts"));
+        columnReceiver.setText(resourceBundle.getString("Receiver"));
+        columnAmount.setText(resourceBundle.getString("Amount"));
+        columnGiver.setText(resourceBundle.getString("Giver"));
+        columnExpense.setText(resourceBundle.getString("Expense"));
+        columnId.setText(resourceBundle.getString("Id"));
+        columnRemind.setText(resourceBundle.getString("Remind"));
+        columnSettle.setText(resourceBundle.getString("Settle"));
     }
 
     //need a way to show open debts from the database

@@ -1,11 +1,17 @@
 package commons;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user_entity")
+@Builder
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,6 +25,8 @@ public class User {
     private String email;
     private Currency preferredCurrency;
 
+    @OneToMany
+    private List<Person> participants;
     /**
      * Constructor without arguments
      */
@@ -30,6 +38,7 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.preferredCurrency = preferredCurrency;
+        this.participants = new ArrayList<>();
     }
 
     public User(String firstName, String lastName, String IBAN, String BIC, String email, Currency preferredCurrency) {
@@ -39,6 +48,7 @@ public class User {
         this.BIC = BIC;
         this.email = email;
         this.preferredCurrency = preferredCurrency;
+        this.participants = new ArrayList<>();
     }
 
     /**
@@ -159,7 +169,20 @@ public class User {
         this.preferredCurrency = preferredCurrency;
     }
 
-
+    /**
+     *
+     * @return list of participants
+     */
+    public List<Person> getParticipants() {
+        return participants;
+    }
+    /**
+     * setter for participants
+     * @param participants new participant list
+     */
+    public void setParticipants(List<Person> participants) {
+        this.participants = participants;
+    }
     /**
      * checks whether it is equal to the object
      * @param o the object to check equality with

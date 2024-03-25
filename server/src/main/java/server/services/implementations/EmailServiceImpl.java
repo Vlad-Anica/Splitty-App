@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import server.database.EmailRepository;
 import server.services.interfaces.EmailService;
 
-
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -20,8 +20,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public Email save(Email email) {
-        emailRep.save(email);
-        return email;
+        return emailRep.save(email);
     }
 
     @Override
@@ -35,7 +34,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public Email findById(long id) {
-        return emailRep.findById(id).get();
+    public Optional<Email> findById(long id) {
+        return emailRep.findById(id);
     }
 }

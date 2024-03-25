@@ -19,10 +19,17 @@ import client.utils.ServerUtils;
 import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainCtrl {
 
@@ -49,6 +56,9 @@ public class MainCtrl {
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebtsScene;
 
+    private StartPageCtrl startPageCtrl;
+    private Scene startPageScene;
+
     //scene and controller for addExpense
     private AddExpenseCtrl addExpenseCtrl;
     private Scene addExpenseScene;
@@ -62,19 +72,45 @@ public class MainCtrl {
 
     //Scene and controller for ManagementOverview
     private ManagementOverviewCtrl managementOverviewCtrl;
-    private Scene managementOverview;
+    private Scene managementOverviewScene;
+
+    //Scene and controller for AddLanguage
+    private AddLanguageCtrl addLanguageCtrl;
+    private Scene addLanguageScene;
 
     private ServerUtils server;
     private int languageIndex;
+    private List<String> languages;
+    //id of the user using this app
+    private long userId;
+    private String language;
+    private boolean restart = false;
 
+    private final Image logo = new Image("/logos/splittyLogo256.png");
 
     public void initialize(Stage primaryStage, Pair<SettingsCtrl, Parent> settings,
                            Pair<AddParticipantCtrl, Parent> addParticipant, Pair<HomeCtrl, Parent> home,
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
-                           Pair<ManagementOverviewCtrl, Parent> managementOverview,
+                           Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<AddLanguageCtrl, Parent> addLanguage,
+                           Pair<StartPageCtrl, Parent> startPage,
                            ServerUtils server) {
-        this.languageIndex = 0;
+        getLastKnownInfo();
+        ArrayList<String> languages = new ArrayList<>();
+//        languages.add(new Pair<>("English(US)", "en_US"));
+        languages.add("English(US)");
+        languages.add("Nederlands");
+//        save(new Pair<Integer, List<Pair<String, String>>>(0,languages));
+        Pair<Integer, List<String>> pair = readFromFile("client/src/main/resources/languages/languages.txt");
+        assert pair != null;
+
+        this.languages = pair.getValue();
+        this.languageIndex = pair.getKey();
+
+//        this.languages = languages;
+//        this.languageIndex = 0;
+
+        this.language = languages.get(languageIndex);
         this.primaryStage = primaryStage;
 
         this.settingsCtrl = settings.getKey();
@@ -99,20 +135,96 @@ public class MainCtrl {
         this.statisticsScene = new Scene(statistics.getValue());
 
         this.managementOverviewCtrl = managementOverview.getKey();
-        this.managementOverview = new Scene(managementOverview.getValue());
+        this.managementOverviewScene = new Scene(managementOverview.getValue());
+
+        this.addLanguageCtrl = addLanguage.getKey();
+        this.addLanguageScene = new Scene(addLanguage.getValue());
+
+        this.startPageCtrl = startPage.getKey();
+        this.startPageScene = new Scene(startPage.getValue());
 
         this.server = server;
 
-        showHome();
+        File file = new File("userConfig.txt");
+        if(!file.exists()){
+            showStartPage();
+        } else {
+            showHome();
+        }
         primaryStage.show();
+        homeCtrl.setup();
+        primaryStage.getIcons().add(logo);
+
+    }
+
+    public void getLastKnownInfo() {
+        File file = new File("userConfig.txt");
+        if (!file.exists()) {
+            languageIndex = 0;
+            userId = -1;
+        } else {
+            Scanner fileScanner = null;
+            try {
+                fileScanner = new Scanner(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();;
+            }
+            languageIndex = fileScanner.nextInt();
+            userId = fileScanner.nextLong();
+        }
     }
 
     public int getLanguageIndex() {
         return languageIndex;
     }
+    public String getLanguage(){
+        return language;
+    }
 
+    public List<String> getLanguages() {
+        return languages;
+    }
+
+    public void setRestart(boolean restart) {
+        this.restart = restart;
+    }
+
+    public boolean getRestart(){
+        return restart;
+    }
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
+        File file = new File("userConfig.txt");
+
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        pw.println(this.languageIndex);
+        pw.println(this.userId);
+        pw.close();
+    }
+    public void setLanguage(String language){
+        this.language = language;
+    }
+    public static void save(Pair<Integer,List<String>> list) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("client/src/main/resources/languages/languages.txt"))) {
+            oos.writeObject(list);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Pair<Integer,List<String>> readFromFile(String filename) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            Pair<Integer,List<String>> list = (Pair<Integer,List<String>>) ois.readObject();
+            return list;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void showAddParticipant() {
@@ -135,6 +247,12 @@ public class MainCtrl {
         primaryStage.setTitle("Settings");
         primaryStage.setScene(settingsScene);
         settingsCtrl.setup();
+    }
+
+    public void showStartPage() {
+        primaryStage.setTitle("Start Page");
+        primaryStage.setScene(startPageScene);
+        startPageCtrl.initializePage();
     }
 
     public void showAddExpense() {
@@ -168,8 +286,13 @@ public class MainCtrl {
     }
     public void showManagementOverview(){
         primaryStage.setTitle("Management Overview");
-        primaryStage.setScene(managementOverview);
+        primaryStage.setScene(managementOverviewScene);
         managementOverviewCtrl.setUp();
+    }
+    public void showAddLanguage(){
+        primaryStage.setTitle("Add Language");
+        primaryStage.setScene(addLanguageScene);
+        addLanguageCtrl.setUp();
     }
 
     public Stage getPrimaryStage(){
