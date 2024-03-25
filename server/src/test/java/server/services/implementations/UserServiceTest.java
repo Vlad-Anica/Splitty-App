@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import server.database.EventRepository;
 import server.database.UserRepository;
 import server.services.interfaces.UserService;
 
@@ -27,6 +28,8 @@ public class UserServiceTest {
     private UserService userService;
     @MockBean
     private UserRepository repo;
+    @MockBean
+    private EventRepository eventRepo;
     private User user1;
     private User user2;
     private List<User> users;
@@ -35,7 +38,7 @@ public class UserServiceTest {
     public void setup(){
         MockitoAnnotations.openMocks(this);
         repo = mock(UserRepository.class);
-        userService = new UserServiceImpl(repo);
+        userService = new UserServiceImpl(repo, eventRepo);
 
         user1 = User.builder().id(1L).firstName("John").lastName("Smith").IBAN("").BIC("11111111")
                 .email("john.smith@gmail.com").preferredCurrency(USD).build();
@@ -124,8 +127,8 @@ public class UserServiceTest {
     @Test
     void getEventsTest(){
 
-        List<Event> result1 = userService.getEvents(1L);
-        List<Event> result2 = userService.getEvents(2L);
+        List<Event> result1 = userService.getEvents(1L).getBody();
+        List<Event> result2 = userService.getEvents(2L).getBody();
 
         //This test doesn't make much sense because I believe the class it is testing also doesn't make much sense
 
