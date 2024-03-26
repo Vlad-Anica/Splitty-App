@@ -120,7 +120,7 @@ public class HomeCtrl {
         goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         goSettingsButton.setText(resourceBundle.getString("Settings"));
-        goEventButton.setText(resourceBundle.getString("AddExpense"));
+        goEventButton.setText(resourceBundle.getString("Submit"));
         eventList.setPromptText(resourceBundle.getString("SelectEvent"));
         addParticipantButton.setText(resourceBundle.getString("AddParticipant"));
         addExpenseButton.setText(resourceBundle.getString("AddExpense"));
