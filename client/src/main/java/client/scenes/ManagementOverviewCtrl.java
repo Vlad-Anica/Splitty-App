@@ -28,6 +28,10 @@ public class ManagementOverviewCtrl {
     public void setUp(){
         setLanguageText();
     }
+
+    public void goSeeEventsAsAdmin() {
+        mainCtrl.showSeeEventsAsAdmin();
+    }
     public void setLanguageText() {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
@@ -36,8 +40,5 @@ public class ManagementOverviewCtrl {
     }
     public void goHome(ActionEvent event) throws IOException {
         mainCtrl.showHome();
-    }
-    public void goSeeEventsAsAdmin() {
-        mainCtrl.showSeeEventsAsAdmin();
     }
 }

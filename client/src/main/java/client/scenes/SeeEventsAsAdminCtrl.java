@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SeeEventsAsAdminCtrl {
-    @Inject
     private MainCtrl mainCtrl;
-    @Inject
     ServerUtils server;
     @FXML
     Button btnManagementOverview;
@@ -25,6 +23,12 @@ public class SeeEventsAsAdminCtrl {
     @FXML
     ComboBox<String> showEventType;
     List<String> types = new ArrayList<>(List.of("By name", "By creation date", "By last update"));
+
+    @Inject
+    public SeeEventsAsAdminCtrl(MainCtrl mainCtrl, ServerUtils sever) {
+        this.mainCtrl = mainCtrl;
+        this.server = sever;
+    }
 
     public void setup() {
         showEventType.setItems(FXCollections.observableList(types.stream().toList()));
@@ -56,8 +60,4 @@ public class SeeEventsAsAdminCtrl {
         mainCtrl.showManagementOverview();
     }
 
-    public SeeEventsAsAdminCtrl(MainCtrl mainCtrl, ServerUtils server) {
-        this.mainCtrl = mainCtrl;
-        this.server = server;
-    }
 }
