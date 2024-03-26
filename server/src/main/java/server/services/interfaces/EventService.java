@@ -15,4 +15,8 @@ public interface EventService {
     public Event findByInviteCode(String inviteCode);
     public void deleteById(long id);
     public ResponseEntity<List<Expense>> getExpenses(long id);
+    Optional<List<Event>> getEventsOrderedByLastModifiedDate();
+    Optional<List<Event>> getEventsOrderedByCreationDate();
+    Optional<List<Event>> getEventsOrderedByName();
+
 }

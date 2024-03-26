@@ -79,7 +79,7 @@ public class AddLanguageCtrl{
             e.printStackTrace();
         }
         mainCtrl.getLanguages().add(nameField.getText());
-        MainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
+        mainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
     }
     public void setUp(){
         setLanguageText();

@@ -74,8 +74,10 @@ public class StartPageCtrl {
             PrintWriter pw = new PrintWriter(file);
             pw.println(mainCtrl.getLanguageIndex());
             pw.println(u.getId());
+            System.out.println(u.getId());
             pw.close();
             System.out.println("User Created Successfully !!!");
+            mainCtrl.getLastKnownInfo();
             mainCtrl.showHome();
         } catch (RuntimeException e) {
             e.printStackTrace();

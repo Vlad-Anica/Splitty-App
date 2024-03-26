@@ -1,6 +1,7 @@
 package client.scenes;
 
 
+import client.sceneSupportClasses.LanguageListListCell;
 import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.inject.Inject;
@@ -77,23 +78,28 @@ public class HomeCtrl {
      */
     public void setup() {
         languages = mainCtrl.getLanguages();
+        System.out.println("Combobox: " + languages);
+        languageList.setButtonCell(new LanguageListListCell());
         if(mainCtrl.getRestart()){
             languageList.setItems(FXCollections.observableList(List.of("Restart")));
             languageList.getSelectionModel().select(0);
         }else{
-        languageList.setItems(FXCollections.observableList(languages));
-        languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
-        languageList.setOnAction(event -> {
-            int selection = languageList.getSelectionModel().getSelectedIndex();
-            System.out.println(selection);
-            if (selection >= 0) {
-                mainCtrl.setLanguageIndex(selection);
-                mainCtrl.setLanguage(languages.get(languageList.getSelectionModel().getSelectedIndex()));
-                MainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
-            }
-            setTextLanguage();
+
+            languageList.setItems(FXCollections.observableList(languages));
+            languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
+            languageList.setOnAction(event -> {
+                int selection = languageList.getSelectionModel().getSelectedIndex();
+                System.out.println("selection: " + selection);
+                if (selection >= 0) {
+                    mainCtrl.setLanguageIndex(selection);
+                    mainCtrl.setLanguage(languages.get(selection));
+                    mainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
+                    setTextLanguage();
+                }
+
         });}
-        List<Event> events = server.getEvents(1L);
+        languageList.setCellFactory(c -> new LanguageListListCell());
+        List<Event> events = server.getEvents(mainCtrl.getUserId());
         eventNames = new ArrayList<>();
         eventIds = new ArrayList<>();
         for (Event event : events) {
@@ -109,7 +115,7 @@ public class HomeCtrl {
         if (languageIndex < 0)
             languageIndex = 0;
         String language = mainCtrl.getLanguage();
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language.split(";")[0]);
         mainPageTestLabel.setText(resourceBundle.getString("WelcomeText"));
         goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         goHomeButton.setText(resourceBundle.getString("Home"));

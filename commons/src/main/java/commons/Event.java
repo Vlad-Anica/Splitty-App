@@ -27,6 +27,24 @@ public class Event {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Expense> expenses;
     private String inviteCode;
+    private java.sql.Date lastModifiedDate;
+    private java.sql.Date creationDate;
+
+    public java.sql.Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(java.sql.Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public java.sql.Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(java.sql.Date creationDate) {
+        this.creationDate = creationDate;
+    }
 
     @SuppressWarnings("Unused")
     public Event() {
