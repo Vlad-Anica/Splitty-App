@@ -1,14 +1,24 @@
 package server.api;
 
 import commons.Admin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import commons.Event;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import server.services.interfaces.EventService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+
+    @Autowired
+    private EventService eventService;
+
+    public AdminController(EventService eventService) {
+        this.eventService = eventService;
+    }
+
     /**
      * check the password
      * @param password password attempt
@@ -18,5 +28,20 @@ public class AdminController {
     public boolean checkPassword(@RequestBody String password) {
         // Assuming Admin.isCorrectPassword(String password) is a static method
         return Admin.isCorrectGeneratedPassword(password);
+    }
+
+    @GetMapping("/eventsOrderedByLastModificationDate")
+    public List<Event> getEventsOrderedByLastModificationDate() {
+        return eventService.getEventsOrderedByUpdatedAt().get();
+    }
+
+    @GetMapping("/eventsOrderedByCreationDate")
+    public List<Event> getEventsOrderedByCreationDate() {
+        return eventService.getEventsOrderedByCreatedAt().get();
+    }
+
+    @GetMapping("/eventsOrderedByName")
+    public List<Event> getEventsOrderedByName() {
+        return eventService.getEventsOrderedByName().get();
     }
 }
