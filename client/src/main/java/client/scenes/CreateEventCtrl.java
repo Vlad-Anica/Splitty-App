@@ -97,7 +97,7 @@ public class CreateEventCtrl {
        mainCtrl.showHome();
     }
 
-    void addTag() {
+    public void addTag() {
 
     }
 
