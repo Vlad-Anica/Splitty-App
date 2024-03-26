@@ -237,6 +237,40 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<List<Event>>(){});
 	}
+	public List<Event> getEventsOrderedByLastModificationDate() {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/admin/eventsOrderedByLastModificationDate")
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Event>>(){});
+	}
+
+	public List<Event> getEventsOrderedByCreationDate() {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/admin/eventsOrderedByCreationDate")
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Event>>(){});
+	}
+
+	public List<Event> getEventsOrderedByName() {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/admin/eventsOrderedByName")
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Event>>(){});
+	}
+
+	/**
+	 * gets all events
+	 */
+	public List<Event> getAllEvents() {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/events")
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Event>>(){});
+	}
 
 	/**
 	 * sends a request to the server to check if the password is correct
