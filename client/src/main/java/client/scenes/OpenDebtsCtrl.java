@@ -117,7 +117,7 @@ public class OpenDebtsCtrl {
                 new Callback<>() {
                     public TableCell call(final TableColumn<Debt, String> param) {
                         final TableCell<Debt, String> cell = new TableCell<>() {
-                            Button btn = new Button(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("Remind"));
+                            Button btn = new Button(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("Remind"));
 
                             public void updateItem(String item, boolean empty) {
                                 super.updateItem(item, empty);
@@ -145,7 +145,7 @@ public class OpenDebtsCtrl {
                 new Callback<>() {
                     public TableCell call(final TableColumn<Debt, String> param) {
                         final TableCell<Debt, String> cell = new TableCell<>() {
-                            Button btn = new Button(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("Settle"));
+                            Button btn = new Button(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("Settle"));
 
                             public void updateItem(String item, boolean empty) {
                                 super.updateItem(item, empty);
@@ -171,7 +171,7 @@ public class OpenDebtsCtrl {
 
     public void setTextLanguage() {
         String language = mainCtrl.getLanguage();
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         int languageIndex = mainCtrl.getLanguageIndex();
         goHomeButton.setText(resourceBundle.getString("Home"));
         goBackButton.setText(resourceBundle.getString("Back"));

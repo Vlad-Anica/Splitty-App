@@ -34,7 +34,7 @@ public class ManagementOverviewCtrl {
     }
     public void setLanguageText() {
         String language = mainCtrl.getLanguage();
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         welcomeLabel.setText(resourceBundle.getString("WelcomeMO"));
         goHomeButton.setText(resourceBundle.getString("Home"));
     }

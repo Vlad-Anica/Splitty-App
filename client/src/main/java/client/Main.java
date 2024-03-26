@@ -39,18 +39,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("languages.language_English(US)");
 
-//        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-//        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
-//
-//        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-//        mainCtrl.initialize(primaryStage);
-
-//        var page = FXML.load(AddParticipantCtrl.class, "client", "scenes", "AddParticipant.fxml");
-//        var ctrl = INJECTOR.getInstance(AddParticipantCtrl.class);
-
-//        var HomePage = FXML.load((HomeCtrl.class), "client", "scenes", "Home.fxml");
-//        var HomeCtrl = INJECTOR.getInstance(HomeCtrl.class);
-
         var home = FXML.load(HomeCtrl.class, bundle, "client", "scenes", "Home.fxml");
         var addExpense = FXML.load(AddExpenseCtrl.class, bundle, "client", "scenes", "AddExpense.fxml");
         var addParticipant = FXML.load(AddParticipantCtrl.class, bundle, "client", "scenes", "AddParticipant.fxml");
