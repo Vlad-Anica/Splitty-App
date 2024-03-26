@@ -40,7 +40,7 @@ public class EventTest {
         debts = new ArrayList<>();
         persons1.add(p1);
         persons2.add(p2);
-        date = new Date(0,0,0,0,0,0);
+        date = new Date(424242);
         t = new Tag("blue", "food");
         tags = new ArrayList<>();
         tags.add(t);
@@ -51,7 +51,7 @@ public class EventTest {
         debt1.setExpense(e1);
         debt2.setExpense(e2);
         ev = new Event("Dinner Party", "Bob's Celebration Dinner", tags,
-                new Date(1, 14, 5, 2006, 4, 30 ),
+                new Date(424242),
                 persons, expenses);
     }
 
@@ -101,13 +101,13 @@ public class EventTest {
 
     @Test
     public void testDateGetter() {
-        assertEquals(new Date(1, 14, 5, 2006, 4, 30), ev.getDate());
+        assertEquals(date, ev.getDate());
     }
 
     @Test
     public void testDateSetter() {
-        ev.setDate(new Date(2, 3, 4, 5, 6, 7));
-        assertEquals(new Date(2, 3, 4, 5, 6, 7), ev.getDate());
+        ev.setDate(new Date(433));
+        assertEquals(new Date(433), ev.getDate());
     }
 
     @Test

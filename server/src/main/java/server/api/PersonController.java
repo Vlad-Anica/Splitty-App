@@ -47,7 +47,7 @@ public class PersonController {
     }
 
 
-    @GetMapping("/iban/{id}")
+    @GetMapping("/{id}/iban")
     public String getIbanById(@PathVariable("id") long id){
         if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
@@ -55,7 +55,7 @@ public class PersonController {
         return personService.findById(id).get().getIBAN();
     }
 
-    @GetMapping("/bic/{id}")
+    @GetMapping("/{id}/bic")
     public String getBicById(@PathVariable("id") long id){
         if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
@@ -63,7 +63,7 @@ public class PersonController {
         return personService.findById(id).get().getIBAN();
     }
 
-    @GetMapping("/bank/{id}")
+    @GetMapping("{id}/bank")
     public String getBankById(@PathVariable("id") long id){
         if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
@@ -79,7 +79,7 @@ public class PersonController {
         return personService.findById(id).get().getDebtList();
     }
 
-    @GetMapping("events/{id}")
+    @GetMapping("/{id}/events")
     public Event getEventsById(@PathVariable("id") long id){
         if (id < 0 || !personService.existsById(id)) {
             return null;
