@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
     Event findByInviteCode(String name);
     Optional<List<Event>>findAllByOrderByNameDesc();
-    Optional<List<Event>>findAllByOrderByLastModifiedDateDesc();
-    Optional<List<Event>>findAllByOrderByCreationDateDesc();
+    Optional<List<Event>>findAllByOrderByUpdatedAtDesc();
+    Optional<List<Event>>findAllByOrderByCreatedAtDesc();
 }

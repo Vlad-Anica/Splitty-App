@@ -32,12 +32,12 @@ public class AdminController {
 
     @GetMapping("/eventsOrderedByLastModificationDate")
     public List<Event> getEventsOrderedByLastModificationDate() {
-        return eventService.getEventsOrderedByLastModifiedDate().get();
+        return eventService.getEventsOrderedByUpdatedAt().get();
     }
 
     @GetMapping("/eventsOrderedByCreationDate")
     public List<Event> getEventsOrderedByCreationDate() {
-        return eventService.getEventsOrderedByCreationDate().get();
+        return eventService.getEventsOrderedByCreatedAt().get();
     }
 
     @GetMapping("/eventsOrderedByName")
