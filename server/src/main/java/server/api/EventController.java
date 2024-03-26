@@ -107,7 +107,6 @@ public class EventController {
 
     @GetMapping(path = {"", "/"})
     public List<Event> getAll() {
-        System.out.println("Find people...");
         return eventService.findAll();
     }
 

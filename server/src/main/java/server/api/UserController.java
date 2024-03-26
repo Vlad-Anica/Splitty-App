@@ -44,8 +44,8 @@ public class UserController {
         return userService.save(user);
     }
 
-    @GetMapping("/events")
-    public ResponseEntity<List<Event>> getEvents(@RequestParam("userId") Long userId) {
+    @GetMapping("/{userId}/events")
+    public ResponseEntity<List<Event>> getEvents(@PathVariable("userId") Long userId) {
         return userService.getEvents(userId);
     }
 

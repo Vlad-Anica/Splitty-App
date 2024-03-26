@@ -231,7 +231,7 @@ public class ServerUtils {
 
 	public List<Event> getEvents(Long userId) {
 		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("user/events")
+				.target(SERVER).path("user/" + userId + "/events")
 				.queryParam("userId", userId)//
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
