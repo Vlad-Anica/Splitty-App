@@ -10,6 +10,7 @@ import server.services.implementations.PersonServiceImpl;
 import server.services.interfaces.EventService;
 import server.services.interfaces.ExpenseService;
 import server.services.interfaces.PersonService;
+import server.services.interfaces.TagService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class EventController {
     private final EventService eventService;
     private PersonService personService;
     private ExpenseService expenseService;
-    // private TagRepository tagRep
+    private TagService tagService;
 
     /**
      * Constructor for an EventController
@@ -30,18 +31,20 @@ public class EventController {
      * @param eventService service class for Event
      * @param personService service class for Person
      * @param expenseService service class for Expense
+     * @param tagService service class for Tag
      */
-    public EventController(EventServiceImpl eventService, PersonServiceImpl personService, ExpenseService expenseService) {
+    public EventController(EventServiceImpl eventService, PersonServiceImpl personService, ExpenseService expenseService, TagService tagService) {
         this.eventService = eventService;
         this.personService = personService;
         this.expenseService = expenseService;
+        this.tagService = tagService;
     }
 
     /**
      * Creates and saves an Event to the database with the specified fields.
      * @param name name to use for the new Event
      * @param description description to use for the new Event
-     * @param tags List of Tags to use for the new Event
+     * @param tagIDs List of Tags IDs to use for the new Event
      * @param date Date the Event will take place on
      * @param participantIDs List of Person IDs of Persons that will attend the Event
      * @param expenseIDs List of Expense IDs of Expenses associated with the Event
@@ -50,17 +53,29 @@ public class EventController {
     @PostMapping("/")
     public Event createEvent(@RequestParam("name") String name,
                              @RequestParam("description") String description,
-                             @RequestParam("tags") List<Tag> tags,
+                             @RequestParam("tags") List<Long> tagIDs,
                              @RequestParam("date") Date date,
                              @RequestParam("participantIDs") List<Long> participantIDs,
                              @RequestParam("expenseIDs") List<Long> expenseIDs) {
-        if(description == null || date == null || name == null || tags == null) {
+        if(description == null || date == null || name == null) {
             System.out.println("Process aborted, null arguments received.");
             return null;
         }
+        ArrayList<Tag> tags =  new ArrayList<>();
         ArrayList<Person> participants = new ArrayList<>();
         ArrayList<Expense> expenses = new ArrayList<>();
         Event event = null;
+        boolean validEntry = true;
+        try {
+            for(Long tID : tagIDs) {
+                tagService.getReferenceById(tID);
+                tags.add(tagService.getReferenceById(tID));
+            }
+        }
+        catch (EntityNotFoundException e) {
+            System.out.println("Invalid ID, no Tag found.");
+            validEntry = false;
+        }
         try {
             for(Long pID : participantIDs) {
                 personService.getReferenceById(pID);
@@ -69,6 +84,7 @@ public class EventController {
         }
         catch (EntityNotFoundException e) {
             System.out.println("Invalid ID, no Participant found.");
+            validEntry = false;
         }
         try {
             for(Long eID : expenseIDs) {
@@ -78,8 +94,11 @@ public class EventController {
         }
         catch (EntityNotFoundException e) {
             System.out.println("Invalid ID, no Expense found.");
+            validEntry = false;
         }
-
+        if(!validEntry) {
+            return null;
+        }
         event = new Event(name, description, tags, date, participants, expenses);
         eventService.save(event);
         return event;
