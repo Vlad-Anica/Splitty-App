@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -96,16 +97,32 @@ public class MainCtrl {
                            Pair<StartPageCtrl, Parent> startPage,
                            ServerUtils server) {
         getLastKnownInfo();
-        ArrayList<String> languages = new ArrayList<>();
-//        languages.add(new Pair<>("English(US)", "en_US"));
-        languages.add("English(US)");
-        languages.add("Nederlands");
-//        save(new Pair<Integer, List<Pair<String, String>>>(0,languages));
-        Pair<Integer, List<String>> pair = readFromFile("client/src/main/resources/languages/languages.txt");
-        assert pair != null;
+        File languageFile = new File("client/src/main/resources/languages/languages.txt");
+        if (languageFile.exists()) {
+            Pair<Integer, List<String>> pair = readFromFile("client/src/main/resources/languages/languages.txt");
+            if (pair == null) {
+                System.out.println("NULLLLLL");
+            }
+            assert pair != null;
 
-        this.languages = pair.getValue();
-        this.languageIndex = pair.getKey();
+            this.languages = pair.getValue();
+        } else {
+            languages = new ArrayList<>();
+            languages.add("English(US);client/images/EnglishFlag.jpg");
+            languages.add("Nederlands;client/images/DutchFlag.png");
+            Pair<Integer, List<String>> languageData = new Pair<>(0, languages);
+            try {
+                languageFile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(languageFile.getName()))) {
+                oos.writeObject(languageData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("LAnguages: "+languages);
 
 //        this.languages = languages;
 //        this.languageIndex = 0;
@@ -149,10 +166,10 @@ public class MainCtrl {
         if(!file.exists()){
             showStartPage();
         } else {
+            getLastKnownInfo();
             showHome();
         }
         primaryStage.show();
-        homeCtrl.setup();
         primaryStage.getIcons().add(logo);
 
     }
@@ -209,7 +226,7 @@ public class MainCtrl {
     public void setLanguage(String language){
         this.language = language;
     }
-    public static void save(Pair<Integer,List<String>> list) {
+    public void save(Pair<Integer,List<String>> list) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("client/src/main/resources/languages/languages.txt"))) {
             oos.writeObject(list);
         } catch (IOException e) {
@@ -298,7 +315,12 @@ public class MainCtrl {
     public Stage getPrimaryStage(){
         return primaryStage;
     }
+
     public List<Event> getEvents(Long userId) {
         return server.getEvents(userId);
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

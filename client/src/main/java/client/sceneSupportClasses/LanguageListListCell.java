@@ -10,12 +10,19 @@ public class LanguageListListCell extends ListCell<String> {
         setGraphic(null);
         setText(null);
         if(item!=null){
-            String text = item.split(" ")[0];
-            String path = item.split(" ")[1];
-            ImageView imageView = new ImageView(new Image(path));
-            imageView.setFitWidth(20);
-            imageView.setFitHeight(15);
-            setGraphic(imageView);
+            String[] tokens = item.split(";");
+            String text = tokens[0];
+            System.out.println("length: " + item);
+            if (tokens.length == 2) {
+                String path = tokens[1];
+                ImageView imageView = new ImageView(new Image(path));
+                imageView.setFitWidth(20);
+                imageView.setFitHeight(15);
+                setGraphic(imageView);
+                if (path != null)
+                    System.out.println(path);
+            }
+
             setText(text);
         }
     }

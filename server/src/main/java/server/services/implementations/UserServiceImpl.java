@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.badRequest().build();
         List<Event> result = new ArrayList<>();
         List<Event> events = eventRep.findAll();
-
         for (Event event : events)
         {
             for (Person p : event.getParticipants())
