@@ -118,11 +118,7 @@ public class MainCtrl {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(languageFile.getName()))) {
-                oos.writeObject(languageData);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            save(languageData);
         }
         System.out.println("LAnguages: "+languages);
 
@@ -180,6 +176,10 @@ public class MainCtrl {
         System.out.println(RowdiesTest.getFamily());
         System.out.println(RowdiesTest.getName());
 
+    }
+
+    public String getLanguageWithoutImagePath() {
+        return languages.get(languageIndex).split(";")[0];
     }
 
     public void getLastKnownInfo() {

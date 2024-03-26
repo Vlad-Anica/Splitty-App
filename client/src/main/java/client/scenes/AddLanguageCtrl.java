@@ -49,19 +49,19 @@ public class AddLanguageCtrl{
     @FXML
     void addLanguage(ActionEvent event) {
         if (nameField == null || nameField.getText().isEmpty() || nameField.getText().contains(" ")){
-            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("FillInIdName"));
+            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("FillInIdName"));
             return;
     }
         if (newLanguage.keySet().size()<phrases.keySet().size()){
             notFilledIn.setText("Not everything is filled in");
-            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("NotFilledIn"));
+            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("NotFilledIn"));
             return;
         }
         System.out.println("Adding language... name: " + nameField.getText());
         String filePath = "client/src/main/resources/languages/language_" + nameField.getText() + ".properties";
         File f = new File(filePath);
         if(f.exists()){
-            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("LanguageAlreadyExists"));
+            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("LanguageAlreadyExists"));
             return;
         }
         try {
@@ -71,7 +71,7 @@ public class AddLanguageCtrl{
             }
             writer.close();
             System.out.println("Lines have been written to the file successfully.");
-            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("RestartLanguage"));
+            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("RestartLanguage"));
             mainCtrl.setRestart(true);
             notFilledIn.setTextFill(Color.rgb(10, 170, 32));
         } catch (IOException e) {
@@ -82,7 +82,7 @@ public class AddLanguageCtrl{
         mainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
     }
     public void setUp(){
-        setLanguageText();
+        setTextLanguage();
         this.phrases = getPhrases();
         languageColumn.setCellValueFactory(x -> new SimpleStringProperty(x.getValue()));
         table.setItems(FXCollections.observableList(phrases.keySet().stream().toList()));
@@ -96,9 +96,9 @@ public class AddLanguageCtrl{
             }
         });
     }
-    public void setLanguageText() {
+    public void setTextLanguage() {
         String language = mainCtrl.getLanguage();
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         languageName.setText(resourceBundle.getString("LanguageName"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         addButton.setText(resourceBundle.getString("Add"));
@@ -109,7 +109,7 @@ public class AddLanguageCtrl{
         HashMap<String, String> result = new HashMap<>();
         try {
             String language = mainCtrl.getLanguage();
-            File file = new File("client/src/main/resources/languages/language_" + language + ".properties");
+            File file = new File("client/src/main/resources/languages/language_" + mainCtrl.getLanguageWithoutImagePath() + ".properties");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
