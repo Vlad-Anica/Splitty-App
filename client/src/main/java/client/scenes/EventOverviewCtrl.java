@@ -10,7 +10,10 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -56,6 +59,8 @@ public class EventOverviewCtrl {
     private Button goToStatsButton;
     @FXML
     private List<CheckBox> checkBoxes;
+    @FXML
+    TextFlow languageIndicator;
     private MainCtrl mainCtrl;
     private ServerUtils server;
 
@@ -92,6 +97,7 @@ public class EventOverviewCtrl {
 
     public void initializePage(Long eventID) {
 
+
         try {
             event = server.getEvent(eventID);
             this.expenses = event.getExpenses();
@@ -127,6 +133,12 @@ public class EventOverviewCtrl {
             alert.showAndWait();
             return;
         }
+    }
+
+    public void setLanguageIndicator() {
+        ImageView flagImage = new ImageView(mainCtrl.getPathToFlagImage());
+        Text language = new Text(mainCtrl.getLanguageWithoutImagePath());
+        languageIndicator.getChildren().addAll(language, flagImage);
     }
 
     public boolean validFiltering() {

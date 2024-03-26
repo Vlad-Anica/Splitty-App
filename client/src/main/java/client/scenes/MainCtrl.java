@@ -181,6 +181,9 @@ public class MainCtrl {
     public String getLanguageWithoutImagePath() {
         return languages.get(languageIndex).split(";")[0];
     }
+    public String getPathToFlagImage() {
+        return languages.get(languageIndex).split(";")[1];
+    }
 
     public void getLastKnownInfo() {
         File file = new File("userConfig.txt");
