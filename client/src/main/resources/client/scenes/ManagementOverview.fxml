@@ -13,6 +13,5 @@
             </font>
         </Label>
         <Button fx:id="goHomeButton" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
-      <Button fx:id="btnGoEvent" layoutX="535.0" layoutY="61.0" mnemonicParsing="false" onAction="#goSeeEventsAsAdmin" text="Events" />
     </children>
 </Pane>
