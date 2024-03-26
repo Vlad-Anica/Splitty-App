@@ -24,6 +24,30 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "EXPENSE_ID")
     private long id;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private java.util.Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at", nullable = false, updatable = true)
+    private java.util.Date updatedAt;
+
+    /**
+     * Upon initial creation of the Object, the Date will be stored.
+     */
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = new java.util.Date();
+        this.updatedAt = createdAt;
+    }
+
+    /**
+     * Upon update, updated the Object's update date. A lot of updates here :)
+     */
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = new java.util.Date();
+    }
     private String description;
     private double amount;
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -71,6 +95,22 @@ public class Expense {
      */
     public long getId() {
         return id;
+    }
+
+    /**
+     * Method that returns creation time of the object.
+     * @return Util Date
+     */
+    public java.util.Date getCreationDate() {
+        return this.createdAt;
+    }
+
+    /**
+     * Method that returns update time of the object.
+     * @return Util Date
+     */
+    public java.util.Date getLastUpdate() {
+        return this.updatedAt;
     }
 
     /***
