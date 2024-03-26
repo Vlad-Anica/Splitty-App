@@ -15,6 +15,7 @@ public interface EventService {
     public Event findByInviteCode(String inviteCode);
     public void deleteById(long id);
     public ResponseEntity<List<Expense>> getExpenses(long id);
+    public ResponseEntity<Double> getExpensesSum(long id);
     Optional<List<Event>> getEventsOrderedByUpdatedAt();
     Optional<List<Event>> getEventsOrderedByCreatedAt();
     Optional<List<Event>> getEventsOrderedByName();

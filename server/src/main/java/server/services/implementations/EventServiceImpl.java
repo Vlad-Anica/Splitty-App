@@ -79,4 +79,24 @@ public class EventServiceImpl implements EventService{
         return eventRep.findAllByOrderByNameDesc();
     }
 
+    public ResponseEntity<Double> getExpensesSum(long id) {
+
+        if (id < 0 || existsById(id))
+            return ResponseEntity.badRequest().build();
+
+        if (findById(id).isEmpty())
+            return ResponseEntity.badRequest().build();
+
+        List<Expense> expenses = getExpenses(id).getBody();
+
+        if (expenses == null)
+            return ResponseEntity.ok(0.0);
+
+        double sum = 0;
+        for (Expense expense : expenses)
+            sum += expense.getAmount();
+
+        return ResponseEntity.ok(sum);
+    }
+
 }

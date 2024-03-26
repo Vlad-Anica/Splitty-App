@@ -146,6 +146,10 @@ public class EventController {
         return ResponseEntity.ok(event);
     }
 
+    @GetMapping("/{id}/totalExpenses")
+    public ResponseEntity<Double> getTotalExpenses(@PathVariable("id") long id) {
+        return eventService.getExpensesSum(id);
+    }
     /**
      * Deletes the Event by id
      * @param id the id of the event
