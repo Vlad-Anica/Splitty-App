@@ -15,11 +15,13 @@
  */
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -167,6 +169,9 @@ public class MainCtrl {
         }
         primaryStage.show();
         primaryStage.getIcons().add(logo);
+        Font RowdiesTest = Font.loadFont(Main.class.getResourceAsStream("/client/fonts/Rowdies-Regular.ttf"), 16);
+        System.out.println(RowdiesTest.getFamily());
+        System.out.println(RowdiesTest.getName());
 
     }
 
