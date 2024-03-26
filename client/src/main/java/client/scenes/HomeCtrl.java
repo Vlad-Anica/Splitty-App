@@ -115,7 +115,7 @@ public class HomeCtrl {
         if (languageIndex < 0)
             languageIndex = 0;
         String language = mainCtrl.getLanguage();
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language.split(";")[0]);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         mainPageTestLabel.setText(resourceBundle.getString("WelcomeText"));
         goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         goHomeButton.setText(resourceBundle.getString("Home"));

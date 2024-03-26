@@ -42,7 +42,7 @@ public class SettingsCtrl {
 
     public void setLanguageText() {
         String language = mainCtrl.getLanguage();
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + language);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         btnSubmitAll.setText(resourceBundle.getString("Submit"));
         settingsTitle.setText(resourceBundle.getString("Settings"));
         btnHome.setText(resourceBundle.getString("Home"));
