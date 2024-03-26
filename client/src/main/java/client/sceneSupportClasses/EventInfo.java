@@ -1,7 +1,6 @@
 package client.sceneSupportClasses;
 
 import javafx.beans.property.SimpleStringProperty;
-import javassist.Loader;
 
 import java.util.Date;
 

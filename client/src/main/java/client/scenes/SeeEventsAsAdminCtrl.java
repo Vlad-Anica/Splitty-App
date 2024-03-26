@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
