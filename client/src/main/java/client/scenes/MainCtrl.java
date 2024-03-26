@@ -78,6 +78,9 @@ public class MainCtrl {
     private Scene addLanguageScene;
 
     private SeeEventsAsAdminCtrl seeEventsAsAdminCtrl;
+
+    private CreateEventCtrl createEventCtrl;
+    private Scene createEventScene;
     private Scene seeEventsAsAdminScene;
 
 
@@ -97,11 +100,11 @@ public class MainCtrl {
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<AddLanguageCtrl, Parent> addLanguage,
                            Pair<StartPageCtrl, Parent> startPage, Pair<SeeEventsAsAdminCtrl, Parent> seeEventsAsAdmin,
-                           ServerUtils server) {
+                           Pair<CreateEventCtrl, Parent> createEvent, ServerUtils server) {
         getLastKnownInfo();
-        File languageFile = new File("client/src/main/resources/languages/languages.txt");
+        File languageFile = new File("C:\\Users\\calin\\oopp-team-61\\client\\src\\main\\resources\\languages\\languages.txt");
         if (languageFile.exists()) {
-            Pair<Integer, List<String>> pair = readFromFile("client/src/main/resources/languages/languages.txt");
+            Pair<Integer, List<String>> pair = readFromFile("C:\\Users\\calin\\oopp-team-61\\client\\src\\main\\resources\\languages\\languages.txt");
             if (pair == null) {
                 System.out.println("NULLLLLL");
             }
@@ -164,6 +167,9 @@ public class MainCtrl {
 
         this.seeEventsAsAdminCtrl = seeEventsAsAdmin.getKey();
         this.seeEventsAsAdminScene = new Scene(seeEventsAsAdmin.getValue());
+
+        this.createEventCtrl = createEvent.getKey();
+        this.createEventScene = new Scene(createEvent.getValue());
 
         this.server = server;
 
@@ -256,6 +262,11 @@ public class MainCtrl {
         seeEventsAsAdminCtrl.setup();
         primaryStage.setTitle("See Events As admin");
         primaryStage.setScene(seeEventsAsAdminScene);
+    }
+
+    public void showCreateEvent() {
+        primaryStage.setTitle("Create new Event");
+        primaryStage.setScene(createEventScene);
     }
 
     public void showAddParticipant() {
