@@ -15,6 +15,8 @@ public class ManagementOverviewCtrl {
     private Button goHomeButton;
     @FXML
     private Label welcomeLabel;
+    @FXML
+    private Button btnGoEvent;
     private MainCtrl mainCtrl;
     private ServerUtils server;
 
@@ -25,6 +27,10 @@ public class ManagementOverviewCtrl {
     }
     public void setUp(){
         setLanguageText();
+    }
+
+    public void goSeeEventsAsAdmin() {
+        mainCtrl.showSeeEventsAsAdmin();
     }
     public void setLanguageText() {
         String language = mainCtrl.getLanguage();

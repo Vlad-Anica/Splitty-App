@@ -61,10 +61,11 @@ public class Main extends Application {
         var managementOverview = FXML.load(ManagementOverviewCtrl.class, bundle, "client", "scenes", "ManagementOverview.fxml");
         var addLanguage = FXML.load(AddLanguageCtrl.class, bundle, "client", "scenes", "AddLanguage.fxml");
         var startPage = FXML.load(StartPageCtrl.class, bundle, "client", "scenes", "StartPage.fxml");
+        var seeEventsAsAdmin = FXML.load(SeeEventsAsAdminCtrl.class, bundle, "client", "scenes", "SeeEventsAsAdmin.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         ServerUtils server = INJECTOR.getInstance(ServerUtils.class);
-        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, managementOverview, addLanguage, startPage, server);
+        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, managementOverview, addLanguage, startPage, seeEventsAsAdmin, server);
     }
 
 }

@@ -77,6 +77,10 @@ public class MainCtrl {
     private AddLanguageCtrl addLanguageCtrl;
     private Scene addLanguageScene;
 
+    private SeeEventsAsAdminCtrl seeEventsAsAdminCtrl;
+    private Scene seeEventsAsAdminScene;
+
+
     private ServerUtils server;
     private int languageIndex;
     private List<String> languages;
@@ -92,7 +96,7 @@ public class MainCtrl {
                            Pair<OpenDebtsCtrl, Parent> openDebts, Pair<AddExpenseCtrl, Parent> addExpense,
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<AddLanguageCtrl, Parent> addLanguage,
-                           Pair<StartPageCtrl, Parent> startPage,
+                           Pair<StartPageCtrl, Parent> startPage, Pair<SeeEventsAsAdminCtrl, Parent> seeEventsAsAdmin,
                            ServerUtils server) {
         getLastKnownInfo();
         File languageFile = new File("client/src/main/resources/languages/languages.txt");
@@ -157,6 +161,9 @@ public class MainCtrl {
 
         this.startPageCtrl = startPage.getKey();
         this.startPageScene = new Scene(startPage.getValue());
+
+        this.seeEventsAsAdminCtrl = seeEventsAsAdmin.getKey();
+        this.seeEventsAsAdminScene = new Scene(seeEventsAsAdmin.getValue());
 
         this.server = server;
 
@@ -243,6 +250,12 @@ public class MainCtrl {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void showSeeEventsAsAdmin() {
+        seeEventsAsAdminCtrl.setup();
+        primaryStage.setTitle("See Events As admin");
+        primaryStage.setScene(seeEventsAsAdminScene);
     }
 
     public void showAddParticipant() {
