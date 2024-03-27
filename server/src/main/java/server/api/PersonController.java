@@ -118,12 +118,20 @@ public class PersonController {
     public ResponseEntity<Person> add(@RequestBody Person person) {
         System.out.println("Received Person object: " + person);
 
-        if (person == null || isNullOrEmpty(person.getFirstName()) ||
-                isNullOrEmpty(person.getLastName())
-                || isNullOrEmpty(person.getIBAN())
-                || isNullOrEmpty(person.getBIC())) {
+        if (person == null)  {
             return ResponseEntity.badRequest().build();
         }
+        System.out.println("Passed the if1!!");
+
+        if( isNullOrEmpty(person.getFirstName())) {
+            return ResponseEntity.badRequest().build();
+        }
+        System.out.println("Passed the if2!!");
+
+        if (isNullOrEmpty(person.getLastName())) {
+            return ResponseEntity.badRequest().build();
+        }
+        System.out.println("Passed the all ifs!!");
 
         Person saved = personService.save(person);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);

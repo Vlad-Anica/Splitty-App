@@ -12,7 +12,6 @@ import server.services.interfaces.EventService;
 import server.services.interfaces.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")

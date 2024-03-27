@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,8 @@ public class User {
     private String email;
     private Currency preferredCurrency;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference(value = "user")
     private List<Person> participants;
     /**
      * Constructor without arguments

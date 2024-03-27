@@ -1,6 +1,8 @@
 package commons;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -45,8 +47,11 @@ public class Event {
     public static final Tag entranceFeesTag = new Tag("blue", "Entrance Fees");
     public static final Tag travelTag = new Tag("red", "Travel");
     private Date date;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
+    @JsonManagedReference(value = "event")
     private List<Person> participants;
+
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Expense> expenses;
     private String inviteCode;
@@ -91,7 +96,7 @@ public class Event {
      * Method that returns creation time of the object.
      * @return Util Date
      */
-    public java.util.Date getCreationDate() {
+    public java.util.Date getCreatedAt() {
         return this.createdAt;
     }
 
@@ -99,7 +104,7 @@ public class Event {
      * Method that returns update time of the object.
      * @return Util Date
      */
-    public java.util.Date getLastUpdate() {
+    public java.util.Date getUpdatedAt() {
         return this.updatedAt;
     }
 
@@ -346,3 +351,5 @@ public class Event {
         return Objects.hash(id, name, description, tags, date, participants, expenses);
     }
 }
+
+

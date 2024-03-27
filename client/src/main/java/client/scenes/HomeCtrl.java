@@ -81,6 +81,7 @@ public class HomeCtrl {
      * set up the home page
      */
     public void setup() {
+        setTextLanguage();
         languages = mainCtrl.getLanguages();
         System.out.println("Combobox: " + languages);
         languageList.setButtonCell(new LanguageListListCell());
@@ -117,7 +118,12 @@ public class HomeCtrl {
     public void searchAndGoToEvent() {
         Event event = server.getEventByInviteCode(inviteCodeText.getText());
         User currentUser = server.getUserById(mainCtrl.getUserId());
-        server.addPerson(new Person(currentUser.getFirstName(), currentUser.getLastName()));
+        Person person = new Person(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getIBAN(),
+                currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, event, currentUser);
+        event.addParticipant(person);
+
+        server.addPerson(new Person(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getIBAN(),
+                currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, event, currentUser));
         mainCtrl.showEventOverview(event.getId());
     }
 

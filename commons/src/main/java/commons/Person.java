@@ -17,6 +17,7 @@ package commons;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -76,14 +77,19 @@ public class Person {
 	private Currency preferredCurrency;
 	@Column(name = "totalDebt")
 	private double totalDebt;
+
 	@ManyToOne
 	@JoinColumn(name = "EVENT_ID")
+	@JsonBackReference(value = "event")
 	private Event event;
+
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
+	@JsonBackReference(value = "user")
 	private User user;
+
 	@OneToMany(mappedBy = "giver", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@JsonManagedReference(value = "giver")
 	private List<Debt> debtList;
 	@SuppressWarnings("unused")
 	public Person() {
@@ -117,7 +123,7 @@ public class Person {
 	 * Method that returns creation time of the object.
 	 * @return Util Date
 	 */
-	public java.util.Date getCreationDate() {
+	public java.util.Date getCreatedAt() {
 		return this.createdAt;
 	}
 
@@ -125,7 +131,7 @@ public class Person {
 	 * Method that returns update time of the object.
 	 * @return Util Date
 	 */
-	public java.util.Date getLastUpdate() {
+	public java.util.Date getUpdatedAt() {
 		return this.updatedAt;
 	}
 	public String getFirstName() {

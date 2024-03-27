@@ -47,7 +47,7 @@ public class Debt {
     private Person giver;
     @ManyToOne
     @JoinColumn(name = "RECEIVER_ID")
-    @JsonBackReference()
+    @JsonBackReference(value = "receiver")
     private Person receiver;
     @ManyToOne
     @JoinColumn(name = "EXPENSE_ID")

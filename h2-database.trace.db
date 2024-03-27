@@ -162,3 +162,24 @@ create table date (id bigint not null, day integer not null, hour integer not nu
 2024-03-22 22:03:34.262669+01:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table date (id bigint not null, [*]day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id))"; expected "identifier"; SQL statement:
 create table date (id bigint not null, day integer not null, hour integer not null, minute integer not null, month integer not null, year integer not null, primary key (id)) [42001-224]
+2024-03-27 21:42:54.306643+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO EVENT(1, \0009[*]‘2021-12-01 14:30:15’, \0009‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummy event', \0009‘2021-12-01 14:30:15’)"; SQL statement:
+INSERT INTO EVENT(1, 	‘2021-12-01 14:30:15’, 	‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummy event', 	‘2021-12-01 14:30:15’) [42000-224]
+2024-03-27 21:43:46.851597+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO EVENT VALUES (1, [*]‘2021-12-01 14:30:15’, \0009‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’)"; SQL statement:
+INSERT INTO EVENT VALUES (1, ‘2021-12-01 14:30:15’, 	‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’) [42000-224]
+2024-03-27 21:43:56.018123+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO EVENT VALUES(1, [*]‘2021-12-01 14:30:15’, ‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’)"; SQL statement:
+INSERT INTO EVENT VALUES(1, ‘2021-12-01 14:30:15’, ‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’) [42000-224]
+2024-03-27 21:44:28.210331+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO EVENT \000d\000aVALUES(1, [*]‘2021-12-01 14:30:15’, ‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’)"; SQL statement:
+INSERT INTO EVENT 
+VALUES(1, ‘2021-12-01 14:30:15’, ‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’) [42000-224]
+2024-03-27 21:45:25.778889+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO EVENT \000d\000aVALUES(1, [*]‘2021-12-01 14:30:15’, ‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’)"; SQL statement:
+INSERT INTO EVENT 
+VALUES(1, ‘2021-12-01 14:30:15’, ‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’) [42000-224]
+2024-03-27 21:45:27.127092+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO EVENT \000d\000aVALUES(1, [*]‘2021-12-01 14:30:15’, ‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’)"; SQL statement:
+INSERT INTO EVENT 
+VALUES(1, ‘2021-12-01 14:30:15’, ‘2021-12-01 14:30:18’, 'dummy description', 'dummyinvite', 'dummyevent', ‘2021-12-01 14:30:15’) [42000-224]
