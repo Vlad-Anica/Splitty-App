@@ -102,9 +102,9 @@ public class MainCtrl {
                            Pair<StartPageCtrl, Parent> startPage, Pair<SeeEventsAsAdminCtrl, Parent> seeEventsAsAdmin,
                            Pair<CreateEventCtrl, Parent> createEvent, ServerUtils server) {
         getLastKnownInfo();
-        File languageFile = new File("C:\\Users\\calin\\oopp-team-61\\client\\src\\main\\resources\\languages\\languages.txt");
+        File languageFile = new File("client/src/main/resources/languages/languages.txt");
         if (languageFile.exists()) {
-            Pair<Integer, List<String>> pair = readFromFile("C:\\Users\\calin\\oopp-team-61\\client\\src\\main\\resources\\languages\\languages.txt");
+            Pair<Integer, List<String>> pair = readFromFile("client/src/main/resources/languages/languages.txt");
             if (pair == null) {
                 System.out.println("NULLLLLL");
             }
