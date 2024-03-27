@@ -59,7 +59,8 @@ public class HomeCtrl {
     private Label adminLogInLabel;
     @FXML
     private Button adminLogInButton;
-
+    @FXML
+    private Button createEventBtn;
     List<String> languages;
     List<String> eventNames;
     List<Long> eventIds;
@@ -172,6 +173,9 @@ public class HomeCtrl {
         mainCtrl.showAddLanguage();
     }
 
+    public void goToCreateEvent(ActionEvent event) throws IOException {
+        mainCtrl.showCreateEvent();
+    }
     /**
      * checks with the server whether the password is correct and displays if it is correct
      *

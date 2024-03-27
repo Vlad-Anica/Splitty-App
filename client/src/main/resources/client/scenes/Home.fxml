@@ -31,5 +31,6 @@
       <Label fx:id="adminLogInLabel" layoutX="54.0" layoutY="334.0" prefHeight="17.0" prefWidth="117.0" text="admin log in" textAlignment="CENTER" />
       <Label fx:id="adminPasswordMessage" layoutX="75.0" layoutY="378.0" />
       <Button fx:id="addLanguageButton" layoutX="14.0" layoutY="47.0" mnemonicParsing="false" onAction="#goToAddLanguage" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="add language" textFill="WHITE" />
+      <Button fx:id="createEventBtn" layoutX="478.0" layoutY="167.0" mnemonicParsing="false" onAction="#goToCreateEvent" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Create Event" />
       </children>
     </AnchorPane>
