@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Event;
 import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
@@ -10,7 +11,10 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -87,9 +91,16 @@ public class CreateEventCtrl {
             return;
         }
 
-        String inviteCode = generateRandomInviteCode();
+        //convert LocalDate to date
+        LocalDate localDate = dateField.getValue();
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        Event newEvent = new Event(nameField.getText(), descField.getText(),
+                new ArrayList<>(), date, new ArrayList<>(), new ArrayList<>());
+
+        server.createEvent(newEvent);
         statusLabel.setTextFill(Color.BLACK);
-        statusLabel.setText("Invite code: " + inviteCode);
+        statusLabel.setText("Invite code: " + newEvent.getInviteCode());
     }
 
     @FXML

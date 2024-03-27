@@ -22,12 +22,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import jakarta.ws.rs.core.MediaType;
+import org.checkerframework.checker.units.qual.C;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -292,7 +294,7 @@ public class ServerUtils {
 			System.out.println("Received object: " + jsonTag);
 
 			return ClientBuilder.newClient(new ClientConfig())//
-					.target(SERVER).path("api/debts")//
+					.target(SERVER).path("api/tags")//
 					.request(APPLICATION_JSON)//
 					.accept(APPLICATION_JSON)//
 					.post(Entity.entity(jsonTag, MediaType.APPLICATION_JSON), Tag.class);
@@ -336,5 +338,24 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>(){});
+	}
+
+	public Event createEvent(Event event) {
+
+		try {
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonEvent = objectMapper.writeValueAsString(event);
+			System.out.println("Received object: " + jsonEvent);
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("/api/events")
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.post(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
+
+		} catch (JsonProcessingException e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
 	}
 }
