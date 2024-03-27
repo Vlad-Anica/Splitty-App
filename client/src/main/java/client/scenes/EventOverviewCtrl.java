@@ -269,7 +269,6 @@ public class EventOverviewCtrl {
             return false;
         }
         this.event.removeExpense(expense);
-        expense = null;
         server.updateEvent(this.event.getId(), this.event);
         return true;
     }
