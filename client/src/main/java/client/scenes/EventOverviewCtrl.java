@@ -270,6 +270,7 @@ public class EventOverviewCtrl {
         }
         this.event.removeExpense(expense);
         expense = null;
+        server.updateEvent(this.event.getId(), this.event);
         return true;
     }
 
@@ -284,12 +285,12 @@ public class EventOverviewCtrl {
             System.out.println("Replaced Expense is null!");
             return false;
         }
-        this.removeExpense(replacedExpense);
-        if(replacedExpense != null) {
+        if(!this.removeExpense(replacedExpense)) {
             System.out.println("Could not delete the Expense!");
             return false;
         }
         this.event.addExpense(newExpense);
+        server.updateEvent(this.event.getId(), this.event);
         return false;
     }
 
