@@ -118,7 +118,7 @@ public class HomeCtrl {
         Event event = server.getEventByInviteCode(inviteCodeText.getText());
         User currentUser = server.getUserById(mainCtrl.getUserId());
         server.addPerson(new Person(currentUser.getFirstName(), currentUser.getLastName()));
-
+        mainCtrl.showEventOverview(event.getId());
     }
 
     public void setTextLanguage() {
