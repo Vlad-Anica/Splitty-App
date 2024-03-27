@@ -91,7 +91,7 @@ public class Event {
      * Method that returns creation time of the object.
      * @return Util Date
      */
-    public java.util.Date getCreationDate() {
+    public java.util.Date getCreatedAt() {
         return this.createdAt;
     }
 
@@ -99,7 +99,7 @@ public class Event {
      * Method that returns update time of the object.
      * @return Util Date
      */
-    public java.util.Date getLastUpdate() {
+    public java.util.Date getUpdatedAt() {
         return this.updatedAt;
     }
 

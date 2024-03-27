@@ -46,7 +46,7 @@ public class SeeEventsAsAdminCtrl {
                 }
                 if (events.size() > 0) {
                     for (Event x: events) {
-                        toShow.add(new EventInfo(x.getId(), x.getName(), x.getCreationDate(), x.getLastUpdate(), x.getParticipants().size()));
+                        toShow.add(new EventInfo(x.getId(), x.getName(), x.getCreatedAt(), x.getUpdatedAt(), x.getParticipants().size()));
                     }
                 }
 
