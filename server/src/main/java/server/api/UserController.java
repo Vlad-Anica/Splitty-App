@@ -4,6 +4,7 @@ import commons.Currency;
 import commons.Event;
 import commons.Expense;
 import commons.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.interfaces.EmailService;
@@ -11,6 +12,7 @@ import server.services.interfaces.EventService;
 import server.services.interfaces.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -42,6 +44,14 @@ public class UserController {
                            @RequestParam("email") String email, @RequestParam("currency") Currency preferredCurency) {
         User user = new User(firstName, lastName, email, preferredCurency);
         return userService.save(user);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable("userId") Long userId) {
+        if (!userService.existsById(userId)) {
+            return (ResponseEntity<User>) ResponseEntity.status(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(userService.findById(userId).get());
     }
 
     @GetMapping("/{userId}/events")

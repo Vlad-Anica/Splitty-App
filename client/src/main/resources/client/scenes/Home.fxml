@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -20,8 +21,8 @@
           <Button fx:id="goHomeButton" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Home" textFill="WHITE" />
           <Button fx:id="addExpenseButton" layoutX="373.0" layoutY="83.0" mnemonicParsing="false" onAction="#goToAddExpense" prefHeight="40.0" prefWidth="126.0" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Add Expense" textFill="WHITE" />
           <Button fx:id="goSettingsButton" layoutX="527.0" layoutY="351.0" mnemonicParsing="false" onAction="#goToSettings" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Settings" textFill="WHITE" />
-      <Button fx:id="goEventButton" layoutX="401.0" layoutY="167.0" mnemonicParsing="false" onAction="#goToEvent" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Submit" textFill="WHITE" />
-      <ComboBox fx:id="eventList" layoutX="214.0" layoutY="167.0" prefWidth="150.0" promptText="Select Event" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" />
+      <Button fx:id="goEventButton" layoutX="382.0" layoutY="227.0" mnemonicParsing="false" onAction="#goToEvent" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Submit" textFill="WHITE" />
+      <ComboBox fx:id="eventList" layoutX="208.0" layoutY="227.0" prefWidth="150.0" promptText="Select Event" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" />
       <ComboBox fx:id="languageList" layoutX="14.0" layoutY="16.0" prefWidth="150.0" />
       <PasswordField fx:id="adminPasswordField" layoutX="22.0" layoutY="351.0" onAction="#adminLogIn" prefHeight="23.0" prefWidth="155.0" promptText="Password" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693;" styleClass="homePageTextBox">
          <font>
@@ -31,6 +32,8 @@
       <Label fx:id="adminLogInLabel" layoutX="54.0" layoutY="334.0" prefHeight="17.0" prefWidth="117.0" text="admin log in" textAlignment="CENTER" />
       <Label fx:id="adminPasswordMessage" layoutX="75.0" layoutY="378.0" />
       <Button fx:id="addLanguageButton" layoutX="14.0" layoutY="47.0" mnemonicParsing="false" onAction="#goToAddLanguage" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="add language" textFill="WHITE" />
-      <Button fx:id="createEventBtn" layoutX="478.0" layoutY="167.0" mnemonicParsing="false" onAction="#goToCreateEvent" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Create Event" />
+      <Button fx:id="createEventBtn" layoutX="468.0" layoutY="227.0" mnemonicParsing="false" onAction="#goToCreateEvent" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Create Event" />
+      <TextField fx:id="inviteCodeText" layoutX="209.0" layoutY="175.0" />
+      <Button fx:id="btnSearchEvent" layoutX="383.0" layoutY="175.0" mnemonicParsing="false" onAction="#searchAndGoToEvent" text="Button" />
       </children>
     </AnchorPane>

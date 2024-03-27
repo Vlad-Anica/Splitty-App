@@ -4,16 +4,15 @@ package client.scenes;
 import client.sceneSupportClasses.LanguageListListCell;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Person;
+import commons.User;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -61,6 +60,10 @@ public class HomeCtrl {
     private Button adminLogInButton;
     @FXML
     private Button createEventBtn;
+    @FXML
+    TextField inviteCodeText;
+    @FXML
+    Button btnSearchEvent;
     List<String> languages;
     List<String> eventNames;
     List<Long> eventIds;
@@ -111,12 +114,21 @@ public class HomeCtrl {
         eventList.setItems(FXCollections.observableList(eventNames.stream().toList()));
     }
 
+    public void searchAndGoToEvent() {
+        Event event = server.getEventByInviteCode(inviteCodeText.getText());
+        User currentUser = server.getUserById(mainCtrl.getUserId());
+        server.addPerson(new Person(currentUser.getFirstName(), currentUser.getLastName()));
+
+    }
+
     public void setTextLanguage() {
         int languageIndex = mainCtrl.getLanguageIndex();
         if (languageIndex < 0)
             languageIndex = 0;
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        btnSearchEvent.setText(resourceBundle.getString("Search"));
+        inviteCodeText.setPromptText(resourceBundle.getString("InviteCode"));
         mainPageTestLabel.setText(resourceBundle.getString("WelcomeText"));
         goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         goHomeButton.setText(resourceBundle.getString("Home"));
@@ -141,7 +153,7 @@ public class HomeCtrl {
             return;
         }
         Long eventId = eventIds.get(index);
-        //TODO: go to the event based on its id
+        mainCtrl.showEventOverview(eventId);
     }
 
     public void goToSettings() {

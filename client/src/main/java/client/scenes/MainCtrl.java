@@ -267,6 +267,12 @@ public class MainCtrl {
         primaryStage.setScene(seeEventsAsAdminScene);
     }
 
+    public void showEventOverview(Long eventId) {
+        eventOverviewCtrl.setup(eventId);
+        primaryStage.setTitle("Event Overview");
+        primaryStage.setScene(eventOverviewScene);
+    }
+
     public void showCreateEvent() {
         primaryStage.setTitle("Create new Event");
         primaryStage.setScene(createEventScene);
