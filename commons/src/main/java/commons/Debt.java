@@ -63,6 +63,7 @@ public class Debt {
         this.amount = amount;
         this.settled = false;
     }
+
     public Debt() {
 
     }
