@@ -250,6 +250,49 @@ public class EventOverviewCtrl {
         }
     }
 
+    /**
+     * Removes an Expense from its association to Event
+     * @param expense Expense to remove
+     * @return true, if successful
+     */
+    public boolean removeExpense(Expense expense) {
+        if(this.event == null) {
+            System.out.println("Event is null!");
+            return false;
+        }
+        if(expense == null) {
+            System.out.println("Expense is null!");
+            return false;
+        }
+        if(!this.event.containsExpense(expense)) {
+            System.out.println("Event doesn't contain the Expense!");
+            return false;
+        }
+        this.event.removeExpense(expense);
+        server.updateEvent(this.event.getId(), this.event);
+        return true;
+    }
+
+    /**
+     * Edits an Expense to a new one. Assumes Debts are automatically updated.
+     * @param replacedExpense replaced Expense
+     * @param newExpense new Expense
+     * @return boolean, true if the operation was successful
+     */
+    public boolean editExpense(Expense replacedExpense, Expense newExpense) {
+        if(replacedExpense == null) {
+            System.out.println("Replaced Expense is null!");
+            return false;
+        }
+        if(!this.removeExpense(replacedExpense)) {
+            System.out.println("Could not delete the Expense!");
+            return false;
+        }
+        this.event.addExpense(newExpense);
+        server.updateEvent(this.event.getId(), this.event);
+        return false;
+    }
+
     public void goHome(ActionEvent event) throws IOException {
         mainCtrl.showHome();
     }

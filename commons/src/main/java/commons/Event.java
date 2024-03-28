@@ -301,13 +301,16 @@ public class Event {
 
     /**
      * Removes an expense from the list of expenses for an event. Returns false if
-     * the expense is not within the list. Placeholder.
+     * the expense is not within the list. Severs Debts associated with it.
      * @param expense Expense representing the Expense to remove from the Event.
      * @return boolean, true if the Expense was successfully removed, false otherwise.
      */
     public boolean removeExpense(Expense expense) {
         if(expense == null || !this.getExpenses().contains(expense)) {
             return false;
+        }
+        for(Debt debt : expense.getDebtList()) {
+            debt.getGiver().getDebtList().remove(debt);
         }
         this.getExpenses().remove(expense);
         return true;

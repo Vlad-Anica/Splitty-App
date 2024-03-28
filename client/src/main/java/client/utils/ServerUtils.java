@@ -96,6 +96,24 @@ public class ServerUtils {
 			return null;
         }
 	}
+
+	public Event updateEvent(Long id, Event newEvent) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonEvent = objectMapper.writeValueAsString(newEvent);
+			System.out.println("Received Event object: " + jsonEvent);
+
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("api/events/" + id)
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.post(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
    public Person updatePerson(Long id, Person updatedPerson) {
 	   try {
 		   ObjectMapper objectMapper = new ObjectMapper();

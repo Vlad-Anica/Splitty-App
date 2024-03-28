@@ -187,6 +187,5 @@ public class EventController {
         return s == null || s.isEmpty();
     }
 
-
 }
 
