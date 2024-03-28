@@ -107,7 +107,7 @@ public class ServerUtils {
 					.target(SERVER).path("api/events/" + id)
 					.request(APPLICATION_JSON)
 					.accept(APPLICATION_JSON)
-					.post(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
+					.put(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
 
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
