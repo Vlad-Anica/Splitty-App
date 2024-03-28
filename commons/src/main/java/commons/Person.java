@@ -15,18 +15,19 @@
  */
 package commons;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
-
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Builder;
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 @Table(name = "PERSON")
