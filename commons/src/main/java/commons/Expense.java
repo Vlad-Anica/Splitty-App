@@ -51,8 +51,6 @@ public class Expense {
     }
     private String description;
     private double amount;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @Transient
     private Date date;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Person receiver;

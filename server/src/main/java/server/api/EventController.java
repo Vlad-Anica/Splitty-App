@@ -110,7 +110,7 @@ public class EventController {
     public ResponseEntity<Event> add(@RequestBody Event event) {
 
         if (event == null || isNullOrEmpty(event.getName()) ||
-                isNullOrEmpty(event.getDescription()) || event.getDate() == null)
+        isNullOrEmpty(event.getDescription()) || event.getDate() == null)
             return ResponseEntity.badRequest().build();
 
         Event saved = eventService.save(event);

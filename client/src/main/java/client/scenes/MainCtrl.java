@@ -276,6 +276,7 @@ public class MainCtrl {
     public void showCreateEvent() {
         primaryStage.setTitle("Create new Event");
         primaryStage.setScene(createEventScene);
+        createEventCtrl.setup();
     }
 
     public void showAddParticipant() {
