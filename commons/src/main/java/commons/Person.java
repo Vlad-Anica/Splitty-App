@@ -17,8 +17,7 @@ package commons;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -33,6 +32,7 @@ import lombok.Builder;
 @Table(name = "PERSON")
 @Builder
 @AllArgsConstructor
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="PERSON_ID")
 public class Person {
 
 	@Id
@@ -80,16 +80,14 @@ public class Person {
 
 	@ManyToOne
 	@JoinColumn(name = "EVENT_ID")
-	@JsonBackReference(value = "event")
 	private Event event;
 
 	@ManyToOne
-	@JoinColumn(name = "USER_ID")
-	@JsonBackReference(value = "user")
+	//@JsonBackReference
 	private User user;
 
-	@OneToMany(mappedBy = "giver", cascade = CascadeType.ALL)
-	@JsonManagedReference(value = "giver")
+	@OneToMany(cascade = CascadeType.PERSIST)
+	//@JsonManagedReference
 	private List<Debt> debtList;
 	@SuppressWarnings("unused")
 	public Person() {

@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -81,6 +82,7 @@ public class HomeCtrl {
      * set up the home page
      */
     public void setup() {
+        System.out.println("!!!!! " + server.getAllEvents().size());
         setTextLanguage();
         languages = mainCtrl.getLanguages();
         System.out.println("Combobox: " + languages);
@@ -120,10 +122,7 @@ public class HomeCtrl {
         User currentUser = server.getUserById(mainCtrl.getUserId());
         Person person = new Person(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getIBAN(),
                 currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, event, currentUser);
-        event.addParticipant(person);
-
-        server.addPerson(new Person(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getIBAN(),
-                currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, event, currentUser));
+        server.addPerson(person);
         mainCtrl.showEventOverview(event.getId());
     }
 

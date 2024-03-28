@@ -3,6 +3,7 @@ package server.api;
 import commons.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.implementations.EventServiceImpl;
@@ -103,6 +104,23 @@ public class EventController {
         event = new Event(name, description, tags, date, participants, expenses);
         eventService.save(event);
         return event;
+    }
+
+    @PostMapping(path = {"", "/"})
+    public ResponseEntity<Event> add(@RequestBody Event event) {
+
+        if (event == null || isNullOrEmpty(event.getName()) ||
+                isNullOrEmpty(event.getDescription()) || event.getDate() == null)
+            return ResponseEntity.badRequest().build();
+
+        Event saved = eventService.save(event);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+
+    @PutMapping("/persist")
+    public ResponseEntity<Event> persistEvent(@RequestBody Event event) {
+        return ResponseEntity.ok(eventService.save(event));
     }
 
     @GetMapping(path = {"", "/"})

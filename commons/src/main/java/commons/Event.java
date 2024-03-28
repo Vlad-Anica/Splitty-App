@@ -2,12 +2,15 @@ package commons;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.*;
 
 @Entity
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="EVENT_ID")
 public class Event {
 
     @Id
@@ -48,14 +51,12 @@ public class Event {
     public static final Tag travelTag = new Tag("red", "Travel");
     private Date date;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.PERSIST)
-    @JsonManagedReference(value = "event")
+    @OneToMany(fetch = FetchType.EAGER,
+            cascade = CascadeType.PERSIST, mappedBy = "event")
     private List<Person> participants;
-
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Expense> expenses;
     private String inviteCode;
-
 
     @SuppressWarnings("Unused")
     public Event() {

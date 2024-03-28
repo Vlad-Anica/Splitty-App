@@ -116,9 +116,11 @@ public class PersonController {
 
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Person> add(@RequestBody Person person) {
+        System.out.println("HELOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n\n\n\n");
         System.out.println("Received Person object: " + person);
 
         if (person == null)  {
+
             return ResponseEntity.badRequest().build();
         }
         System.out.println("Passed the if1!!");

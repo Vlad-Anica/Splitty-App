@@ -355,4 +355,22 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<User>(){});
 	}
+
+	public Event updateEvent(Event newEvent) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonEvent = objectMapper.writeValueAsString(newEvent);
+			System.out.println("Received Event object: " + jsonEvent);
+
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("api/events/persist")
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.put(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

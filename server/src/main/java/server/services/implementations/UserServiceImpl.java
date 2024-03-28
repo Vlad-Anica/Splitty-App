@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
         List<Event> events = eventRep.findAll();
         for (Event event : events)
         {
+            System.out.println(event.getParticipants().size());
             for (Person p : event.getParticipants())
                 if (p.getUser().getId() == userId && !result.contains(event))
                     result.add(event);

@@ -1,6 +1,8 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -10,11 +12,12 @@ import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 @Table(name = "DEBT")
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="DEBT_ID")
 public class Debt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(name = "DEBT_ID")
     private long id;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -43,11 +46,11 @@ public class Debt {
     }
     @ManyToOne
     @JoinColumn(name = "GIVER_ID")
-    @JsonBackReference(value = "giver")
+    //@JsonBackReference(value = "giver-debt")
     private Person giver;
     @ManyToOne
     @JoinColumn(name = "RECEIVER_ID")
-    @JsonBackReference(value = "receiver")
+    //@JsonBackReference(value = "receiver-debt")
     private Person receiver;
     @ManyToOne
     @JoinColumn(name = "EXPENSE_ID")

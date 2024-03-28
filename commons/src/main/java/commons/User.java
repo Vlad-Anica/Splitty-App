@@ -1,6 +1,7 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Table(name = "user_entity")
 @Builder
 @AllArgsConstructor
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="USER_ID")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,8 +28,8 @@ public class User {
     private String email;
     private Currency preferredCurrency;
 
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference(value = "user")
+    @OneToMany()
+    //@JsonManagedReference
     private List<Person> participants;
     /**
      * Constructor without arguments
