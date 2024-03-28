@@ -332,12 +332,47 @@ public class ServerUtils {
 	public Event getEvent(Long eventID) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER)
-				.queryParam("eventID", eventID)
+				.path("api/events/" + eventID)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>(){});
 	}
 
+	public Event getEventByInviteCode(String inviteCode) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("api/events/inviteCode/" + inviteCode)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<Event>(){});
+	}
+
+	public User getUserById(Long id) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("user/" + id.toString())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<User>(){});
+	}
+
+	public Event updateEvent(Event newEvent) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonEvent = objectMapper.writeValueAsString(newEvent);
+			System.out.println("Received Event object: " + jsonEvent);
+
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("api/events/persist")
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.put(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public Event createEvent(Event event) {
 
 		try {

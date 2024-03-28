@@ -116,6 +116,13 @@ public class EventController {
         Event saved = eventService.save(event);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+
+
+    @PutMapping("/persist")
+    public ResponseEntity<Event> persistEvent(@RequestBody Event event) {
+        return ResponseEntity.ok(eventService.save(event));
+    }
+
     @GetMapping(path = {"", "/"})
     public List<Event> getAll() {
         return eventService.findAll();

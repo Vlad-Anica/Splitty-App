@@ -95,7 +95,7 @@ public class EventOverviewCtrl {
         this.filteringExpensesPane.setPrefWidth(200);
     }
 
-    public void initializePage(Long eventID) {
+    public void setup(Long eventID) {
 
 
         try {

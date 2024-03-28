@@ -15,23 +15,25 @@
  */
 package commons;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Builder;
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 @Table(name = "PERSON")
 @Builder
 @AllArgsConstructor
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="PERSON_ID")
 public class Person {
 
 	@Id
@@ -76,14 +78,17 @@ public class Person {
 	private Currency preferredCurrency;
 	@Column(name = "totalDebt")
 	private double totalDebt;
+
 	@ManyToOne
 	@JoinColumn(name = "EVENT_ID")
 	private Event event;
+
 	@ManyToOne
-	@JoinColumn(name = "USER_ID")
+	//@JsonBackReference
 	private User user;
-	@OneToMany(mappedBy = "giver", cascade = CascadeType.ALL)
-	@JsonManagedReference
+
+	@OneToMany(cascade = CascadeType.PERSIST)
+	//@JsonManagedReference
 	private List<Debt> debtList;
 	@SuppressWarnings("unused")
 	public Person() {
@@ -117,7 +122,7 @@ public class Person {
 	 * Method that returns creation time of the object.
 	 * @return Util Date
 	 */
-	public java.util.Date getCreationDate() {
+	public java.util.Date getCreatedAt() {
 		return this.createdAt;
 	}
 
@@ -125,7 +130,7 @@ public class Person {
 	 * Method that returns update time of the object.
 	 * @return Util Date
 	 */
-	public java.util.Date getLastUpdate() {
+	public java.util.Date getUpdatedAt() {
 		return this.updatedAt;
 	}
 	public String getFirstName() {
