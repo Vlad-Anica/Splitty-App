@@ -2,6 +2,8 @@ package server.services.implementations;
 
 import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.ExpenseRepository;
 import server.services.interfaces.ExpenseService;
@@ -39,7 +41,21 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
+    public ResponseEntity<Expense> add(Expense expense) {
+        if (expense == null || isNullOrEmpty(expense.getDescription()) ||
+                expense.getReceiver() == null || expense.getDate() == null ||
+                expense.getCurrency() == null)
+            return ResponseEntity.badRequest().build();
+
+        Expense saved = save(expense);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+    @Override
     public Expense getReferenceById(long id) {
         return expenseRep.getReferenceById(id);
+    }
+
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
     }
 }

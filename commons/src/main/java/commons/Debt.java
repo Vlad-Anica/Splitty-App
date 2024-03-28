@@ -51,7 +51,7 @@ public class Debt {
     @JoinColumn(name = "RECEIVER_ID")
     //@JsonBackReference(value = "receiver-debt")
     private Person receiver;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "EXPENSE_ID")
     private Expense expense;
     @Column(name = "amount")
@@ -75,7 +75,7 @@ public class Debt {
      * Method that returns creation time of the object.
      * @return Util Date
      */
-    public java.util.Date getCreationDate() {
+    public java.util.Date getCreatedAt() {
         return this.createdAt;
     }
 
@@ -83,7 +83,7 @@ public class Debt {
      * Method that returns update time of the object.
      * @return Util Date
      */
-    public java.util.Date getLastUpdate() {
+    public java.util.Date getUpdatedAt() {
         return this.updatedAt;
     }
     public Person getGiver() {

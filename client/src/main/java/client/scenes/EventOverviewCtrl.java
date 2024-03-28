@@ -84,6 +84,10 @@ public class EventOverviewCtrl {
         showExpensesWithPersonButton.setText("Including <<PERSON>>");
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
     /**
      * Method that resets the parameters of the filtering pane as needed.
      */
@@ -101,6 +105,7 @@ public class EventOverviewCtrl {
         try {
             event = server.getEvent(eventID);
             this.expenses = event.getExpenses();
+            overviewLabel.setText(event.getName());
         } catch (Exception e) {
             System.out.println("Cannot find associated Event within the repository!");
             return;

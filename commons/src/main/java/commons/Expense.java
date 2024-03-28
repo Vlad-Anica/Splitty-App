@@ -52,12 +52,12 @@ public class Expense {
     private String description;
     private double amount;
     private Date date;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Person receiver;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Debt> debtList;
     private Currency currency;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Tag tag;
 
     /***

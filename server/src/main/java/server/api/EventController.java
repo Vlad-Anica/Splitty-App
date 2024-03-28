@@ -117,6 +117,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
+    @PutMapping("{id}/newExpense")
+    public ResponseEntity<Event> addExpense(@PathVariable("id") long eventId, @RequestBody Expense expense) {
+        Event event = getById(eventId).getBody();
+        if (event == null)
+            return ResponseEntity.badRequest().build();
+
+        expenseService.add(expense);
+        event.getExpenses().add(expense);
+        return ResponseEntity.ok(eventService.save(event));
+    }
 
     @PutMapping("/persist")
     public ResponseEntity<Event> persistEvent(@RequestBody Event event) {

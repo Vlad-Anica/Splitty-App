@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import commons.*;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
@@ -62,10 +63,13 @@ public class AddExpenseCtrl {
     private List<Expense> expenses;
     private List<Tag> tags;
     private MainCtrl mainCtrl;
+    private EventOverviewCtrl eventOverviewCtrl;
     private ServerUtils server;
+    private Event event;
     @Inject
-    public AddExpenseCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public AddExpenseCtrl(MainCtrl mainCtrl, EventOverviewCtrl eventOverviewCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
+        this.eventOverviewCtrl = eventOverviewCtrl;
         this.server = server;
     }
 
@@ -82,14 +86,18 @@ public class AddExpenseCtrl {
                 description = null;
             else
                 description = descriptionField.getText();
+
             double amount = Double.parseDouble(amountField.getText());
+
             double amountPerPerson = splitEvenButton.isSelected() ?
                     amount / getAllGivers().size() : amount / selectedBoxesNumber();
             List<Debt> debts = new ArrayList<>();
 
             for (Person p : getAllGivers()) {
                 Debt debt = new Debt(getPayerData(), p, null, amountPerPerson);
+                server.addDebt(debt);
                 debts.add(debt);
+
             }
             Expense e = new Expense(description, amount, new Date(), getPayerData(), debts,
                     getCurrencyData(), getTypeData());
@@ -98,10 +106,15 @@ public class AddExpenseCtrl {
                 debt.setExpense(e);
 
             expenses.add(e);
+            server.createExpense(e);
+            server.addExpenseToEvent(this.event.getId(), e);
+            System.out.println(this.event.getExpenses().size());
             System.out.println("Created expense");
-            System.out.println(expenses.size());
+            System.out.println("Expenses size" + expenses.size());
         } catch (RuntimeException e) {
             e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
         }
 
 
@@ -137,19 +150,14 @@ public class AddExpenseCtrl {
 
         if (getPayerData() == null)
             return false;
-        System.out.println(1);
         if (getCurrencyData() == null)
             return false;
-        System.out.println(2);
         if (getTypeData() == null)
             return false;
-        System.out.println(3);
         if (amountField == null || amountField.getText().isEmpty())
             return false;
-        System.out.println(4);
         if (splitButton.isSelected() && selectedBoxesNumber() == 0)
             return false;
-        System.out.println(5);
         return true;
     }
 
@@ -215,6 +223,8 @@ public class AddExpenseCtrl {
     public void initializePage()  {
 
         try {
+            this.event = eventOverviewCtrl.getEvent();
+
             participants = new ArrayList<>();
             participants.addAll(server.getPersons());
             int y = 5;

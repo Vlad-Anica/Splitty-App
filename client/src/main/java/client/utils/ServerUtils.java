@@ -391,4 +391,52 @@ public class ServerUtils {
 			return null;
 		}
 	}
+
+	/***
+	 * Adds an expense to the database
+	 * @param expense Expense to be added to DB
+	 * @return the added expense
+	 */
+	public Expense createExpense(Expense expense) {
+
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonExpense = objectMapper.writeValueAsString(expense);
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("/api/expenses")
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.post(Entity.entity(jsonExpense, MediaType.APPLICATION_JSON), Expense.class);
+		} catch (JsonProcessingException e) {
+			System.out.println(e.getMessage());
+			return null;
+        }
+    }
+
+	/***
+	 *
+	 * @param eventId the id of the event to find in the DB
+	 * @param expense expense to be added to event
+	 * @return updated event
+	 * @throws JsonProcessingException
+	 */
+	public Event addExpenseToEvent(long eventId, Expense expense) throws JsonProcessingException {
+
+		try {
+			Event event = getEvent(eventId);
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonEvent = objectMapper.writeValueAsString(event);
+			System.out.println("Received Event object: " + jsonEvent);
+			event.getExpenses().add(expense);
+
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("api/events/" + eventId + "/newExpense")
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.put(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
+		} catch (JsonProcessingException e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
 }

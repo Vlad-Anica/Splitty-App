@@ -98,6 +98,11 @@ public class ExpenseController {
         return expense;
     }
 
+    @PostMapping(path = {"", "/"})
+    public ResponseEntity<Expense> add(@RequestBody Expense expense) {
+
+        return expenseService.add(expense);
+    }
     @GetMapping(path = {"", "/"})
     public List<Expense> getAll() {
         System.out.println("Find people...");
