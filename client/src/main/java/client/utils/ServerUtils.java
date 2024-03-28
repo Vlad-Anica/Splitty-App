@@ -370,6 +370,9 @@ public class ServerUtils {
 
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
+		}
+		return null;
+	}
 	public Event createEvent(Event event) {
 
 		try {
