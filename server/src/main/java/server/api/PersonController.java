@@ -68,7 +68,7 @@ public class PersonController {
         if (id < 0 || !personService.existsById(id)) {
             return "Error, PERSON NOT FOUND";
         }
-        return personService.findById(id).get().getIBAN() + ", " + personService.findById(id).get().getIBAN();
+        return personService.findById(id).get().getIBAN() + ", " + personService.findById(id).get().getBIC();
     }
 
     @GetMapping("/{id}/debts")

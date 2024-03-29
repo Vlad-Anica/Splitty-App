@@ -95,4 +95,31 @@ public class PersonControllerTest {
         assertEquals(person1.getBIC(), personController.getBicById(1L));
         assertEquals(person2.getBIC(), personController.getBicById(2L));
     }
+    @Test
+    public void testGetBankById(){
+        when(personService.findById(1L)).thenReturn(Optional.ofNullable(person1));
+        when(personService.existsById(1L)).thenReturn(true);
+        when(personService.findById(2L)).thenReturn(Optional.ofNullable(person2));
+        when(personService.existsById(2L)).thenReturn(true);
+        assertEquals(person1.getIBAN() + ", " + person1.getBIC(), personController.getBankById(1L));
+        assertEquals(person2.getIBAN() + ", " + person2.getBIC(), personController.getBankById(2L));
+    }
+    @Test
+    public void testGetDebtsById(){
+        when(personService.findById(1L)).thenReturn(Optional.ofNullable(person1));
+        when(personService.existsById(1L)).thenReturn(true);
+        when(personService.findById(2L)).thenReturn(Optional.ofNullable(person2));
+        when(personService.existsById(2L)).thenReturn(true);
+        assertEquals(person1.getDebtList(), personController.getDebtsById(1L));
+        assertEquals(person2.getDebtList(), personController.getDebtsById(2L));
+    }
+    @Test
+    public void testGetEventsById(){
+        when(personService.findById(1L)).thenReturn(Optional.ofNullable(person1));
+        when(personService.existsById(1L)).thenReturn(true);
+        when(personService.findById(2L)).thenReturn(Optional.ofNullable(person2));
+        when(personService.existsById(2L)).thenReturn(true);
+        assertEquals(person1.getEvent(), personController.getEventsById(1L));
+        assertEquals(person2.getEvent(), personController.getEventsById(2L));
+    }
 }
