@@ -102,13 +102,12 @@ public class AddLanguageCtrl{
         languageName.setText(resourceBundle.getString("LanguageName"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         addButton.setText(resourceBundle.getString("Add"));
-        languageColumn.setText(mainCtrl.getLanguage());
+        languageColumn.setText(mainCtrl.getLanguage().split(";")[0]);
         yourLanguageColumn.setText(resourceBundle.getString("YourLanguage"));
     }
     public HashMap<String, String> getPhrases() {
         HashMap<String, String> result = new HashMap<>();
         try {
-            String language = mainCtrl.getLanguage();
             File file = new File("client/src/main/resources/languages/language_" + mainCtrl.getLanguageWithoutImagePath() + ".properties");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
