@@ -330,11 +330,11 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
-    public void showStatsTest() {
-        String name = eventOverviewCtrl.getEventName();
+    public void showStatsTest(Long eventId) {
+        statisticsCtrl.setup(eventId);
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statisticsScene);
-        statisticsCtrl.PieChartExpenses.setTitle(name);
+
     }
     public void showManagementOverview(){
         primaryStage.setTitle("Management Overview");

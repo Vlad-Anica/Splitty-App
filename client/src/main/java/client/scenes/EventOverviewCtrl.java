@@ -65,6 +65,7 @@ public class EventOverviewCtrl {
     private ServerUtils server;
 
     private Event event;
+    private long eventId;
     private List<Person> participants;
     private Person selectedPerson;
     private List<Expense> expenses;
@@ -99,6 +100,7 @@ public class EventOverviewCtrl {
 
 
         try {
+            eventId = eventID;
             event = server.getEvent(eventID);
             this.expenses = event.getExpenses();
         } catch (Exception e) {
@@ -302,7 +304,7 @@ public class EventOverviewCtrl {
     }
 
     public void goToStats(ActionEvent event) throws IOException {
-        mainCtrl.showStatsTest();
+        mainCtrl.showStatsTest(eventId);
     }
 
     //Will use this method to get the name of the event,
