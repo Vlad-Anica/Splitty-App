@@ -84,17 +84,19 @@ public class AddLanguageCtrl{
     public void setUp(){
         setTextLanguage();
         this.phrases = getPhrases();
-        languageColumn.setCellValueFactory(x -> new SimpleStringProperty(x.getValue()));
-        table.setItems(FXCollections.observableList(phrases.keySet().stream().toList()));
-        table.setEditable(true);
+        languageColumn.setCellValueFactory(x -> new SimpleStringProperty(x.getValue().split(";")[0]));
+        yourLanguageColumn.setCellValueFactory(x -> new SimpleStringProperty(x.getValue().split(";")[1]));
         yourLanguageColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         yourLanguageColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<String, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<String, String> event) {
-                System.out.println(event.getRowValue() + " = " + event.getNewValue());
-                newLanguage.put(phrases.get(event.getRowValue()), event.getNewValue());
+                System.out.println(event.getRowValue().split(";")[0] + " = " + event.getNewValue());
+                newLanguage.put(phrases.get(event.getRowValue().split(";")[0]), event.getNewValue());
+                table.setItems(FXCollections.observableList(phrases.keySet().stream().map(x -> x+";"+(newLanguage.get(x)!=null ? newLanguage.get(x) : " ")).toList()));
             }
         });
+        table.setItems(FXCollections.observableList(phrases.keySet().stream().map(x -> x+";"+(newLanguage.get(x)!=null ? newLanguage.get(x) : " ")).toList()));
+        table.setEditable(true);
     }
     public void setTextLanguage() {
         String language = mainCtrl.getLanguage();
