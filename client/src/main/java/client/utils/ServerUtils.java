@@ -40,8 +40,11 @@ public class ServerUtils {
 
 	private static String SERVER = "http://localhost:8080/";
 
-	public void setSERVER(String server) {
+	public static void setSERVER(String server) {
 		SERVER = server;
+	}
+	public String getSERVER() {
+		return SERVER;
 	}
 	public static boolean isOnline(String SERVER_IP_ADDRESS, Integer PORT) {
 		boolean b = true;
