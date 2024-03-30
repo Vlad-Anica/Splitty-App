@@ -2,13 +2,14 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import jakarta.inject.Inject;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.util.ResourceBundle;
 
@@ -23,6 +24,14 @@ public class SelectServerCtrl {
     TextField portField;
     @FXML
     Button btnConnect;
+    @FXML
+    StackPane pane;
+    @Inject
+    public SelectServerCtrl(MainCtrl mainCtrl, ServerUtils server) {
+        this.mainCtrl = mainCtrl;
+        this.server = server;
+
+    }
 
 
 
@@ -44,6 +53,7 @@ public class SelectServerCtrl {
         }
         if (IPAddress.contains(" ")) {
             showErrorMessage("NoSpaceCharsInIPAddress");
+            return;
         }
 
         if (server.isOnline(IPAddress, port)) {
@@ -51,6 +61,16 @@ public class SelectServerCtrl {
 
         } else {
             showErrorMessage("ServerNotFound");
+            return;
+        }
+
+        if (mainCtrl.hasBeenConnected(IPAddress)) {
+            mainCtrl.setIPAddress(IPAddress);
+            mainCtrl.showHome();
+        } else {
+            System.out.println("SIUUUU");
+            mainCtrl.addNewIPAddress(IPAddress);
+            mainCtrl.showStartPage();
         }
 
     }
@@ -60,32 +80,23 @@ public class SelectServerCtrl {
      * @param resourceKey the key to the line we want in the language resource bundle
      */
     public void showErrorMessage(String resourceKey) {
+        pane.getChildren().clear();
         ResourceBundle resourceBundle = mainCtrl.getLanguageResource();
         Text error = new Text(resourceBundle.getString(resourceKey));
         error.setStyle("-fx-text-fill: red;");
         setTextDown(error);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(10));
+        delay.setOnFinished(event -> {
+            pane.getChildren().remove(error);
+        });
+        delay.play();
     }
 
-    /**
-     * show error message if the server you want to connect to cannot be found
-     */
-    public void showServerNotFound() {
-        ResourceBundle resourceBundle = mainCtrl.getLanguageResource();
-        Text error = new Text(resourceBundle.getString("ServerNotFound"));
-        error.setStyle("-fx-text-fill: red;");
-        setTextDown(error);
-    }
 
     public void setTextDown(Text text) {
-        BorderPane pane = new BorderPane();
-
-// Create a StackPane, add the Text node to it, and set the alignment to center
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().add(text);
+        pane.getChildren().add(text);
         StackPane.setAlignment(text, Pos.CENTER);
-
-// Set the StackPane at the bottom of the BorderPane
-        pane.setBottom(stackPane);
     }
 
     public void goHome() {
@@ -99,12 +110,5 @@ public class SelectServerCtrl {
         portField.setPromptText("PortNumber");
         btnConnect.setText("Connect");
     }
-    @Inject
-    public SelectServerCtrl(MainCtrl mainCtrl, ServerUtils server) {
-        this.mainCtrl = mainCtrl;
-        this.server = server;
-
-    }
-
 
 }
