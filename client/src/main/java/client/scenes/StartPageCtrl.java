@@ -51,6 +51,7 @@ public class StartPageCtrl {
     public StartPageCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+
     }
 
 
@@ -115,6 +116,7 @@ public class StartPageCtrl {
             mainCtrl.setLanguageIndex(languageComboBox.getSelectionModel().getSelectedIndex());
             setTextLanguage();
         });
+
     }
 
     public void setTextLanguage() {

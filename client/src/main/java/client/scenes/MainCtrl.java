@@ -18,9 +18,11 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
+import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -305,6 +307,16 @@ public class MainCtrl {
         primaryStage.setTitle("Start Page");
         primaryStage.setScene(startPageScene);
         startPageCtrl.initializePage();
+        startPageScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                try {
+                    System.out.println("Trying to create a new user!");
+                    startPageCtrl.createUser(new ActionEvent());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     public void showAddExpense() {
