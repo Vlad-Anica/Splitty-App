@@ -26,7 +26,7 @@ public class StartPageCtrl {
             "Voornaam"));
     @FXML
     private Label title;
-    private List<String> titleText = new ArrayList<>(List.of("Start",
+    private List<String> titleText = new ArrayList<>(List.of("Sign Up",
             "Begin"));
     @FXML
     private TextField lastname;
