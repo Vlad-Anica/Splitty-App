@@ -39,24 +39,29 @@ public class SelectServerCtrl {
         try {
             port = Integer.parseInt(portField.getText());
         } catch(NumberFormatException e) {
-            showInvalidPortNumberMessage();
+            showErrorMessage("InvalidPortNumberMessage");
+            return;
+        }
+        if (IPAddress.contains(" ")) {
+            showErrorMessage("NoSpaceCharsInIPAddress");
         }
 
         if (server.isOnline(IPAddress, port)) {
             server.setSERVER("http://" + IPAddress + ":" + port + "/");
-            mainCtrl
+
         } else {
-            showServerNotFound();
+            showErrorMessage("ServerNotFound");
         }
 
     }
 
     /**
-     * show error text if you did not input a valid number in the port field
+     * displays and error message at the bottom of the page
+     * @param resourceKey the key to the line we want in the language resource bundle
      */
-    public void showInvalidPortNumberMessage() {
+    public void showErrorMessage(String resourceKey) {
         ResourceBundle resourceBundle = mainCtrl.getLanguageResource();
-        Text error = new Text(resourceBundle.getString("IvalidPortNumberMessage"));
+        Text error = new Text(resourceBundle.getString(resourceKey));
         error.setStyle("-fx-text-fill: red;");
         setTextDown(error);
     }
