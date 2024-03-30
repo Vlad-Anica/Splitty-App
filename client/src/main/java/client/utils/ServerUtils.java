@@ -40,13 +40,13 @@ public class ServerUtils {
 
 	private static String SERVER = "http://localhost:8080/";
 
-	public static void setSERVER(String server) {
+	public void setSERVER(String server) {
 		SERVER = server;
 	}
 	public String getSERVER() {
 		return SERVER;
 	}
-	public static boolean isOnline(String SERVER_IP_ADDRESS, Integer PORT) {
+	public boolean isOnline(String SERVER_IP_ADDRESS, Integer PORT) {
 		boolean b = true;
 		try{
 			InetSocketAddress sa = new InetSocketAddress(SERVER_IP_ADDRESS, PORT);
