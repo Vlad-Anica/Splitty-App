@@ -28,6 +28,7 @@ import javafx.util.Pair;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class MainCtrl {
@@ -182,6 +183,14 @@ public class MainCtrl {
         System.out.println(RowdiesTest.getFamily());
         System.out.println(RowdiesTest.getName());
 
+    }
+
+    public ResourceBundle getLanguageResource() {
+        int languageIndex = getLanguageIndex();
+        if (languageIndex < 0)
+            languageIndex = 0;
+        return ResourceBundle.getBundle("languages.language_" +
+                getLanguageWithoutImagePath());
     }
 
     public String getLanguageWithoutImagePath() {
