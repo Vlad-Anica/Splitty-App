@@ -201,6 +201,7 @@ public class MainCtrl {
     }
 
 
+
     public void getLastKnownInfo() {
         File file = new File("userConfig.txt");
         if (!file.exists()) {
@@ -250,6 +251,72 @@ public class MainCtrl {
         pw.println(this.userId);
         pw.close();
     }
+
+    /**
+     * returns or creates a new file given a file path
+     * @param path the file path provided
+     * @return the file which is returned or created
+     */
+    public File getOrCreateFile(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file;
+    }
+    /**
+     * get from the IPAddresses file the ip addresses used before
+     * @return
+     */
+    public List<String> getUsedIPAddresses() {
+        File file = getOrCreateFile("client/src/main/resources/userInfo/IPAddresses");
+        List<String> IPAddresses = new ArrayList<>();
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        while (scanner.hasNextLine()) {
+            IPAddresses.add(scanner.nextLine());
+        }
+        return IPAddresses;
+    }
+
+    /**
+     * check if a provided IP address has been used before
+     * @param IPAddress the provided IP address
+     * @return true if the user has been connected to it before
+     */
+    public boolean hasBeenConnected(String IPAddress) {
+        return getUsedIPAddresses().contains(IPAddress);
+    }
+
+    /**
+     * adds a new IP address to the list of IP addresses used before
+     * @param IPAddress the IP address provided
+     */
+    public void addNewIPAddress(String IPAddress) {
+        List<String> IPAddresses = getUsedIPAddresses();
+        IPAddresses.add(IPAddress);
+        File file = getOrCreateFile("client/src/main/resources/userInfo/IPAddresses");
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (String address: IPAddresses) {
+            writer.println(address);
+        }
+    }
+
     public void setLanguage(String language){
         this.language = language;
     }
