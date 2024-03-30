@@ -66,6 +66,7 @@ public class SelectServerCtrl {
 
         if (mainCtrl.hasBeenConnected(IPAddress)) {
             mainCtrl.setIPAddress(IPAddress);
+            mainCtrl.getLastKnownInfo();
             mainCtrl.showHome();
         } else {
             System.out.println("SIUUUU");
