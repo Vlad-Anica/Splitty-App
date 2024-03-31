@@ -145,6 +145,10 @@ public class EventOverviewCtrl {
         languageIndicator.getChildren().addAll(language, flagImage);
     }
 
+    /**
+     * Method that determines whether a Person has actually been selected in order to facilitate filtering.
+     * @return Boolean, true if a Person has been selected.
+     */
     public boolean validFiltering() {
         return this.selectedPerson != null;
     }
@@ -155,10 +159,6 @@ public class EventOverviewCtrl {
      */
     public void showAllExpensesInEvent(ActionEvent event) {
         resetFilteringPane();
-        if (validFiltering()) {
-            System.out.println("Cannot filter properly, no Person is selected");
-            return;
-        }
         showAllExpensesFiltered(this.expenses);
     }
 
@@ -309,8 +309,6 @@ public class EventOverviewCtrl {
         mainCtrl.showStatsTest();
     }
 
-    //Will use this method to get the name of the event,
-    // so i can pass it to the stats page. Idk of this is the correct label tho. Yeah, it is :)
     public String getEventName() {
         return overviewLabel.getText();
     }
