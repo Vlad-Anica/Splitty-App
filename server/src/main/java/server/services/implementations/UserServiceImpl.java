@@ -48,10 +48,10 @@ public class UserServiceImpl implements UserService {
         if (id < 0 || !userRep.existsById(id))
             return ResponseEntity.badRequest().build();
 
-        if (!findById(id).hasBody())
+        if (findById(id).isEmpty())
             return ResponseEntity.badRequest().build();
 
-        User user = findById(id).getBody();
+        User user = findById(id).get();
 
         List<Event> events = getEvents(id).getBody();
         if (events == null)
@@ -75,11 +75,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<User> save(User user) {
-        if(user.getFirstName() == null || user.getLastName() == null || user.getBIC() == null || user.getParticipants() == null
-                || user.getEmail() == null || user.getPreferredCurrency() == null || user.getIBAN() == null)
-            return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok(userRep.save(user));
+    public User save(User user) {
+        return userRep.save(user);
     }
 
     @Override
@@ -88,14 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<User> findById(long id) {
-        if (id < 0 || !userRep.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Optional<User> user = userRep.findById(id);
-        if (user.isPresent())
-            return ResponseEntity.ok(user.get());
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public Optional<User> findById(long id) {
+        return userRep.findById(id);
     }
 }

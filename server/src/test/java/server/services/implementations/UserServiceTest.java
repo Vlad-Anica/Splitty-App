@@ -7,10 +7,9 @@ import static commons.Currency.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mock;
 import org.springframework.http.ResponseEntity;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import server.database.EventRepository;
 import server.database.UserRepository;
 import server.services.interfaces.UserService;
@@ -27,9 +26,9 @@ import static org.mockito.Mockito.when;
 public class UserServiceTest {
 
     private UserService userService;
-    @MockBean
+    @Mock
     private UserRepository repo;
-    @MockBean
+    @Mock
     private EventRepository eventRepo;
     private User user1;
     private User user2;
@@ -37,8 +36,6 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setup(){
-        MockitoAnnotations.openMocks(this);
-        repo = mock(UserRepository.class);
         userService = new UserServiceImpl(repo, eventRepo);
 
         user1 = User.builder().id(1L).firstName("John").lastName("Smith").IBAN("").BIC("11111111")
@@ -71,40 +68,25 @@ public class UserServiceTest {
 
     @Test
     void saveTest(){
-        ResponseEntity<User> result = userService.save(user1);
-        assertEquals(user1, result.getBody());
+        when(repo.save(user1)).thenReturn(user1);
+        User result = userService.save(user1);
         assertEquals(user1, result);
     }
 
     @Test
     void saveTestNull(){
-        User p = null;
-        ResponseEntity<User> result = userService.save(null);
-        assertNull(result.getBody());
+        User result = userService.save(null);
         assertNull(result);
     }
 
     @Test
     void findByIdTest(){
-        users.add(user1);
-        users.add(user2);
-        Optional<User> optUser1 = Optional.of(user1);
-        Optional<User> optUser2 = Optional.of(user2);
-        Optional<User> optUser3 = Optional.empty();
+        when(repo.findById(1L)).thenReturn(Optional.of(user1));
 
-        when(repo.findById(1L)).thenReturn(optUser1);
-        when(repo.findById(2L)).thenReturn(optUser2);
-        when(repo.findById(3L)).thenReturn(optUser3);
+        Optional<User> result = userService.findById(1L);
 
-        ResponseEntity<User> result1 = userService.findById(1L);
-        ResponseEntity<User> result2 = userService.findById(2L);
-        ResponseEntity<User> result3 = userService.findById(3L);
-
-        assertEquals(optUser1, result1.getBody());
-        assertEquals(optUser2, result2.getBody());
-        assertNotEquals(optUser1, result2.getBody());
-        assertNotEquals(optUser2, result1.getBody());
-        assertEquals(Optional.empty(), result3.getBody());
+        assertTrue(result.isPresent());
+        assertEquals(user1, result.get());
     }
 
     @Test

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import server.services.interfaces.EventService;
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.when;
 class AdminControllerTest {
     @InjectMocks
     private AdminController adminController;
+    @Mock
     private EventService eventService;
     private Event event1;
     private Event event2;
@@ -75,7 +77,7 @@ class AdminControllerTest {
 
         when(eventService.getEventsOrderedByCreatedAt()).thenReturn(Optional.of(events));
 
-        List<Event> result = adminController.getEventsOrderedByLastModificationDate();
+        List<Event> result = adminController.getEventsOrderedByCreationDate();
         assertEquals(3, result.size());
         assertEquals(event1, result.get(0));
         assertEquals(event2, result.get(1));
@@ -91,7 +93,7 @@ class AdminControllerTest {
 
         when(eventService.getEventsOrderedByName()).thenReturn(Optional.of(events));
 
-        List<Event> result = adminController.getEventsOrderedByLastModificationDate();
+        List<Event> result = adminController.getEventsOrderedByName();
         assertEquals(3, result.size());
         assertEquals(event3, result.get(0));
         assertEquals(event2, result.get(1));

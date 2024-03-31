@@ -9,6 +9,7 @@ import server.services.interfaces.EventService;
 import server.services.interfaces.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -39,7 +40,7 @@ public class UserController {
     public User createUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
                            @RequestParam("email") String email, @RequestParam("currency") Currency preferredCurency) {
         User user = new User(firstName, lastName, email, preferredCurency);
-        return userService.save(user).getBody();
+        return userService.save(user);
     }
 
     @GetMapping("/{userId}")
@@ -47,7 +48,7 @@ public class UserController {
         if (!userService.existsById(userId)) {
             return (ResponseEntity<User>) ResponseEntity.status(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(userService.findById(userId).getBody());
+        return ResponseEntity.ok(userService.findById(userId).get());
     }
 
     @GetMapping("/{userId}/events")
@@ -61,7 +62,7 @@ public class UserController {
     }
     @GetMapping(path = {"/add"})
     public ResponseEntity<User> add(@RequestBody User user){
-        return ResponseEntity.ok(userService.save(user).getBody());
+        return ResponseEntity.ok(userService.save(user));
     }
 
     @GetMapping(path = {"/All"})
@@ -70,7 +71,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable  long id) {
+    public Optional<User> getById(@PathVariable  long id) {
         return userService.findById(id);
     }
 
@@ -80,10 +81,10 @@ public class UserController {
         if (id < 0 || !userService.existsById(id))
             return ResponseEntity.badRequest().build();
 
-        if (!userService.findById(id).hasBody())
+        if (userService.findById(id).isEmpty())
             return ResponseEntity.badRequest().build();
 
-        User user = userService.findById(id).getBody();
+        User user = userService.findById(id).get();
 
         List<Event> events = getEvents(id).getBody();
         if (events == null)

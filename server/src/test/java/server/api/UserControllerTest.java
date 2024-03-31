@@ -5,9 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.services.interfaces.EmailService;
@@ -26,18 +25,17 @@ import static org.mockito.Mockito.when;
 class UserControllerTest {
     @InjectMocks
     private UserController userController;
-    @MockBean
+    @Mock
     private UserService userService;
+    @Mock
     private EmailService emailService;
+    @Mock
     private EventService eventService;
     private User user1;
     private User user2;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        emailService = mock(EmailService.class);
-        userService = mock(UserService.class);
         userController = new UserController(emailService , userService, eventService);
         user1 = User.builder().id(1L).firstName("John").lastName("Smith").IBAN("").BIC("11111111")
                 .email("john.smith@gmail.com").preferredCurrency(USD).build();
