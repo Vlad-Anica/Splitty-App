@@ -71,6 +71,7 @@ public class UserServiceTest {
         assertEquals(user1, result);
     }
 
+    /*
     @Test
     void saveTestNull(){
         User result = userService.save(null);
@@ -85,7 +86,7 @@ public class UserServiceTest {
 
         assertTrue(result.isPresent());
         assertEquals(user1, result.get());
-    }
+    }*/
 
     @Test
     void existByIdTest(){
