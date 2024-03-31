@@ -66,6 +66,9 @@ public class SeeEventsAsAdminCtrl {
                 } else if (selection == 2) {
                     events = server.getEventsOrderedByLastModificationDate();
                 }
+                if (ascending) {
+                    events = events.reversed();
+                }
                 printToTable();
             }
         });

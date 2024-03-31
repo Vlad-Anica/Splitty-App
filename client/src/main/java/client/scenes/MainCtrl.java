@@ -18,9 +18,11 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
+import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -370,6 +372,22 @@ public class MainCtrl {
         primaryStage.setTitle("Create new Event");
         primaryStage.setScene(createEventScene);
         createEventCtrl.setup();
+        createEventScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                System.out.println("Trying to create a new event!");
+                createEventCtrl.createEvent(new ActionEvent());
+            }
+        });
+        createEventScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.BACK_SPACE) {
+                System.out.println("GOING HOME");
+                try {
+                    createEventCtrl.goHome(new ActionEvent());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     public void showAddParticipant() {
@@ -386,18 +404,50 @@ public class MainCtrl {
     public void showOpenDebts() {
         primaryStage.setScene(openDebtsScene);
         openDebtsCtrl.setup();
+        openDebtsScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.BACK_SPACE) {
+                System.out.println("Going Back!");
+                try {
+                    openDebtsCtrl.goBack(new ActionEvent());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     public void showSettings() {
         primaryStage.setTitle("Settings");
         primaryStage.setScene(settingsScene);
         settingsCtrl.setup();
+        settingsScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                System.out.println("Submitting!");
+                settingsCtrl.clickBtnSubmitAll();
+            }
+        });
+        settingsScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.BACK_SPACE) {
+                System.out.println("GOING HOME");
+                settingsCtrl.clickBtnHome();
+            }
+        });
     }
 
     public void showStartPage() {
         primaryStage.setTitle("Start Page");
         primaryStage.setScene(startPageScene);
         startPageCtrl.setup();
+        startPageScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                try {
+                    System.out.println("Trying to create a new user!");
+                    startPageCtrl.createUser(new ActionEvent());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     public void showAddExpense() {
@@ -423,11 +473,11 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
-    public void showStatsTest() {
-        String name = eventOverviewCtrl.getEventName();
+    public void showStatsTest(Long eventId) {
+        statisticsCtrl.setup(eventId);
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statisticsScene);
-        statisticsCtrl.PieChartExpenses.setTitle(name);
+
     }
     public void showManagementOverview(){
         primaryStage.setTitle("Management Overview");
