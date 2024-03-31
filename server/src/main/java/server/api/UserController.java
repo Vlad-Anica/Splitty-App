@@ -37,18 +37,25 @@ public class UserController {
      * @return the user
      */
     @PostMapping("/")
-    public User createUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
-                           @RequestParam("email") String email, @RequestParam("currency") Currency preferredCurency) {
-        User user = new User(firstName, lastName, email, preferredCurency);
-        return userService.save(user);
+    public ResponseEntity<User> createUser(@RequestParam("firstName") String firstName,
+                                           @RequestParam("lastName") String lastName,
+                                           @RequestParam("email") String email,
+                                           @RequestParam("currency") Currency preferredCurrency) {
+        User user = new User(firstName, lastName, email, preferredCurrency);
+        User savedUser = userService.save(user);
+        if(savedUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable("userId") Long userId) {
-        if (!userService.existsById(userId)) {
-            return (ResponseEntity<User>) ResponseEntity.status(HttpStatus.NOT_FOUND);
+        Optional<User> user = userService.findById(userId);
+        if (!user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(userService.findById(userId).get());
+        return ResponseEntity.ok(user.get());
     }
 
     @GetMapping("/{userId}/events")
@@ -62,7 +69,11 @@ public class UserController {
     }
     @GetMapping(path = {"/add"})
     public ResponseEntity<User> add(@RequestBody User user){
-        return ResponseEntity.ok(userService.save(user));
+        User savedUser = userService.save(user);
+        if(savedUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @GetMapping(path = {"/All"})

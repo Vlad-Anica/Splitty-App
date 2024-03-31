@@ -15,6 +15,7 @@ import server.services.interfaces.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static commons.Currency.EUR;
 import static commons.Currency.USD;
@@ -47,21 +48,22 @@ class UserControllerTest {
 
     @Test
     public void testAdd() {
-        when(userService.save(user1)).thenReturn(ResponseEntity.ok(user1));
-        when(userService.save(user2)).thenReturn(ResponseEntity.ok(user2));
+        when(userService.save(user1)).thenReturn(user1);
+        when(userService.save(user2)).thenReturn(user2);
+
         ResponseEntity<User> response = userController.add(user1);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode()); // Assuming add() returns 201 CREATED on success
+        assertEquals(user1, response.getBody());
 
         response = userController.add(user2);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode()); // Same assumption as above
+        assertEquals(user2, response.getBody());
 
-        when(userService.findById(1L)).thenReturn(ResponseEntity.ok(user1));
-        when(userService.findById(2L)).thenReturn(ResponseEntity.ok(user2));
         when(userService.findAll()).thenReturn(List.of(user1, user2));
         List<User> users = userController.getAll();
         assertEquals(2, users.size());
-        assertEquals(user1, userController.getById(1L).getBody());
-        assertEquals(user2, userController.getById(2L).getBody());
+        assertEquals(user1, users.get(0));
+        assertEquals(user2, users.get(1));
     }
 
     //Find out what connects user and event to create these tests
@@ -76,18 +78,18 @@ class UserControllerTest {
     @Test
     public void testGetById() {
 
-        when(userService.findById(1L)).thenReturn(
-                ResponseEntity.ok(user1));
-        userController.add(user1);
-        ResponseEntity<User> response = userController.getById(1L);
+        when(userService.findById(1L)).thenReturn(Optional.of(user1));
+
+        ResponseEntity<User> response = userController.getUserById(1L);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(1L, response.getBody().getId());
-        assertEquals("John", response.getBody().getFirstName());
-        assertEquals("Smith", response.getBody().getLastName());
-        assertEquals("", response.getBody().getIBAN());
-        assertEquals("11111111", response.getBody().getBIC());
-        assertEquals("john.smith@gmail.com", response.getBody().getEmail());
-        assertEquals(USD, response.getBody().getPreferredCurrency());
+        assertNotNull(response.getBody());
+        assertEquals(user1.getId(), response.getBody().getId());
+        assertEquals(user1.getFirstName(), response.getBody().getFirstName());
+        assertEquals(user1.getLastName(), response.getBody().getLastName());
+        assertEquals(user1.getIBAN(), response.getBody().getIBAN());
+        assertEquals(user1.getBIC(), response.getBody().getBIC());
+        assertEquals(user1.getEmail(), response.getBody().getEmail());
+        assertEquals(user1.getPreferredCurrency(), response.getBody().getPreferredCurrency());
     }
 
     @Test
