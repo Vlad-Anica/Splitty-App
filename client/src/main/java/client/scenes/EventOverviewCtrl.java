@@ -42,7 +42,7 @@ public class EventOverviewCtrl {
     @FXML
     private Button goHomeButton;
     @FXML
-    private ComboBox showAllParticipantsInEvent;
+    private ComboBox<String> showAllParticipantsInEvent;
     @FXML
     private AnchorPane choosePersonsPane;
     @FXML
@@ -104,6 +104,7 @@ public class EventOverviewCtrl {
 
     /**
      * Method that initialises the page and other useful fields.
+     *
      * @param eventID event ID that represents the Event being parsed here.
      */
     public void setup(Long eventID) {
@@ -146,6 +147,30 @@ public class EventOverviewCtrl {
         }
     }
 
+    /**
+     * Method that selects the Selected Person and also returns it.
+     * @return currently selected Person.
+     */
+    public Person getSelectedPerson() {
+        Person person = null;
+        String fullName = null;
+        if (showAllParticipantsInEvent.getValue() != null) {
+            fullName = showAllParticipantsInEvent.getValue();
+        } else {
+            this.selectedPerson = person;
+        return person;
+        }
+        for (Person p : this.event.getParticipants()) {
+            if (new String(p.getFirstName() + " " + p.getLastName()).equals(fullName)) {
+                this.selectedPerson = person;
+                return selectedPerson;
+            }
+        }
+        return person;
+    }
+
+
+
     public void setLanguageIndicator() {
         ImageView flagImage = new ImageView(mainCtrl.getPathToFlagImage());
         Text language = new Text(mainCtrl.getLanguageWithoutImagePath());
@@ -154,6 +179,7 @@ public class EventOverviewCtrl {
 
     /**
      * Method that determines whether a Person has actually been selected in order to facilitate filtering.
+     *
      * @return Boolean, true if a Person has been selected.
      */
     public boolean validFiltering() {
@@ -162,6 +188,7 @@ public class EventOverviewCtrl {
 
     /**
      * Method that shows all Expenses in selected Event, if applicable.
+     *
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesInEvent(ActionEvent event) {
@@ -171,6 +198,7 @@ public class EventOverviewCtrl {
 
     /**
      * Method that shows all Expenses made by the selected Person iof applicable.
+     *
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesFromPerson(ActionEvent event) {
@@ -180,11 +208,11 @@ public class EventOverviewCtrl {
             return;
         }
         List<Expense> selectedExpenses = new ArrayList<>();
-        if(this.expenses == null) {
+        if (this.expenses == null) {
             selectedExpenses = null;
         } else {
-            for(Expense expense: this.expenses) {
-                if(expense.getReceiver().equals(selectedPerson)) {
+            for (Expense expense : this.expenses) {
+                if (expense.getReceiver().equals(selectedPerson)) {
                     selectedExpenses.add(expense);
                 }
             }
@@ -194,6 +222,7 @@ public class EventOverviewCtrl {
 
     /**
      * Method that shows all Expenses associated with the selected Person if applicable.
+     *
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesWithPerson(ActionEvent event) {
@@ -203,11 +232,11 @@ public class EventOverviewCtrl {
             return;
         }
         List<Expense> selectedExpenses = new ArrayList<>();
-        if(this.expenses == null) {
+        if (this.expenses == null) {
             selectedExpenses = null;
         } else {
-            for(Expense expense: this.expenses) {
-                if(expense.getInvolved().contains(selectedPerson)) {
+            for (Expense expense : this.expenses) {
+                if (expense.getInvolved().contains(selectedPerson)) {
                     selectedExpenses.add(expense);
                 }
             }
@@ -263,19 +292,20 @@ public class EventOverviewCtrl {
 
     /**
      * Removes an Expense from its association to Event
+     *
      * @param expense Expense to remove
      * @return true, if successful
      */
     public boolean removeExpense(Expense expense) {
-        if(this.event == null) {
+        if (this.event == null) {
             System.out.println("Event is null!");
             return false;
         }
-        if(expense == null) {
+        if (expense == null) {
             System.out.println("Expense is null!");
             return false;
         }
-        if(!this.event.containsExpense(expense)) {
+        if (!this.event.containsExpense(expense)) {
             System.out.println("Event doesn't contain the Expense!");
             return false;
         }
@@ -286,16 +316,17 @@ public class EventOverviewCtrl {
 
     /**
      * Edits an Expense to a new one. Assumes Debts are automatically updated.
+     *
      * @param replacedExpense replaced Expense
-     * @param newExpense new Expense
+     * @param newExpense      new Expense
      * @return boolean, true if the operation was successful
      */
     public boolean editExpense(Expense replacedExpense, Expense newExpense) {
-        if(replacedExpense == null) {
+        if (replacedExpense == null) {
             System.out.println("Replaced Expense is null!");
             return false;
         }
-        if(!this.removeExpense(replacedExpense)) {
+        if (!this.removeExpense(replacedExpense)) {
             System.out.println("Could not delete the Expense!");
             return false;
         }
@@ -322,20 +353,21 @@ public class EventOverviewCtrl {
 
     /**
      * Method that sends an email containing the inviteCode of the Event to the email address.
+     *
      * @param event
      * @return boolean, true if the action was successfully executed.
      */
     public boolean sendInvite(ActionEvent event) {
-        if(this.event == null) {
+        if (this.event == null) {
             System.out.println("Event is null! Cannot send out an invite!");
             return false;
         }
-        if(this.event.getInviteCode() == null) {
+        if (this.event.getInviteCode() == null) {
             System.out.println("Invite Code could not be properly parsed!");
             return false;
         }
         String email = this.emailField.getText();
-        if(email == null) {
+        if (email == null) {
             System.out.println("No email has been detected!");
             return false;
         }
