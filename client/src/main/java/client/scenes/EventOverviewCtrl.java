@@ -128,6 +128,7 @@ public class EventOverviewCtrl {
             for (Person p : participants) {
                 CheckBox newBox = new CheckBox(
                         p.getFirstName() + " " + p.getLastName());
+                newBox.setOnAction(this::checkPersonBoxes);
                 choosePersonsPane.getChildren().add(newBox);
                 newBox.setLayoutY(y);
                 y += 25;
@@ -137,6 +138,9 @@ public class EventOverviewCtrl {
             ));
 
             checkBoxes = choosePersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
+            getSelectedPerson();
+            checkPersonBoxes(new ActionEvent());
+            this.goToExpenseEdit.setVisible(false);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -149,6 +153,7 @@ public class EventOverviewCtrl {
 
     /**
      * Method that selects the Selected Person and also returns it.
+     *
      * @return currently selected Person.
      */
     public Person getSelectedPerson() {
@@ -158,7 +163,7 @@ public class EventOverviewCtrl {
             fullName = showAllParticipantsInEvent.getValue();
         } else {
             this.selectedPerson = person;
-        return person;
+            return person;
         }
         for (Person p : this.event.getParticipants()) {
             if (new String(p.getFirstName() + " " + p.getLastName()).equals(fullName)) {
@@ -169,6 +174,24 @@ public class EventOverviewCtrl {
         return person;
     }
 
+    /**
+     * Method that consistently makes sure only one checkBox for Selected Person can be active at once.
+     *
+     * @param event
+     */
+    public void checkPersonBoxes(ActionEvent event) {
+        getSelectedPerson();
+        if (selectedPerson == null) {
+            return;
+        }
+        String name = selectedPerson.getFirstName() + " " + selectedPerson.getLastName();
+        for (CheckBox box : checkBoxes) {
+            box.setDisable(false);
+            if (!box.getText().equals(name)) {
+                box.setSelected(false);
+            }
+        }
+    }
 
 
     public void setLanguageIndicator() {
@@ -192,6 +215,13 @@ public class EventOverviewCtrl {
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesInEvent(ActionEvent event) {
+        if(this.goToExpenseEdit.isVisible()) {
+            resetFilteringPane();
+            this.goToExpenseEdit.setVisible(false);
+            return;
+        } else {
+            this.goToExpenseEdit.setVisible(true);
+        }
         resetFilteringPane();
         showAllExpensesFiltered(this.expenses);
     }
@@ -202,6 +232,13 @@ public class EventOverviewCtrl {
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesFromPerson(ActionEvent event) {
+        if(this.goToExpenseEdit.isVisible()) {
+            resetFilteringPane();
+            this.goToExpenseEdit.setVisible(false);
+            return;
+        } else {
+            this.goToExpenseEdit.setVisible(true);
+        }
         resetFilteringPane();
         if (validFiltering()) {
             System.out.println("Cannot filter properly, no Person is selected");
@@ -226,6 +263,13 @@ public class EventOverviewCtrl {
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesWithPerson(ActionEvent event) {
+        if(this.goToExpenseEdit.isVisible()) {
+            resetFilteringPane();
+            this.goToExpenseEdit.setVisible(false);
+            return;
+        } else {
+            this.goToExpenseEdit.setVisible(true);
+        }
         resetFilteringPane();
         if (validFiltering()) {
             System.out.println("Cannot filter properly, no Person is selected");
