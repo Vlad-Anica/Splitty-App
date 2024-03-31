@@ -65,8 +65,10 @@ class UserControllerTest {
         assertEquals(user1, userController.getById(1L).getBody());
         assertEquals(user2, userController.getById(2L).getBody());
     }
+
+    //Find out what connects user and event to create these tests
     //@Test
-    //blic void testGetEvent(){
+    //public void testGetEvent(){
     //}
 
     //@Test
