@@ -191,6 +191,7 @@ public class MainCtrl {
         return languages.get(languageIndex).split(";")[1];
     }
 
+
     public void getLastKnownInfo() {
         File file = new File("userConfig.txt");
         if (!file.exists()) {

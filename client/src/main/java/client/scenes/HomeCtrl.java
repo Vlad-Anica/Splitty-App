@@ -197,7 +197,7 @@ public class HomeCtrl {
      */
     public void adminLogIn(ActionEvent event) {
         if (adminPasswordField.getText().isEmpty() || !server.checkAdminPassword(adminPasswordField.getText())) {
-            adminPasswordMessage.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("IncorrectPassword"));
+            adminPasswordMessage.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("IncorrectPassword"));
             adminPasswordMessage.setTextFill(Color.rgb(210, 39, 30));
         } else {
             mainCtrl.showManagementOverview();
