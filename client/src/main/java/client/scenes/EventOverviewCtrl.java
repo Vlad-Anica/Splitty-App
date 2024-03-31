@@ -34,6 +34,10 @@ public class EventOverviewCtrl {
     @FXML
     private Label eventNameLabel;
     @FXML
+    private Label inviteCode;
+    @FXML
+    private TextField emailField;
+    @FXML
     private Button inviteButton;
     @FXML
     private Button goHomeButton;
@@ -82,6 +86,7 @@ public class EventOverviewCtrl {
     private void resetTextFields() {
         showExpensesFromPersonButton.setText("From <<PERSON>>");
         showExpensesWithPersonButton.setText("Including <<PERSON>>");
+
     }
 
     /**
@@ -96,7 +101,6 @@ public class EventOverviewCtrl {
     }
 
     public void setup(Long eventID) {
-
 
         try {
             event = server.getEvent(eventID);
