@@ -20,7 +20,6 @@ import java.util.Optional;
 import static commons.Currency.EUR;
 import static commons.Currency.USD;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
