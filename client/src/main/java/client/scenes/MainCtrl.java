@@ -286,6 +286,16 @@ public class MainCtrl {
                 createEventCtrl.createEvent(new ActionEvent());
             }
         });
+        createEventScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.BACK_SPACE) {
+                System.out.println("GOING HOME");
+                try {
+                    createEventCtrl.goHome(new ActionEvent());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     public void showAddParticipant() {
@@ -302,12 +312,34 @@ public class MainCtrl {
     public void showOpenDebts() {
         primaryStage.setScene(openDebtsScene);
         openDebtsCtrl.setup();
+        openDebtsScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.BACK_SPACE) {
+                System.out.println("Going Back!");
+                try {
+                    openDebtsCtrl.goBack(new ActionEvent());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     public void showSettings() {
         primaryStage.setTitle("Settings");
         primaryStage.setScene(settingsScene);
         settingsCtrl.setup();
+        settingsScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                System.out.println("Submitting!");
+                settingsCtrl.clickBtnSubmitAll();
+            }
+        });
+        settingsScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.BACK_SPACE) {
+                System.out.println("GOING HOME");
+                settingsCtrl.clickBtnHome();
+            }
+        });
     }
 
     public void showStartPage() {
