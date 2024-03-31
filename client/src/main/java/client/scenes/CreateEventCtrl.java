@@ -8,6 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -66,6 +68,7 @@ public class CreateEventCtrl {
     private ServerUtils server;
 
     private List<Tag> tags;
+    private final Clipboard clipboard = Clipboard.getSystemClipboard();
 
     @Inject
     public CreateEventCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -100,7 +103,11 @@ public class CreateEventCtrl {
 
         server.createEvent(newEvent);
         statusLabel.setTextFill(Color.BLACK);
-        statusLabel.setText("Invite code: " + newEvent.getInviteCode());
+        ClipboardContent inviteCodeClipboard = new ClipboardContent();
+        inviteCodeClipboard.putString(newEvent.getInviteCode());
+        clipboard.setContent(inviteCodeClipboard);
+        statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
+
     }
 
     @FXML
