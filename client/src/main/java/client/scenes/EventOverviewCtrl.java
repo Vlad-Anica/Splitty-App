@@ -65,6 +65,8 @@ public class EventOverviewCtrl {
     private List<CheckBox> checkBoxes;
     @FXML
     TextFlow languageIndicator;
+    @FXML
+    private Button goToExpenseEdit;
     private MainCtrl mainCtrl;
     private ServerUtils server;
 
@@ -86,7 +88,7 @@ public class EventOverviewCtrl {
     private void resetTextFields() {
         showExpensesFromPersonButton.setText("From <<PERSON>>");
         showExpensesWithPersonButton.setText("Including <<PERSON>>");
-
+        overviewLabel.setText("<<EVENT>>");
     }
 
     /**
@@ -100,6 +102,10 @@ public class EventOverviewCtrl {
         this.filteringExpensesPane.setPrefWidth(200);
     }
 
+    /**
+     * Method that initialises the page and other useful fields.
+     * @param eventID event ID that represents the Event being parsed here.
+     */
     public void setup(Long eventID) {
 
         try {
@@ -113,6 +119,7 @@ public class EventOverviewCtrl {
             System.out.println("Cannot find associated Event within the repository!");
             return;
         }
+        this.overviewLabel.setText(event.getName());
         try {
             participants = new ArrayList<>();
             participants.addAll(event.getParticipants());
@@ -294,7 +301,7 @@ public class EventOverviewCtrl {
         }
         this.event.addExpense(newExpense);
         server.updateEvent(this.event.getId(), this.event);
-        return false;
+        return true;
     }
 
     public void goHome(ActionEvent event) throws IOException {
@@ -311,6 +318,29 @@ public class EventOverviewCtrl {
 
     public String getEventName() {
         return overviewLabel.getText();
+    }
+
+    /**
+     * Method that sends an email containing the inviteCode of the Event to the email address.
+     * @param event
+     * @return boolean, true if the action was successfully executed.
+     */
+    public boolean sendInvite(ActionEvent event) {
+        if(this.event == null) {
+            System.out.println("Event is null! Cannot send out an invite!");
+            return false;
+        }
+        if(this.event.getInviteCode() == null) {
+            System.out.println("Invite Code could not be properly parsed!");
+            return false;
+        }
+        String email = this.emailField.getText();
+        if(email == null) {
+            System.out.println("No email has been detected!");
+            return false;
+        }
+        // <INSERT METHOD> someCreativeName(email, inviteCode)
+        return true;
     }
 
 }

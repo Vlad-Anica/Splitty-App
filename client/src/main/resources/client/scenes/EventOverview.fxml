@@ -37,7 +37,7 @@
                 <Font size="24.0" />
             </font>
         </Label>
-      <Button fx:id="goToStatsButton" layoutX="14.0" layoutY="322.0" mnemonicParsing="false" onAction="#goToStats" prefHeight="52.0" prefWidth="52.0" text="GoStats" />
+      <Button fx:id="goToStatsButton" layoutX="14.0" layoutY="322.0" mnemonicParsing="false" onAction="#goToStats" prefHeight="52.0" prefWidth="57.0" text="Stats" />
       <ComboBox fx:id="showAllParticipantsInEvent" centerShape="false" layoutX="14.0" layoutY="107.0" prefWidth="150.0" promptText="Participants" />
       <AnchorPane fx:id="choosePersonsPane" layoutX="14.0" layoutY="120.0" prefHeight="200.0" prefWidth="149.0" />
       <AnchorPane fx:id="filteringExpensesPane" layoutX="294.0" layoutY="133.0" prefHeight="200.0" prefWidth="295.0" />
@@ -52,5 +52,6 @@
             <Insets top="2.0" />
          </opaqueInsets>
       </Label>
+      <Button fx:id="goToExpenseEdit" layoutX="294.0" layoutY="333.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="289.0" text="Edit the Expense!" />
     </children>
 </Pane>
