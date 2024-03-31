@@ -3,6 +3,7 @@ package server.services.implementations;
 import commons.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 import server.database.UserRepository;
@@ -47,10 +48,10 @@ public class UserServiceImpl implements UserService {
         if (id < 0 || !userRep.existsById(id))
             return ResponseEntity.badRequest().build();
 
-        if (findById(id).isEmpty())
+        if (!findById(id).hasBody())
             return ResponseEntity.badRequest().build();
 
-        User user = findById(id).get();
+        User user = findById(id).getBody();
 
         List<Event> events = getEvents(id).getBody();
         if (events == null)
@@ -74,8 +75,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
-        return userRep.save(user);
+    public ResponseEntity<User> save(User user) {
+        if(user.getFirstName() == null || user.getLastName() == null || user.getBIC() == null || user.getParticipants() == null
+                || user.getEmail() == null || user.getPreferredCurrency() == null || user.getIBAN() == null)
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(userRep.save(user));
     }
 
     @Override
@@ -84,7 +88,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(long id) {
-        return userRep.findById(id);
+    public ResponseEntity<User> findById(long id) {
+        if (id < 0 || !userRep.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<User> user = userRep.findById(id);
+        if (user.isPresent())
+            return ResponseEntity.ok(user.get());
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

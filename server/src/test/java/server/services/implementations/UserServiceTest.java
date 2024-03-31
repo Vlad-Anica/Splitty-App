@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import server.database.EventRepository;
@@ -70,16 +71,16 @@ public class UserServiceTest {
 
     @Test
     void saveTest(){
-        when(repo.save(user1)).thenReturn(user1);
-        User result = userService.save(user1);
+        ResponseEntity<User> result = userService.save(user1);
+        assertEquals(user1, result.getBody());
         assertEquals(user1, result);
     }
 
     @Test
     void saveTestNull(){
         User p = null;
-        when(repo.save(p)).thenReturn(null);
-        User result = userService.save(null);
+        ResponseEntity<User> result = userService.save(null);
+        assertNull(result.getBody());
         assertNull(result);
     }
 
@@ -95,15 +96,15 @@ public class UserServiceTest {
         when(repo.findById(2L)).thenReturn(optUser2);
         when(repo.findById(3L)).thenReturn(optUser3);
 
-        Optional<User> result1 = userService.findById(1L);
-        Optional<User> result2 = userService.findById(2L);
-        Optional<User> result3 = userService.findById(3L);
+        ResponseEntity<User> result1 = userService.findById(1L);
+        ResponseEntity<User> result2 = userService.findById(2L);
+        ResponseEntity<User> result3 = userService.findById(3L);
 
-        assertEquals(optUser1, result1);
-        assertEquals(optUser2, result2);
-        assertNotEquals(optUser1, result2);
-        assertNotEquals(optUser2, result1);
-        assertEquals(Optional.empty(), result3);
+        assertEquals(optUser1, result1.getBody());
+        assertEquals(optUser2, result2.getBody());
+        assertNotEquals(optUser1, result2.getBody());
+        assertNotEquals(optUser2, result1.getBody());
+        assertEquals(Optional.empty(), result3.getBody());
     }
 
     @Test

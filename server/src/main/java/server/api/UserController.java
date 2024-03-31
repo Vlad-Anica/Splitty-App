@@ -1,9 +1,6 @@
 package server.api;
 
-import commons.Currency;
-import commons.Event;
-import commons.Expense;
-import commons.User;
+import commons.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +39,7 @@ public class UserController {
     public User createUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
                            @RequestParam("email") String email, @RequestParam("currency") Currency preferredCurency) {
         User user = new User(firstName, lastName, email, preferredCurency);
-        return userService.save(user);
+        return userService.save(user).getBody();
     }
 
     @GetMapping("/{userId}")
@@ -50,7 +47,7 @@ public class UserController {
         if (!userService.existsById(userId)) {
             return (ResponseEntity<User>) ResponseEntity.status(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(userService.findById(userId).get());
+        return ResponseEntity.ok(userService.findById(userId).getBody());
     }
 
     @GetMapping("/{userId}/events")
@@ -62,6 +59,20 @@ public class UserController {
     public ResponseEntity<List<Expense>> getExpenses(@PathVariable("id") long id) {
         return userService.getExpenses(id);
     }
+    @GetMapping(path = {"/add"})
+    public ResponseEntity<User> add(@RequestBody User user){
+        return ResponseEntity.ok(userService.save(user).getBody());
+    }
+
+    @GetMapping(path = {"/All"})
+    public List<User> getAll() {
+        return userService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getById(@PathVariable  long id) {
+        return userService.findById(id);
+    }
 
     @GetMapping("/{id}/totalExpenses")
     public ResponseEntity<Double> getTotalExpenses(@PathVariable("id") long id) {
@@ -69,10 +80,10 @@ public class UserController {
         if (id < 0 || !userService.existsById(id))
             return ResponseEntity.badRequest().build();
 
-        if (userService.findById(id).isEmpty())
+        if (!userService.findById(id).hasBody())
             return ResponseEntity.badRequest().build();
 
-        User user = userService.findById(id).get();
+        User user = userService.findById(id).getBody();
 
         List<Event> events = getEvents(id).getBody();
         if (events == null)
