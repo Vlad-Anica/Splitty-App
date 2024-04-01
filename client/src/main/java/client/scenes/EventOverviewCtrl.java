@@ -34,7 +34,7 @@ public class EventOverviewCtrl {
     @FXML
     private Label eventNameLabel;
     @FXML
-    private Label inviteCode;
+    private Label inviteCodeLabel;
     @FXML
     private TextField emailField;
     @FXML
@@ -46,7 +46,7 @@ public class EventOverviewCtrl {
     @FXML
     private AnchorPane choosePersonsPane;
     @FXML
-    private Button goToAddExpense;
+    private Button goToAddExpenseButton;
     @FXML
     private Label expensesLabel;
     @FXML
@@ -67,13 +67,15 @@ public class EventOverviewCtrl {
     TextFlow languageIndicator;
     @FXML
     private Button goToExpenseEdit;
+    @FXML
+    private Button deleteExpenseButton;
     private MainCtrl mainCtrl;
     private ServerUtils server;
-
     private Event event;
     private List<Person> participants;
     private Person selectedPerson;
     private List<Expense> expenses;
+    private Expense selectedExpense;
 
 
     @Inject
@@ -89,6 +91,7 @@ public class EventOverviewCtrl {
         showExpensesFromPersonButton.setText("From <<PERSON>>");
         showExpensesWithPersonButton.setText("Including <<PERSON>>");
         overviewLabel.setText("<<EVENT>>");
+        inviteCodeLabel.setText("<<CODE>>");
     }
 
     /**
@@ -141,6 +144,7 @@ public class EventOverviewCtrl {
             getSelectedPerson();
             checkPersonBoxes(new ActionEvent());
             this.goToExpenseEdit.setVisible(false);
+            this.deleteExpenseButton.setVisible(false);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -171,6 +175,7 @@ public class EventOverviewCtrl {
                 return selectedPerson;
             }
         }
+        this.renameFilters();
         return person;
     }
 
@@ -210,18 +215,28 @@ public class EventOverviewCtrl {
     }
 
     /**
+     * Method that sets or resets visibility to buttons related to filtering and selecting Expenses.
+     */
+    public void filteringVisibilityCheck() {
+        if(this.goToExpenseEdit.isVisible()) {
+            resetFilteringPane();
+            this.goToExpenseEdit.setVisible(false);
+            this.deleteExpenseButton.setVisible(false);
+            return;
+        } else {
+            this.goToExpenseEdit.setVisible(true);
+            this.deleteExpenseButton.setVisible(true;
+        }
+    }
+
+
+    /**
      * Method that shows all Expenses in selected Event, if applicable.
      *
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesInEvent(ActionEvent event) {
-        if(this.goToExpenseEdit.isVisible()) {
-            resetFilteringPane();
-            this.goToExpenseEdit.setVisible(false);
-            return;
-        } else {
-            this.goToExpenseEdit.setVisible(true);
-        }
+        filteringVisibilityCheck();
         resetFilteringPane();
         showAllExpensesFiltered(this.expenses);
     }
@@ -232,13 +247,7 @@ public class EventOverviewCtrl {
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesFromPerson(ActionEvent event) {
-        if(this.goToExpenseEdit.isVisible()) {
-            resetFilteringPane();
-            this.goToExpenseEdit.setVisible(false);
-            return;
-        } else {
-            this.goToExpenseEdit.setVisible(true);
-        }
+        filteringVisibilityCheck();
         resetFilteringPane();
         if (validFiltering()) {
             System.out.println("Cannot filter properly, no Person is selected");
@@ -263,13 +272,7 @@ public class EventOverviewCtrl {
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesWithPerson(ActionEvent event) {
-        if(this.goToExpenseEdit.isVisible()) {
-            resetFilteringPane();
-            this.goToExpenseEdit.setVisible(false);
-            return;
-        } else {
-            this.goToExpenseEdit.setVisible(true);
-        }
+        filteringVisibilityCheck();
         resetFilteringPane();
         if (validFiltering()) {
             System.out.println("Cannot filter properly, no Person is selected");
@@ -288,18 +291,23 @@ public class EventOverviewCtrl {
         showAllExpensesFiltered(selectedExpenses);
     }
 
-    public void showAllExpensesFiltered(List<Expense> selectedExpenses) {
+    /**
+     * Method that takes a List of Expenses and parses it to the UI to display it as a list of Expenses.
+     * @param selectedExpenses
+     * @return boolean, true if the List was parsed successfully
+     */
+    public boolean showAllExpensesFiltered(List<Expense> selectedExpenses) {
         try {
             if (selectedExpenses == null) {
                 System.out.println("Cannot filter properly, Expenses are null.");
-                return;
+                return false;
             }
             if (selectedExpenses.isEmpty()) {
                 System.out.println("The Event has no Expenses associated with it.");
                 CheckBox newBox = new CheckBox("There's nothing to display, silly!");
                 filteringExpensesPane.getChildren().add(newBox);
                 newBox.setLayoutY(5);
-                return;
+                return true;
             }
             int y = 5;
             for (Expense e : selectedExpenses) {
@@ -309,18 +317,21 @@ public class EventOverviewCtrl {
                 newBox.setLayoutY(y);
                 y += 25;
             }
-
             checkBoxes = filteringExpensesPane.getChildren().stream().map(t -> (CheckBox) t).toList();
+            return true;
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-            return;
+            return false;
         }
     }
 
+    /**
+     * Upon selecting a Person, this method should be called in order to rename the filters.
+     */
     public void renameFilters() {
         if (selectedPerson == null) {
             System.out.println("Selected Person is null!!! Filter refresh aborted.");
@@ -385,6 +396,14 @@ public class EventOverviewCtrl {
 
     public void goToAddExpense(ActionEvent event) throws IOException {
         mainCtrl.showAddExpense();
+    }
+
+    public void removeExpense(ActionEvent event) throws IOException {
+        if(selectedExpense == null) {
+            System.out.println("Cannot remove Expense as none was selected.");
+        } else {
+            this.removeExpense(selectedExpense);
+        }
     }
 
     public void goToStats(ActionEvent event) throws IOException {
