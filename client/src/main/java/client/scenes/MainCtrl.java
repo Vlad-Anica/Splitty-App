@@ -30,6 +30,7 @@ import javafx.util.Pair;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class MainCtrl {
@@ -84,6 +85,8 @@ public class MainCtrl {
     private CreateEventCtrl createEventCtrl;
     private Scene createEventScene;
     private Scene seeEventsAsAdminScene;
+    private Scene selectServerScene;
+    private SelectServerCtrl selectServerCtrl;
 
 
     private ServerUtils server;
@@ -93,6 +96,8 @@ public class MainCtrl {
     private long userId;
     private String language;
     private boolean restart = false;
+    private String currentIPAddress;
+    private File userConfig;
 
     private final Image logo = new Image("/logos/splittyLogo256.png");
 
@@ -102,8 +107,8 @@ public class MainCtrl {
                            Pair<EventOverviewCtrl, Parent> eventOverview, Pair<StatisticsCtrl, Parent> statistics,
                            Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<AddLanguageCtrl, Parent> addLanguage,
                            Pair<StartPageCtrl, Parent> startPage, Pair<SeeEventsAsAdminCtrl, Parent> seeEventsAsAdmin,
-                           Pair<CreateEventCtrl, Parent> createEvent, ServerUtils server) {
-        getLastKnownInfo();
+                           Pair<CreateEventCtrl, Parent> createEvent, Pair<SelectServerCtrl, Parent> selectServer,
+                           ServerUtils server) {
         File languageFile = new File("client/src/main/resources/languages/languages.txt");
         if (languageFile.exists()) {
             Pair<Integer, List<String>> pair = readFromFile("client/src/main/resources/languages/languages.txt");
@@ -126,9 +131,6 @@ public class MainCtrl {
             save(languageData);
         }
         System.out.println("LAnguages: "+languages);
-
-//        this.languages = languages;
-//        this.languageIndex = 0;
 
         this.language = languages.get(languageIndex);
         this.primaryStage = primaryStage;
@@ -169,21 +171,27 @@ public class MainCtrl {
         this.createEventCtrl = createEvent.getKey();
         this.createEventScene = new Scene(createEvent.getValue());
 
+        this.selectServerCtrl = selectServer.getKey();
+        this.selectServerScene = new Scene(selectServer.getValue());
+
         this.server = server;
 
-        File file = new File("userConfig.txt");
-        if(!file.exists()){
-            showStartPage();
-        } else {
-            getLastKnownInfo();
-            showHome();
-        }
+        showSelectServer();
+
         primaryStage.show();
         primaryStage.getIcons().add(logo);
         Font RowdiesTest = Font.loadFont(Main.class.getResourceAsStream("/client/fonts/Rowdies-Regular.ttf"), 16);
         System.out.println(RowdiesTest.getFamily());
         System.out.println(RowdiesTest.getName());
 
+    }
+
+    public ResourceBundle getLanguageResource() {
+        int languageIndex = getLanguageIndex();
+        if (languageIndex < 0)
+            languageIndex = 0;
+        return ResourceBundle.getBundle("languages.language_" +
+                getLanguageWithoutImagePath());
     }
 
     public String getLanguageWithoutImagePath() {
@@ -194,15 +202,15 @@ public class MainCtrl {
     }
 
 
+
     public void getLastKnownInfo() {
-        File file = new File("userConfig.txt");
-        if (!file.exists()) {
+        if (!userConfig.exists()) {
             languageIndex = 0;
             userId = -1;
         } else {
             Scanner fileScanner = null;
             try {
-                fileScanner = new Scanner(file);
+                fileScanner = new Scanner(userConfig);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();;
             }
@@ -231,11 +239,11 @@ public class MainCtrl {
     }
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
-        File file = new File("userConfig.txt");
+
 
         PrintWriter pw = null;
         try {
-            pw = new PrintWriter(file);
+            pw = new PrintWriter(userConfig);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -243,6 +251,84 @@ public class MainCtrl {
         pw.println(this.userId);
         pw.close();
     }
+
+    /**
+     * returns or creates a new file given a file path
+     * @param path the file path provided
+     * @return the file which is returned or created
+     */
+    public File getOrCreateFile(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file;
+    }
+    /**
+     * get from the IPAddresses file the ip addresses used before
+     * @return list of ip addresses used
+     */
+    public List<String> getUsedIPAddresses() {
+        File file = getOrCreateFile("client/src/main/resources/userInfo/IPAddresses.txt");
+        List<String> IPAddresses = new ArrayList<>();
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        while (scanner.hasNextLine()) {
+            IPAddresses.add(scanner.nextLine());
+        }
+        return IPAddresses;
+    }
+
+    /**
+     * check if a provided IP address has been used before
+     * @param IPAddress the provided IP address
+     * @return true if the user has been connected to it before
+     */
+    public boolean hasBeenConnected(String IPAddress) {
+        return getUsedIPAddresses().contains(IPAddress);
+    }
+
+    /**
+     * adds a new IP address to the list of IP addresses used before
+     * @param IPAddress the IP address provided
+     */
+    public void addNewIPAddress(String IPAddress) {
+        List<String> IPAddresses = getUsedIPAddresses();
+        IPAddresses.add(IPAddress);
+        File file = getOrCreateFile("client/src/main/resources/userInfo/IPAddresses.txt");
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (String address: IPAddresses) {
+            assert writer != null;
+            writer.println(address);
+        }
+        writer.close();
+        setIPAddress(IPAddress);
+    }
+
+    /**
+     * returns the position of the IP address in the
+     * @param IPAddress
+     * @return
+     */
+    public int getIPAddressPosition(String IPAddress) {
+        return getUsedIPAddresses().indexOf(IPAddress);
+    }
+
     public void setLanguage(String language){
         this.language = language;
     }
@@ -262,6 +348,12 @@ public class MainCtrl {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void showSelectServer() {
+        selectServerCtrl.setup();
+        primaryStage.setTitle("Select Server");
+        primaryStage.setScene(selectServerScene);
     }
 
     public void showSeeEventsAsAdmin() {
@@ -345,7 +437,7 @@ public class MainCtrl {
     public void showStartPage() {
         primaryStage.setTitle("Start Page");
         primaryStage.setScene(startPageScene);
-        startPageCtrl.initializePage();
+        startPageCtrl.setup();
         startPageScene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 try {
@@ -408,5 +500,12 @@ public class MainCtrl {
 
     public Long getUserId() {
         return userId;
+    }
+    public File getUserConfig() {
+        return userConfig;
+    }
+    public void setIPAddress(String IPAddress) {
+        this.currentIPAddress = IPAddress;
+        this.userConfig = new File("userConfig" + getIPAddressPosition(IPAddress));
     }
 }

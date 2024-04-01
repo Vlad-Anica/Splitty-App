@@ -20,6 +20,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -36,7 +38,26 @@ import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
 
-	private static final String SERVER = "http://localhost:8080/";
+	private static String SERVER = "http://localhost:8080/";
+
+	public void setSERVER(String server) {
+		SERVER = server;
+	}
+	public String getSERVER() {
+		return SERVER;
+	}
+	public boolean isOnline(String SERVER_IP_ADDRESS, Integer PORT) {
+		boolean b = true;
+		try{
+			InetSocketAddress sa = new InetSocketAddress(SERVER_IP_ADDRESS, PORT);
+			Socket ss = new Socket();
+			ss.connect(sa, 10);
+			ss.close();
+		}catch(Exception e) {
+			b = false;
+		}
+		return b;
+	}
 
 	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
 		var url = new URI("http://localhost:8080/api/quotes").toURL();

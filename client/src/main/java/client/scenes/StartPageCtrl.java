@@ -68,7 +68,7 @@ public class StartPageCtrl {
             User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
 
             u = server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
-            File file = new File("userConfig.txt");
+            File file = mainCtrl.getUserConfig();
             if(!file.exists()){
                 file.createNewFile();
             }
@@ -104,7 +104,7 @@ public class StartPageCtrl {
         return languageComboBox.getValue();
     }
 
-    public void initializePage()  {
+    public void setup()  {
         currencyComboBox.setItems(FXCollections.observableList(
                 List.of(Currency.EUR, Currency.USD,
                         Currency.CHF, Currency.GBP)));
