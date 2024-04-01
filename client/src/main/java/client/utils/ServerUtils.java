@@ -426,7 +426,7 @@ public class ServerUtils {
 			Event event = getEvent(eventId);
 			event.getExpenses().add(expense);
 			ObjectMapper objectMapper = new ObjectMapper();
-			String jsonEvent = objectMapper.writeValueAsString(event);
+			String jsonEvent = objectMapper.writeValueAsString(expense);
 			System.out.println("Received Event object: " + jsonEvent);
 			return ClientBuilder.newClient(new ClientConfig())
 					.target(SERVER).path("api/events/" + eventId + "/newExpense")

@@ -34,7 +34,7 @@ public class Expense {
     private java.util.Date updatedAt;
 
     /**
-     * Upon initial creation of the Object, the Date will be stored.
+     * Upon initial x of the Object, the Date will be stored.
      */
     @PrePersist
     public void onCreate() {
@@ -100,7 +100,7 @@ public class Expense {
      * Method that returns creation time of the object.
      * @return Util Date
      */
-    public java.util.Date getCreationDate() {
+    public java.util.Date getCreatedAt() {
         return this.createdAt;
     }
 
@@ -108,7 +108,7 @@ public class Expense {
      * Method that returns update time of the object.
      * @return Util Date
      */
-    public java.util.Date getLastUpdate() {
+    public java.util.Date getUpdatedAt() {
         return this.updatedAt;
     }
 
