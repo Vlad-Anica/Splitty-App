@@ -307,10 +307,10 @@ public class MainCtrl {
         startPageCtrl.initializePage();
     }
 
-    public void showAddExpense() {
+    public void showAddExpense(long eventID) {
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpenseScene);
-        addExpenseCtrl.initializePage();
+        addExpenseCtrl.initializePage(eventID);
     }
 
     public void showEventOverview() {

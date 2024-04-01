@@ -424,18 +424,17 @@ public class ServerUtils {
 
 		try {
 			Event event = getEvent(eventId);
+			event.getExpenses().add(expense);
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonEvent = objectMapper.writeValueAsString(event);
 			System.out.println("Received Event object: " + jsonEvent);
-			event.getExpenses().add(expense);
-
 			return ClientBuilder.newClient(new ClientConfig())
 					.target(SERVER).path("api/events/" + eventId + "/newExpense")
 					.request(APPLICATION_JSON)
 					.accept(APPLICATION_JSON)
 					.put(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
 		} catch (JsonProcessingException e) {
-			System.out.println(e.getMessage());
+			System.out.println(e.getMessage() + " " + e.getCause());
 			return null;
 		}
 	}

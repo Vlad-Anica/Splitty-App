@@ -259,8 +259,8 @@ public class EventOverviewCtrl {
         mainCtrl.showHome();
     }
 
-    public void goToAddExpense(ActionEvent event) throws IOException {
-        mainCtrl.showAddExpense();
+    public void goToAddExpense() throws IOException {
+        mainCtrl.showAddExpense(event.getId());
     }
 
     public void goToStats(ActionEvent event) throws IOException {

@@ -99,18 +99,14 @@ public class AddExpenseCtrl {
                 debts.add(debt);
 
             }
+            System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
             Expense e = new Expense(description, amount, new Date(), getPayerData(), debts,
                     getCurrencyData(), getTypeData());
 
             for (Debt debt : debts)
                 debt.setExpense(e);
-
-            expenses.add(e);
-            server.createExpense(e);
             server.addExpenseToEvent(this.event.getId(), e);
-            System.out.println(this.event.getExpenses().size());
             System.out.println("Created expense");
-            System.out.println("Expenses size" + expenses.size());
         } catch (RuntimeException e) {
             e.printStackTrace();
         } catch (JsonProcessingException e) {
@@ -220,10 +216,10 @@ public class AddExpenseCtrl {
 
         return k;
     }
-    public void initializePage()  {
+    public void initializePage(long eventID)  {
 
         try {
-            this.event = eventOverviewCtrl.getEvent();
+            event = server.getEvent(eventID);
 
             participants = new ArrayList<>();
             participants.addAll(server.getPersons());
