@@ -49,11 +49,9 @@ public class Event {
     public static final Tag travelTag = new Tag("red", "Travel");
     private Date date;
 
-    @OneToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.PERSIST, mappedBy = "event")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "event")
     private List<Person> participants;
-    @OneToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.PERSIST)
+    @OneToMany
     private List<Expense> expenses;
     private String inviteCode;
 

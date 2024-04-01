@@ -54,7 +54,7 @@ public class Expense {
     private Date date;
     @ManyToOne(cascade = CascadeType.MERGE)
     private Person receiver;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Debt> debtList;
     private Currency currency;
     @ManyToOne(cascade = CascadeType.PERSIST)

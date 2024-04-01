@@ -51,7 +51,7 @@ public class Debt {
     @JoinColumn(name = "RECEIVER_ID")
     //@JsonBackReference(value = "receiver-debt")
     private Person receiver;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "EXPENSE_ID")
     private Expense expense;
     @Column(name = "amount")

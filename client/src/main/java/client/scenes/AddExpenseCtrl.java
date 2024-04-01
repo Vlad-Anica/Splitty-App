@@ -95,7 +95,7 @@ public class AddExpenseCtrl {
 
             for (Person p : getAllGivers()) {
                 Debt debt = new Debt(getPayerData(), p, null, amountPerPerson);
-                server.addDebt(debt);
+               // server.addDebt(debt);
                 debts.add(debt);
 
             }
