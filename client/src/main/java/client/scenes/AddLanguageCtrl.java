@@ -84,17 +84,19 @@ public class AddLanguageCtrl{
     public void setUp(){
         setTextLanguage();
         this.phrases = getPhrases();
-        languageColumn.setCellValueFactory(x -> new SimpleStringProperty(x.getValue()));
-        table.setItems(FXCollections.observableList(phrases.keySet().stream().toList()));
-        table.setEditable(true);
+        languageColumn.setCellValueFactory(x -> new SimpleStringProperty(x.getValue().split(";")[0]));
+        yourLanguageColumn.setCellValueFactory(x -> new SimpleStringProperty(x.getValue().split(";")[1]));
         yourLanguageColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         yourLanguageColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<String, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<String, String> event) {
-                System.out.println(event.getRowValue() + " = " + event.getNewValue());
-                newLanguage.put(phrases.get(event.getRowValue()), event.getNewValue());
+                System.out.println(event.getRowValue().split(";")[0] + " = " + event.getNewValue());
+                newLanguage.put(phrases.get(event.getRowValue().split(";")[0]), event.getNewValue());
+                table.setItems(FXCollections.observableList(phrases.keySet().stream().map(x -> x+";"+(newLanguage.get(x)!=null ? newLanguage.get(x) : " ")).toList()));
             }
         });
+        table.setItems(FXCollections.observableList(phrases.keySet().stream().map(x -> x+";"+(newLanguage.get(x)!=null ? newLanguage.get(x) : " ")).toList()));
+        table.setEditable(true);
     }
     public void setTextLanguage() {
         String language = mainCtrl.getLanguage();
@@ -102,13 +104,12 @@ public class AddLanguageCtrl{
         languageName.setText(resourceBundle.getString("LanguageName"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         addButton.setText(resourceBundle.getString("Add"));
-        languageColumn.setText(mainCtrl.getLanguage());
+        languageColumn.setText(mainCtrl.getLanguage().split(";")[0]);
         yourLanguageColumn.setText(resourceBundle.getString("YourLanguage"));
     }
     public HashMap<String, String> getPhrases() {
         HashMap<String, String> result = new HashMap<>();
         try {
-            String language = mainCtrl.getLanguage();
             File file = new File("client/src/main/resources/languages/language_" + mainCtrl.getLanguageWithoutImagePath() + ".properties");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {

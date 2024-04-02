@@ -44,25 +44,23 @@ public class UserServiceImpl implements UserService {
     }
 
     public ResponseEntity<List<Expense>> getExpenses(long id) {
-        if (id < 0 || !userRep.existsById(id))
+        Optional<User> userOptional = findById(id);
+        if (userOptional.isEmpty()) {
             return ResponseEntity.badRequest().build();
+        }
 
-        if (findById(id).isEmpty())
-            return ResponseEntity.badRequest().build();
-
-        User user = findById(id).get();
-
+        User user = userOptional.get();
         List<Event> events = getEvents(id).getBody();
-        if (events == null)
+        if (events == null || events.isEmpty()) {
             return ResponseEntity.notFound().build();
+        }
+
         List<Expense> result = new ArrayList<>();
         for (Event event : events) {
-            for (Expense expense : event.getExpenses())
-            {
-                for (Person p : expense.getInvolved())
-                    if (user.getParticipants().contains(p) &&
-                            !result.contains(expense))
-                        result.add(expense);
+            for (Expense expense : event.getExpenses()) {
+                if (expense.getInvolved().stream().anyMatch(p -> p.getUser().equals(user))) {
+                    result.add(expense);
+                }
             }
         }
 
@@ -75,7 +73,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        return userRep.save(user);
+        if(user.getFirstName() == null || user.getLastName() == null || user.getBIC() == null
+                || user.getEmail() == null || user.getPreferredCurrency() == null || user.getIBAN() == null)
+            return null;
+
+     return userRep.save(user);
     }
 
     @Override
@@ -85,6 +87,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findById(long id) {
+        if (id < 0 || !userRep.existsById(id)) {
+            return Optional.empty();
+        }
+
+        Optional<User> user = userRep.findById(id);
+        if (user.isPresent())
+            return user;
         return userRep.findById(id);
     }
 }

@@ -4,10 +4,14 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.util.*;
 
 @Entity
+@Builder
+@AllArgsConstructor
 @JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="EVENT_ID")
 public class Event {
 
@@ -300,13 +304,16 @@ public class Event {
 
     /**
      * Removes an expense from the list of expenses for an event. Returns false if
-     * the expense is not within the list. Placeholder.
+     * the expense is not within the list. Severs Debts associated with it.
      * @param expense Expense representing the Expense to remove from the Event.
      * @return boolean, true if the Expense was successfully removed, false otherwise.
      */
     public boolean removeExpense(Expense expense) {
         if(expense == null || !this.getExpenses().contains(expense)) {
             return false;
+        }
+        for(Debt debt : expense.getDebtList()) {
+            debt.getGiver().getDebtList().remove(debt);
         }
         this.getExpenses().remove(expense);
         return true;

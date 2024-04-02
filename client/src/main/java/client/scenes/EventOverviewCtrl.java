@@ -34,6 +34,10 @@ public class EventOverviewCtrl {
     @FXML
     private Label eventNameLabel;
     @FXML
+    private Label inviteCode;
+    @FXML
+    private TextField emailField;
+    @FXML
     private Button inviteButton;
     @FXML
     private Button goHomeButton;
@@ -61,10 +65,13 @@ public class EventOverviewCtrl {
     private List<CheckBox> checkBoxes;
     @FXML
     TextFlow languageIndicator;
+    @FXML
+    private Button goToExpenseEdit;
     private MainCtrl mainCtrl;
     private ServerUtils server;
 
     private Event event;
+    private long eventId;
     private List<Person> participants;
     private Person selectedPerson;
     private List<Expense> expenses;
@@ -82,6 +89,7 @@ public class EventOverviewCtrl {
     private void resetTextFields() {
         showExpensesFromPersonButton.setText("From <<PERSON>>");
         showExpensesWithPersonButton.setText("Including <<PERSON>>");
+        overviewLabel.setText("<<EVENT>>");
     }
 
     public Event getEvent() {
@@ -99,10 +107,14 @@ public class EventOverviewCtrl {
         this.filteringExpensesPane.setPrefWidth(200);
     }
 
+    /**
+     * Method that initialises the page and other useful fields.
+     * @param eventID event ID that represents the Event being parsed here.
+     */
     public void setup(Long eventID) {
 
-
         try {
+            eventId = eventID;
             event = server.getEvent(eventID);
             this.expenses = event.getExpenses();
             overviewLabel.setText(event.getName());
@@ -114,6 +126,7 @@ public class EventOverviewCtrl {
             System.out.println("Cannot find associated Event within the repository!");
             return;
         }
+        this.overviewLabel.setText(event.getName());
         try {
             participants = new ArrayList<>();
             participants.addAll(event.getParticipants());
@@ -146,6 +159,10 @@ public class EventOverviewCtrl {
         languageIndicator.getChildren().addAll(language, flagImage);
     }
 
+    /**
+     * Method that determines whether a Person has actually been selected in order to facilitate filtering.
+     * @return Boolean, true if a Person has been selected.
+     */
     public boolean validFiltering() {
         return this.selectedPerson != null;
     }
@@ -156,10 +173,6 @@ public class EventOverviewCtrl {
      */
     public void showAllExpensesInEvent(ActionEvent event) {
         resetFilteringPane();
-        if (validFiltering()) {
-            System.out.println("Cannot filter properly, no Person is selected");
-            return;
-        }
         showAllExpensesFiltered(this.expenses);
     }
 
@@ -255,6 +268,49 @@ public class EventOverviewCtrl {
         }
     }
 
+    /**
+     * Removes an Expense from its association to Event
+     * @param expense Expense to remove
+     * @return true, if successful
+     */
+    public boolean removeExpense(Expense expense) {
+        if(this.event == null) {
+            System.out.println("Event is null!");
+            return false;
+        }
+        if(expense == null) {
+            System.out.println("Expense is null!");
+            return false;
+        }
+        if(!this.event.containsExpense(expense)) {
+            System.out.println("Event doesn't contain the Expense!");
+            return false;
+        }
+        this.event.removeExpense(expense);
+        server.updateEvent(this.event.getId(), this.event);
+        return true;
+    }
+
+    /**
+     * Edits an Expense to a new one. Assumes Debts are automatically updated.
+     * @param replacedExpense replaced Expense
+     * @param newExpense new Expense
+     * @return boolean, true if the operation was successful
+     */
+    public boolean editExpense(Expense replacedExpense, Expense newExpense) {
+        if(replacedExpense == null) {
+            System.out.println("Replaced Expense is null!");
+            return false;
+        }
+        if(!this.removeExpense(replacedExpense)) {
+            System.out.println("Could not delete the Expense!");
+            return false;
+        }
+        this.event.addExpense(newExpense);
+        server.updateEvent(this.event.getId(), this.event);
+        return true;
+    }
+
     public void goHome(ActionEvent event) throws IOException {
         mainCtrl.showHome();
     }
@@ -264,13 +320,34 @@ public class EventOverviewCtrl {
     }
 
     public void goToStats(ActionEvent event) throws IOException {
-        mainCtrl.showStatsTest();
+        mainCtrl.showStatsTest(eventId);
     }
 
-    //Will use this method to get the name of the event,
-    // so i can pass it to the stats page. Idk of this is the correct label tho. Yeah, it is :)
     public String getEventName() {
         return overviewLabel.getText();
+    }
+
+    /**
+     * Method that sends an email containing the inviteCode of the Event to the email address.
+     * @param event
+     * @return boolean, true if the action was successfully executed.
+     */
+    public boolean sendInvite(ActionEvent event) {
+        if(this.event == null) {
+            System.out.println("Event is null! Cannot send out an invite!");
+            return false;
+        }
+        if(this.event.getInviteCode() == null) {
+            System.out.println("Invite Code could not be properly parsed!");
+            return false;
+        }
+        String email = this.emailField.getText();
+        if(email == null) {
+            System.out.println("No email has been detected!");
+            return false;
+        }
+        // <INSERT METHOD> someCreativeName(email, inviteCode)
+        return true;
     }
 
 }

@@ -63,6 +63,7 @@ public class ExpenseController {
             System.out.println("Process aborted, null arguments received.");
             return null;
         }
+        
         ArrayList<Debt> debts = new ArrayList<>();
         Expense expense = null;
         boolean validEntry = true;

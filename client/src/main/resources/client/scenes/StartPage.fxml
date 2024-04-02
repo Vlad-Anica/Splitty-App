@@ -5,20 +5,42 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartPageCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: fffaf4;" styleClass="StarterPageBackground" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartPageCtrl">
     <children>
-        <TextField fx:id="firstname" layoutX="133.0" layoutY="142.0" promptText="First name" />
-        <TextField fx:id="lastname" layoutX="317.0" layoutY="142.0" promptText="Last name" />
-        <TextField fx:id="email" layoutX="225.0" layoutY="200.0" promptText="Email (optional)" />
-        <ComboBox fx:id="currencyComboBox" layoutX="132.0" layoutY="261.0" prefWidth="150.0" promptText="Currency" />
-        <ComboBox fx:id="languageComboBox" layoutX="316.0" layoutY="261.0" prefWidth="150.0" promptText="Language" />
-        <Button layoutX="274.0" layoutY="314.0" mnemonicParsing="false" onAction="#createUser" prefHeight="32.0" prefWidth="51.0" text="GO" />
-      <Label fx:id="title" layoutX="234.0" layoutY="32.0" text="Start" textFill="#1e00ff">
+      <Polygon fill="#4c6592" layoutX="50.0" layoutY="-44.0" points="-50.0, 40.0, 183.5, 40.0, -50.0, 237.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="32.0" layoutX="276.0" layoutY="317.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="51.0" />
+        <TextField fx:id="firstname" layoutX="143.0" layoutY="142.0" prefHeight="23.0" prefWidth="139.0" promptText="First name" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693;" styleClass="FirstNameText">
          <font>
-            <Font size="63.0" />
+            <Font name="Rowdies Regular" size="12.0" />
+         </font></TextField>
+        <TextField fx:id="lastname" layoutX="325.0" layoutY="142.0" prefHeight="25.0" prefWidth="139.0" promptText="Last name" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693;" styleClass="LastNameTextfield">
+         <font>
+            <Font name="Rowdies Regular" size="12.0" />
+         </font></TextField>
+        <TextField fx:id="email" layoutX="225.0" layoutY="200.0" promptText="Email (optional)" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693;" styleClass="EmailTextField">
+         <font>
+            <Font name="Rowdies Regular" size="12.0" />
+         </font></TextField>
+        <ComboBox fx:id="currencyComboBox" layoutX="132.0" layoutY="261.0" prefWidth="150.0" promptText="Currency" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693;" styleClass="Currency" />
+        <ComboBox fx:id="languageComboBox" layoutX="316.0" layoutY="261.0" prefWidth="150.0" promptText="Language" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693;" styleClass="Language" />
+        <Button layoutX="274.0" layoutY="314.0" mnemonicParsing="false" onAction="#createUser" prefHeight="32.0" prefWidth="51.0" style="-fx-background-color: #72a4ff;" styleClass="GoButton" text="GO" textFill="WHITE">
+         <font>
+            <Font name="Rowdies Regular" size="16.0" />
+         </font></Button>
+      <Label fx:id="title" layoutX="190.0" layoutY="39.0" text="Sign Up" textFill="#394d72">
+         <font>
+            <Font name="Rowdies Regular" size="63.0" />
          </font>
       </Label>
+      <Polygon fill="#4c6592" layoutX="416.0" layoutY="160.0" points="184.0, 240.427490234375, 184.0, 40.0, -46.467498779296875, 240.427490234375" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="342.0" layoutX="329.0" layoutY="-84.0" rotate="97.6" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" y="1.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="214.0" layoutX="2.0" layoutY="-30.0" rotate="-14.9" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="29.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="196.0" layoutX="516.0" layoutY="202.0" rotate="-11.3" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="29.0" />
+      <Polygon fill="#fffaf4" layoutX="426.0" layoutY="169.0" points="139.532470703125, 231.0, 127.532470703125, 172.177490234375, 110.282470703125, 231.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Polygon fill="#fffaf4" layoutX="425.0" layoutY="169.0" points="139.532470703125, 231.0, 96.532470703125, 158.427490234375, 110.032470703125, 231.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
     </children>
 </AnchorPane>

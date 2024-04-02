@@ -133,7 +133,6 @@ public class HomeCtrl {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         btnSearchEvent.setText(resourceBundle.getString("Search"));
         inviteCodeText.setPromptText(resourceBundle.getString("InviteCode"));
-        mainPageTestLabel.setText(resourceBundle.getString("WelcomeText"));
         goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         goSettingsButton.setText(resourceBundle.getString("Settings"));
@@ -144,7 +143,6 @@ public class HomeCtrl {
         addLanguageButton.setText(resourceBundle.getString("AddLanguage"));
         mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("Home"));
         adminPasswordField.setPromptText(resourceBundle.getString("AdminPassword"));
-        adminLogInLabel.setText(resourceBundle.getString("AdminLogIn"));
         adminLogInButton.setText(resourceBundle.getString("LogIn"));
         if (!adminPasswordMessage.getText().isEmpty()) {
             adminPasswordMessage.setText(resourceBundle.getString("IncorrectPassword"));
@@ -199,7 +197,7 @@ public class HomeCtrl {
      */
     public void adminLogIn(ActionEvent event) {
         if (adminPasswordField.getText().isEmpty() || !server.checkAdminPassword(adminPasswordField.getText())) {
-            adminPasswordMessage.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguage()).getString("IncorrectPassword"));
+            adminPasswordMessage.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("IncorrectPassword"));
             adminPasswordMessage.setTextFill(Color.rgb(210, 39, 30));
         } else {
             mainCtrl.showManagementOverview();
