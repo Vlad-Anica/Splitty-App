@@ -29,19 +29,19 @@ Presentation of current app to TA:
 
 
 Talking points:
-- What have we achieved? - UI greatly improved, testing a bit improved, several more features have been implemented
-- UI work - Victor - event overview
+What have we achieved? - UI greatly improved, testing a bit improved, several more features have been implemented
+UI work - Victor - event overview
             Calin - add expense
             Lucca -  open debts
             Vlad - admin stuff
             Duco - server selection, stats
-- Debt splitting algorithm:
+Debt splitting algorithm:
    - proposal by vlad: cut link from expense to debt, add a link from event to debt
    - can be hard to work around removing/editing expenses
    - but can make calculating/recalculating debts and achieving the minimum no. of debts
    - useful link for this kind of algorithm (whatsapp) 
    - we decide at a later date
-- What's left? 
+What's left? 
    - Web sockets and long polling still need to be implemented in the app (for adding/editing events - web sockets; admin - long polling) 
    - Some basic features still need implementing:
           - JSON Dump 
