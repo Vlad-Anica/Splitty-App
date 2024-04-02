@@ -17,7 +17,7 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID")
+    @Column(name="EVENT_ID")
     public long id;
 
     @Temporal(TemporalType.TIMESTAMP)

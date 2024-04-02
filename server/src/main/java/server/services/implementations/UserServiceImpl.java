@@ -73,8 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        if(user.getFirstName() == null || user.getLastName() == null || user.getBIC() == null
-                || user.getEmail() == null || user.getPreferredCurrency() == null || user.getIBAN() == null)
+        if(user.getFirstName() == null || user.getLastName() == null)
             return null;
 
      return userRep.save(user);
