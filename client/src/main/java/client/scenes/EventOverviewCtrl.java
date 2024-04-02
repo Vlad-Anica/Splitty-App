@@ -75,7 +75,7 @@ public class EventOverviewCtrl {
     private List<Person> participants;
     private Person selectedPerson;
     private List<Expense> expenses;
-    private Expense selectedExpense;
+    private List<Expense> selectedExpenses;
 
 
     @Inject
@@ -225,7 +225,7 @@ public class EventOverviewCtrl {
             return;
         } else {
             this.goToExpenseEdit.setVisible(true);
-            this.deleteExpenseButton.setVisible(true;
+            this.deleteExpenseButton.setVisible(true);
         }
     }
 
@@ -399,11 +399,27 @@ public class EventOverviewCtrl {
     }
 
     public void removeExpense(ActionEvent event) throws IOException {
-        if(selectedExpense == null) {
+        if(this.selectedExpenses == null) {
             System.out.println("Cannot remove Expense as none was selected.");
         } else {
-            this.removeExpense(selectedExpense);
+            for(Expense expense : this.selectedExpenses) {
+                this.removeExpense(expense);
+            }
         }
+    }
+
+    public void goToExpenseEdit(ActionEvent event) throws IOException {
+
+        if(selectedExpenses == null) {
+            System.out.println("Cannot edit expense as none was selected!");
+            return;
+        }
+        if(selectedExpenses.size() >= 2) {
+            System.out.println("Cannot edit expense as multiple expenses have been selected at once.");
+            return;
+        }
+        //goToExpenseEdit stuff tbi
+        return;
     }
 
     public void goToStats(ActionEvent event) throws IOException {

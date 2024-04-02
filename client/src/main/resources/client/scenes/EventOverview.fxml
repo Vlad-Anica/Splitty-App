@@ -53,6 +53,6 @@
          </opaqueInsets>
       </Label>
       <Button fx:id="goToExpenseEditButton" layoutX="294.0" layoutY="333.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="242.0" text="Edit the Expense!" />
-      <Button fx:id="deleteExpenseButton" layoutX="535.0" layoutY="333.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="48.0" text="Delete it!" />
+      <Button fx:id="deleteExpenseButton" layoutX="535.0" layoutY="333.0" mnemonicParsing="false" onAction="#removeExpense" prefHeight="25.0" prefWidth="48.0" text="Delete it!" />
     </children>
 </Pane>
