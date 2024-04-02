@@ -478,4 +478,12 @@ public class ServerUtils {
 			return null;
 		}
 	}
+
+	public Event deleteEventById(Long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/" + eventId)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete(Event.class);
+	}
 }
