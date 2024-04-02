@@ -168,7 +168,7 @@ public class HomeCtrl {
     }
 
     public void goToAddExpense(ActionEvent event) throws IOException {
-        mainCtrl.showAddExpense();
+
     }
 
     public void goToDebts(ActionEvent event) throws IOException {

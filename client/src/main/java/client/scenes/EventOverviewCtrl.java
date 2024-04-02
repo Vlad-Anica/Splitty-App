@@ -72,6 +72,7 @@ public class EventOverviewCtrl {
     private MainCtrl mainCtrl;
     private ServerUtils server;
     private Event event;
+    private long eventId;
     private List<Person> participants;
     private Person selectedPerson;
     private List<Expense> expenses;
@@ -94,6 +95,10 @@ public class EventOverviewCtrl {
         inviteCodeLabel.setText("<<CODE>>");
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
     /**
      * Method that resets the parameters of the filtering pane as needed.
      */
@@ -113,8 +118,10 @@ public class EventOverviewCtrl {
     public void setup(Long eventID) {
 
         try {
+            eventId = eventID;
             event = server.getEvent(eventID);
             this.expenses = event.getExpenses();
+            overviewLabel.setText(event.getName());
         } catch (Exception e) {
             System.out.println("Cannot find associated Event within the repository!");
             return;
@@ -394,8 +401,8 @@ public class EventOverviewCtrl {
         mainCtrl.showHome();
     }
 
-    public void goToAddExpense(ActionEvent event) throws IOException {
-        mainCtrl.showAddExpense();
+    public void goToAddExpense() throws IOException {
+        mainCtrl.showAddExpense(event.getId());
     }
 
     public void removeExpense(ActionEvent event) throws IOException {
@@ -423,7 +430,7 @@ public class EventOverviewCtrl {
     }
 
     public void goToStats(ActionEvent event) throws IOException {
-        mainCtrl.showStatsTest();
+        mainCtrl.showStatsTest(eventId);
     }
 
     public String getEventName() {

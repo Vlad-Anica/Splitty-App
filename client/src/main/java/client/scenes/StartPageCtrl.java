@@ -26,7 +26,7 @@ public class StartPageCtrl {
             "Voornaam"));
     @FXML
     private Label title;
-    private List<String> titleText = new ArrayList<>(List.of("Start",
+    private List<String> titleText = new ArrayList<>(List.of("Sign Up",
             "Begin"));
     @FXML
     private TextField lastname;
@@ -51,6 +51,7 @@ public class StartPageCtrl {
     public StartPageCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+
     }
 
 
@@ -67,7 +68,7 @@ public class StartPageCtrl {
             User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
 
             u = server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
-            File file = new File("userConfig.txt");
+            File file = mainCtrl.getUserConfig();
             if(!file.exists()){
                 file.createNewFile();
             }
@@ -103,7 +104,7 @@ public class StartPageCtrl {
         return languageComboBox.getValue();
     }
 
-    public void initializePage()  {
+    public void setup()  {
         currencyComboBox.setItems(FXCollections.observableList(
                 List.of(Currency.EUR, Currency.USD,
                         Currency.CHF, Currency.GBP)));
@@ -115,6 +116,7 @@ public class StartPageCtrl {
             mainCtrl.setLanguageIndex(languageComboBox.getSelectionModel().getSelectedIndex());
             setTextLanguage();
         });
+
     }
 
     public void setTextLanguage() {

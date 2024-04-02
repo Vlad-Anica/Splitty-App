@@ -4,16 +4,20 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.util.*;
 
 @Entity
+@Builder
+@AllArgsConstructor
 @JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="EVENT_ID")
 public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="EVENT_ID")
+    @Column(name="ID")
     public long id;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -49,10 +53,9 @@ public class Event {
     public static final Tag travelTag = new Tag("red", "Travel");
     private Date date;
 
-    @OneToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.PERSIST, mappedBy = "event")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "event")
     private List<Person> participants;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany
     private List<Expense> expenses;
     private String inviteCode;
 

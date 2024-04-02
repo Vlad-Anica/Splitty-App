@@ -1,9 +1,6 @@
 package server.api;
 
-import commons.Currency;
-import commons.Event;
-import commons.Expense;
-import commons.User;
+import commons.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +9,7 @@ import server.services.interfaces.EventService;
 import server.services.interfaces.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -39,18 +37,25 @@ public class UserController {
      * @return the user
      */
     @PostMapping("/")
-    public User createUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
-                           @RequestParam("email") String email, @RequestParam("currency") Currency preferredCurency) {
-        User user = new User(firstName, lastName, email, preferredCurency);
-        return userService.save(user);
+    public ResponseEntity<User> createUser(@RequestParam("firstName") String firstName,
+                                           @RequestParam("lastName") String lastName,
+                                           @RequestParam("email") String email,
+                                           @RequestParam("currency") Currency preferredCurrency) {
+        User user = new User(firstName, lastName, email, preferredCurrency);
+        User savedUser = userService.save(user);
+        if(savedUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable("userId") Long userId) {
-        if (!userService.existsById(userId)) {
-            return (ResponseEntity<User>) ResponseEntity.status(HttpStatus.NOT_FOUND);
+        Optional<User> user = userService.findById(userId);
+        if (!user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(userService.findById(userId).get());
+        return ResponseEntity.ok(user.get());
     }
 
     @GetMapping("/{userId}/events")
@@ -61,6 +66,24 @@ public class UserController {
     @GetMapping("/{id}/expenses")
     public ResponseEntity<List<Expense>> getExpenses(@PathVariable("id") long id) {
         return userService.getExpenses(id);
+    }
+    @GetMapping(path = {"/add"})
+    public ResponseEntity<User> add(@RequestBody User user){
+        User savedUser = userService.save(user);
+        if(savedUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
+
+    @GetMapping(path = {"/All"})
+    public List<User> getAll() {
+        return userService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<User> getById(@PathVariable  long id) {
+        return userService.findById(id);
     }
 
     @GetMapping("/{id}/totalExpenses")
