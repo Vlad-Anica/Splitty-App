@@ -351,6 +351,7 @@ public class ServerUtils {
 				.get(new GenericType<List<Expense>>(){});
 	}
 	public User addUser(String firstName, String lastName, String email, Currency preferredCurency){
+		System.out.println("Server: " + getSERVER());
 
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER)

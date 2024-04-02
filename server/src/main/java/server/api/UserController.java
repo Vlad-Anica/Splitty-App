@@ -33,7 +33,7 @@ public class UserController {
      * @param firstName first name of the user
      * @param lastName last name of the user
      * @param email email of the user
-     * @param preferredCurency preferred currency of the user
+     * @param preferredCurrency preferred currency of the user
      * @return the user
      */
     @PostMapping("/")
@@ -79,11 +79,6 @@ public class UserController {
     @GetMapping(path = {"/All"})
     public List<User> getAll() {
         return userService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Optional<User> getById(@PathVariable  long id) {
-        return userService.findById(id);
     }
 
     @GetMapping("/{id}/totalExpenses")
