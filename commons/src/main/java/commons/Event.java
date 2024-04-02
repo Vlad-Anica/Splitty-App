@@ -17,7 +17,7 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="EVENT_ID")
+    @Column(name="ID")
     public long id;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -53,10 +53,9 @@ public class Event {
     public static final Tag travelTag = new Tag("red", "Travel");
     private Date date;
 
-    @OneToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.PERSIST, mappedBy = "event")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "event")
     private List<Person> participants;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany
     private List<Expense> expenses;
     private String inviteCode;
 

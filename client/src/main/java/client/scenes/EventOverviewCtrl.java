@@ -92,6 +92,10 @@ public class EventOverviewCtrl {
         overviewLabel.setText("<<EVENT>>");
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
     /**
      * Method that resets the parameters of the filtering pane as needed.
      */
@@ -113,6 +117,7 @@ public class EventOverviewCtrl {
             eventId = eventID;
             event = server.getEvent(eventID);
             this.expenses = event.getExpenses();
+            overviewLabel.setText(event.getName());
         } catch (Exception e) {
             System.out.println("Cannot find associated Event within the repository!");
             return;
@@ -310,8 +315,8 @@ public class EventOverviewCtrl {
         mainCtrl.showHome();
     }
 
-    public void goToAddExpense(ActionEvent event) throws IOException {
-        mainCtrl.showAddExpense();
+    public void goToAddExpense() throws IOException {
+        mainCtrl.showAddExpense(event.getId());
     }
 
     public void goToStats(ActionEvent event) throws IOException {

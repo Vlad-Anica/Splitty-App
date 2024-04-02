@@ -34,7 +34,7 @@ public class Expense {
     private java.util.Date updatedAt;
 
     /**
-     * Upon initial creation of the Object, the Date will be stored.
+     * Upon initial x of the Object, the Date will be stored.
      */
     @PrePersist
     public void onCreate() {
@@ -52,12 +52,14 @@ public class Expense {
     private String description;
     private double amount;
     private Date date;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Person receiver;
-    @OneToMany(cascade = CascadeType.PERSIST)
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Debt> debtList;
+    
     private Currency currency;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Tag tag;
 
     /***

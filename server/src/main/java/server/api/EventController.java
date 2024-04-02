@@ -8,24 +8,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.implementations.EventServiceImpl;
 import server.services.implementations.PersonServiceImpl;
-import server.services.interfaces.EventService;
-import server.services.interfaces.ExpenseService;
-import server.services.interfaces.PersonService;
-import server.services.interfaces.TagService;
+import server.services.interfaces.*;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
-    @Autowired
+
     private final EventService eventService;
     private PersonService personService;
     private ExpenseService expenseService;
     private TagService tagService;
+    private DebtService debtService;
 
     /**
      * Constructor for an EventController
@@ -35,11 +33,14 @@ public class EventController {
      * @param expenseService service class for Expense
      * @param tagService service class for Tag
      */
-    public EventController(EventServiceImpl eventService, PersonServiceImpl personService, ExpenseService expenseService, TagService tagService) {
+    @Autowired
+    public EventController(EventServiceImpl eventService, PersonServiceImpl personService, ExpenseService expenseService, TagService tagService,
+                           DebtService debtService) {
         this.eventService = eventService;
         this.personService = personService;
         this.expenseService = expenseService;
         this.tagService = tagService;
+        this.debtService = debtService;
     }
 
     /**
@@ -117,6 +118,25 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
+    @PutMapping("{id}/newExpense")
+    public ResponseEntity<Event> addExpense(@PathVariable("id") long eventId, @RequestBody Expense expense) {
+        Event event = getById(eventId).getBody();
+        if (event == null)
+            return ResponseEntity.badRequest().build();
+        List<Debt> debts = expense.getDebtList();
+        expense.setDebtList(new ArrayList<>());
+        expenseService.add(expense);
+
+
+        for (Debt debt : debts) {
+            debt.setExpense(expense); // Set the Expense on each Debt entity
+            debtService.save(debt); // Save each Debt entity
+        }
+        expense.setDebtList(debts);
+        expenseService.add(expense);
+        event.getExpenses().add(expense);
+        return ResponseEntity.ok(eventService.save(event));
+    }
 
     @PutMapping("/persist")
     public ResponseEntity<Event> persistEvent(@RequestBody Event event) {
