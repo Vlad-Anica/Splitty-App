@@ -81,11 +81,6 @@ public class UserController {
         return userService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Optional<User> getById(@PathVariable  long id) {
-        return userService.findById(id);
-    }
-
     @GetMapping("/{id}/totalExpenses")
     public ResponseEntity<Double> getTotalExpenses(@PathVariable("id") long id) {
 
