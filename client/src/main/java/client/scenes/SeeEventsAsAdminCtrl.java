@@ -133,9 +133,9 @@ public class SeeEventsAsAdminCtrl {
         int languageIndex = mainCtrl.getLanguageIndex();
         if (languageIndex < 0)
             languageIndex = 0;
-        btnDeleteEvent.setText("Delete event");
-        eventToDeleteId.setPromptText("Event Id");
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        btnDeleteEvent.setText(resourceBundle.getString("DeleteEvent"));
+        eventToDeleteId.setPromptText(resourceBundle.getString("EventId"));
         btnManagementOverview.setText(resourceBundle.getString("ManagementOverview"));
         selectAscDesc.setPromptText(resourceBundle.getString("SelectAscDesc"));
         ascDesc.set(0, resourceBundle.getString("Ascending"));
