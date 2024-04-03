@@ -480,10 +480,12 @@ public class ServerUtils {
 	}
 
 	public Event deleteEventById(Long eventId) {
-		return ClientBuilder.newClient(new ClientConfig())
+		Event event = ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events/" + eventId)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.delete(Event.class);
+				.delete(new GenericType<Event>() {
+				});
+		return event;
 	}
 }
