@@ -37,7 +37,7 @@
          </font>
       </Label>
       <Polygon fill="#4c6592" layoutX="416.0" layoutY="160.0" points="184.0, 240.427490234375, 184.0, 40.0, -46.467498779296875, 240.427490234375" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="342.0" layoutX="329.0" layoutY="-84.0" rotate="97.6" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" y="1.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="342.0" layoutX="322.0" layoutY="-81.0" rotate="97.6" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" y="1.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="214.0" layoutX="2.0" layoutY="-30.0" rotate="-14.9" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="29.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="196.0" layoutX="516.0" layoutY="202.0" rotate="-11.3" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="29.0" />
       <Polygon fill="#fffaf4" layoutX="426.0" layoutY="169.0" points="139.532470703125, 231.0, 127.532470703125, 172.177490234375, 110.282470703125, 231.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
