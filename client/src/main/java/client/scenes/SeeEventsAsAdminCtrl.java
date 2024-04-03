@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -30,6 +31,7 @@ public class SeeEventsAsAdminCtrl {
     List<String> types = new ArrayList<>(List.of("name", "creationDate", "lastUpdate"));
     List<String> ascDesc = new ArrayList<>(List.of("asc", "desc"));
     List<Event> events;
+    ObservableList<Event> data;
     Boolean ascending;
 
     @Inject
@@ -39,6 +41,7 @@ public class SeeEventsAsAdminCtrl {
     }
 
     public void setup() {
+
         createTable();
         setTextLanguage();
         ascending = false;
@@ -72,6 +75,9 @@ public class SeeEventsAsAdminCtrl {
                 printToTable();
             }
         });
+        server.registerForAddition("/topic/events", Event.class, e -> {
+            data.add(e);
+        });
     }
 
     /**
@@ -80,7 +86,7 @@ public class SeeEventsAsAdminCtrl {
     public void printToTable() {
         List<EventInfo> toShow = new ArrayList<>();
         if (events.size() > 0) {
-            for (Event x: events) {
+            for (Event x: data) {
                 toShow.add(new EventInfo(x.getId(), x.getName(), x.getCreatedAt(), x.getUpdatedAt(), x.getParticipants().size()));
             }
         }

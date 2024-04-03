@@ -5,6 +5,7 @@ import commons.Event;
 import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -66,9 +67,9 @@ public class CreateEventCtrl {
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
-
     private List<Tag> tags;
     private final Clipboard clipboard = Clipboard.getSystemClipboard();
+
 
     @Inject
     public CreateEventCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -101,12 +102,15 @@ public class CreateEventCtrl {
         Event newEvent = new Event(nameField.getText(), descField.getText(),
                 new ArrayList<>(), date, new ArrayList<>(), new ArrayList<>());
 
-        server.createEvent(newEvent);
+       // server.createEvent(newEvent);
+        server.send("/app/events", newEvent);
+
         statusLabel.setTextFill(Color.BLACK);
         ClipboardContent inviteCodeClipboard = new ClipboardContent();
         inviteCodeClipboard.putString(newEvent.getInviteCode());
         clipboard.setContent(inviteCodeClipboard);
         statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
+
 
     }
 

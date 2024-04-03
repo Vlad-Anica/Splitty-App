@@ -20,21 +20,32 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import jakarta.ws.rs.core.MediaType;
+import javafx.collections.ObservableList;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
@@ -477,5 +488,42 @@ public class ServerUtils {
 			System.out.println(e.getMessage() + " " + e.getCause());
 			return null;
 		}
+	}
+
+	private StompSession session = connect("ws://localhost:8080/websocket");
+
+	private StompSession connect(String URL) {
+
+		var client = new StandardWebSocketClient();
+		var stomp = new WebSocketStompClient(client);
+		stomp.setMessageConverter(new MappingJackson2MessageConverter());
+		try {
+            return stomp.connectAsync(URL, new StompSessionHandlerAdapter() {
+			}).get();
+		} catch (ExecutionException e) {
+			System.out.println(e.getMessage());
+		} catch (InterruptedException e) {
+			System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return null;
+	}
+
+	public <T> void registerForAddition(String destination, Class<T> type, Consumer<T> consumer) {
+		session.subscribe(SERVER, new StompFrameHandler() {
+			@Override
+			public Type getPayloadType(StompHeaders headers) {
+				return type;
+			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				consumer.accept((T) payload);
+			}
+		});
+	}
+
+	public void send(String destination, Object o) {
+		session.send(destination, o);
 	}
 }
