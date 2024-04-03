@@ -17,6 +17,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,17 @@ public class EventOverviewCtrl {
     private Scene scene;
     @FXML
     private Parent root;
+
+    @FXML
+    TextFlow languageIndicator;
     @FXML
     private Label overviewLabel;
     @FXML
+    private Button goHomeButton;
+    @FXML
     private Label eventNameLabel;
+    @FXML
+    private Button goToStatsButton;
     @FXML
     private Label inviteCodeLabel;
     @FXML
@@ -40,13 +48,13 @@ public class EventOverviewCtrl {
     @FXML
     private Button inviteButton;
     @FXML
-    private Button goHomeButton;
-    @FXML
-    private ComboBox<String> showAllParticipantsInEvent;
+    private ComboBox<String> showAllParticipantsInEventComboBox;
     @FXML
     private AnchorPane choosePersonsPane;
     @FXML
-    private Button goToAddExpenseButton;
+    private Button goToEditPersonButton;
+    @FXML
+    private Button removePersonsButton;
     @FXML
     private Label expensesLabel;
     @FXML
@@ -60,15 +68,21 @@ public class EventOverviewCtrl {
     @FXML
     private static AnchorPane filteringExpensesPaneOriginal;
     @FXML
-    private Button goToStatsButton;
+    private Button goToAddExpenseButton;
+    @FXML
+    private Button goToEditExpenseButton;
+    @FXML
+    private Button removeExpensesButton;
+    @FXML
+    private Label tagsLabel;
+    @FXML
+    private Button goToAddTagButton;
+    @FXML
+    private Button goToEditTagButton;
+    @FXML
+    private Button removeTagButton;
     @FXML
     private List<CheckBox> checkBoxes;
-    @FXML
-    TextFlow languageIndicator;
-    @FXML
-    private Button goToExpenseEdit;
-    @FXML
-    private Button deleteExpenseButton;
     private MainCtrl mainCtrl;
     private ServerUtils server;
     private Event event;
@@ -91,7 +105,7 @@ public class EventOverviewCtrl {
     private void resetTextFields() {
         showExpensesFromPersonButton.setText("From <<PERSON>>");
         showExpensesWithPersonButton.setText("Including <<PERSON>>");
-        overviewLabel.setText("<<EVENT>>");
+        eventNameLabel.setText("<<EVENT>>");
         inviteCodeLabel.setText("<<CODE>>");
     }
 
@@ -121,7 +135,7 @@ public class EventOverviewCtrl {
             eventId = eventID;
             event = server.getEvent(eventID);
             this.expenses = event.getExpenses();
-            overviewLabel.setText(event.getName());
+            eventNameLabel.setText(event.getName());
         } catch (Exception e) {
             System.out.println("Cannot find associated Event within the repository!");
             return;
@@ -143,15 +157,19 @@ public class EventOverviewCtrl {
                 newBox.setLayoutY(y);
                 y += 25;
             }
-            showAllParticipantsInEvent.setItems(FXCollections.observableArrayList(
+            showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(
                     participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
             ));
 
             checkBoxes = choosePersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
             getSelectedPerson();
             checkPersonBoxes(new ActionEvent());
-            this.goToExpenseEdit.setVisible(false);
-            this.deleteExpenseButton.setVisible(false);
+            this.goToEditExpenseButton.setVisible(false);
+            this.removeExpensesButton.setVisible(false);
+            this.choosePersonsPane.setVisible(false);
+            this.showAllParticipantsInEventComboBox.setVisible(false);
+            this.choosePersonsPane.setVisible(false);
+            this.filteringExpensesPane.setVisible(false);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -162,6 +180,10 @@ public class EventOverviewCtrl {
         }
     }
 
+
+    public void showAllParticipantsInEvent(ActionEvent event) {
+
+    }
     /**
      * Method that selects the Selected Person and also returns it.
      *
@@ -170,8 +192,8 @@ public class EventOverviewCtrl {
     public Person getSelectedPerson() {
         Person person = null;
         String fullName = null;
-        if (showAllParticipantsInEvent.getValue() != null) {
-            fullName = showAllParticipantsInEvent.getValue();
+        if (showAllParticipantsInEventComboBox.getValue() != null) {
+            fullName = showAllParticipantsInEventComboBox.getValue();
         } else {
             this.selectedPerson = person;
             return person;
@@ -205,6 +227,16 @@ public class EventOverviewCtrl {
         }
     }
 
+    public List<Expense> getSelectedExpenses() {
+        ArrayList<Expense> expenses;
+        String text = null;
+        return null;
+    }
+
+    public void checkExpenseBoxes(ActionEvent event) {
+
+    }
+
 
     public void setLanguageIndicator() {
         ImageView flagImage = new ImageView(mainCtrl.getPathToFlagImage());
@@ -225,15 +257,21 @@ public class EventOverviewCtrl {
      * Method that sets or resets visibility to buttons related to filtering and selecting Expenses.
      */
     public void filteringVisibilityCheck() {
-        if(this.goToExpenseEdit.isVisible()) {
+        if(this.goToEditExpenseButton.isVisible()) {
             resetFilteringPane();
-            this.goToExpenseEdit.setVisible(false);
-            this.deleteExpenseButton.setVisible(false);
+            this.filteringExpensesPane.setVisible(false);
+            this.goToEditExpenseButton.setVisible(false);
+            this.removeExpensesButton.setVisible(false);
             return;
         } else {
-            this.goToExpenseEdit.setVisible(true);
-            this.deleteExpenseButton.setVisible(true);
+            this.filteringExpensesPane.setVisible(true);
+            this.goToEditExpenseButton.setVisible(true);
+            this.removeExpensesButton.setVisible(true);
         }
+    }
+
+    public void choosePersonsVisibilityCheck() {
+
     }
 
 
@@ -300,7 +338,7 @@ public class EventOverviewCtrl {
 
     /**
      * Method that takes a List of Expenses and parses it to the UI to display it as a list of Expenses.
-     * @param selectedExpenses
+     * @param selectedExpenses List of Expenses to show in the Pane.
      * @return boolean, true if the List was parsed successfully
      */
     public boolean showAllExpensesFiltered(List<Expense> selectedExpenses) {
@@ -321,6 +359,7 @@ public class EventOverviewCtrl {
                 CheckBox newBox = new CheckBox(
                         e.getTag() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName());
                 filteringExpensesPane.getChildren().add(newBox);
+                newBox.setOnAction(this::checkExpenseBoxes);
                 newBox.setLayoutY(y);
                 y += 25;
             }
@@ -401,21 +440,24 @@ public class EventOverviewCtrl {
         mainCtrl.showHome();
     }
 
-    public void goToAddExpense() throws IOException {
+    public void goToEditPerson(ActionEvent event) throws IOException {
+
+    }
+
+    public void removePersons(ActionEvent event) throws IOException {
+
+    }
+
+    public void goToAddExpense(ActionEvent e) throws IOException {
         mainCtrl.showAddExpense(event.getId());
     }
 
-    public void removeExpense(ActionEvent event) throws IOException {
-        if(this.selectedExpenses == null) {
-            System.out.println("Cannot remove Expense as none was selected.");
-        } else {
-            for(Expense expense : this.selectedExpenses) {
-                this.removeExpense(expense);
-            }
-        }
-    }
-
-    public void goToExpenseEdit(ActionEvent event) throws IOException {
+    /**
+     * Method that redirects the User to an Edit Expense page if only one was selected.
+     * @param event
+     * @throws IOException IO Exception that could occur
+     */
+    public void goToEditExpense(ActionEvent event) throws IOException {
 
         if(selectedExpenses == null) {
             System.out.println("Cannot edit expense as none was selected!");
@@ -428,6 +470,29 @@ public class EventOverviewCtrl {
         //goToExpenseEdit stuff tbi
         return;
     }
+
+    public void removeExpenses(ActionEvent event) throws IOException {
+        if(this.selectedExpenses == null) {
+            System.out.println("Cannot remove Expense as none was selected.");
+        } else {
+            for(Expense expense : this.selectedExpenses) {
+                this.removeExpense(expense);
+            }
+        }
+    }
+
+    public void goToAddTag(ActionEvent event) {
+
+    }
+
+    public void goToEditTag(ActionEvent event) {
+
+    }
+
+    public void removeTags(ActionEvent event) {
+
+    }
+
 
     public void goToStats(ActionEvent event) throws IOException {
         mainCtrl.showStatsTest(eventId);
