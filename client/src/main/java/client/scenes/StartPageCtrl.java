@@ -60,7 +60,7 @@ public class StartPageCtrl {
             {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("User Creation Warning");
-                alert.setContentText("Please fill all fields");
+                alert.setContentText("Please fill all necessary fields");
                 alert.showAndWait();
                 return;
             }
