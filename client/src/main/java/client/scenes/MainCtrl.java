@@ -360,6 +360,7 @@ public class MainCtrl {
         seeEventsAsAdminCtrl.setup();
         primaryStage.setTitle("See Events As admin");
         primaryStage.setScene(seeEventsAsAdminScene);
+        seeEventsAsAdminCtrl.refresh();
     }
 
     public void showEventOverview(Long eventId) {

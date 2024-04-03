@@ -40,7 +40,21 @@ public class SeeEventsAsAdminCtrl {
         this.server = sever;
     }
 
+    public void refresh() {
+        events = server.getAllEvents();
+        data = FXCollections.observableList(events);
+        eventTable.setItems(FXCollections.observableList(data.stream()
+                .map(e -> new EventInfo(e.getId(), e.getName(),
+                        e.getCreatedAt(), e.getUpdatedAt(), e.getParticipants().size()))
+                .toList()));
+    }
     public void setup() {
+
+        server.registerForAddition("/topic/events", Event.class, e -> {
+            data.add(e);
+        });
+
+
 
         createTable();
         setTextLanguage();
@@ -75,9 +89,6 @@ public class SeeEventsAsAdminCtrl {
                 printToTable();
             }
         });
-        server.registerForAddition("/topic/events", Event.class, e -> {
-            data.add(e);
-        });
     }
 
     /**
@@ -86,7 +97,7 @@ public class SeeEventsAsAdminCtrl {
     public void printToTable() {
         List<EventInfo> toShow = new ArrayList<>();
         if (events.size() > 0) {
-            for (Event x: data) {
+            for (Event x: events) {
                 toShow.add(new EventInfo(x.getId(), x.getName(), x.getCreatedAt(), x.getUpdatedAt(), x.getParticipants().size()));
             }
         }
