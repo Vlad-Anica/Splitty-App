@@ -1,0 +1,11 @@
+.table-view .column-header .label {
+    -fx-text-fill: #fffaf4;
+    -fx-font-family: 'Rowdies';
+}
+.table-view .column-header-background .filler {
+    -fx-background-color: #72a4ff;
+}
+
+.table-view .column-header, .table-view .column-header .label {
+    -fx-background-color: #72a4ff;
+}
