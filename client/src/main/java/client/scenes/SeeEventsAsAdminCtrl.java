@@ -50,12 +50,6 @@ public class SeeEventsAsAdminCtrl {
     }
     public void setup() {
 
-        server.registerForAddition("/topic/events", Event.class, e -> {
-            data.add(e);
-        });
-
-
-
         createTable();
         setTextLanguage();
         ascending = false;

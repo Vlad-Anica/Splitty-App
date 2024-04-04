@@ -360,7 +360,6 @@ public class MainCtrl {
         seeEventsAsAdminCtrl.setup();
         primaryStage.setTitle("See Events As admin");
         primaryStage.setScene(seeEventsAsAdminScene);
-        seeEventsAsAdminCtrl.refresh();
     }
 
     public void showEventOverview(Long eventId) {
@@ -400,6 +399,7 @@ public class MainCtrl {
         primaryStage.setTitle("Home");
         primaryStage.setScene(homeScene);
         homeCtrl.setup();
+        homeCtrl.refresh();
     }
 
     public void showOpenDebts() {

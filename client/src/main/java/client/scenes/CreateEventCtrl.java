@@ -2,7 +2,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Person;
 import commons.Tag;
+import commons.User;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -77,7 +79,7 @@ public class CreateEventCtrl {
     }
 
     @FXML
-    public void clearFields(ActionEvent event) {
+    public void clearFields() {
         nameField.clear();
         dateField.getEditor().clear();
         inviteField.clear();
@@ -100,16 +102,18 @@ public class CreateEventCtrl {
 
         Event newEvent = new Event(nameField.getText(), descField.getText(),
                 new ArrayList<>(), date, new ArrayList<>(), new ArrayList<>());
-
+        User currentUser = server.getUserById(mainCtrl.getUserId());
+        newEvent.getParticipants().add(new Person(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getIBAN(),
+                currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, newEvent, currentUser));
        // server.createEvent(newEvent);
         server.send("/app/events", newEvent);
+
 
         statusLabel.setTextFill(Color.BLACK);
         ClipboardContent inviteCodeClipboard = new ClipboardContent();
         inviteCodeClipboard.putString(newEvent.getInviteCode());
         clipboard.setContent(inviteCodeClipboard);
         statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
-
 
     }
 

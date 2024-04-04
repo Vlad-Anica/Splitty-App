@@ -502,14 +502,13 @@ public class ServerUtils {
 		} catch (ExecutionException e) {
 			System.out.println(e.getMessage());
 		} catch (InterruptedException e) {
-			System.out.println(e.getMessage());
-            throw new RuntimeException(e);
+			Thread.currentThread().interrupt();
         }
         return null;
 	}
 
 	public <T> void registerForAddition(String destination, Class<T> type, Consumer<T> consumer) {
-		session.subscribe(SERVER, new StompFrameHandler() {
+		session.subscribe(destination, new StompFrameHandler() {
 			@Override
 			public Type getPayloadType(StompHeaders headers) {
 				return type;
