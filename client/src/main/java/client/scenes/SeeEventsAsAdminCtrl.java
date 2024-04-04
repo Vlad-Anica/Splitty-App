@@ -12,9 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SeeEventsAsAdminCtrl {
     private MainCtrl mainCtrl;
@@ -57,21 +55,34 @@ public class SeeEventsAsAdminCtrl {
             }
         });
         selectOrdering.setOnAction(event -> {
-            int selection = selectOrdering.getSelectionModel().getSelectedIndex();
-            if (selection >= 0) {
-                if (selection == 0) {
-                    events = server.getEventsOrderedByName();
-                } else if (selection == 1) {
-                    events = server.getEventsOrderedByCreationDate();
-                } else if (selection == 2) {
-                    events = server.getEventsOrderedByLastModificationDate();
-                }
-                if (ascending) {
-                    events = events.reversed();
-                }
-                printToTable();
-            }
+            printSortedEvents();
         });
+        server.registerForUpdates(event -> {
+            printSortedEvents();
+        });
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                printSortedEvents();
+            }
+        }, 1000L, 5000L);
+    }
+
+    public void printSortedEvents() {
+        int selection = selectOrdering.getSelectionModel().getSelectedIndex();
+        if (selection >= 0) {
+            if (selection == 0) {
+                events = server.getEventsOrderedByName();
+            } else if (selection == 1) {
+                events = server.getEventsOrderedByCreationDate();
+            } else if (selection == 2) {
+                events = server.getEventsOrderedByLastModificationDate();
+            }
+            if (ascending) {
+                events = events.reversed();
+            }
+            printToTable();
+        }
     }
 
     /**
@@ -107,6 +118,10 @@ public class SeeEventsAsAdminCtrl {
 
         eventTable.getColumns().setAll(idColumn, nameColumn, createdAtColumn, updatedAtColumn, nrParticipantsColumn);
 
+    }
+
+    public void stop() {
+        server.stop();
     }
 
     public void setTextLanguage() {
