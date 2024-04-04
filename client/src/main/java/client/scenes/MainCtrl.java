@@ -492,6 +492,7 @@ public class MainCtrl {
         primaryStage.setTitle("Add Language");
         primaryStage.setScene(addLanguageScene);
         addLanguageCtrl.setUp();
+        addLanguageScene.getStylesheets().add("/client/scenes/opendebts.css");
     }
 
     public Stage getPrimaryStage(){
