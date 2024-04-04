@@ -130,7 +130,7 @@
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
          <children>
-            <TableView fx:id="table" prefHeight="313.0" prefWidth="600.0" style="-fx-background-color: fffaf4;" stylesheets="@../../../../../build/resources/opendebts.css">
+            <TableView fx:id="table" prefHeight="313.0" prefWidth="600.0" style="-fx-background-color: fffaf4;" stylesheets="@../../opendebts.css">
               <columns>
                 <TableColumn fx:id="columnId" minWidth="0.0" prefWidth="52.0" text="id" />
                 <TableColumn fx:id="columnGiver" prefWidth="125.0" text="Giver" />
