@@ -8,12 +8,15 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import server.services.implementations.DebtServiceImpl;
 import server.services.implementations.ExpenseServiceImpl;
 import server.services.implementations.PersonServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -121,5 +124,88 @@ public class PersonControllerTest {
         when(personService.existsById(2L)).thenReturn(true);
         assertEquals(person1.getEvent(), personController.getEventsById(1L));
         assertEquals(person2.getEvent(), personController.getEventsById(2L));
+    }
+    @Test
+    public void testAdd(){
+        when(personService.save(person1)).thenReturn(person1);
+        when(personService.save(person2)).thenReturn(person2);
+        assertEquals(ResponseEntity.status(HttpStatus.CREATED).body(person1), personController.add(person1));
+        assertEquals(ResponseEntity.status(HttpStatus.CREATED).body(person2), personController.add(person2));
+        List<Person> persons = new ArrayList<>();
+        persons.add(person1);
+        persons.add(person2);
+        when(personService.findById(1L)).thenReturn(Optional.ofNullable(person1));
+        when(personService.existsById(1L)).thenReturn(true);
+        when(personService.findById(2L)).thenReturn(Optional.ofNullable(person2));
+        when(personService.existsById(2L)).thenReturn(true);
+        when(personService.findAll()).thenReturn(persons);
+        assertEquals(2, personController.getAll().size());
+        assertEquals(person1, personController.getById(1L).getBody());
+        assertEquals(person2, personController.getById(2L).getBody());
+    }
+    @Test
+    public void testUpdate(){
+        Event event = new Event();
+        User user = new User();
+        List<Debt> debtList = new ArrayList<>();
+        Person newPerson =  Person.builder().id(1L).firstName("Frank").lastName("Verkoren")
+                .email("frank@gmail.cm").IBAN("INGB1234567890").BIC("1234567")
+                .preferredCurrency(Currency.EUR).totalDebt(20D).event(event)
+                .user(user).debtList(debtList).build();
+        when(personService.save(person1)).thenReturn(person1);
+        when(personService.save(person2)).thenReturn(person2);
+        when(personService.save(newPerson)).thenReturn(newPerson);
+        when(personService.existsById(1L)).thenReturn(true);
+        when(personService.existsById(2L)).thenReturn(true);
+        assertEquals(ResponseEntity.status(HttpStatus.OK).body(person1), personController.update(1L, person1));
+        assertEquals(ResponseEntity.status(HttpStatus.OK).body(person2), personController.update(2L, person2));
+        assertEquals(ResponseEntity.status(HttpStatus.OK).body(newPerson), personController.update(1L, newPerson));
+        List<Person> persons = new ArrayList<>();
+        persons.add(person1);
+        persons.add(newPerson);
+        when(personService.findById(1L)).thenReturn(Optional.ofNullable(person1));
+        when(personService.findById(2L)).thenReturn(Optional.of(newPerson));
+        when(personService.findAll()).thenReturn(persons);
+        assertEquals(2, personController.getAll().size());
+        assertEquals(person1, personController.getById(1L).getBody());
+        assertEquals(newPerson, personController.getById(2L).getBody());
+    }
+    @Test
+    public void testAddDebt(){
+        when(personService.findById(1L)).thenReturn(Optional.ofNullable(person1));
+        when(personService.existsById(1L)).thenReturn(true);
+        Debt debt = new Debt(person1, person2, null, 20);
+        ArrayList<Debt> debts = new ArrayList<>();
+        debts.add(debt);
+        when(debtService.save(debt)).thenReturn(debt);
+        when(personService.save(person1)).thenReturn(person1);
+        assertEquals(debts, Objects.requireNonNull(personController.addDebt(1L, debt).getBody()).getDebtList());
+    }
+    @Test
+    public void testSettleDebt(){
+        Debt debt = new Debt(person1, person2, null, 20);
+        ArrayList<Debt> debts = new ArrayList<>();
+        debts.add(debt);
+        person1.addDebt(debt);
+        when(personService.findById(1L)).thenReturn(Optional.ofNullable(person1));
+        when(personService.existsById(1L)).thenReturn(true);
+        when(debtService.existsById(0L)).thenReturn(true);
+        when(debtService.findById(0L)).thenReturn(Optional.of(debt));
+        when(personService.save(person1)).thenReturn(person1);
+        debts.remove(debt);
+        assertEquals(debts, Objects.requireNonNull(personController.settleDebt(1L, 0L).getBody()).getDebtList());
+    }
+    @Test
+    public void testPayDebtPartially(){
+        Debt debt = new Debt(person1, person2, null, 20);
+        ArrayList<Debt> debts = new ArrayList<>();
+        debts.add(debt);
+        person1.addDebt(debt);
+        when(personService.findById(1L)).thenReturn(Optional.ofNullable(person1));
+        when(personService.existsById(1L)).thenReturn(true);
+        when(debtService.existsById(0L)).thenReturn(true);
+        when(debtService.findById(0L)).thenReturn(Optional.of(debt));
+        when(personService.save(person1)).thenReturn(person1);
+        assertEquals(5, personController.payDebtPartially(1L, 0L, 15).getBody().getDebtList().getFirst().getAmount());
     }
 }
