@@ -40,7 +40,7 @@
       <ComboBox fx:id="showAllParticipantsInEventComboBox" centerShape="false" layoutX="14.0" layoutY="107.0" onAction="#showAllParticipantsInEvent" prefWidth="150.0" promptText="Participants" />
       <AnchorPane fx:id="choosePersonsPane" layoutX="14.0" layoutY="120.0" prefHeight="216.0" prefWidth="149.0" />
       <AnchorPane fx:id="filteringExpensesPane" layoutX="163.0" layoutY="134.0" prefHeight="200.0" prefWidth="295.0" />
-      <AnchorPane fx:id="filteringExpensesPaneOriginal" layoutX="163.0" layoutY="134.0" prefHeight="200.0" prefWidth="295.0" />
+      <AnchorPane fx:id="filteringExpensesPaneOriginal" layoutX="163.0" layoutY="160.0" prefHeight="174.0" prefWidth="295.0" />
       <TextFlow fx:id="languageIndicator" layoutX="15.0" layoutY="13.0" prefHeight="27.0" prefWidth="149.0" />
       <TextField fx:id="emailField" layoutX="226.0" layoutY="70.0" promptText="Please enter the recipient" />
       <Label fx:id="inviteCodeLabel" alignment="CENTER" layoutX="104.0" layoutY="69.0" prefHeight="27.0" prefWidth="121.0" style="-FX-BORDER-COLOR: rgb(128,128,128);" text="&lt;&lt;CODE&gt;&gt;">
@@ -54,7 +54,7 @@
       <Button fx:id="goToEditExpenseButton" layoutX="169.0" layoutY="336.0" mnemonicParsing="false" onAction="#goToEditExpense" prefHeight="27.0" prefWidth="240.0" style="-fx-border-color: rgb(128,128,128);" text="Edit the Expense!" />
       <Button fx:id="removeExpensesButton" layoutX="412.0" layoutY="336.0" mnemonicParsing="false" onAction="#removeExpenses" prefHeight="25.0" prefWidth="48.0" text="Delete it!" />
       <Button fx:id="goToEditPersonButton" layoutX="14.0" layoutY="337.0" mnemonicParsing="false" onAction="#goToEditPerson" prefHeight="25.0" prefWidth="114.0" text="Edit their info!" />
-      <Button fx:id="removePersonButton" layoutX="127.0" layoutY="337.0" mnemonicParsing="false" onAction="#removePersons" prefHeight="25.0" prefWidth="42.0" text="Delete" />
+      <Button fx:id="removePersonButton" layoutX="127.0" layoutY="337.0" mnemonicParsing="false" onAction="#removePerson" prefHeight="25.0" prefWidth="42.0" text="Delete" />
       <Label fx:id="tagsLabel" alignment="CENTER" layoutX="456.0" layoutY="106.0" prefHeight="27.0" prefWidth="139.0" style="-fx-border-color: rgb(128,128,128);" text="Tags" />
       <AnchorPane layoutX="454.0" layoutY="133.0" prefHeight="200.0" prefWidth="143.0" />
       <Button fx:id="goToEditTagButton" layoutX="460.0" layoutY="337.0" mnemonicParsing="false" onAction="#goToEditTag" prefHeight="25.0" prefWidth="97.0" text="Edit" />

@@ -189,11 +189,11 @@ public class Event {
     }
 
     /**
-     * Method that removes a Tag from an Event. Does not work if the Tag is currently in use.
+     * Method that removes a Tag from an Event if it is deprecated. Does not work if the Tag is currently in use.
      * @param tag Tag to remove
      * @return boolean, true if the Tag was removed, false otherwise
      */
-    public boolean removeTag(Tag tag) {
+    public boolean deprecateTag(Tag tag) {
         if(tag == null || !this.getTags().contains(tag)) {
             return false;
         }
@@ -309,6 +309,19 @@ public class Event {
     }
 
     /**
+     * Method that severs the link between an Event and Person by deleting all Expenses associated with them.
+     * @param person Person to remove from the Event
+     */
+    public void severPersonConnection(Person person) {
+        for(Expense expense : this.getExpenses()) {
+            if(expense.getInvolved().contains(person)) {
+                this.removeExpense(expense);
+            }
+        }
+        this.removeParticipant(person);
+    }
+
+    /**
      * Determines whether an expense is part of an event.
      * @param expense Expense to check.
      * @return boolean, true if the Expense is in the event, false otherwise.
@@ -387,6 +400,7 @@ public class Event {
     public int hashCode() {
         return Objects.hash(id, name, description, tags, date, participants, expenses);
     }
+
 }
 
 

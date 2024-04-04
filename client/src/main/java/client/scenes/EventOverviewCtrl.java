@@ -277,8 +277,30 @@ public class EventOverviewCtrl {
     }
 
 
-    public void removePersons(ActionEvent event) throws IOException {
+    public void removePerson(ActionEvent event) throws IOException {
+        if (this.selectedPerson == null) {
+            System.out.println("Cannot remove Person as none was selected.");
+        } else {
+            this.severPersonConnection(selectedPerson);
+        }
+    }
 
+    public boolean severPersonConnection(Person person) {
+        if (this.event == null) {
+            System.out.println("Event is null!");
+            return false;
+        }
+        if (person == null) {
+            System.out.println("Person is null!");
+            return false;
+        }
+        if (!this.event.isAttending(person)) {
+            System.out.println("Event doesn't contain the Person!");
+            return false;
+        }
+        this.event.severPersonConnection(person);
+        server.updateEvent(this.event.getId(), this.event);
+        return true;
     }
 
     /**
@@ -408,7 +430,7 @@ public class EventOverviewCtrl {
                 return false;
             }
             if (selectedExpenses.isEmpty()) {
-                System.out.println("The Event has no Expenses associated with it.");
+                System.out.println("The Event has no such Expenses associated with it.");
                 CheckBox newBox = new CheckBox("There's nothing to display, silly!");
                 filteringExpensesPane.getChildren().add(newBox);
                 newBox.setLayoutY(5);
@@ -423,7 +445,7 @@ public class EventOverviewCtrl {
                 newBox.setLayoutY(y);
                 y += 25;
             }
-            personCheckBoxes = filteringExpensesPane.getChildren().stream().map(t -> (CheckBox) t).toList();
+            expenseCheckBoxes = filteringExpensesPane.getChildren().stream().map(t -> (CheckBox) t).toList();
             return true;
         } catch (WebApplicationException e) {
 
@@ -447,7 +469,7 @@ public class EventOverviewCtrl {
             System.out.println("Replaced Expense is null!");
             return false;
         }
-        if (!this.removeExpense(replacedExpense)) {
+        if (!this.severExpenseConnection(replacedExpense)) {
             System.out.println("Could not delete the Expense!");
             return false;
         }
@@ -488,7 +510,7 @@ public class EventOverviewCtrl {
             System.out.println("Cannot remove Expense as none was selected.");
         } else {
             for (Expense expense : this.selectedExpenses) {
-                this.removeExpense(expense);
+                this.severExpenseConnection(expense);
             }
         }
     }
@@ -499,7 +521,7 @@ public class EventOverviewCtrl {
      * @param expense Expense to remove
      * @return true, if successful
      */
-    public boolean removeExpense(Expense expense) {
+    public boolean severExpenseConnection(Expense expense) {
         if (this.event == null) {
             System.out.println("Event is null!");
             return false;
@@ -540,13 +562,13 @@ public class EventOverviewCtrl {
                         System.out.println("Cannot proceed with operation as Tag is currently in use.");
                         return;
                     }
-                    this.removeTag(tag);
+                    this.severTagConnection(tag);
                 }
             }
         }
     }
 
-    public boolean removeTag(Tag tag) {
+    public boolean severTagConnection(Tag tag) {
         if (this.event == null) {
             System.out.println("Event is null!");
             return false;
@@ -559,7 +581,7 @@ public class EventOverviewCtrl {
             System.out.println("Event doesn't contain the Tag!");
             return false;
         }
-        this.event.removeTag(tag);
+        this.event.deprecateTag(tag);
         server.updateEvent(this.event.getId(), this.event);
         return true;
     }
