@@ -173,14 +173,19 @@ public class AddExpenseCtrl {
                     debts.add(debt);
 
                 }
+                //convert LocalDate to date
+                LocalDate localDate = dateField.getValue();
+                Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
-                Expense e = new Expense(description, amount, new Date(), getPayerData(), debts,
-                        getCurrencyData(), getTypeData());
+                Expense e = new Expense(description, amount, date, getPayerData(), debts,
+                    getCurrencyData(), getTypeData());
 
-                for (Debt debt : debts)
-                    debt.setExpense(e);
-                server.addExpenseToEvent(this.event.getId(), e);
-                System.out.println("Created expense");
+               for (Debt debt : debts)
+                 debt.setExpense(e);
+               server.addExpenseToEvent(this.event.getId(), e);
+               System.out.println("Created expense");
+               statusLabel.setText("Expense created!");
+               clearFields();
             }
             else{
                 payerComboBox.cancelEdit();
@@ -188,19 +193,7 @@ public class AddExpenseCtrl {
                 amountField.setText(null);
                 typeComboBox.cancelEdit();
             }
-            //convert LocalDate to date
-            LocalDate localDate = dateField.getValue();
-            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
-            Expense e = new Expense(description, amount, date, getPayerData(), debts,
-                    getCurrencyData(), getTypeData());
-
-            for (Debt debt : debts)
-                debt.setExpense(e);
-            server.addExpenseToEvent(this.event.getId(), e);
-            System.out.println("Created expense");
-            statusLabel.setText("Expense created!");
-            clearFields();
+            
 
         } catch (RuntimeException e) {
             e.printStackTrace();
