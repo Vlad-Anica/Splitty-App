@@ -309,13 +309,21 @@ public class Event {
     }
 
     /**
-     * Method that severs the link between an Event and Person by deleting all Expenses associated with them.
+     * Method that severs the link between an Event and Person.
      * @param person Person to remove from the Event
      */
     public void severPersonConnection(Person person) {
         for(Expense expense : this.getExpenses()) {
             if(expense.getInvolved().contains(person)) {
-                this.removeExpense(expense);
+                if(expense.getReceiver().equals(person)) {
+                    this.removeExpense(expense);
+                } else {
+                    List<Person> persons = expense.getInvolved();
+                    persons.remove(expense.getReceiver());
+                    if(persons.size() == 1) {
+                        this.removeExpense(expense);
+                    }
+                }
             }
         }
         this.removeParticipant(person);

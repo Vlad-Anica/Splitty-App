@@ -81,9 +81,11 @@ public class EventOverviewCtrl {
     private Button removeExpensesButton;
 
     @FXML
-    private Label tagsLabel;
+    private Button showAllTagsInEvent;
     @FXML
     private List<CheckBox> tagsCheckBoxes;
+    @FXML
+    private AnchorPane chooseTagsPane;
     @FXML
     private Button goToEditTagButton;
     @FXML
@@ -174,8 +176,23 @@ public class EventOverviewCtrl {
     }
 
     public void computeSelectedExpenses() {
-        ArrayList<Expense> expenses;
+        ArrayList<Expense> expenses = new ArrayList<>();
         String text = null;
+        for (CheckBox box : this.expenseCheckBoxes) {
+            if (box.isSelected()) {
+                text = box.getText();
+            } else {
+                continue;
+            }
+            for (Expense e : this.event.getExpenses()) {
+                if ((e.getTag() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName()).equals(text)) {
+                    this.selectedExpenses.add(e);
+                    return;
+                }
+            }
+            return;
+        }
+        this.selectedExpenses = expenses;
     }
 
     /**
@@ -185,7 +202,7 @@ public class EventOverviewCtrl {
      */
     public void checkPersonBoxes(ActionEvent event) {
         computeSelectedPerson();
-        if (selectedPerson == null) {
+        if (!validPersonSelection()) {
             return;
         }
         String name = selectedPerson.getFirstName() + " " + selectedPerson.getLastName();
@@ -197,8 +214,26 @@ public class EventOverviewCtrl {
         }
     }
 
-    public void checkExpenseBoxes(ActionEvent event) {
+    public void toggleInSelectedExpenses(Expense expense) {
+        if(this.selectedExpenses == null) {
+            this.selectedExpenses = new ArrayList<>();
+        }
+        if(this.selectedExpenses.contains(expense)) {
+            this.selectedExpenses.remove(expense);
+        } else {
+            this.selectedExpenses.add(expense);
+        }
+    }
 
+    public void toggleInSelectedTags(Tag tag) {
+        if(this.selectedTags == null) {
+            this.selectedTags = new ArrayList<>();
+        }
+        if(this.selectedTags.contains(tag)) {
+            this.selectedTags.remove(tag);
+        } else {
+            this.selectedTags.add(tag);
+        }
     }
 
     /**
@@ -231,6 +266,7 @@ public class EventOverviewCtrl {
                 CheckBox newBox = new CheckBox(
                         p.getFirstName() + " " + p.getLastName());
                 newBox.setOnAction(this::checkPersonBoxes);
+                //newBox.setOnAction(event -> personClick());
                 choosePersonsPane.getChildren().add(newBox);
                 newBox.setLayoutY(y);
                 y += 25;
@@ -246,6 +282,7 @@ public class EventOverviewCtrl {
             this.showAllParticipantsInEventComboBox.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
+            this.setPersonCheckBoxesVisibility(false);
 
 
             this.filteringExpensesPane.setVisible(false);
@@ -265,20 +302,45 @@ public class EventOverviewCtrl {
     }
 
     public void choosePersonsVisibilityCheck() {
+        if(this.goToEditPersonButton.isVisible()) {
+            resetPersonsPane();
+            this.choosePersonsPane.setVisible(false);
+            this.goToEditPersonButton.setVisible(false);
+            this.removePersonButton.setVisible(false);
+            this.setPersonCheckBoxesVisibility(false);
+        } else {
+            this.choosePersonsPane.setVisible(true);
+            this.goToEditPersonButton.setVisible(true);
+            this.removePersonButton.setVisible(true);
+            this.setPersonCheckBoxesVisibility(true);
+        }
+    }
 
+    public void setPersonCheckBoxesVisibility(boolean state) {
+        if(this.personCheckBoxes == null || personCheckBoxes.isEmpty()) {
+            return;
+        } else {
+            for(CheckBox box : personCheckBoxes) {
+                box.setVisible(state);
+            }
+        }
     }
 
     public void showAllParticipantsInEvent(ActionEvent event) {
-
+        this.choosePersonsVisibilityCheck();
     }
 
     public void goToEditPerson(ActionEvent event) throws IOException {
-
+        if(!validPersonSelection()) {
+            System.out.println("Cannot edit Person as none was selected.");
+        } else {
+            //goToEditPerson() tbi etc
+        }
     }
 
 
     public void removePerson(ActionEvent event) throws IOException {
-        if (this.selectedPerson == null) {
+        if (!validPersonSelection()) {
             System.out.println("Cannot remove Person as none was selected.");
         } else {
             this.severPersonConnection(selectedPerson);
@@ -290,7 +352,7 @@ public class EventOverviewCtrl {
             System.out.println("Event is null!");
             return false;
         }
-        if (person == null) {
+        if (!validPersonSelection()) {
             System.out.println("Person is null!");
             return false;
         }
@@ -300,6 +362,7 @@ public class EventOverviewCtrl {
         }
         this.event.severPersonConnection(person);
         server.updateEvent(this.event.getId(), this.event);
+        this.setup(eventId);
         return true;
     }
 
@@ -326,7 +389,7 @@ public class EventOverviewCtrl {
      * @return Boolean, true if a Person has been selected.
      */
     public boolean validPersonSelection() {
-        return this.selectedPerson != null;
+        return this.selectedPerson != null && this.event.isAttending(selectedPerson);
     }
 
     /**
@@ -340,11 +403,27 @@ public class EventOverviewCtrl {
         this.filteringExpensesPane.setPrefWidth(200);
     }
 
+    private void resetPersonsPane() {
+        this.choosePersonsPane.getChildren().removeAll();
+        this.choosePersonsPane.setLayoutX(14);
+        this.choosePersonsPane.setLayoutY(120);
+        this.choosePersonsPane.setPrefHeight(216);
+        this.choosePersonsPane.setPrefWidth(149);
+    }
+
+    public void resetTagsPane() {
+        this.chooseTagsPane.getChildren().removeAll();
+        this.chooseTagsPane.setLayoutX(454);
+        this.chooseTagsPane.setLayoutY(133);
+        this.chooseTagsPane.setPrefHeight(200);
+        this.chooseTagsPane.setPrefWidth(143);
+    }
+
     /**
      * Upon selecting a Person, this method should be called in order to rename the filters.
      */
     public void renameFilters() {
-        if (selectedPerson == null) {
+        if (!validPersonSelection()) {
             System.out.println("Selected Person is null!!! Filter refresh aborted.");
         }
         try {
@@ -364,7 +443,7 @@ public class EventOverviewCtrl {
     public void showAllExpensesInEvent(ActionEvent event) {
         expenseFilteringVisibilityCheck();
         resetExpenseFilteringPane();
-        showAllExpensesFiltered(this.expenses);
+        showAllExpensesFiltered(this.event.getExpenses());
     }
 
     /**
@@ -380,10 +459,10 @@ public class EventOverviewCtrl {
             return;
         }
         List<Expense> selectedExpenses = new ArrayList<>();
-        if (this.expenses == null) {
+        if (this.event.getExpenses() == null) {
             selectedExpenses = null;
         } else {
-            for (Expense expense : this.expenses) {
+            for (Expense expense : this.event.getExpenses()) {
                 if (expense.getReceiver().equals(selectedPerson)) {
                     selectedExpenses.add(expense);
                 }
@@ -405,10 +484,10 @@ public class EventOverviewCtrl {
             return;
         }
         List<Expense> selectedExpenses = new ArrayList<>();
-        if (this.expenses == null) {
+        if (this.event.getExpenses() == null) {
             selectedExpenses = null;
         } else {
-            for (Expense expense : this.expenses) {
+            for (Expense expense : this.event.getExpenses()) {
                 if (expense.getInvolved().contains(selectedPerson)) {
                     selectedExpenses.add(expense);
                 }
@@ -441,7 +520,7 @@ public class EventOverviewCtrl {
                 CheckBox newBox = new CheckBox(
                         e.getTag() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName());
                 filteringExpensesPane.getChildren().add(newBox);
-                newBox.setOnAction(this::checkExpenseBoxes);
+                newBox.setOnAction(event -> toggleInSelectedExpenses(e));
                 newBox.setLayoutY(y);
                 y += 25;
             }
@@ -511,7 +590,9 @@ public class EventOverviewCtrl {
         } else {
             for (Expense expense : this.selectedExpenses) {
                 this.severExpenseConnection(expense);
+                this.selectedExpenses.remove(expense);
             }
+            this.setup(eventId);
         }
     }
 
@@ -536,7 +617,39 @@ public class EventOverviewCtrl {
         }
         this.event.removeExpense(expense);
         server.updateEvent(this.event.getId(), this.event);
+        this.setup(eventId);
         return true;
+    }
+
+
+    public void tagsVisibilityCheck() {
+        if(this.goToEditTagButton.isVisible()) {
+            resetTagsPane();
+            this.chooseTagsPane.setVisible(false);
+            this.goToEditTagButton.setVisible(false);
+            this.removeTagButton.setVisible(false);
+        } else {
+            this.chooseTagsPane.setVisible(true);
+            this.goToEditTagButton.setVisible(true);
+            this.removeTagButton.setVisible(true);
+        }
+    }
+    public void showAllTagsInEvent(ActionEvent event) {
+        tagsVisibilityCheck();
+        resetTagsPane();
+        showAllTags(this.event.getTags());
+    }
+
+    public void showAllTags(List<Tag> tags) {
+        int y = 5;
+        for (Tag t : tags) {
+            CheckBox newBox = new CheckBox(t.getType());
+            newBox.setOnAction(event -> toggleInSelectedTags(t));
+            chooseTagsPane.getChildren().add(newBox);
+            newBox.setLayoutY(y);
+            y += 25;
+        }
+        tagsCheckBoxes = chooseTagsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
     }
 
     public void goToEditTag(ActionEvent event) {
@@ -557,7 +670,7 @@ public class EventOverviewCtrl {
             System.out.println("Cannot remove Tag as none was selected.");
         } else {
             for (Tag tag : this.tags) {
-                for(Expense expense : expenses) {
+                for(Expense expense : this.event.getExpenses()) {
                     if(expense.getTag().equals(tag)) {
                         System.out.println("Cannot proceed with operation as Tag is currently in use.");
                         return;
@@ -583,6 +696,7 @@ public class EventOverviewCtrl {
         }
         this.event.deprecateTag(tag);
         server.updateEvent(this.event.getId(), this.event);
+        this.setup(eventId);
         return true;
     }
 
