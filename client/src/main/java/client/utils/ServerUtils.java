@@ -15,7 +15,15 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import commons.*;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,20 +33,16 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import commons.*;
-import jakarta.ws.rs.core.MediaType;
-import org.glassfish.jersey.client.ClientConfig;
-
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
 	private static String SERVER = "http://localhost:8080/";
+	private static final int NO_CONTENT_STATUS = 204;
 
 	public void setSERVER(String server) {
 		SERVER = server;
@@ -479,6 +483,28 @@ public class ServerUtils {
 		}
 	}
 
+	private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+	public void registerForUpdates(Consumer<Event> consumer) {
+		EXEC.submit(() -> {
+			while (!Thread.interrupted()) {
+				Response res = ClientBuilder.newClient(new ClientConfig()) //
+						.target(SERVER).path("/api/events/updates") //
+						.request(APPLICATION_JSON) //
+						.accept(APPLICATION_JSON) //
+						.get(Response.class);
+				if (res.getStatus() == NO_CONTENT_STATUS) {
+					continue;
+				}
+				Event event = (Event) res.readEntity(Event.class);
+				consumer.accept(event);
+			}
+		});
+
+	}
+
+	public void stop() {
+		EXEC.shutdownNow();
+	}
 	public void deleteEventById(Long eventId) {
 		ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events/" + eventId)
