@@ -198,8 +198,6 @@ public class PersonControllerTest {
     @Test
     public void testPayDebtPartially(){
         Debt debt = new Debt(person1, person2, null, 20);
-        ArrayList<Debt> debts = new ArrayList<>();
-        debts.add(debt);
         person1.addDebt(debt);
         when(personService.findById(1L)).thenReturn(Optional.ofNullable(person1));
         when(personService.existsById(1L)).thenReturn(true);
