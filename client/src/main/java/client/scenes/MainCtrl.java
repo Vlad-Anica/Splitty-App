@@ -404,6 +404,8 @@ public class MainCtrl {
     public void showOpenDebts() {
         primaryStage.setScene(openDebtsScene);
         openDebtsCtrl.setup();
+        openDebtsScene.getStylesheets().add("/client/scenes/opendebts.css");
+
         openDebtsScene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.BACK_SPACE) {
                 System.out.println("Going Back!");
