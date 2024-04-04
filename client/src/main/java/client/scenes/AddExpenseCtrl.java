@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class AddExpenseCtrl {
 
@@ -78,35 +79,51 @@ public class AddExpenseCtrl {
         try {
             if (!isValidInput())
             {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Create Expense Warning");
+                alert.setContentText("Please fill all fields correctly!");
+                alert.showAndWait();
                 System.out.println("Every field needs to filled properly");
                 return;
             }
-            String description;
-            if (descriptionField == null || descriptionField.getText().isEmpty())
-                description = null;
-            else
-                description = descriptionField.getText();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Adding Expense Confirmation Alert");
+            alert.setContentText("Do you want to add this expense?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() == ButtonType.OK) {
+                String description;
+                if (descriptionField == null || descriptionField.getText().isEmpty())
+                    description = null;
+                else
+                    description = descriptionField.getText();
 
-            double amount = Double.parseDouble(amountField.getText());
+                double amount = Double.parseDouble(amountField.getText());
 
-            double amountPerPerson = splitEvenButton.isSelected() ?
-                    amount / getAllGivers().size() : amount / selectedBoxesNumber();
-            List<Debt> debts = new ArrayList<>();
+                double amountPerPerson = splitEvenButton.isSelected() ?
+                        amount / getAllGivers().size() : amount / selectedBoxesNumber();
+                List<Debt> debts = new ArrayList<>();
 
-            for (Person p : getAllGivers()) {
-                Debt debt = new Debt(getPayerData(), p, null, amountPerPerson);
-               // server.addDebt(debt);
-                debts.add(debt);
+                for (Person p : getAllGivers()) {
+                    Debt debt = new Debt(getPayerData(), p, null, amountPerPerson);
+                    // server.addDebt(debt);
+                    debts.add(debt);
 
+                }
+                System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
+                Expense e = new Expense(description, amount, new Date(), getPayerData(), debts,
+                        getCurrencyData(), getTypeData());
+
+                for (Debt debt : debts)
+                    debt.setExpense(e);
+                server.addExpenseToEvent(this.event.getId(), e);
+                System.out.println("Created expense");
             }
-            System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
-            Expense e = new Expense(description, amount, new Date(), getPayerData(), debts,
-                    getCurrencyData(), getTypeData());
-
-            for (Debt debt : debts)
-                debt.setExpense(e);
-            server.addExpenseToEvent(this.event.getId(), e);
-            System.out.println("Created expense");
+            else{
+                payerComboBox.cancelEdit();
+                descriptionField.setText(null);
+                amountField.setText(null);
+                typeComboBox.cancelEdit();
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
         } catch (JsonProcessingException e) {

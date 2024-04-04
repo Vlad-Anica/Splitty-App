@@ -7,15 +7,15 @@ import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
 import java.io.File;
 import java.io.PrintWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StartPageCtrl {
 
@@ -54,32 +54,45 @@ public class StartPageCtrl {
 
     }
 
-
     public void createUser(ActionEvent event) throws IOException {
         try {
             if (!isValidInput())
             {
-                System.out.println("Every field needs to filled properly");
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("User Creation Warning");
+                alert.setContentText("Please fill all necessary fields");
+                alert.showAndWait();
                 return;
             }
-            String emailHolder = "-1";
-            if(!(email.getText().isEmpty()))
-                emailHolder = email.getText();
-            User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("User Creation Confirmation Alert");
+            alert.setContentText("Do you want to create this user?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() == ButtonType.OK) {
+                String emailHolder = "-1";
+                if (!(email.getText().isEmpty()))
+                    emailHolder = email.getText();
+                User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData());
 
-            u = server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData() );
-            File file = mainCtrl.getUserConfig();
-            if(!file.exists()){
-                file.createNewFile();
+                u = server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData());
+                File file = mainCtrl.getUserConfig();
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                PrintWriter pw = new PrintWriter(file);
+                pw.println(mainCtrl.getLanguageIndex());
+                pw.println(u.getId());
+                System.out.println(u.getId());
+                pw.close();
+                System.out.println("User Created Successfully !!!");
+                mainCtrl.getLastKnownInfo();
+                mainCtrl.showHome();
             }
-            PrintWriter pw = new PrintWriter(file);
-            pw.println(mainCtrl.getLanguageIndex());
-            pw.println(u.getId());
-            System.out.println(u.getId());
-            pw.close();
-            System.out.println("User Created Successfully !!!");
-            mainCtrl.getLastKnownInfo();
-            mainCtrl.showHome();
+            else{
+                firstname.setText(null);
+                lastname.setText(null);
+                email.setText(null);
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
