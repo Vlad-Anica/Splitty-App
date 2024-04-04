@@ -15,10 +15,7 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class CreateEventCtrl {
 
@@ -88,26 +85,40 @@ public class CreateEventCtrl {
     public void createEvent(ActionEvent event) {
 
         if (!isValidInput()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Event Creation Warning");
+            alert.setContentText("Please fill all fields correctly!");
+            alert.showAndWait();
             statusLabel.setStyle("-fx-font-weight: bold");
             statusLabel.setTextFill(Color.RED);
             statusLabel.setText("Fill out every field correctly!");
             return;
         }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Event Creation Alert");
+        alert.setContentText("Do you want to create this event?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get() == ButtonType.OK) {
+            //convert LocalDate to date
+            LocalDate localDate = dateField.getValue();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        //convert LocalDate to date
-        LocalDate localDate = dateField.getValue();
-        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Event newEvent = new Event(nameField.getText(), descField.getText(),
+                    new ArrayList<>(), date, new ArrayList<>(), new ArrayList<>());
 
-        Event newEvent = new Event(nameField.getText(), descField.getText(),
-                new ArrayList<>(), date, new ArrayList<>(), new ArrayList<>());
-
-        server.createEvent(newEvent);
-        statusLabel.setTextFill(Color.BLACK);
-        ClipboardContent inviteCodeClipboard = new ClipboardContent();
-        inviteCodeClipboard.putString(newEvent.getInviteCode());
-        clipboard.setContent(inviteCodeClipboard);
-        statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
-
+            server.createEvent(newEvent);
+            statusLabel.setTextFill(Color.BLACK);
+            ClipboardContent inviteCodeClipboard = new ClipboardContent();
+            inviteCodeClipboard.putString(newEvent.getInviteCode());
+            clipboard.setContent(inviteCodeClipboard);
+            statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
+        }
+        else{
+            nameField.setText(null);
+            inviteField.setText(null);
+            descField.setText(null);
+            dateField.getEditor().clear();
+        }
     }
 
     @FXML

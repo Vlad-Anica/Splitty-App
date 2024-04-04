@@ -3,12 +3,11 @@ package client.scenes;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
@@ -49,8 +48,17 @@ public class SettingsCtrl {
 
     }
     public void clickBtnSubmitAll() {
-        currentUsername = publicUsername.getText();
-        currency = (String)selectedCurrency.getValue();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Submit Alert");
+        alert.setContentText("Are you sure you want to submit?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get() == ButtonType.OK) {
+            currentUsername = publicUsername.getText();
+            currency = (String) selectedCurrency.getValue();
+        }
+        else{
+            publicUsername.setText(null);
+        }
     }
 
     public void clickBtnHome() {

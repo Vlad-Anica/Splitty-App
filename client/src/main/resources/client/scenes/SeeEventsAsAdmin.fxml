@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SeeEventsAsAdminCtrl">
@@ -16,5 +17,7 @@
          </content>
       </ScrollPane>
       <ComboBox fx:id="selectAscDesc" layoutX="199.0" layoutY="36.0" prefWidth="150.0" />
+      <TextField fx:id="eventToDeleteId" layoutX="50.0" layoutY="345.0" />
+      <Button fx:id="btnDeleteEvent" layoutX="222.0" layoutY="345.0" mnemonicParsing="false" onAction="#deleteEventById" text="Button" />
    </children>
 </AnchorPane>

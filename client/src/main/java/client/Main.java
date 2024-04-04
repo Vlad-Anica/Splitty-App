@@ -56,6 +56,9 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         ServerUtils server = INJECTOR.getInstance(ServerUtils.class);
         mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, managementOverview, addLanguage, startPage, seeEventsAsAdmin, createEvent, selectServer, server);
+        primaryStage.setOnCloseRequest(e -> {
+            seeEventsAsAdmin.getKey().stop();
+        });
     }
 
 }

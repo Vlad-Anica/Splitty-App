@@ -6,19 +6,18 @@ import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SeeEventsAsAdminCtrl {
     private MainCtrl mainCtrl;
     ServerUtils server;
+    @FXML
+    Button btnDeleteEvent;
+    @FXML
+    TextField eventToDeleteId;
     @FXML
     Button btnManagementOverview;
     @FXML
@@ -57,21 +56,34 @@ public class SeeEventsAsAdminCtrl {
             }
         });
         selectOrdering.setOnAction(event -> {
-            int selection = selectOrdering.getSelectionModel().getSelectedIndex();
-            if (selection >= 0) {
-                if (selection == 0) {
-                    events = server.getEventsOrderedByName();
-                } else if (selection == 1) {
-                    events = server.getEventsOrderedByCreationDate();
-                } else if (selection == 2) {
-                    events = server.getEventsOrderedByLastModificationDate();
-                }
-                if (ascending) {
-                    events = events.reversed();
-                }
-                printToTable();
-            }
+            printSortedEvents();
         });
+        server.registerForUpdates(event -> {
+            printSortedEvents();
+        });
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                printSortedEvents();
+            }
+        }, 1000L, 5000L);
+    }
+
+    public void printSortedEvents() {
+        int selection = selectOrdering.getSelectionModel().getSelectedIndex();
+        if (selection >= 0) {
+            if (selection == 0) {
+                events = server.getEventsOrderedByName();
+            } else if (selection == 1) {
+                events = server.getEventsOrderedByCreationDate();
+            } else if (selection == 2) {
+                events = server.getEventsOrderedByLastModificationDate();
+            }
+            if (ascending) {
+                events = events.reversed();
+            }
+            printToTable();
+        }
     }
 
     /**
@@ -109,11 +121,36 @@ public class SeeEventsAsAdminCtrl {
 
     }
 
+    public void stop() {
+        server.stop();
+    }
+    
+    public void deleteEventById() {
+        Long eventId = Long.parseLong(eventToDeleteId.getText());
+        server.deleteEventById(eventId);
+        int selection = selectOrdering.getSelectionModel().getSelectedIndex();
+        if (selection >= 0) {
+            if (selection == 0) {
+                events = server.getEventsOrderedByName();
+            } else if (selection == 1) {
+                events = server.getEventsOrderedByCreationDate();
+            } else if (selection == 2) {
+                events = server.getEventsOrderedByLastModificationDate();
+            }
+            if (ascending) {
+                events = events.reversed();
+            }
+            printToTable();
+        }
+    }
+
     public void setTextLanguage() {
         int languageIndex = mainCtrl.getLanguageIndex();
         if (languageIndex < 0)
             languageIndex = 0;
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        btnDeleteEvent.setText(resourceBundle.getString("DeleteEvent"));
+        eventToDeleteId.setPromptText(resourceBundle.getString("EventId"));
         btnManagementOverview.setText(resourceBundle.getString("ManagementOverview"));
         selectAscDesc.setPromptText(resourceBundle.getString("SelectAscDesc"));
         ascDesc.set(0, resourceBundle.getString("Ascending"));
