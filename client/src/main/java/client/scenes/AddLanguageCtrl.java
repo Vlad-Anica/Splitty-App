@@ -49,37 +49,55 @@ public class AddLanguageCtrl{
     @FXML
     void addLanguage(ActionEvent event) {
         if (nameField == null || nameField.getText().isEmpty() || nameField.getText().contains(" ")){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setContentText("Please fill in id name");
+            alert.showAndWait();
             notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("FillInIdName"));
             return;
     }
         if (newLanguage.keySet().size()<phrases.keySet().size()){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setContentText("Please fill all fields");
+            alert.showAndWait();
             notFilledIn.setText("Not everything is filled in");
             notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("NotFilledIn"));
             return;
         }
-        System.out.println("Adding language... name: " + nameField.getText());
-        String filePath = "client/src/main/resources/languages/language_" + nameField.getText() + ".properties";
-        File f = new File(filePath);
-        if(f.exists()){
-            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("LanguageAlreadyExists"));
-            return;
-        }
-        try {
-            PrintWriter writer = new PrintWriter(new FileWriter(filePath));
-            for (String i: newLanguage.keySet()) {
-                writer.println(i + " = " + newLanguage.get(i));
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Language Addition Alert");
+        alert.setContentText("Do you want to add this language?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get() == ButtonType.OK) {
+            System.out.println("Adding language... name: " + nameField.getText());
+            String filePath = "client/src/main/resources/languages/language_" + nameField.getText() + ".properties";
+            File f = new File(filePath);
+            if (f.exists()) {
+                Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                alert1.setTitle("Warning");
+                alert1.setContentText("Language Already Exists");
+                alert1.showAndWait();
+                notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("LanguageAlreadyExists"));
+                return;
             }
-            writer.close();
-            System.out.println("Lines have been written to the file successfully.");
-            notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("RestartLanguage"));
-            mainCtrl.setRestart(true);
-            notFilledIn.setTextFill(Color.rgb(10, 170, 32));
-        } catch (IOException e) {
-            System.out.println("An error occurred while writing to the file: " + e.getMessage());
-            e.printStackTrace();
+            try {
+                PrintWriter writer = new PrintWriter(new FileWriter(filePath));
+                for (String i : newLanguage.keySet()) {
+                    writer.println(i + " = " + newLanguage.get(i));
+                }
+                writer.close();
+                System.out.println("Lines have been written to the file successfully.");
+                notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("RestartLanguage"));
+                mainCtrl.setRestart(true);
+                notFilledIn.setTextFill(Color.rgb(10, 170, 32));
+            } catch (IOException e) {
+                System.out.println("An error occurred while writing to the file: " + e.getMessage());
+                e.printStackTrace();
+            }
+            mainCtrl.getLanguages().add(nameField.getText());
+            mainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
         }
-        mainCtrl.getLanguages().add(nameField.getText());
-        mainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
     }
     public void setUp(){
         setTextLanguage();
