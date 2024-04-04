@@ -1,0 +1,90 @@
+* {
+    -fx-blue-color: #72a4ff;
+    -fx-font-family: Rowdies;
+}
+
+.radio-button .radio {
+    -fx-border-width: 1px;
+    -fx-border-color: -fx-blue-color;
+    -fx-background-color: white;
+    -fx-background-image: null;
+    -fx-border-radius: 15px;
+    -fx-padding: 2px;
+}
+.radio-button .radio:selected {
+    -fx-background-color: white;
+    -fx-background-image: null;
+}
+.radio-button -radio:armed {
+    -fx-background-color: white;
+    -fx-background-image: null;
+}
+.radio-button -radio:determinate {
+    -fx-background-color: white;
+    -fx-background-image: null;
+}
+.radio-button -radio:indeterminate {
+    -fx-background-color: white;
+    -fx-background-image: null;
+}
+.radio-button .dot {
+    -fx-background-radius: 15px;
+
+}
+.radio-button:selected .radio .dot {
+    -fx-background-color: -fx-blue-color;
+    -fx-background-insets: 0;
+}
+
+.check-box .box {
+
+    -fx-background-color: white;
+    -fx-border-color:grey;
+    -fx-border-radius:3px;
+
+}
+
+.check-box:selected .box {
+    -fx-background-color: -fx-blue-color;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.button, .combo-box {
+    -fx-background-color: -fx-blue-color;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
+}
+.date-picker .selected {
+    -fx-background-color: -fx-blue-color;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: -fx-blue-color;
+    -fx-background-radius: 0;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+.date-picker-popup  {
+    -fx-border-color: transparent;
+}
+.date-picker-popup .month-year-pane {
+    -fx-background-color: -fx-blue-color;
+}
+.date-picker-popup .month-year-pane .label {
+    -fx-text-fill: white;
+}
+
+.date-picker-popup .spinner .button .left-arrow,
+.date-picker-popup .spinner .button .right-arrow {
+    -fx-background-color: white;
+}

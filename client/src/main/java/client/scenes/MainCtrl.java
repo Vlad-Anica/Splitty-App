@@ -454,6 +454,7 @@ public class MainCtrl {
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpenseScene);
         addExpenseCtrl.initializePage(eventID);
+        addExpenseScene.getStylesheets().add("/client/scenes/addExpense.css");
         addExpenseScene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
                 case KeyCode.ENTER -> addExpenseCtrl.createExpense();
