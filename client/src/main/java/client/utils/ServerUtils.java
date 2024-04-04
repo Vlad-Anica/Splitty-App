@@ -479,13 +479,11 @@ public class ServerUtils {
 		}
 	}
 
-	public Event deleteEventById(Long eventId) {
-		Event event = ClientBuilder.newClient(new ClientConfig())
+	public void deleteEventById(Long eventId) {
+		ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/events/" + eventId)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.delete(new GenericType<Event>() {
-				});
-		return event;
+				.delete();
 	}
 }
