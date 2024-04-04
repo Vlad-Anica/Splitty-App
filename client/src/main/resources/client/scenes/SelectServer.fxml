@@ -12,7 +12,7 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #fffaf4;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SelectServerCtrl">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="30.0" layoutX="261.0" layoutY="227.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="69.0" />
-      <Text fx:id="instructionMessage" layoutX="277.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+      <Text fx:id="instructionMessage" layoutX="200.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
          <font>
             <Font name="Rowdies Regular" size="12.0" />
          </font></Text>
