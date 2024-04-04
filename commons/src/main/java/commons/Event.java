@@ -46,16 +46,16 @@ public class Event {
     }
     private String name;
     private String description;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Tag> tags;
     public static final Tag foodTag= new Tag("green", "Food");
     public static final Tag entranceFeesTag = new Tag("blue", "Entrance Fees");
     public static final Tag travelTag = new Tag("red", "Travel");
     private Date date;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "event")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private List<Person> participants;
-    @OneToMany
+    @OneToMany (cascade = CascadeType.ALL)
     private List<Expense> expenses;
     private String inviteCode;
 
