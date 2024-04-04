@@ -162,6 +162,20 @@ public class Event {
     }
 
     /**
+     * Method that determines whether a Tag is present in the Event's list of Tags.
+     * @param tag Tag to check
+     * @return boolean, true if the Tag is in the Event's List. False otherwise.
+     */
+    public boolean containsTag(Tag tag) {
+        for(Tag eventTag : this.getTags()) {
+            if(tag.equals(eventTag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Method that adds a Tag to an Event's list of Tags if not already present.
      * @param tag Tag to add to the event.
      * @return boolean, true if the Tag was added successfully, false otherwise.
@@ -171,6 +185,24 @@ public class Event {
             return false;
         }
         this.tags.add(tag);
+        return true;
+    }
+
+    /**
+     * Method that removes a Tag from an Event. Does not work if the Tag is currently in use.
+     * @param tag Tag to remove
+     * @return boolean, true if the Tag was removed, false otherwise
+     */
+    public boolean removeTag(Tag tag) {
+        if(tag == null || !this.getTags().contains(tag)) {
+            return false;
+        }
+        for(Expense expense : this.getExpenses()) {
+            if(expense.getTag().equals(tag)) {
+                return false;
+            }
+        }
+        this.getTags().remove(tag);
         return true;
     }
 
