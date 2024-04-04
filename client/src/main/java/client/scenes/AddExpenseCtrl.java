@@ -12,9 +12,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +45,10 @@ public class AddExpenseCtrl {
     @FXML
     private TextField tagClrField;
     @FXML
+    private DatePicker dateField;
+    @FXML
+    private Label dateLabel;
+    @FXML
     private ComboBox<Currency> currencyComboBox;
     @FXML
     private RadioButton splitEvenButton;
@@ -56,7 +65,11 @@ public class AddExpenseCtrl {
     @FXML
     private Button goHomeButton;
     @FXML
+    private Button backButton;
+    @FXML
     private Button addTagButton;
+    @FXML
+    private Label statusLabel;
     @FXML
     private List<CheckBox> checkBoxes;
     private List<Person> participants;
@@ -66,6 +79,7 @@ public class AddExpenseCtrl {
     private EventOverviewCtrl eventOverviewCtrl;
     private ServerUtils server;
     private Event event;
+
     @Inject
     public AddExpenseCtrl(MainCtrl mainCtrl, EventOverviewCtrl eventOverviewCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
@@ -73,12 +87,61 @@ public class AddExpenseCtrl {
         this.server = server;
     }
 
-    public void createExpense(ActionEvent event) throws RuntimeException  {
+    public void initializePage(long eventID)  {
+
+        try {
+            event = server.getEvent(eventID);
+            participants = new ArrayList<>();
+            participants.addAll(server.getPersons());
+            int y = 5;
+            for (Person p : participants) {
+                CheckBox newBox = new CheckBox(
+                        p.getFirstName() + " " + p.getLastName());
+                splitPersonsPane.getChildren().add(newBox);
+                newBox.setLayoutY(y);
+                y += 25;
+            }
+            payerComboBox.setItems(FXCollections.observableArrayList(
+                    participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
+            ));
+
+            checkBoxes = splitPersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
+
+            List<Tag> defaultTags = List.of(
+                    new Tag("green", "Food"),
+                    new Tag("blue", "Entrance Fees"),
+                    new Tag("red", "Travel")
+            );
+            tags = new ArrayList<>();
+            tags.addAll(defaultTags);
+            typeComboBox.setItems(FXCollections.observableArrayList(
+                    defaultTags.stream().map(Tag::getType).toList()));
+
+            currencyComboBox.setItems(FXCollections.observableList(
+                    List.of(Currency.EUR, Currency.USD,
+                            Currency.CHF, Currency.GBP)));
+            currencyComboBox.getSelectionModel().selectFirst();
+
+            checkPersonBoxes(new ActionEvent());
+            expenses = new ArrayList<>();
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+    }
+
+    public void createExpense() throws RuntimeException  {
 
         try {
             if (!isValidInput())
             {
-                System.out.println("Every field needs to filled properly");
+                statusLabel.setStyle("-fx-font-weight: bold");
+                statusLabel.setTextFill(Color.RED);
+                statusLabel.setText("Fill out every field correctly!");
                 return;
             }
             String description;
@@ -91,6 +154,7 @@ public class AddExpenseCtrl {
 
             double amountPerPerson = splitEvenButton.isSelected() ?
                     amount / getAllGivers().size() : amount / selectedBoxesNumber();
+
             List<Debt> debts = new ArrayList<>();
 
             for (Person p : getAllGivers()) {
@@ -99,14 +163,19 @@ public class AddExpenseCtrl {
                 debts.add(debt);
 
             }
+            //convert LocalDate to date
+            LocalDate localDate = dateField.getValue();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
-            Expense e = new Expense(description, amount, new Date(), getPayerData(), debts,
+            Expense e = new Expense(description, amount, date, getPayerData(), debts,
                     getCurrencyData(), getTypeData());
 
             for (Debt debt : debts)
                 debt.setExpense(e);
             server.addExpenseToEvent(this.event.getId(), e);
             System.out.println("Created expense");
+            statusLabel.setText("Expense created!");
+            clearFields();
         } catch (RuntimeException e) {
             e.printStackTrace();
         } catch (JsonProcessingException e) {
@@ -152,8 +221,11 @@ public class AddExpenseCtrl {
             return false;
         if (amountField == null || amountField.getText().isEmpty())
             return false;
+        if (dateField == null || dateField.getEditor().getText().isEmpty())
+            return false;
         if (splitButton.isSelected() && selectedBoxesNumber() == 0)
             return false;
+
         return true;
     }
 
@@ -216,52 +288,20 @@ public class AddExpenseCtrl {
 
         return k;
     }
-    public void initializePage(long eventID)  {
 
-        try {
-            event = server.getEvent(eventID);
 
-            participants = new ArrayList<>();
-            participants.addAll(server.getPersons());
-            int y = 5;
-            for (Person p : participants) {
-                CheckBox newBox = new CheckBox(
-                        p.getFirstName() + " " + p.getLastName());
-                splitPersonsPane.getChildren().add(newBox);
-                newBox.setLayoutY(y);
-                y += 25;
-            }
-            payerComboBox.setItems(FXCollections.observableArrayList(
-                    participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
-            ));
+    public void clearFields() {
 
-            checkBoxes = splitPersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
+        payerComboBox.setValue(null);
+        amountField.clear();
+        descriptionField.clear();
+        dateField.getEditor().clear();
+        typeComboBox.setValue(null);
+    }
 
-            List<Tag> defaultTags = List.of(
-                    new Tag("green", "Food"),
-                    new Tag("blue", "Entrance Fees"),
-                    new Tag("red", "Travel")
-                    );
-            tags = new ArrayList<>();
-            tags.addAll(defaultTags);
-            typeComboBox.setItems(FXCollections.observableArrayList(
-                    defaultTags.stream().map(Tag::getType).toList()));
-
-            currencyComboBox.setItems(FXCollections.observableList(
-                    List.of(Currency.EUR, Currency.USD,
-                            Currency.CHF, Currency.GBP)));
-            currencyComboBox.getSelectionModel().selectFirst();
-
-            checkPersonBoxes(new ActionEvent());
-            expenses = new ArrayList<>();
-        } catch (WebApplicationException e) {
-
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
-        }
+    public void cancel() {
+        clearFields();
+        goToEventOverview();
     }
 
     public void showAddTag(ActionEvent event) throws IOException {
@@ -294,5 +334,10 @@ public class AddExpenseCtrl {
     public void goHome(ActionEvent event) throws IOException {
         mainCtrl.showHome();
     }
+
+    public void goToEventOverview() {
+        mainCtrl.showEventOverview(event.getId());
+    }
+
 
 }

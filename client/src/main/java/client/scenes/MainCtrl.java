@@ -27,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -454,6 +455,12 @@ public class MainCtrl {
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpenseScene);
         addExpenseCtrl.initializePage(eventID);
+        addExpenseScene.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case KeyCode.ENTER -> addExpenseCtrl.createExpense();
+                case KeyCode.BACK_SPACE -> addExpenseCtrl.cancel();
+            }
+        });
     }
 
     public void showEventOverview() {
