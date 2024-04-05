@@ -71,7 +71,7 @@ public class AddLanguageCtrl{
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK) {
             System.out.println("Adding language... name: " + nameField.getText());
-            String filePath = "client/src/main/resources/languages/language_" + nameField.getText() + ".properties";
+            String filePath = "./src/main/resources/languages/language_" + nameField.getText() + ".properties";
             File f = new File(filePath);
             if (f.exists()) {
                 Alert alert1 = new Alert(Alert.AlertType.WARNING);
