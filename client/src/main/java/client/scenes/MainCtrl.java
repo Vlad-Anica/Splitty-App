@@ -356,6 +356,13 @@ public class MainCtrl {
         selectServerCtrl.setup();
         primaryStage.setTitle("Select Server");
         primaryStage.setScene(selectServerScene);
+        selectServerScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                System.out.println("Trying to join!");
+                selectServerCtrl.connect();
+            }
+        });
+
     }
 
     public void showSeeEventsAsAdmin() {
