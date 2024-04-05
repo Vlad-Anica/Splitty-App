@@ -59,6 +59,7 @@
 }
 
 .combo-box .list-cell {
+    -fx-background-color: -fx-blue-color;
     -fx-text-fill: white;
 }
 .date-picker .selected {
