@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -113,6 +114,12 @@ public class CreateEventCtrl {
                 currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, newEvent, currentUser));
         // server.createEvent(newEvent);
         server.send("/app/events", newEvent);
+
+        statusLabel.setTextFill(Color.BLACK);
+        ClipboardContent inviteCodeClipboard = new ClipboardContent();
+        inviteCodeClipboard.putString(newEvent.getInviteCode());
+        clipboard.setContent(inviteCodeClipboard);
+        statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
 
         }
         else{
