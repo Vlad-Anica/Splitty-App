@@ -502,7 +502,6 @@ public class ServerUtils {
 		}
 	}
 
-<<<<<<< client/src/main/java/client/utils/ServerUtils.java
 	private StompSession session = connect("ws://localhost:8080/websocket");
 
 	private StompSession connect(String URL) {
