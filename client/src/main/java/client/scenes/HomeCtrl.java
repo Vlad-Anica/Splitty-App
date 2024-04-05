@@ -21,6 +21,7 @@ import javafx.util.Pair;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class HomeCtrl {
@@ -212,10 +213,21 @@ public class HomeCtrl {
      */
     public void adminLogIn(ActionEvent event) {
         if (adminPasswordField.getText().isEmpty() || !server.checkAdminPassword(adminPasswordField.getText())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Wrong Password Warning");
+            alert.setContentText("Please input the correct password!");
+            alert.showAndWait();
             adminPasswordMessage.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("IncorrectPassword"));
             adminPasswordMessage.setTextFill(Color.rgb(210, 39, 30));
         } else {
-            mainCtrl.showManagementOverview();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Admin login Alert");
+            alert.setContentText("Do you want to log in as admin?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() == ButtonType.OK)
+                mainCtrl.showManagementOverview();
+            else
+                adminPasswordField.setText(null);
         }
         adminPasswordField.clear();
     }

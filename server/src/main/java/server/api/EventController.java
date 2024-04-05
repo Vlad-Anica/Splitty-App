@@ -8,13 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.services.implementations.EventServiceImpl;
 import server.services.implementations.PersonServiceImpl;
 import server.services.interfaces.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
 
 @RestController
@@ -45,6 +45,27 @@ public class EventController {
         this.debtService = debtService;
     }
 
+    private Map<Object, Consumer<Event>> listeners = new HashMap<>();
+    public void addListener(Event event) {
+        listeners.forEach((key, listener) -> listener.accept(event));
+    }
+    @GetMapping("/updates")
+    public DeferredResult<ResponseEntity<Event>> getUpdates() {
+        ResponseEntity<Event> noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        DeferredResult<ResponseEntity<Event>> result = new DeferredResult<ResponseEntity<Event>>(5000L, noContent);
+
+        Object key = new Object();
+        listeners.put(key, event -> {
+            result.setResult(ResponseEntity.ok(event));
+        });
+        result.onCompletion(() -> {
+            listeners.remove(key);
+        });
+
+        return result;
+    }
+
+
     /**
      * Creates and saves an Event to the database with the specified fields.
      * @param name name to use for the new Event
@@ -69,7 +90,6 @@ public class EventController {
         ArrayList<Tag> tags =  new ArrayList<>();
         ArrayList<Person> participants = new ArrayList<>();
         ArrayList<Expense> expenses = new ArrayList<>();
-        Event event = null;
         boolean validEntry = true;
         try {
             for(Long tID : tagIDs) {
@@ -104,7 +124,8 @@ public class EventController {
         if(!validEntry) {
             return null;
         }
-        event = new Event(name, description, tags, date, participants, expenses);
+        final Event event = new Event(name, description, tags, date, participants, expenses);
+        addListener(event);
         eventService.save(event);
         return event;
     }
@@ -117,6 +138,7 @@ public class EventController {
             return ResponseEntity.badRequest().build();
 
         Event saved = eventService.save(event);
+        addListener(event);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
@@ -206,13 +228,11 @@ public class EventController {
      * @return ResponseEntity that tells that it worked/didn't work
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Event> deleteById(@PathVariable("id") long id) {
+    public void deleteById(@PathVariable("id") long id) {
         if (!eventService.existsById(id)) {
-            return ResponseEntity.notFound().build();
+            return;
         }
-        Event deletedEvent = eventService.findById(id).get();
         eventService.deleteById(id);
-        return ResponseEntity.ok(deletedEvent);
     }
 
     private static boolean isNullOrEmpty(String s) {
