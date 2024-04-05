@@ -48,8 +48,8 @@ public class EventOverviewCtrl {
     private Button inviteButton;
 
 
-    @FXML
-    private List<CheckBox> personCheckBoxes;
+    //@FXML
+    //private List<CheckBox> personCheckBoxes;
     @FXML
     private ComboBox<String> showAllParticipantsInEventComboBox;
     @FXML
@@ -139,6 +139,7 @@ public class EventOverviewCtrl {
      */
     public void computeSelectedPerson() {
         String fullName = null;
+        /*
         for (CheckBox box : this.personCheckBoxes) {
             if (box.isSelected()) {
                 fullName = box.getText();
@@ -156,22 +157,25 @@ public class EventOverviewCtrl {
             return;
         }
         this.selectedPerson = null;
-        /*
+        */
+        Person person = null;
         if (showAllParticipantsInEventComboBox.getValue() != null) {
             fullName = showAllParticipantsInEventComboBox.getValue();
         } else {
             this.selectedPerson = person;
-            return person;
+            this.renameFilters();
+            return;
         }
         for (Person p : this.event.getParticipants()) {
-            if (new String(p.getFirstName() + " " + p.getLastName()).equals(fullName)) {
-                this.selectedPerson = person;
-                return selectedPerson;
+            System.out.println("Finding the selected Participant...");
+            if ((p.getFirstName() + " " + p.getLastName()).equals(fullName)) {
+                this.selectedPerson = p;
+                this.renameFilters();
+                return;
             }
         }
         this.renameFilters();
-        return person;
-        */
+        return;
 
     }
 
@@ -198,8 +202,9 @@ public class EventOverviewCtrl {
     /**
      * Method that consistently makes sure only one checkBox for Selected Person can be active at once.
      *
-     * @param event
+     * @param
      */
+    /*
     public void checkPersonBoxes(ActionEvent event) {
         computeSelectedPerson();
         if (!validPersonSelection()) {
@@ -213,6 +218,7 @@ public class EventOverviewCtrl {
             }
         }
     }
+    */
 
     public void toggleInSelectedExpenses(Expense expense) {
         if(this.selectedExpenses == null) {
@@ -261,6 +267,7 @@ public class EventOverviewCtrl {
         try {
             participants = new ArrayList<>();
             participants.addAll(event.getParticipants());
+            /*
             int y = 5;
             for (Person p : participants) {
                 CheckBox newBox = new CheckBox(
@@ -271,18 +278,19 @@ public class EventOverviewCtrl {
                 newBox.setLayoutY(y);
                 y += 25;
             }
+            */
             showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(
                     participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
             ));
+            showAllParticipantsInEventComboBox.setOnAction(event -> computeSelectedPerson());
 
-            personCheckBoxes = choosePersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
-            computeSelectedPerson();
-            checkPersonBoxes(new ActionEvent());
+            //personCheckBoxes = choosePersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
+            //computeSelectedPerson();
+            //checkPersonBoxes(new ActionEvent());
             this.choosePersonsPane.setVisible(false);
-            this.showAllParticipantsInEventComboBox.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
-            this.setPersonCheckBoxesVisibility(false);
+            //this.setPersonCheckBoxesVisibility(false);
 
 
             this.filteringExpensesPane.setVisible(false);
@@ -307,15 +315,15 @@ public class EventOverviewCtrl {
             this.choosePersonsPane.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
-            this.setPersonCheckBoxesVisibility(false);
+            //this.setPersonCheckBoxesVisibility(false);
         } else {
             this.choosePersonsPane.setVisible(true);
             this.goToEditPersonButton.setVisible(true);
             this.removePersonButton.setVisible(true);
-            this.setPersonCheckBoxesVisibility(true);
+            //this.setPersonCheckBoxesVisibility(true);
         }
     }
-
+/*
     public void setPersonCheckBoxesVisibility(boolean state) {
         if(this.personCheckBoxes == null || personCheckBoxes.isEmpty()) {
             return;
@@ -325,6 +333,7 @@ public class EventOverviewCtrl {
             }
         }
     }
+    */
 
     public void showAllParticipantsInEvent(ActionEvent event) {
         this.choosePersonsVisibilityCheck();
