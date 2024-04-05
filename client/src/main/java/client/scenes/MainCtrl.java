@@ -457,8 +457,8 @@ public class MainCtrl {
         addExpenseScene.getStylesheets().add("/client/scenes/addExpense.css");
         addExpenseScene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
-                case KeyCode.ENTER -> addExpenseCtrl.createExpense();
-                case KeyCode.BACK_SPACE -> addExpenseCtrl.cancel();
+                case ENTER -> addExpenseCtrl.createExpense();
+                case BACK_SPACE -> addExpenseCtrl.cancel();
             }
         });
     }
