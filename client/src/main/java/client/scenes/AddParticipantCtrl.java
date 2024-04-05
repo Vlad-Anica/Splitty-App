@@ -9,16 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class AddParticipantCtrl {
@@ -64,15 +62,31 @@ public class AddParticipantCtrl {
                 Person p = getParticipant();
                 if (participants.contains(p))
                 {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Participant Added Warning");
+                    alert.setContentText("The participant: " + p.getFirstName() + " was already added");
+                    alert.showAndWait();
                     participantAdded.setText(p.getFirstName() + " was already added");
                     participantAdded.setTextFill(Color.RED);
                     participantAdded.setStyle("-fx-font-weight: bold");
                     return;
                 }
-
-                server.addPerson(p);
-                participants.add(p);
-                System.out.println(p);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Adding Participant Alert");
+                alert.setContentText("Do you want to add this participant?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if(result.get() == ButtonType.OK) {
+                    server.addPerson(p);
+                    participants.add(p);
+                    System.out.println(p);
+                }
+                else{
+                    firstName.setText(null);
+                    lastName.setText(null);
+                    email.setText(null);
+                    IBAN.setText(null);
+                    BIC.setText(null);
+                }
             } catch (WebApplicationException e) {
 
                 var alert = new Alert(Alert.AlertType.ERROR);
@@ -94,6 +108,10 @@ public class AddParticipantCtrl {
             participantAdded.setStyle("-fx-font-weight: light");
         }
         else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Adding Participant Warning");
+            alert.setContentText("Please fill all fields correctly!");
+            alert.showAndWait();
             participantAdded.setText("Please fill out all fields correctly!");
             participantAdded.setTextFill(Color.RED);
             participantAdded.setStyle("-fx-font-weight: bold");
