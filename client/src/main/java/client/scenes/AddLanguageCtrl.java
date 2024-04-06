@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Pair;
 
 import java.io.*;
@@ -29,7 +30,7 @@ public class AddLanguageCtrl{
     @FXML
     private Button addButton;
     @FXML
-    private Label notFilledIn;
+    private Text notFilledIn;
     @FXML
     private TableView<String> table;
     @FXML
@@ -90,7 +91,7 @@ public class AddLanguageCtrl{
                 System.out.println("Lines have been written to the file successfully.");
                 notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("RestartLanguage"));
                 mainCtrl.setRestart(true);
-                notFilledIn.setTextFill(Color.rgb(10, 170, 32));
+                notFilledIn.setFill(Color.rgb(10, 170, 32));
             } catch (IOException e) {
                 System.out.println("An error occurred while writing to the file: " + e.getMessage());
                 e.printStackTrace();
