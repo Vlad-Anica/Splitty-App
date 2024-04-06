@@ -2,8 +2,6 @@ package client.scenes;
 
 import client.sceneSupportClasses.EventInfo;
 import client.utils.ServerUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
