@@ -18,8 +18,8 @@
         <Button fx:id="goHomeButton" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
         <Button fx:id="inviteButton" alignment="CENTER" layoutX="375.0" layoutY="70.0" mnemonicParsing="false" onAction="#sendInvite" prefWidth="150.0" text="Invite" />
         <Button fx:id="showAllExpensesButton" layoutX="165.0" layoutY="132.0" mnemonicParsing="false" onAction="#showAllExpensesInEvent" prefHeight="27.0" prefWidth="48.0" style="-fx-border-color: rgb(128,128,128);" text="All" />
-        <Button fx:id="showExpensesFromPersonButton" layoutX="213.0" layoutY="132.0" mnemonicParsing="false" onAction="#showAllExpensesFromPerson" prefHeight="27.0" prefWidth="121.0" style="-fx-border-color: rgb(128,128,128);" text="From &lt;&lt;PERSON&gt;&gt;" />
-        <Button fx:id="showExpensesWithPersonButton" layoutX="334.0" layoutY="132.0" mnemonicParsing="false" onAction="#showAllExpensesWithPerson" prefHeight="27.0" prefWidth="121.0" style="-fx-border-color: rgb(128,128,128);" text="Including &lt;&lt;PERSON&gt;" />
+        <Button fx:id="showExpensesFromPersonButton" layoutX="213.0" layoutY="132.0" mnemonicParsing="false" onAction="#showAllExpensesFromPerson" prefHeight="27.0" prefWidth="121.0" style="-fx-border-color: rgb(128,128,128);" text="Select a Person!" />
+        <Button fx:id="showExpensesWithPersonButton" layoutX="334.0" layoutY="132.0" mnemonicParsing="false" onAction="#showAllExpensesWithPerson" prefHeight="27.0" prefWidth="121.0" style="-fx-border-color: rgb(128,128,128);" text="Select a Person!" />
         <ScrollPane layoutX="14.0" layoutY="133.0" prefHeight="228.0" prefWidth="149.0" visible="false">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="149.0">
@@ -30,7 +30,7 @@
         </content>
       </ScrollPane>
         <Label alignment="CENTER" layoutX="165.0" layoutY="107.0" prefHeight="27.0" prefWidth="289.0" style="-fx-border-color: rgb(128,128,128);" text="Expenses" />
-        <Label fx:id="eventNameLabel" alignment="CENTER" layoutX="225.0" layoutY="45.0" prefHeight="25.0" prefWidth="150.0" text="&lt;&lt;EVENT&gt;&gt;" />
+        <Label fx:id="eventDateLabel" alignment="CENTER" layoutX="225.0" layoutY="45.0" prefHeight="25.0" prefWidth="150.0" text="&lt;&lt;EVENT&gt;&gt;" />
         <Label fx:id="overviewLabel" alignment="CENTER" layoutX="225.0" layoutY="8.0" prefHeight="36.0" prefWidth="150.0" text="OVERVIEW">
             <font>
                 <Font size="24.0" />
@@ -39,8 +39,7 @@
       <Button fx:id="goToStatsButton" layoutX="20.0" layoutY="69.0" mnemonicParsing="false" onAction="#goToStats" prefHeight="27.0" prefWidth="84.0" text="Stats" />
       <ComboBox fx:id="showAllParticipantsInEventComboBox" centerShape="false" layoutX="14.0" layoutY="107.0" onAction="#showAllParticipantsInEvent" prefWidth="150.0" promptText="Participants" />
       <AnchorPane fx:id="choosePersonsPane" layoutX="14.0" layoutY="120.0" prefHeight="216.0" prefWidth="149.0" />
-      <AnchorPane fx:id="filteringExpensesPane" layoutX="163.0" layoutY="134.0" prefHeight="200.0" prefWidth="295.0" />
-      <AnchorPane fx:id="filteringExpensesPaneOriginal" layoutX="163.0" layoutY="160.0" prefHeight="174.0" prefWidth="295.0" />
+      <AnchorPane fx:id="filteringExpensesPane" layoutX="163.0" layoutY="160.0" prefHeight="174.0" prefWidth="84.0" />
       <TextFlow fx:id="languageIndicator" layoutX="15.0" layoutY="13.0" prefHeight="27.0" prefWidth="149.0" />
       <TextField fx:id="emailField" layoutX="226.0" layoutY="70.0" promptText="Please enter the recipient" />
       <Label fx:id="inviteCodeLabel" alignment="CENTER" layoutX="104.0" layoutY="69.0" prefHeight="27.0" prefWidth="121.0" style="-FX-BORDER-COLOR: rgb(128,128,128);" text="&lt;&lt;CODE&gt;&gt;">
@@ -60,5 +59,6 @@
         <Button fx:id="goToAddExpenseButton" layoutX="417.0" layoutY="105.0" maxHeight="27.0" mnemonicParsing="false" onAction="#goToAddExpense" prefHeight="27.0" prefWidth="35.0" text="+" textAlignment="CENTER" />
       <Button fx:id="removeTagButton" layoutX="559.0" layoutY="336.0" mnemonicParsing="false" onAction="#removeTags" prefHeight="25.0" prefWidth="35.0" text="Delete" />
       <Button fx:id="showAllTagsInEvent" layoutX="454.0" layoutY="106.0" mnemonicParsing="false" onAction="#showAllTagsInEvent" prefHeight="27.0" prefWidth="139.0" text="Tags" />
+      <Button fx:id="refreshInviteCodeButton" layoutX="200.0" layoutY="70.0" mnemonicParsing="false" onAction="#refreshInviteCode" prefHeight="25.0" prefWidth="26.0" text="Refresh" />
     </children>
 </Pane>

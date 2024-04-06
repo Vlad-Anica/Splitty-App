@@ -184,6 +184,11 @@ public class Event {
         if(tag == null || this.tags.contains(tag)) {
             return false;
         }
+        for (Tag tag1: tags) {
+            if (tag.getType().equals(tag1.getType())) {
+                return false;
+            }
+        }
         this.tags.add(tag);
         return true;
     }

@@ -37,19 +37,19 @@ public class EventOverviewCtrl {
     @FXML
     private Button goHomeButton;
     @FXML
-    private Label eventNameLabel;
+    private Label eventDateLabel;
     @FXML
     private Button goToStatsButton;
     @FXML
     private Label inviteCodeLabel;
+    @FXML
+    private Button refreshInviteCodeButton;
     @FXML
     private TextField emailField;
     @FXML
     private Button inviteButton;
 
 
-    //@FXML
-    //private List<CheckBox> personCheckBoxes;
     @FXML
     private ComboBox<String> showAllParticipantsInEventComboBox;
     @FXML
@@ -126,8 +126,15 @@ public class EventOverviewCtrl {
     private void resetTextFields() {
         showExpensesFromPersonButton.setText("From <<PERSON>>");
         showExpensesWithPersonButton.setText("Including <<PERSON>>");
-        eventNameLabel.setText("<<EVENT>>");
+        eventDateLabel.setText("<<DATE>>");
         inviteCodeLabel.setText("<<CODE>>");
+    }
+
+    public void refreshInviteCode(ActionEvent event) {
+        this.event.refreshInviteCode();
+        this.inviteCodeLabel.setText(this.event.getInviteCode());
+        server.updateEvent(this.event.getId(), this.event);
+        this.setup(eventId);
     }
 
     public Event getEvent() {
@@ -139,25 +146,6 @@ public class EventOverviewCtrl {
      */
     public void computeSelectedPerson() {
         String fullName = null;
-        /*
-        for (CheckBox box : this.personCheckBoxes) {
-            if (box.isSelected()) {
-                fullName = box.getText();
-            } else {
-                continue;
-            }
-            for (Person p : this.event.getParticipants()) {
-                if ((p.getFirstName() + " " + p.getLastName()).equals(fullName)) {
-                    this.selectedPerson = p;
-                    this.renameFilters();
-                    return;
-                }
-            }
-            this.renameFilters();
-            return;
-        }
-        this.selectedPerson = null;
-        */
         Person person = null;
         if (showAllParticipantsInEventComboBox.getValue() != null) {
             fullName = showAllParticipantsInEventComboBox.getValue();
@@ -199,27 +187,6 @@ public class EventOverviewCtrl {
         this.selectedExpenses = expenses;
     }
 
-    /**
-     * Method that consistently makes sure only one checkBox for Selected Person can be active at once.
-     *
-     * @param
-     */
-    /*
-    public void checkPersonBoxes(ActionEvent event) {
-        computeSelectedPerson();
-        if (!validPersonSelection()) {
-            return;
-        }
-        String name = selectedPerson.getFirstName() + " " + selectedPerson.getLastName();
-        for (CheckBox box : personCheckBoxes) {
-            box.setDisable(false);
-            if (!box.getText().equals(name)) {
-                box.setSelected(false);
-            }
-        }
-    }
-    */
-
     public void toggleInSelectedExpenses(Expense expense) {
         if(this.selectedExpenses == null) {
             this.selectedExpenses = new ArrayList<>();
@@ -252,9 +219,8 @@ public class EventOverviewCtrl {
         try {
             eventId = eventID;
             this.event = server.getEvent(eventID);
-            this.expenses = event.getExpenses();
-            this.tags = event.getTags();
-            eventNameLabel.setText(event.getName());
+            eventDateLabel.setText(event.getDate().toString());
+            inviteCodeLabel.setText(event.getInviteCode());
         } catch (Exception e) {
             System.out.println("Cannot find associated Event within the repository!");
             return;
@@ -267,30 +233,14 @@ public class EventOverviewCtrl {
         try {
             participants = new ArrayList<>();
             participants.addAll(event.getParticipants());
-            /*
-            int y = 5;
-            for (Person p : participants) {
-                CheckBox newBox = new CheckBox(
-                        p.getFirstName() + " " + p.getLastName());
-                newBox.setOnAction(this::checkPersonBoxes);
-                //newBox.setOnAction(event -> personClick());
-                choosePersonsPane.getChildren().add(newBox);
-                newBox.setLayoutY(y);
-                y += 25;
-            }
-            */
             showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(
                     participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
             ));
-            showAllParticipantsInEventComboBox.setOnAction(event -> computeSelectedPerson());
+            showAllParticipantsInEventComboBox.setOnAction(this::showAllParticipantsInEvent);
 
-            //personCheckBoxes = choosePersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
-            //computeSelectedPerson();
-            //checkPersonBoxes(new ActionEvent());
             this.choosePersonsPane.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
-            //this.setPersonCheckBoxesVisibility(false);
 
 
             this.filteringExpensesPane.setVisible(false);
@@ -310,32 +260,20 @@ public class EventOverviewCtrl {
     }
 
     public void choosePersonsVisibilityCheck() {
-        if(this.goToEditPersonButton.isVisible()) {
+        if(this.selectedPerson == null) {
             resetPersonsPane();
             this.choosePersonsPane.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
-            //this.setPersonCheckBoxesVisibility(false);
         } else {
             this.choosePersonsPane.setVisible(true);
             this.goToEditPersonButton.setVisible(true);
             this.removePersonButton.setVisible(true);
-            //this.setPersonCheckBoxesVisibility(true);
         }
     }
-/*
-    public void setPersonCheckBoxesVisibility(boolean state) {
-        if(this.personCheckBoxes == null || personCheckBoxes.isEmpty()) {
-            return;
-        } else {
-            for(CheckBox box : personCheckBoxes) {
-                box.setVisible(state);
-            }
-        }
-    }
-    */
 
     public void showAllParticipantsInEvent(ActionEvent event) {
+        computeSelectedPerson();
         this.choosePersonsVisibilityCheck();
     }
 
@@ -379,7 +317,7 @@ public class EventOverviewCtrl {
      * Method that sets or resets visibility to buttons related to filtering and selecting Expenses.
      */
     public void expenseFilteringVisibilityCheck() {
-        if (this.goToEditExpenseButton.isVisible()) {
+        if (this.selectedPerson == null) {
             resetExpenseFilteringPane();
             this.filteringExpensesPane.setVisible(false);
             this.goToEditExpenseButton.setVisible(false);
@@ -390,6 +328,12 @@ public class EventOverviewCtrl {
             this.goToEditExpenseButton.setVisible(true);
             this.removeExpensesButton.setVisible(true);
         }
+    }
+
+    public void expenseFilteringVisibilityCheckNoSelection() {
+        this.filteringExpensesPane.setVisible(true);
+        this.goToEditExpenseButton.setVisible(true);
+        this.removeExpensesButton.setVisible(true);
     }
 
     /**
@@ -405,11 +349,22 @@ public class EventOverviewCtrl {
      * Method that resets the parameters of the expense filtering pane as needed.
      */
     private void resetExpenseFilteringPane() {
+
+        CheckBox box = new CheckBox();
+        Label label = new Label();
+        for(Object element : this.filteringExpensesPane.getChildren()) {
+            if(element.getClass() == box.getClass()) {
+                ((CheckBox) element).setVisible(false);
+            }
+            if(element.getClass() == label.getClass()) {
+                ((Label) element).setVisible(false);
+            }
+        }
         this.filteringExpensesPane.getChildren().removeAll();
-        this.filteringExpensesPane.setLayoutX(294);
-        this.filteringExpensesPane.setLayoutY(133);
-        this.filteringExpensesPane.setPrefHeight(200);
-        this.filteringExpensesPane.setPrefWidth(200);
+        this.filteringExpensesPane.setLayoutX(163);
+        this.filteringExpensesPane.setLayoutY(160);
+        this.filteringExpensesPane.setPrefHeight(174);
+        this.filteringExpensesPane.setPrefWidth(80);
     }
 
     private void resetPersonsPane() {
@@ -421,6 +376,12 @@ public class EventOverviewCtrl {
     }
 
     public void resetTagsPane() {
+        CheckBox box = new CheckBox();
+        for(Object element : this.chooseTagsPane.getChildren()) {
+            if(element.getClass() == box.getClass()) {
+                ((CheckBox) element).setVisible(false);
+            }
+        }
         this.chooseTagsPane.getChildren().removeAll();
         this.chooseTagsPane.setLayoutX(454);
         this.chooseTagsPane.setLayoutY(133);
@@ -436,8 +397,9 @@ public class EventOverviewCtrl {
             System.out.println("Selected Person is null!!! Filter refresh aborted.");
         }
         try {
-            showExpensesFromPersonButton.setText("From" + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
-            showExpensesWithPersonButton.setText("Including" + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
+            showExpensesFromPersonButton.setText("From " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
+            showExpensesWithPersonButton.setText("Including " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
+
             System.out.println("Successful filter refresh!");
         } catch (Exception e) {
             System.out.println("Error encountered while receiving selected Person info.");
@@ -450,7 +412,7 @@ public class EventOverviewCtrl {
      * @param event Event in the page currently viewed
      */
     public void showAllExpensesInEvent(ActionEvent event) {
-        expenseFilteringVisibilityCheck();
+        expenseFilteringVisibilityCheckNoSelection();
         resetExpenseFilteringPane();
         showAllExpensesFiltered(this.event.getExpenses());
     }
@@ -463,7 +425,7 @@ public class EventOverviewCtrl {
     public void showAllExpensesFromPerson(ActionEvent event) {
         expenseFilteringVisibilityCheck();
         resetExpenseFilteringPane();
-        if (validPersonSelection()) {
+        if (!validPersonSelection()) {
             System.out.println("Cannot filter properly, no Person is selected");
             return;
         }
@@ -488,7 +450,7 @@ public class EventOverviewCtrl {
     public void showAllExpensesWithPerson(ActionEvent event) {
         expenseFilteringVisibilityCheck();
         resetExpenseFilteringPane();
-        if (validPersonSelection()) {
+        if (!validPersonSelection()) {
             System.out.println("Cannot filter properly, no Person is selected");
             return;
         }
@@ -497,6 +459,7 @@ public class EventOverviewCtrl {
             selectedExpenses = null;
         } else {
             for (Expense expense : this.event.getExpenses()) {
+                System.out.println("ligma");
                 if (expense.getInvolved().contains(selectedPerson)) {
                     selectedExpenses.add(expense);
                 }
@@ -519,9 +482,9 @@ public class EventOverviewCtrl {
             }
             if (selectedExpenses.isEmpty()) {
                 System.out.println("The Event has no such Expenses associated with it.");
-                CheckBox newBox = new CheckBox("There's nothing to display, silly!");
-                filteringExpensesPane.getChildren().add(newBox);
-                newBox.setLayoutY(5);
+                Label label = new Label("There's nothing to display, silly!");
+                filteringExpensesPane.getChildren().add(label);
+                label.setLayoutY(5);
                 return true;
             }
             int y = 5;
@@ -678,7 +641,7 @@ public class EventOverviewCtrl {
         if (this.selectedTags == null || this.selectedTags.isEmpty()) {
             System.out.println("Cannot remove Tag as none was selected.");
         } else {
-            for (Tag tag : this.tags) {
+            for (Tag tag : this.event.getTags()) {
                 for(Expense expense : this.event.getExpenses()) {
                     if(expense.getTag().equals(tag)) {
                         System.out.println("Cannot proceed with operation as Tag is currently in use.");
