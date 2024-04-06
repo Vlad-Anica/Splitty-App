@@ -134,7 +134,6 @@ public class EventOverviewCtrl {
         this.event.refreshInviteCode();
         this.inviteCodeLabel.setText(this.event.getInviteCode());
         server.updateEvent(this.event.getId(), this.event);
-        this.setup(eventId);
     }
 
     public Event getEvent() {
@@ -188,10 +187,10 @@ public class EventOverviewCtrl {
     }
 
     public void toggleInSelectedExpenses(Expense expense) {
-        if(this.selectedExpenses == null) {
+        if (this.selectedExpenses == null) {
             this.selectedExpenses = new ArrayList<>();
         }
-        if(this.selectedExpenses.contains(expense)) {
+        if (this.selectedExpenses.contains(expense)) {
             this.selectedExpenses.remove(expense);
         } else {
             this.selectedExpenses.add(expense);
@@ -199,10 +198,10 @@ public class EventOverviewCtrl {
     }
 
     public void toggleInSelectedTags(Tag tag) {
-        if(this.selectedTags == null) {
+        if (this.selectedTags == null) {
             this.selectedTags = new ArrayList<>();
         }
-        if(this.selectedTags.contains(tag)) {
+        if (this.selectedTags.contains(tag)) {
             this.selectedTags.remove(tag);
         } else {
             this.selectedTags.add(tag);
@@ -217,8 +216,16 @@ public class EventOverviewCtrl {
     public void setup(Long eventID) {
 
         try {
+            this.showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList());
             eventId = eventID;
             this.event = server.getEvent(eventID);
+
+            /*
+            if(this.event.getInviteCode().equals("OW99THEL")) {
+
+                this.event.addParticipant(new Person("Obama", "bARACK", "34", "444", "343", Currency.EUR, 0, this.event, new User()));
+            }
+            */
             eventDateLabel.setText(event.getDate().toString());
             inviteCodeLabel.setText(event.getInviteCode());
         } catch (Exception e) {
@@ -241,7 +248,10 @@ public class EventOverviewCtrl {
             this.choosePersonsPane.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
-
+            if (validPersonSelection()) {
+                this.goToEditPersonButton.setVisible(true);
+                this.removePersonButton.setVisible(true);
+            }
 
             this.filteringExpensesPane.setVisible(false);
             this.goToEditExpenseButton.setVisible(false);
@@ -260,7 +270,7 @@ public class EventOverviewCtrl {
     }
 
     public void choosePersonsVisibilityCheck() {
-        if(this.selectedPerson == null) {
+        if (this.selectedPerson == null) {
             resetPersonsPane();
             this.choosePersonsPane.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
@@ -278,7 +288,7 @@ public class EventOverviewCtrl {
     }
 
     public void goToEditPerson(ActionEvent event) throws IOException {
-        if(!validPersonSelection()) {
+        if (!validPersonSelection()) {
             System.out.println("Cannot edit Person as none was selected.");
         } else {
             //goToEditPerson() tbi etc
@@ -352,11 +362,11 @@ public class EventOverviewCtrl {
 
         CheckBox box = new CheckBox();
         Label label = new Label();
-        for(Object element : this.filteringExpensesPane.getChildren()) {
-            if(element.getClass() == box.getClass()) {
+        for (Object element : this.filteringExpensesPane.getChildren()) {
+            if (element.getClass() == box.getClass()) {
                 ((CheckBox) element).setVisible(false);
             }
-            if(element.getClass() == label.getClass()) {
+            if (element.getClass() == label.getClass()) {
                 ((Label) element).setVisible(false);
             }
         }
@@ -377,8 +387,8 @@ public class EventOverviewCtrl {
 
     public void resetTagsPane() {
         CheckBox box = new CheckBox();
-        for(Object element : this.chooseTagsPane.getChildren()) {
-            if(element.getClass() == box.getClass()) {
+        for (Object element : this.chooseTagsPane.getChildren()) {
+            if (element.getClass() == box.getClass()) {
                 ((CheckBox) element).setVisible(false);
             }
         }
@@ -394,7 +404,10 @@ public class EventOverviewCtrl {
      */
     public void renameFilters() {
         if (!validPersonSelection()) {
-            System.out.println("Selected Person is null!!! Filter refresh aborted.");
+            System.out.println("Selected Person is null!!! Filter refresh aborted and reset to normal.");
+            this.showExpensesWithPersonButton.setText("Select a Person!");
+            this.showExpensesFromPersonButton.setText("Select a Person!");
+            return;
         }
         try {
             showExpensesFromPersonButton.setText("From " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
@@ -459,7 +472,6 @@ public class EventOverviewCtrl {
             selectedExpenses = null;
         } else {
             for (Expense expense : this.event.getExpenses()) {
-                System.out.println("ligma");
                 if (expense.getInvolved().contains(selectedPerson)) {
                     selectedExpenses.add(expense);
                 }
@@ -595,7 +607,7 @@ public class EventOverviewCtrl {
 
 
     public void tagsVisibilityCheck() {
-        if(this.goToEditTagButton.isVisible()) {
+        if (this.goToEditTagButton.isVisible()) {
             resetTagsPane();
             this.chooseTagsPane.setVisible(false);
             this.goToEditTagButton.setVisible(false);
@@ -606,6 +618,7 @@ public class EventOverviewCtrl {
             this.removeTagButton.setVisible(true);
         }
     }
+
     public void showAllTagsInEvent(ActionEvent event) {
         tagsVisibilityCheck();
         resetTagsPane();
@@ -642,8 +655,8 @@ public class EventOverviewCtrl {
             System.out.println("Cannot remove Tag as none was selected.");
         } else {
             for (Tag tag : this.event.getTags()) {
-                for(Expense expense : this.event.getExpenses()) {
-                    if(expense.getTag().equals(tag)) {
+                for (Expense expense : this.event.getExpenses()) {
+                    if (expense.getTag().equals(tag)) {
                         System.out.println("Cannot proceed with operation as Tag is currently in use.");
                         return;
                     }
