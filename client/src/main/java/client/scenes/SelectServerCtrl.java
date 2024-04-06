@@ -58,6 +58,7 @@ public class SelectServerCtrl {
 
         if (server.isOnline(IPAddress, port)) {
             server.setSERVER("http://" + IPAddress + ":" + port + "/");
+            server.setWEBSOCKETSERVER("ws://" + IPAddress + ":" + port + "/websocket");
 
         } else {
             showErrorMessage("ServerNotFound");
