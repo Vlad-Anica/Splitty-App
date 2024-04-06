@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.sceneSupportClasses.EventInfo;
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
@@ -9,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class SeeEventsAsAdminCtrl {
@@ -16,6 +20,10 @@ public class SeeEventsAsAdminCtrl {
     ServerUtils server;
     @FXML
     Button btnDeleteEvent;
+    @FXML
+    Button btnDownload;
+    @FXML
+    Button btnImport;
     @FXML
     TextField eventToDeleteId;
     @FXML
@@ -53,6 +61,15 @@ public class SeeEventsAsAdminCtrl {
                     }
                     printToTable();
                 }
+            }
+        });
+        btnDownload.setOnAction(event -> {
+            try {
+                downloadJSONDump();
+            } catch (URISyntaxException e) {
+                System.out.println(e.getMessage());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
         });
         selectOrdering.setOnAction(event -> {
@@ -121,6 +138,15 @@ public class SeeEventsAsAdminCtrl {
 
     }
 
+    /**
+     * download a json dump of the event with the specified id
+     * @throws URISyntaxException
+     * @throws IOException
+     */
+    public void downloadJSONDump() throws URISyntaxException, IOException {
+        Long eventId = Long.parseLong(eventToDeleteId.getText());
+        server.downloadJSONDump(eventId);
+    }
     public void stop() {
         server.stop();
     }
@@ -150,6 +176,8 @@ public class SeeEventsAsAdminCtrl {
             languageIndex = 0;
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         btnDeleteEvent.setText(resourceBundle.getString("DeleteEvent"));
+        btnDownload.setText(resourceBundle.getString("Download"));
+        btnImport.setText(resourceBundle.getString("Import"));
         eventToDeleteId.setPromptText(resourceBundle.getString("EventId"));
         btnManagementOverview.setText(resourceBundle.getString("ManagementOverview"));
         selectAscDesc.setPromptText(resourceBundle.getString("SelectAscDesc"));

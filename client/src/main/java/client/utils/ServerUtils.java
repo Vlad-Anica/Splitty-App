@@ -18,16 +18,18 @@ package client.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
+import commons.Event;
+import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.checkerframework.checker.units.qual.C;
 import org.glassfish.jersey.client.ClientConfig;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.awt.*;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
@@ -511,5 +513,24 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
+	}
+
+	public void downloadJSONDump(Long eventId) throws URISyntaxException, IOException {
+
+		Client client = ClientBuilder.newClient();
+		Response res = client
+				.target(SERVER).path("api/events/" + eventId + "/download")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get();
+		if (res.getStatus() == Response.Status.OK.getStatusCode()) {
+			Desktop.getDesktop().browse(new URI(SERVER + "api/events/" + eventId + "/download"));
+		}
+		else {
+			System.out.println(res.getStatus());
+		}
+
+		res.close();
+		client.close();
 	}
 }
