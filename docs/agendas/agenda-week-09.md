@@ -17,6 +17,7 @@ Agenda Items:
 - Presentation of the current app to TA (5 min)
 - Talking Points: (Inform/ brainstorm/ decision making/ discuss)
     - Sprint review - Have we finished all basic requirements? (5 min)
+    - Improve home page UI (5 min)
     - Discuss finishing debt splitting (5 min)
     - What extra features are we going to implement? (5 min)
     - Splitting the extra features (10 min)
@@ -25,4 +26,4 @@ Agenda Items:
 - Planned meeting duration != actual duration? Where/why did you mis -estimate? (1 min)
 - Question round: Does anyone have anything to add before the meeting closes? (1 min)
 - Closure (1 min) 
-- Estimated total time (51min)
+- Estimated total time (56 min)
