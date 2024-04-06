@@ -19,7 +19,10 @@ java {
 
 dependencies {
 	implementation project(":commons")
-	implementation 'jakarta.mail:jakarta.mail-api:2.1.2'
+
+
+	implementation 'jakarta.mail:jakarta.mail-api:2.0.1'
+	implementation group: 'com.sun.mail', name: 'jakarta.mail', version: '2.0.1'
 
 	implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '3.0.3'
 	implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: '3.0.3'

@@ -12,10 +12,15 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.paint.Color;
 
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+
+import static com.sun.prism.impl.PrismSettings.debug;
 
 public class CreateEventCtrl {
 
@@ -83,7 +88,7 @@ public class CreateEventCtrl {
 
     @FXML
     public void createEvent(ActionEvent event) {
-
+        sendMail();
         if (!isValidInput()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Event Creation Warning");
@@ -128,6 +133,45 @@ public class CreateEventCtrl {
 
     public void addTag() {
 
+    }
+
+    public void sendMail(){
+        final String username = "use.splitty";
+        final String password = "sbfs akue pjrj oiqt";
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(prop,
+                new jakarta.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("use.splitty@gmail.com"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse("duco.floris@gmail.com")
+            );
+            message.setSubject("Testing Gmail SSL");
+            message.setText("Dear Mail Crawler,"
+                    + "\n\n Please do not spam my email!");
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isValidInput() {
