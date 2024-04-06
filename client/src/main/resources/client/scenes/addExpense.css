@@ -1,5 +1,6 @@
 * {
     -fx-blue-color: #72a4ff;
+    -fx-offwhite-color: #fffaf4;
     -fx-font-family: Rowdies;
 }
 
@@ -54,7 +55,7 @@
 
 .button, .combo-box {
     -fx-background-color: -fx-blue-color;
-    -fx-text-fill: white;
+    -fx-text-fill: -fx-offwhite-color;
     -fx-font-weight: bold;
 }
 
@@ -82,10 +83,11 @@
     -fx-background-color: -fx-blue-color;
 }
 .date-picker-popup .month-year-pane .label {
-    -fx-text-fill: white;
+    -fx-text-fill: -fx-offwhite-color;
 }
 
 .date-picker-popup .spinner .button .left-arrow,
 .date-picker-popup .spinner .button .right-arrow {
-    -fx-background-color: white;
+    -fx-background-color: -fx-off-white-color;
 }
+
