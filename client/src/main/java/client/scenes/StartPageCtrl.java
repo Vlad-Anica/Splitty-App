@@ -16,34 +16,34 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class StartPageCtrl {
 
     private MainCtrl mainCtrl;
     @FXML
     private TextField firstname;
-    private List<String> fnText = new ArrayList<>(List.of("First name",
-            "Voornaam"));
+
     @FXML
     private Label title;
-    private List<String> titleText = new ArrayList<>(List.of("Sign Up",
-            "Begin"));
+
     @FXML
     private TextField lastname;
-    private List<String> lnText = new ArrayList<>(List.of("Last name",
-            "Achternaam"));
+
     @FXML
     private TextField email;
-    private List<String> emText = new ArrayList<>(List.of("Email (optional)",
-            "Email (optioneel)"));
+
     @FXML
     private ComboBox<Currency> currencyComboBox;
-    private List<String> cText = new ArrayList<>(List.of("Currency",
-            "Munteenheid"));
+
     @FXML
     private ComboBox<String> languageComboBox;
-    private List<String> lText = new ArrayList<>(List.of("Language",
-            "Taal"));
+
+    private String warningTitle;
+    private String warningText;
+    private String alertTitle;
+    private String alertText;
+
     private ServerUtils server;
     List<String> languages;
 
@@ -56,19 +56,18 @@ public class StartPageCtrl {
 
     public void createUser(ActionEvent event) throws IOException {
         try {
-            if (!isValidInput())
-            {
+            if (!isValidInput()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("User Creation Warning");
-                alert.setContentText("Please fill all necessary fields");
+                alert.setTitle(warningTitle);
+                alert.setContentText(warningText);
                 alert.showAndWait();
                 return;
             }
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("User Creation Confirmation Alert");
-            alert.setContentText("Do you want to create this user?");
+            alert.setTitle(alertTitle);
+            alert.setContentText(alertText);
             Optional<ButtonType> result = alert.showAndWait();
-            if(result.get() == ButtonType.OK) {
+            if (result.get() == ButtonType.OK) {
                 String emailHolder = "-1";
                 if (!(email.getText().isEmpty()))
                     emailHolder = email.getText();
@@ -87,8 +86,7 @@ public class StartPageCtrl {
                 System.out.println("User Created Successfully !!!");
                 mainCtrl.getLastKnownInfo();
                 mainCtrl.showHome();
-            }
-            else{
+            } else {
                 firstname.setText(null);
                 lastname.setText(null);
                 email.setText(null);
@@ -99,13 +97,13 @@ public class StartPageCtrl {
     }
 
     public boolean isValidInput() {
-        if(firstname.getText().isEmpty())
+        if (firstname.getText().isEmpty())
             return false;
-        if(lastname.getText().isEmpty())
+        if (lastname.getText().isEmpty())
             return false;
-        if(getCurrencyData() == null)
+        if (getCurrencyData() == null)
             return false;
-        if(getLanguageData() == null)
+        if (getLanguageData() == null)
             return false;
         return true;
     }
@@ -113,11 +111,12 @@ public class StartPageCtrl {
     public Currency getCurrencyData() {
         return currencyComboBox.getValue();
     }
+
     public String getLanguageData() {
         return languageComboBox.getValue();
     }
 
-    public void setup()  {
+    public void setup() {
         currencyComboBox.setItems(FXCollections.observableList(
                 List.of(Currency.EUR, Currency.USD,
                         Currency.CHF, Currency.GBP)));
@@ -133,15 +132,17 @@ public class StartPageCtrl {
     }
 
     public void setTextLanguage() {
-        int languageIndex = mainCtrl.getLanguageIndex();
-        if(languageIndex < 0)
-            languageIndex = 0;
-        title.setText(titleText.get(languageIndex));
-        lastname.setPromptText(lnText.get(languageIndex));
-        firstname.setPromptText(fnText.get(languageIndex));
-        email.setPromptText(emText.get(languageIndex));
-        currencyComboBox.setPromptText(cText.get(languageIndex));
-        languageComboBox.setPromptText(lText.get(languageIndex));
-    }
+        ResourceBundle resourceBundle = mainCtrl.getLanguageResource();
+        title.setText(resourceBundle.getString("Sign up"));
+        lastname.setPromptText(resourceBundle.getString("Last name"));
+        firstname.setPromptText(resourceBundle.getString("First name"));
+        email.setPromptText(resourceBundle.getString("Email (optional)"));
+        currencyComboBox.setPromptText(resourceBundle.getString("Currency"));
+        languageComboBox.setPromptText(resourceBundle.getString("Language"));
+        alertTitle = resourceBundle.getString("User Creation Confirmation Alert");
+        alertText = resourceBundle.getString("Do you want to create this user?");
+        warningTitle = resourceBundle.getString("User Creation Warning");
+        warningText = resourceBundle.getString("Please fill all necessary fields");
 
+    }
 }

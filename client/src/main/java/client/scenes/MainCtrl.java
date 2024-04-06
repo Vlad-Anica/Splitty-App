@@ -109,7 +109,7 @@ public class MainCtrl {
                            Pair<StartPageCtrl, Parent> startPage, Pair<SeeEventsAsAdminCtrl, Parent> seeEventsAsAdmin,
                            Pair<CreateEventCtrl, Parent> createEvent, Pair<SelectServerCtrl, Parent> selectServer,
                            ServerUtils server) {
-        File languageFile = new File("./src/main/resources/languages/languages.txt");
+        File languageFile = new File("client/src/main/resources/languages/languages.txt");
         System.out.println(languageFile.getAbsolutePath());
         if (languageFile.exists()) {
             Pair<Integer, List<String>> pair = readFromFile(languageFile.getAbsolutePath());
@@ -274,7 +274,7 @@ public class MainCtrl {
      * @return list of ip addresses used
      */
     public List<String> getUsedIPAddresses() {
-        File file = getOrCreateFile("./src/main/resources/userInfo/IPAddresses.txt");
+        File file = getOrCreateFile("client/src/main/resources/userInfo/IPAddresses.txt");
         List<String> IPAddresses = new ArrayList<>();
         Scanner scanner = null;
         try {
@@ -305,7 +305,7 @@ public class MainCtrl {
     public void addNewIPAddress(String IPAddress) {
         List<String> IPAddresses = getUsedIPAddresses();
         IPAddresses.add(IPAddress);
-        File file = getOrCreateFile("./src/main/resources/userInfo/IPAddresses.txt");
+        File file = getOrCreateFile("client/src/main/resources/userInfo/IPAddresses.txt");
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(file);
@@ -334,7 +334,7 @@ public class MainCtrl {
         this.language = language;
     }
     public void save(Pair<Integer,List<String>> list) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./src/main/resources/languages/languages.txt"))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("client/src/main/resources/languages/languages.txt"))) {
             oos.writeObject(list);
         } catch (IOException e) {
             e.printStackTrace();
