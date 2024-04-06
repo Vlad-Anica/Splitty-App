@@ -15,7 +15,15 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import commons.*;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,11 +53,19 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
 	private static String SERVER = "http://localhost:8080/";
+
 	private static String WEBSOCKETSERVER = "ws://localhost:8080/websocket";
+
+	private static final int NO_CONTENT_STATUS = 204;
+
 
 	public void setSERVER(String server) {
 		SERVER = server;
@@ -531,5 +547,34 @@ public class ServerUtils {
 
 	public void send(String destination, Object o) {
 		session.send(destination, o);
+}
+	private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+	public void registerForUpdates(Consumer<Event> consumer) {
+		EXEC.submit(() -> {
+			while (!Thread.interrupted()) {
+				Response res = ClientBuilder.newClient(new ClientConfig()) //
+						.target(SERVER).path("/api/events/updates") //
+						.request(APPLICATION_JSON) //
+						.accept(APPLICATION_JSON) //
+						.get(Response.class);
+				if (res.getStatus() == NO_CONTENT_STATUS) {
+					continue;
+				}
+				Event event = (Event) res.readEntity(Event.class);
+				consumer.accept(event);
+			}
+		});
+
+	}
+
+	public void stop() {
+		EXEC.shutdownNow();
+	}
+	public void deleteEventById(Long eventId) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/events/" + eventId)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
 	}
 }

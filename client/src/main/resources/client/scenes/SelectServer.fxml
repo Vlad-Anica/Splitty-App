@@ -4,15 +4,36 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SelectServerCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #fffaf4;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SelectServerCtrl">
    <children>
-      <Text fx:id="instructionMessage" layoutX="277.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <TextField fx:id="IPAddressField" layoutX="214.0" layoutY="132.0" />
-      <TextField fx:id="portField" layoutX="215.0" layoutY="175.0" />
-      <Button fx:id="btnConnect" layoutX="264.0" layoutY="214.0" mnemonicParsing="false" onAction="#connect" text="Button" />
-      <StackPane fx:id="pane" layoutX="91.0" layoutY="250.0" prefHeight="150.0" prefWidth="458.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="30.0" layoutX="261.0" layoutY="227.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="69.0" />
+      <Text fx:id="instructionMessage" layoutX="200.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+         <font>
+            <Font name="Rowdies Regular" size="12.0" />
+         </font></Text>
+      <TextField fx:id="IPAddressField" alignment="CENTER" layoutX="201.0" layoutY="142.0" promptText="Server Ip" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693;" styleClass="TextField">
+         <font>
+            <Font name="Rowdies Regular" size="12.0" />
+         </font></TextField>
+      <TextField fx:id="portField" alignment="CENTER" layoutX="202.0" layoutY="185.0" promptText="Port" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693;" styleClass="TextField">
+         <font>
+            <Font name="Rowdies Regular" size="12.0" />
+         </font></TextField>
+      <Button fx:id="btnConnect" layoutX="259.0" layoutY="224.0" mnemonicParsing="false" onAction="#connect" prefHeight="30.0" prefWidth="69.0" style="-fx-background-color: #72a4ff;" styleClass="Go-button" text="Button" textFill="WHITE">
+         <font>
+            <Font name="Rowdies Regular" size="12.0" />
+         </font></Button>
+      <StackPane fx:id="pane" layoutX="159.0" layoutY="250.0" prefHeight="150.0" prefWidth="258.0" />
+      <Polygon fill="#4c6592" layoutX="46.0" layoutY="-45.0" points="-50.0, 40.0, 183.5, 40.0, -50.0, 237.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Polygon fill="#4c6592" layoutX="426.0" layoutY="170.0" points="184.0, 240.427490234375, 184.0, 40.0, -46.467498779296875, 240.427490234375" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="214.0" layoutX="12.0" layoutY="-20.0" rotate="-16.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="29.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="196.0" layoutX="526.0" layoutY="212.0" rotate="-11.3" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="29.0" />
+      <Polygon fill="#fffaf4" layoutX="436.0" layoutY="179.0" points="139.532470703125, 231.0, 127.532470703125, 172.177490234375, 110.282470703125, 231.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Polygon fill="#fffaf4" layoutX="435.0" layoutY="179.0" points="139.532470703125, 231.0, 96.532470703125, 158.427490234375, 110.032470703125, 231.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
    </children>
 </AnchorPane>

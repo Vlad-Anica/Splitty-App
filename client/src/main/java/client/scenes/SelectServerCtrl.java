@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -82,6 +83,10 @@ public class SelectServerCtrl {
      * @param resourceKey the key to the line we want in the language resource bundle
      */
     public void showErrorMessage(String resourceKey) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Port Warning");
+        alert.setContentText("Please choose a suitable server");
+        alert.showAndWait();
         pane.getChildren().clear();
         ResourceBundle resourceBundle = mainCtrl.getLanguageResource();
         Text error = new Text(resourceBundle.getString(resourceKey));
