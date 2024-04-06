@@ -504,7 +504,7 @@ public class ServerUtils {
 		}
 	}
 
-	private StompSession session = connect(WEBSOCKETSERVER);
+	private static StompSession session;
 
 	private StompSession connect(String URL) {
 
@@ -520,6 +520,10 @@ public class ServerUtils {
 			Thread.currentThread().interrupt();
         }
         return null;
+	}
+	public void startConnection(){
+		System.out.println(WEBSOCKETSERVER);
+		session = connect(WEBSOCKETSERVER);
 	}
 
 	public <T> void registerForAddition(String destination, Class<T> type, Consumer<T> consumer) {
