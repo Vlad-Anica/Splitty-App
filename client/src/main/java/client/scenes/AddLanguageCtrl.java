@@ -130,11 +130,11 @@ public class AddLanguageCtrl{
         addButton.setText(resourceBundle.getString("Add"));
         languageColumn.setText(mainCtrl.getLanguage().split(";")[0]);
         warningTitle = resourceBundle.getString("Warning");
-        warningText1 = resourceBundle.getString("Please fill in id name");
-        warningText2 = resourceBundle.getString("Please fill all fields");
-        warningText3 = resourceBundle.getString("Language Already Exists");
-        alertTitle = resourceBundle.getString("Language Addition Alert");
-        alertText = resourceBundle.getString("Do you want to add this language?");
+        warningText1 = resourceBundle.getString("Pleasefillinidname");
+        warningText2 = resourceBundle.getString("Pleasefillallfields");
+        warningText3 = resourceBundle.getString("LanguageAlreadyExists");
+        alertTitle = resourceBundle.getString("LanguageAdditionAlert");
+        alertText = resourceBundle.getString("Doyouwanttoaddthislanguage");
         yourLanguageColumn.setText(resourceBundle.getString("YourLanguage"));
     }
     public HashMap<String, String> getPhrases() {

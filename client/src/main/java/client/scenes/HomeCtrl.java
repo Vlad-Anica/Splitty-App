@@ -149,10 +149,10 @@ public class HomeCtrl {
         mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("Home"));
         adminPasswordField.setPromptText(resourceBundle.getString("AdminPassword"));
         adminLogInButton.setText(resourceBundle.getString("LogIn"));
-        warningTitle = resourceBundle.getString("Wrong Password Warning");
-        warningText = resourceBundle.getString("Please input the correct password!");
-        alertTitle = resourceBundle.getString("Admin login Alert");
-        alertText = resourceBundle.getString("Do you want to log in as admin?");
+        warningTitle = resourceBundle.getString("WrongPasswordWarning");
+        warningText = resourceBundle.getString("Pleaseinputthecorrectpassword");
+        alertTitle = resourceBundle.getString("AdminLoginAlert");
+        alertText = resourceBundle.getString("Doyouwanttologinasadmin");
         if (!adminPasswordMessage.getText().isEmpty()) {
             adminPasswordMessage.setText(resourceBundle.getString("IncorrectPassword"));
         }

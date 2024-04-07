@@ -68,19 +68,19 @@ public class AddParticipantCtrl {
     public void setTextLanguage() {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
-        firstName.setPromptText(resourceBundle.getString("First Name"));
-        firstNameLabel.setText(resourceBundle.getString("First Name"));
-        lastName.setPromptText(resourceBundle.getString("Last Name"));
-        lastNameLabel.setText(resourceBundle.getString("Last Name"));
+        firstName.setPromptText(resourceBundle.getString("FirstName"));
+        firstNameLabel.setText(resourceBundle.getString("FirstName"));
+        lastName.setPromptText(resourceBundle.getString("LastName"));
+        lastNameLabel.setText(resourceBundle.getString("LastName"));
         goHomeButton.setText(resourceBundle.getString("Home"));
-        addParticipantButton.setText(resourceBundle.getString("Add Participant"));
-        warningTitle =resourceBundle.getString("Participant Added Warning");
-        warningText =resourceBundle.getString("The participant: ");
-        warningText1 =resourceBundle.getString(" was already added");
-        warningTitle2 =resourceBundle.getString("Adding Participant Warning");
-        warningText2 =resourceBundle.getString("Please fill all fields correctly!");
-        alertTitle =resourceBundle.getString("Adding Participant Alert");
-        alertText =resourceBundle.getString("Do you want to add this participant?");
+        addParticipantButton.setText(resourceBundle.getString("AddParticipant"));
+        warningTitle =resourceBundle.getString("ParticipantAddedWarning");
+        warningText =resourceBundle.getString("Theparticipant");
+        warningText1 =resourceBundle.getString("wasalreadyadded");
+        warningTitle2 =resourceBundle.getString("AddingParticipantWarning");
+        warningText2 =resourceBundle.getString("Pleasefillallfieldscorrectly");
+        alertTitle =resourceBundle.getString("AddingParticipantAlert");
+        alertText =resourceBundle.getString("Doyouwanttoaddthisparticipant");
     }
 
     @FXML
@@ -93,7 +93,7 @@ public class AddParticipantCtrl {
                 {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle(warningTitle);
-                    alert.setContentText(warningText + p.getFirstName() + warningText1);
+                    alert.setContentText(warningText + p.getFirstName() +" "+ warningText1);
                     alert.showAndWait();
                     participantAdded.setText(p.getFirstName() + " was already added");
                     participantAdded.setTextFill(Color.RED);

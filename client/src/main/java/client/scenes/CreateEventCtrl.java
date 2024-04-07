@@ -90,22 +90,22 @@ public class CreateEventCtrl {
     public void setTextLanguage() {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
-        title.setText(resourceBundle.getString("Create New Event"));
+        title.setText(resourceBundle.getString("CreateNewEvent"));
         nameField.setPromptText(resourceBundle.getString("Name"));
         nameLabel.setText(resourceBundle.getString("Name"));
-        descField.setPromptText(resourceBundle.getString("Write a short description"));
+        descField.setPromptText(resourceBundle.getString("Writeashortdescription"));
         descLabel.setText(resourceBundle.getString("Description"));
         dateLabel.setText(resourceBundle.getString("Date"));
         homeBtn.setText(resourceBundle.getString("Home"));
-        inviteLabel.setText(resourceBundle.getString("Invite some people (1 email per line)"));
-        tagComboBox.setPromptText(resourceBundle.getString("Choose Tag"));
-        addTagBtn.setText(resourceBundle.getString("New Tag"));
+        inviteLabel.setText(resourceBundle.getString("Invitesomepeople"));
+        tagComboBox.setPromptText(resourceBundle.getString("ChooseTag"));
+        addTagBtn.setText(resourceBundle.getString("NewTag"));
         clearBtn.setText(resourceBundle.getString("Clear"));
         createBtn.setText(resourceBundle.getString("Create"));
-        warningText = resourceBundle.getString("Please fill all fields correctly!");
-        warningTitle = resourceBundle.getString("Event Creation Warning");
-        alertText = resourceBundle.getString("Do you want to create this event?");
-        alertTitle = resourceBundle.getString("Event Creation Alert");
+        warningText = resourceBundle.getString("Pleasefillallfieldscorrectly");
+        warningTitle = resourceBundle.getString("EventCreationWarning");
+        alertText = resourceBundle.getString("Doyouwanttocreate");
+        alertTitle = resourceBundle.getString("EventCreationAlert");
     }
 
     @FXML

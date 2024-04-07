@@ -152,27 +152,27 @@ public class AddExpenseCtrl {
     public void setTextLanguage() {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
-        payerComboBox.setPromptText(resourceBundle.getString("Choose a payer"));
-        title.setText(resourceBundle.getString("Add/Edit expense"));
+        payerComboBox.setPromptText(resourceBundle.getString("ChooseAPayer"));
+        title.setText(resourceBundle.getString("Editexpense"));
         backButton.setText(resourceBundle.getString("Back"));
         goHomeButton.setText(resourceBundle.getString("Home"));
-        payerText.setText(resourceBundle.getString("Who paid?"));
-        descText.setText(resourceBundle.getString("What for?"));
+        payerText.setText(resourceBundle.getString("WhoPaid"));
+        descText.setText(resourceBundle.getString("WhatFor"));
         currencyComboBox.setPromptText(resourceBundle.getString("Currency"));
-        amountField.setText(resourceBundle.getString("How much?"));
-        dateLabel.setText(resourceBundle.getString("When?"));
-        chooseText.setText(resourceBundle.getString("How to split?"));
-        splitEvenButton.setText(resourceBundle.getString("Split evenly"));
-        splitButton.setText(resourceBundle.getString("Some People"));
-        typeText.setText(resourceBundle.getString("Expense type"));
-        typeComboBox.setPromptText(resourceBundle.getString("Choose a type"));
-        addTagButton.setText(resourceBundle.getString("Add Tag"));
+        amountField.setText(resourceBundle.getString("HowMuch"));
+        dateLabel.setText(resourceBundle.getString("When"));
+        chooseText.setText(resourceBundle.getString("HowToSplit"));
+        splitEvenButton.setText(resourceBundle.getString("SplitEvenly"));
+        splitButton.setText(resourceBundle.getString("SomePeople"));
+        typeText.setText(resourceBundle.getString("ExpenseType"));
+        typeComboBox.setPromptText(resourceBundle.getString("ChooseAType"));
+        addTagButton.setText(resourceBundle.getString("AddTag"));
         cancelButton.setText(resourceBundle.getString("Cancel"));
         addButton.setText(resourceBundle.getString("Add"));
-        warningTitle = resourceBundle.getString("Create Expense Warning");
-        warningText = resourceBundle.getString("Please fill all fields correctly!");
-        alertTitle = resourceBundle.getString("Adding Expense Confirmation Alert");
-        alertText = resourceBundle.getString("Do you want to add this expense?");
+        warningTitle = resourceBundle.getString("CreateExpenseWarning");
+        warningText = resourceBundle.getString("Pleasefillallfieldscorrectly");
+        alertTitle = resourceBundle.getString("AddingExpenseConfirmationAlert");
+        alertText = resourceBundle.getString("Doyouwanttoaddthisexpense");
     }
 
     public void createExpense() throws RuntimeException  {

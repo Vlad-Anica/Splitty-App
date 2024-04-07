@@ -47,8 +47,8 @@ public class SettingsCtrl {
         btnSubmitAll.setText(resourceBundle.getString("Submit"));
         settingsTitle.setText(resourceBundle.getString("Settings"));
         btnHome.setText(resourceBundle.getString("Home"));
-        alertTitle = resourceBundle.getString("Submit Alert");
-        alertText = resourceBundle.getString("Are you sure you want to submit?");
+        alertTitle = resourceBundle.getString("SubmitAlert");
+        alertText = resourceBundle.getString("Areyousureyouwanttosubmit");
 
     }
     public void clickBtnSubmitAll() {

@@ -133,16 +133,16 @@ public class StartPageCtrl {
 
     public void setTextLanguage() {
         ResourceBundle resourceBundle = mainCtrl.getLanguageResource();
-        title.setText(resourceBundle.getString("Sign up"));
-        lastname.setPromptText(resourceBundle.getString("Last name"));
-        firstname.setPromptText(resourceBundle.getString("First name"));
-        email.setPromptText(resourceBundle.getString("Email (optional)"));
+        title.setText(resourceBundle.getString("Signup"));
+        lastname.setPromptText(resourceBundle.getString("LastName"));
+        firstname.setPromptText(resourceBundle.getString("FirstName"));
+        email.setPromptText(resourceBundle.getString("Email(optional)"));
         currencyComboBox.setPromptText(resourceBundle.getString("Currency"));
         languageComboBox.setPromptText(resourceBundle.getString("Language"));
-        alertTitle = resourceBundle.getString("User Creation Confirmation Alert");
-        alertText = resourceBundle.getString("Do you want to create this user?");
-        warningTitle = resourceBundle.getString("User Creation Warning");
-        warningText = resourceBundle.getString("Please fill all necessary fields");
+        alertTitle = resourceBundle.getString("UserCreationConfirmationAlert");
+        alertText = resourceBundle.getString("Doyouwanttocreatethisuser");
+        warningTitle = resourceBundle.getString("UserCreationWarning");
+        warningText = resourceBundle.getString("Pleasefillallnecessaryfields");
 
     }
 }

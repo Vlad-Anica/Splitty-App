@@ -117,8 +117,8 @@ public class SelectServerCtrl {
         IPAddressField.setPromptText("IPAddress");
         portField.setPromptText("PortNumber");
         btnConnect.setText("Connect");
-        warningTitle = resourceBundle.getString("Port Warning");
-        warningText = resourceBundle.getString("Please choose a suitable server");
+        warningTitle = resourceBundle.getString("PortWarning");
+        warningText = resourceBundle.getString("Pleasechooseasuitableserver");
     }
 
 }
