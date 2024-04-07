@@ -15,7 +15,11 @@ import javafx.scene.input.ClipboardContent;
 
 import javafx.scene.paint.Color;
 
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -113,7 +117,6 @@ public class CreateEventCtrl {
 
     @FXML
     public void createEvent(ActionEvent event) {
-
         if (!isValidInput()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle(warningTitle);
@@ -140,13 +143,22 @@ public class CreateEventCtrl {
                 currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, newEvent, currentUser));
         // server.createEvent(newEvent);
         server.send("/app/events", newEvent);
-
+        server.createEvent(newEvent);
         statusLabel.setTextFill(Color.BLACK);
         ClipboardContent inviteCodeClipboard = new ClipboardContent();
         inviteCodeClipboard.putString(newEvent.getInviteCode());
         clipboard.setContent(inviteCodeClipboard);
         statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
 
+        //We Send the emails;
+        String emails = inviteField.getText();
+        Scanner mailScanner = new Scanner(emails);
+        mailScanner.useDelimiter("\n");
+        while (mailScanner.hasNext()){
+            String email = mailScanner.nextLine();
+            sendMailToParticipants(email, newEvent.getInviteCode(), nameField.getText());
+            System.out.println("Email sent to: " + email);
+            }
         }
         else{
             nameField.setText(null);
@@ -163,6 +175,72 @@ public class CreateEventCtrl {
 
     public void addTag() {
 
+    }
+
+    public void sendMailToParticipants(String mail, String inviteCode, String eventName){
+        final String username = "use.splitty";
+        final String password = "sbfs akue pjrj oiqt";
+        String serverAddress = server.getSERVER();
+        serverAddress = serverAddress.substring(7, serverAddress.length()-1);
+        System.out.println(serverAddress);
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(prop,
+                new jakarta.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("use.splitty@gmail.com", "Splitty App"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(mail)
+            );
+            message.setSubject("You're Invited to Join " +  eventName+ " - Use Your Invite Code!");
+            message.setText("Hello,\n" +
+                    "\n" +
+                    "You're invited to join an exclusive event on Splitty, your go-to expenses processing app!\n" +
+                    "\n" +
+                    "Event Details:\n" +
+                    "\n" +
+                    "Event Name: " + eventName + "\n" +
+                    "To join the event, simply follow these steps:\n" +
+                    "\n" +
+                    "Open the Splitty app on your device.\n" +
+                    "\n" +
+                    "Login on the following server: " + serverAddress + "\n" +
+                    "\n" +
+                    "On the home screen, locate the option to join an event.\n" +
+                    "\n" +
+                    "Enter the invite code provided below:\n" +
+                    "\n" +
+                    "Invite Code: " + inviteCode +"\n" +
+                    "\n" +
+                    "Once you've entered the invite code, you'll gain instant access to the event and all its exciting activities. Don't miss out on this opportunity to connect with others and enjoy a memorable experience!\n" +
+                    "\n" +
+                    "If you encounter any issues or have questions, feel free to reach out to our support team at use.splitty@gmail.com. We're here to help ensure you have a seamless experience joining the event.\n" +
+                    "\n" +
+                    "We look forward to seeing you at the event on Splitty!\n" +
+                    "\n" +
+                    "Best regards,\n" +
+                    "The Splitty Team");
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean isValidInput() {
