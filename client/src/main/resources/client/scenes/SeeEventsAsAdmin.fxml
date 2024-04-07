@@ -10,18 +10,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SeeEventsAsAdminCtrl">
+<AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SeeEventsAsAdminCtrl">
    <children>
       <Button fx:id="btnManagementOverview" layoutX="440.0" layoutY="36.0" mnemonicParsing="false" onAction="#goToManagementOverview" text="ManagementOverview" />
       <ComboBox fx:id="selectOrdering" layoutX="36.0" layoutY="36.0" prefWidth="150.0" promptText="Select how to see events" />
-      <ScrollPane layoutX="50.0" layoutY="128.0" prefHeight="200.0" prefWidth="500.0">
-         <content>
-            <TableView fx:id="eventTable" prefHeight="200.0" prefWidth="493.0" />
-         </content>
-      </ScrollPane>
       <ComboBox fx:id="selectAscDesc" layoutX="199.0" layoutY="36.0" prefWidth="150.0" />
       <TextField fx:id="eventToDeleteId" layoutX="50.0" layoutY="345.0" />
-      <Button fx:id="btnDownload" layoutX="210.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0" text="Button" />
+      <Button fx:id="btnDownload" layoutX="210.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0" 
       <Button fx:id="btnDeleteEvent" layoutX="297.0" layoutY="345.0" mnemonicParsing="false" onAction="#deleteEventById" text="Button" />
       <Button fx:id="btnImport" layoutX="499.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Button" />
       <Pane fx:id="importPane" layoutX="107.0" layoutY="74.0" prefHeight="252.0" prefWidth="380.0" style="-fx-background-color: #dfdede;">
@@ -30,6 +25,11 @@
             <Label fx:id="jsonImportLabel" layoutX="27.0" layoutY="23.0" prefHeight="17.0" prefWidth="197.0" text="Paste your JSON in the field below:" />
             <Button fx:id="btnImportOK" layoutX="265.0" layoutY="213.0" mnemonicParsing="false" text="OK" />
             <Button fx:id="btnImportCancel" layoutX="311.0" layoutY="213.0" mnemonicParsing="false" text="Cancel" />
+         </children>
+      </Pane>
+      <Pane layoutX="62.0" layoutY="125.0" prefHeight="200.0" prefWidth="494.0">
+         <children>
+            <TableView fx:id="eventTable" layoutX="1.0" prefHeight="200.0" prefWidth="493.0" />
          </children>
       </Pane>
    </children>
