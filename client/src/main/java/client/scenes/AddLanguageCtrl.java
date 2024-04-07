@@ -38,6 +38,12 @@ public class AddLanguageCtrl{
     private TableColumn<String, String> yourLanguageColumn;
     private HashMap<String, String> newLanguage;
     private HashMap<String, String> phrases;
+    private String warningTitle;
+    private String warningText1;
+    private String warningText2;
+    private String warningText3;
+    private String alertTitle;
+    private String alertText;
 
     @Inject
     public AddLanguageCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -50,24 +56,24 @@ public class AddLanguageCtrl{
     void addLanguage(ActionEvent event) {
         if (nameField == null || nameField.getText().isEmpty() || nameField.getText().contains(" ")){
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setContentText("Please fill in id name");
+            alert.setTitle(warningTitle);
+            alert.setContentText(warningText1);
             alert.showAndWait();
             notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("FillInIdName"));
             return;
     }
         if (newLanguage.keySet().size()<phrases.keySet().size()){
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setContentText("Please fill all fields");
+            alert.setTitle(warningTitle);
+            alert.setContentText(warningText2);
             alert.showAndWait();
             notFilledIn.setText("Not everything is filled in");
             notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("NotFilledIn"));
             return;
         }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Language Addition Alert");
-        alert.setContentText("Do you want to add this language?");
+        alert.setTitle(alertTitle);
+        alert.setContentText(alertText);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK) {
             System.out.println("Adding language... name: " + nameField.getText());
@@ -75,8 +81,8 @@ public class AddLanguageCtrl{
             File f = new File(filePath);
             if (f.exists()) {
                 Alert alert1 = new Alert(Alert.AlertType.WARNING);
-                alert1.setTitle("Warning");
-                alert1.setContentText("Language Already Exists");
+                alert1.setTitle(warningTitle);
+                alert1.setContentText(warningText3);
                 alert1.showAndWait();
                 notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("LanguageAlreadyExists"));
                 return;
@@ -123,6 +129,12 @@ public class AddLanguageCtrl{
         goHomeButton.setText(resourceBundle.getString("Home"));
         addButton.setText(resourceBundle.getString("Add"));
         languageColumn.setText(mainCtrl.getLanguage().split(";")[0]);
+        warningTitle = resourceBundle.getString("Warning");
+        warningText1 = resourceBundle.getString("Please fill in id name");
+        warningText2 = resourceBundle.getString("Please fill all fields");
+        warningText3 = resourceBundle.getString("Language Already Exists");
+        alertTitle = resourceBundle.getString("Language Addition Alert");
+        alertText = resourceBundle.getString("Do you want to add this language?");
         yourLanguageColumn.setText(resourceBundle.getString("YourLanguage"));
     }
     public HashMap<String, String> getPhrases() {

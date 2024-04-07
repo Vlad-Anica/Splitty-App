@@ -24,6 +24,8 @@ public class CreateEventCtrl {
 
     @FXML
     private Button createBtn;
+    @FXML
+    private Label title;
 
     @FXML
     private DatePicker dateField;
@@ -63,6 +65,10 @@ public class CreateEventCtrl {
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
+    private String warningTitle;
+    private String warningText;
+    private String alertTitle;
+    private String alertText;
 
     private List<Tag> tags;
     private final Clipboard clipboard = Clipboard.getSystemClipboard();
@@ -81,13 +87,34 @@ public class CreateEventCtrl {
         descField.clear();
     }
 
+    public void setTextLanguage() {
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        title.setText(resourceBundle.getString("Create New Event"));
+        nameField.setPromptText(resourceBundle.getString("Name"));
+        nameLabel.setText(resourceBundle.getString("Name"));
+        descField.setPromptText(resourceBundle.getString("Write a short description"));
+        descLabel.setText(resourceBundle.getString("Description"));
+        dateLabel.setText(resourceBundle.getString("Date"));
+        homeBtn.setText(resourceBundle.getString("Home"));
+        inviteLabel.setText(resourceBundle.getString("Invite some people (1 email per line)"));
+        tagComboBox.setPromptText(resourceBundle.getString("Choose Tag"));
+        addTagBtn.setText(resourceBundle.getString("New Tag"));
+        clearBtn.setText(resourceBundle.getString("Clear"));
+        createBtn.setText(resourceBundle.getString("Create"));
+        warningText = resourceBundle.getString("Please fill all fields correctly!");
+        warningTitle = resourceBundle.getString("Event Creation Warning");
+        alertText = resourceBundle.getString("Do you want to create this event?");
+        alertTitle = resourceBundle.getString("Event Creation Alert");
+    }
+
     @FXML
     public void createEvent(ActionEvent event) {
 
         if (!isValidInput()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Event Creation Warning");
-            alert.setContentText("Please fill all fields correctly!");
+            alert.setTitle(warningTitle);
+            alert.setContentText(warningText);
             alert.showAndWait();
             statusLabel.setStyle("-fx-font-weight: bold");
             statusLabel.setTextFill(Color.RED);
@@ -95,8 +122,8 @@ public class CreateEventCtrl {
             return;
         }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Event Creation Alert");
-        alert.setContentText("Do you want to create this event?");
+        alert.setTitle(alertTitle);
+        alert.setContentText(alertText);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK) {
             //convert LocalDate to date
@@ -157,7 +184,7 @@ public class CreateEventCtrl {
         tags = new ArrayList<>();
         tagComboBox.setItems(FXCollections.observableArrayList("Party", "Dinner",
                 "Trip"));
-
+        setTextLanguage();
     }
 
 }

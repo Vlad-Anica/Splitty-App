@@ -27,6 +27,8 @@ public class SelectServerCtrl {
     Button btnConnect;
     @FXML
     StackPane pane;
+    private String warningTitle;
+    private String warningText;
     @Inject
     public SelectServerCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
@@ -83,8 +85,8 @@ public class SelectServerCtrl {
      */
     public void showErrorMessage(String resourceKey) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Port Warning");
-        alert.setContentText("Please choose a suitable server");
+        alert.setTitle(warningTitle);
+        alert.setContentText(warningText);
         alert.showAndWait();
         pane.getChildren().clear();
         ResourceBundle resourceBundle = mainCtrl.getLanguageResource();
@@ -115,6 +117,8 @@ public class SelectServerCtrl {
         IPAddressField.setPromptText("IPAddress");
         portField.setPromptText("PortNumber");
         btnConnect.setText("Connect");
+        warningTitle = resourceBundle.getString("Port Warning");
+        warningText = resourceBundle.getString("Please choose a suitable server");
     }
 
 }

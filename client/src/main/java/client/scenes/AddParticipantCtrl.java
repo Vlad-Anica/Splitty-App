@@ -14,10 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 public class AddParticipantCtrl {
 
@@ -43,15 +40,47 @@ public class AddParticipantCtrl {
     private TextField BIC;
     @FXML
     Label participantAdded;
+    @FXML
+    private Label firstNameLabel;
+    @FXML
+    private Label lastNameLabel;
     List<Person> participants = new ArrayList<>();
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
+    private String warningTitle;
+    private String warningText;
+    private String warningText1;
+    private String warningTitle2;
+    private String warningText2;
+    private String alertTitle;
+    private String alertText;
 
     @Inject
     public AddParticipantCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    public void setup() {
+        setTextLanguage();
+    }
+    public void setTextLanguage() {
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        firstName.setPromptText(resourceBundle.getString("First Name"));
+        firstNameLabel.setText(resourceBundle.getString("First Name"));
+        lastName.setPromptText(resourceBundle.getString("Last Name"));
+        lastNameLabel.setText(resourceBundle.getString("Last Name"));
+        goHomeButton.setText(resourceBundle.getString("Home"));
+        addParticipantButton.setText(resourceBundle.getString("Add Participant"));
+        warningTitle =resourceBundle.getString("Participant Added Warning");
+        warningText =resourceBundle.getString("The participant: ");
+        warningText1 =resourceBundle.getString(" was already added");
+        warningTitle2 =resourceBundle.getString("Adding Participant Warning");
+        warningText2 =resourceBundle.getString("Please fill all fields correctly!");
+        alertTitle =resourceBundle.getString("Adding Participant Alert");
+        alertText =resourceBundle.getString("Do you want to add this participant?");
     }
 
     @FXML
@@ -63,8 +92,8 @@ public class AddParticipantCtrl {
                 if (participants.contains(p))
                 {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Participant Added Warning");
-                    alert.setContentText("The participant: " + p.getFirstName() + " was already added");
+                    alert.setTitle(warningTitle);
+                    alert.setContentText(warningText + p.getFirstName() + warningText1);
                     alert.showAndWait();
                     participantAdded.setText(p.getFirstName() + " was already added");
                     participantAdded.setTextFill(Color.RED);
@@ -72,8 +101,8 @@ public class AddParticipantCtrl {
                     return;
                 }
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Adding Participant Alert");
-                alert.setContentText("Do you want to add this participant?");
+                alert.setTitle(alertTitle);
+                alert.setContentText(alertText);
                 Optional<ButtonType> result = alert.showAndWait();
                 if(result.get() == ButtonType.OK) {
                     server.addPerson(p);
@@ -109,8 +138,8 @@ public class AddParticipantCtrl {
         }
         else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Adding Participant Warning");
-            alert.setContentText("Please fill all fields correctly!");
+            alert.setTitle(warningTitle2);
+            alert.setContentText(warningText2);
             alert.showAndWait();
             participantAdded.setText("Please fill out all fields correctly!");
             participantAdded.setTextFill(Color.RED);
