@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +40,7 @@ public class ExpenseControllerTest {
     private TagServiceImpl tagService;
     private Expense e1;
     private Expense e2;
+    private List<Debt> debts;
 
     @BeforeEach
     public void setUp() {
@@ -51,7 +53,9 @@ public class ExpenseControllerTest {
         personService = mock(PersonServiceImpl.class);
         tagService = mock(TagServiceImpl.class);
         expenseController = new ExpenseController(expenseService, personService, debtService, tagService);
-        e1 = Expense.builder().id(1L).description("desc1").amount(69).date(new Date()).receiver(p1).debtList(debtList).currency(Currency.USD).build();
+        debts = new ArrayList<>();
+        debts.add(new Debt());
+        e1 = Expense.builder().id(1L).description("desc1").amount(69).date(new Date()).receiver(p1).debtList(debts).currency(Currency.USD).build();
         e2 = Expense.builder().id(2L).description("desc2").amount(420).date(new Date()).receiver(p2).debtList(debtList).currency(Currency.EUR).build();
     }
 
@@ -77,6 +81,7 @@ public class ExpenseControllerTest {
         when(expenseService.existsById(2L)).thenReturn(true);
         assertEquals(e1, expenseController.getById(1L).getBody());
         assertEquals(e2, expenseController.getById(2L).getBody());
+        assertEquals(ResponseEntity.badRequest().build(), expenseController.getById(0L));
     }
 
     @Test
@@ -87,15 +92,20 @@ public class ExpenseControllerTest {
         when(expenseService.existsById(2L)).thenReturn(true);
         assertEquals(e1.getDebtList(), expenseController.getDebtsListById(1L));
         assertEquals(e2.getDebtList(), expenseController.getDebtsListById(2L));
+        assertNull(expenseController.getDebtsListById(-1L));
     }
 
     @Test
     public void testCreateExpense() {
-        when(expenseService.save(Expense.builder().id(0L).description("desc1").amount(69).date(e1.getDate()).receiver(null).debtList(new ArrayList<>()).currency(Currency.USD).updatedAt(null).createdAt(null).build())).thenReturn(e1);
+        when(expenseService.save(Expense.builder().id(0L).description("desc1").amount(69).date(e1.getDate()).receiver(null).debtList(debts).currency(Currency.USD).updatedAt(null).createdAt(null).build())).thenReturn(e1);
         when(personService.getReferenceById(0L)).thenReturn(null);
         when(tagService.getReferenceById(0L)).thenReturn(null);
+        when(personService.getReferenceById(-1L)).thenThrow(new EntityNotFoundException());
+        when(debtService.getReferenceById(-1L)).thenThrow(new EntityNotFoundException());
+        when(tagService.getReferenceById(-1L)).thenThrow(new EntityNotFoundException());
+        when(debtService.getReferenceById(0L)).thenReturn(debts.get(0));
         Expense r1 = expenseController.createExpense(e1.getDescription(), e1.getAmount(), e1.getDate(),
-                0L, new ArrayList<>(),
+                0L, List.of(0L),
                 e1.getCurrency(), 0L);
         assertEquals(e1.getCreatedAt(), r1.getCreatedAt());
         assertEquals(e1.getTag(), r1.getTag());
@@ -105,6 +115,16 @@ public class ExpenseControllerTest {
         assertEquals(e1.getDescription(), r1.getDescription());
         assertEquals(e1.getAmount(), r1.getAmount());
         assertEquals(e1.getCurrency(), r1.getCurrency());
+        assertNull(expenseController.createExpense(null, 20D, null, null, null, null, null));
+        assertNull(expenseController.createExpense(e1.getDescription(), e1.getAmount(), e1.getDate(),
+                0L, List.of(0L),
+                e1.getCurrency(), -1L));
+        assertNull(expenseController.createExpense(e1.getDescription(), e1.getAmount(), e1.getDate(),
+                -1L, List.of(0L),
+                e1.getCurrency(), 0L));
+        assertNull(expenseController.createExpense(e1.getDescription(), e1.getAmount(), e1.getDate(),
+                0L, List.of(-1L),
+                e1.getCurrency(), 0L));
     }
     @Test
     public void testAdd(){
