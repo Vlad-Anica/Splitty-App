@@ -1,9 +1,14 @@
 package server.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -13,6 +18,8 @@ import server.services.implementations.EventServiceImpl;
 import server.services.implementations.PersonServiceImpl;
 import server.services.interfaces.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -64,7 +71,6 @@ public class EventController {
 
         return result;
     }
-
 
     /**
      * Creates and saves an Event to the database with the specified fields.
@@ -206,6 +212,25 @@ public class EventController {
         return null;
     }
 
+    @GetMapping("/{id}/download")
+    public ResponseEntity<InputStreamResource> downloadJSONDump(@PathVariable("id") long id) throws JsonProcessingException {
+
+        Event event = getById(id).getBody();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonEvent = mapper.writeValueAsString(event);
+
+        byte[] eventByteArray = jsonEvent.getBytes();
+
+        InputStream input = new ByteArrayInputStream(eventByteArray);
+        System.out.println("Downloading event " + id);
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment;filename=event-"+ id + ".json")
+                .contentType(MediaType.APPLICATION_JSON)
+                .contentLength(eventByteArray.length)
+                .body(new InputStreamResource(input));
+    }
     @GetMapping("event/{id}")
     public Event getEventById(@PathVariable("id") long id) {
         if (id < 0 || !eventService.existsById(id)) {
