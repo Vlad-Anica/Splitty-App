@@ -418,6 +418,7 @@ public class MainCtrl {
         primaryStage.setTitle("Home");
         primaryStage.setScene(homeScene);
         homeCtrl.setup();
+        homeCtrl.refresh();
     }
 
     public void showOpenDebts() {

@@ -5,6 +5,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.services.implementations.EventServiceImpl;
@@ -150,6 +152,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
+    @MessageMapping("/events")
+    @SendTo("/topic/events")
+    public Event addEvent(Event event) {
+
+        ResponseEntity<Event> response = add(event);
+        if (response.getStatusCode().equals(HttpStatus.BAD_REQUEST))
+            return null;
+
+        return event;
+    }
     @PutMapping("{id}/newExpense")
     public ResponseEntity<Event> addExpense(@PathVariable("id") long eventId, @RequestBody Expense expense) {
         Event event = getById(eventId).getBody();

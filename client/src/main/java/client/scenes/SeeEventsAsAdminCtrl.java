@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -29,6 +30,7 @@ public class SeeEventsAsAdminCtrl {
     List<String> types = new ArrayList<>(List.of("name", "creationDate", "lastUpdate"));
     List<String> ascDesc = new ArrayList<>(List.of("asc", "desc"));
     List<Event> events;
+    ObservableList<Event> data;
     Boolean ascending;
 
     @Inject
@@ -37,7 +39,16 @@ public class SeeEventsAsAdminCtrl {
         this.server = sever;
     }
 
+    public void refresh() {
+        events = server.getAllEvents();
+        data = FXCollections.observableList(events);
+        eventTable.setItems(FXCollections.observableList(data.stream()
+                .map(e -> new EventInfo(e.getId(), e.getName(),
+                        e.getCreatedAt(), e.getUpdatedAt(), e.getParticipants().size()))
+                .toList()));
+    }
     public void setup() {
+
         createTable();
         setTextLanguage();
         ascending = false;
