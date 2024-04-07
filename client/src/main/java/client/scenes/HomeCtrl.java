@@ -8,6 +8,7 @@ import commons.Person;
 import commons.User;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -68,6 +69,7 @@ public class HomeCtrl {
     List<String> languages;
     List<String> eventNames;
     List<Long> eventIds;
+    ObservableList<Event> eventData;
     private MainCtrl mainCtrl;
 
     private ServerUtils server;
@@ -82,6 +84,13 @@ public class HomeCtrl {
      * set up the home page
      */
     public void setup() {
+
+        server.registerForAddition("/topic/events", Event.class, e -> {
+            eventData.add(e);
+            System.out.println("refreshed");
+            refresh();
+        });
+
         System.out.println("!!!!! " + server.getAllEvents().size());
         setTextLanguage();
         languages = mainCtrl.getLanguages();
@@ -117,6 +126,12 @@ public class HomeCtrl {
         eventList.setItems(FXCollections.observableList(eventNames.stream().toList()));
     }
 
+    public void refresh() {
+        var events = server.getEvents(mainCtrl.getUserId());
+        eventData = FXCollections.observableList(events);
+        eventList.setItems(FXCollections.observableList(eventData.stream().map(Event::getName).toList()));
+
+    }
     public void searchAndGoToEvent() {
         Event event = server.getEventByInviteCode(inviteCodeText.getText());
         User currentUser = server.getUserById(mainCtrl.getUserId());
@@ -177,7 +192,7 @@ public class HomeCtrl {
     }
 
     public void goHome(ActionEvent event) throws IOException {
-        mainCtrl.showHome();
+        refresh();
     }
 
     public void goToEventOverview(ActionEvent event) throws IOException {
