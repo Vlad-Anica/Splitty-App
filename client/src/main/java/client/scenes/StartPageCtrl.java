@@ -75,9 +75,10 @@ public class StartPageCtrl {
             Optional<ButtonType> result = alert.showAndWait();
             if(result.get() == ButtonType.OK) {
                 String emailHolder = "-1";
-                if (!(email.getText().isEmpty()))
+                if (!(email.getText().isEmpty())) {
                     emailHolder = email.getText();
                     sendWelcomeMail(emailHolder, firstname.getText());
+                }
                 User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData());
 
                 u = server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData());
