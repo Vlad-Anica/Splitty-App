@@ -146,6 +146,9 @@ public class CreateEventCtrl {
     public void sendMailToParticipants(String mail, String inviteCode, String eventName){
         final String username = "use.splitty";
         final String password = "sbfs akue pjrj oiqt";
+        String serverAddress = server.getSERVER();
+        serverAddress = serverAddress.substring(7, serverAddress.length()-1);
+        System.out.println(serverAddress);
 
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
@@ -177,6 +180,8 @@ public class CreateEventCtrl {
                     "To join the event, simply follow these steps:\n" +
                     "\n" +
                     "Open the Splitty app on your device.\n" +
+                    "\n" +
+                    "Login on the following server: " + serverAddress + "\n" +
                     "\n" +
                     "On the home screen, locate the option to join an event.\n" +
                     "\n" +
