@@ -27,6 +27,8 @@ public class SettingsCtrl {
     @FXML
     private Text publicUsernameText;
     private MainCtrl mainCtrl;
+    private String alertTitle;
+    private String alertText;
 
     private String currentUsername = "Sapunaru";
     private String currency = "EUR";
@@ -50,14 +52,16 @@ public class SettingsCtrl {
         btnSubmitAll.setText(resourceBundle.getString("Submit"));
         settingsTitle.setText(resourceBundle.getString("Settings"));
         btnHome.setText(resourceBundle.getString("Home"));
+        alertTitle = resourceBundle.getString("SubmitAlert");
+        alertText = resourceBundle.getString("Areyousureyouwanttosubmit");
         currencyText.setText(resourceBundle.getString("PreferredCurrency"));
         publicUsernameText.setText(resourceBundle.getString("PublicUsername"));
 
     }
     public void clickBtnSubmitAll() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Submit Alert");
-        alert.setContentText("Are you sure you want to submit?");
+        alert.setTitle(alertTitle);
+        alert.setContentText(alertText);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK) {
             currentUsername = publicUsername.getText();

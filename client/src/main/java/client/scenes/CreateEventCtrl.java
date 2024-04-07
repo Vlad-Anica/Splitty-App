@@ -31,6 +31,8 @@ public class CreateEventCtrl {
 
     @FXML
     private Button createBtn;
+    @FXML
+    private Label title;
 
     @FXML
     private DatePicker dateField;
@@ -70,9 +72,13 @@ public class CreateEventCtrl {
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
+    private String warningTitle;
+    private String warningText;
+    private String alertTitle;
+    private String alertText;
+
     private List<Tag> tags;
     private final Clipboard clipboard = Clipboard.getSystemClipboard();
-
 
     @Inject
     public CreateEventCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -81,19 +87,40 @@ public class CreateEventCtrl {
     }
 
     @FXML
-    public void clearFields() {
+    public void clearFields(ActionEvent event) {
         nameField.clear();
         dateField.getEditor().clear();
         inviteField.clear();
         descField.clear();
     }
 
+    public void setTextLanguage() {
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        title.setText(resourceBundle.getString("CreateNewEvent"));
+        nameField.setPromptText(resourceBundle.getString("Name"));
+        nameLabel.setText(resourceBundle.getString("Name"));
+        descField.setPromptText(resourceBundle.getString("Writeashortdescription"));
+        descLabel.setText(resourceBundle.getString("Description"));
+        dateLabel.setText(resourceBundle.getString("Date"));
+        homeBtn.setText(resourceBundle.getString("Home"));
+        inviteLabel.setText(resourceBundle.getString("Invitesomepeople"));
+        tagComboBox.setPromptText(resourceBundle.getString("ChooseTag"));
+        addTagBtn.setText(resourceBundle.getString("NewTag"));
+        clearBtn.setText(resourceBundle.getString("Clear"));
+        createBtn.setText(resourceBundle.getString("Create"));
+        warningText = resourceBundle.getString("Pleasefillallfieldscorrectly");
+        warningTitle = resourceBundle.getString("EventCreationWarning");
+        alertText = resourceBundle.getString("Doyouwanttocreate");
+        alertTitle = resourceBundle.getString("EventCreationAlert");
+    }
+
     @FXML
     public void createEvent(ActionEvent event) {
         if (!isValidInput()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Event Creation Warning");
-            alert.setContentText("Please fill all fields correctly!");
+            alert.setTitle(warningTitle);
+            alert.setContentText(warningText);
             alert.showAndWait();
             statusLabel.setStyle("-fx-font-weight: bold");
             statusLabel.setTextFill(Color.RED);
@@ -101,14 +128,13 @@ public class CreateEventCtrl {
             return;
         }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Event Creation Alert");
-        alert.setContentText("Do you want to create this event?");
+        alert.setTitle(alertTitle);
+        alert.setContentText(alertText);
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK) {
-
-        //convert LocalDate to date
-        LocalDate localDate = dateField.getValue();
-        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            //convert LocalDate to date
+            LocalDate localDate = dateField.getValue();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         Event newEvent = new Event(nameField.getText(), descField.getText(),
                 new ArrayList<>(), date, new ArrayList<>(), new ArrayList<>());
@@ -219,10 +245,10 @@ public class CreateEventCtrl {
 
     public boolean isValidInput() {
 
-        if (nameField == null || nameField.getText().isEmpty())
+        if (nameField == null || nameField.getText() == null || nameField.getText().isEmpty())
             return false;
 
-        if (descField == null || descField.getText().isEmpty())
+        if (descField == null || descField.getText() == null || descField.getText().isEmpty())
             return false;
 
         if (dateField == null || dateField.getEditor().getText().isEmpty())
@@ -244,7 +270,7 @@ public class CreateEventCtrl {
         tags = new ArrayList<>();
         tagComboBox.setItems(FXCollections.observableArrayList("Party", "Dinner",
                 "Trip"));
-
+        setTextLanguage();
     }
 
 }

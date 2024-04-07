@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddParticipantCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddParticipantCtrl">
     <children>
         <Button fx:id="addParticipantButton" layoutX="225.0" layoutY="317.0" mnemonicParsing="false" onAction="#addParticipant" text="Add Participant" textAlignment="CENTER" />
         <TextField fx:id="firstName" layoutX="117.0" layoutY="109.0" promptText="First Name" />
         <TextField fx:id="lastName" layoutX="292.0" layoutY="109.0" promptText="Last Name" />
         <TextField fx:id="email" layoutX="117.0" layoutY="187.0" promptText="E-mail" />
         <TextField fx:id="IBAN" layoutX="117.0" layoutY="254.0" promptText="IBAN" />
-        <Label alignment="CENTER" layoutX="115.0" layoutY="82.0" prefHeight="17.0" prefWidth="64.0" text="First Name" textAlignment="CENTER" />
-        <Label alignment="CENTER" layoutX="292.0" layoutY="82.0" prefHeight="17.0" prefWidth="64.0" text="Last Name" />
+        <Label fx:id="firstNameLabel" alignment="CENTER" layoutX="115.0" layoutY="82.0" prefHeight="17.0" prefWidth="64.0" text="First Name" textAlignment="CENTER" />
+        <Label fx:id="lastNameLabel" alignment="CENTER" layoutX="292.0" layoutY="82.0" prefHeight="17.0" prefWidth="64.0" text="Last Name" />
         <Label alignment="CENTER" layoutX="117.0" layoutY="158.0" text="E-mail" />
         <Label layoutX="120.0" layoutY="227.0" text="IBAN" />
         <Label fx:id="participantAdded" alignment="CENTER" contentDisplay="CENTER" layoutX="159.0" layoutY="360.0" prefHeight="17.0" prefWidth="230.0" />

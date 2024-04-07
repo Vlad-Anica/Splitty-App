@@ -55,7 +55,7 @@
 
 .button, .combo-box {
     -fx-background-color: -fx-blue-color;
-    -fx-text-fill: -fx-offwhite-color;
+    -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 

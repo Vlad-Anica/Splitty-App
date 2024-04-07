@@ -73,6 +73,10 @@ public class HomeCtrl {
     private MainCtrl mainCtrl;
 
     private ServerUtils server;
+    private String warningTitle;
+    private String warningText;
+    private String alertTitle;
+    private String alertText;
 
     @Inject
     public HomeCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -160,6 +164,10 @@ public class HomeCtrl {
         mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("Home"));
         adminPasswordField.setPromptText(resourceBundle.getString("AdminPassword"));
         adminLogInButton.setText(resourceBundle.getString("LogIn"));
+        warningTitle = resourceBundle.getString("WrongPasswordWarning");
+        warningText = resourceBundle.getString("Pleaseinputthecorrectpassword");
+        alertTitle = resourceBundle.getString("AdminLoginAlert");
+        alertText = resourceBundle.getString("Doyouwanttologinasadmin");
         if (!adminPasswordMessage.getText().isEmpty()) {
             adminPasswordMessage.setText(resourceBundle.getString("IncorrectPassword"));
         }
@@ -195,10 +203,6 @@ public class HomeCtrl {
         refresh();
     }
 
-    public void goToEventOverview(ActionEvent event) throws IOException {
-        mainCtrl.showEventOverview();
-    }
-
     public void goToAddLanguage(ActionEvent event) throws IOException {
         mainCtrl.showAddLanguage();
     }
@@ -214,15 +218,15 @@ public class HomeCtrl {
     public void adminLogIn(ActionEvent event) {
         if (adminPasswordField.getText().isEmpty() || !server.checkAdminPassword(adminPasswordField.getText())) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Wrong Password Warning");
-            alert.setContentText("Please input the correct password!");
+            alert.setTitle(warningTitle);
+            alert.setContentText(warningText);
             alert.showAndWait();
             adminPasswordMessage.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("IncorrectPassword"));
             adminPasswordMessage.setTextFill(Color.rgb(210, 39, 30));
         } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Admin login Alert");
-            alert.setContentText("Do you want to log in as admin?");
+            alert.setTitle(alertTitle);
+            alert.setContentText(alertText);
             Optional<ButtonType> result = alert.showAndWait();
             if(result.get() == ButtonType.OK)
                 mainCtrl.showManagementOverview();

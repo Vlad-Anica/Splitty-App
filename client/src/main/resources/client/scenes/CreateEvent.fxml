@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="446.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateEventCtrl">
    <children>
-      <Label alignment="CENTER" layoutX="200.0" layoutY="21.0" prefHeight="37.0" prefWidth="199.0" style="-fx-font-weight: bold;" text="Create New Event" textAlignment="CENTER">
+      <Label fx:id="title" alignment="CENTER" layoutX="200.0" layoutY="21.0" prefHeight="37.0" prefWidth="199.0" style="-fx-font-weight: bold;" text="Create New Event" textAlignment="CENTER">
          <font>
             <Font size="20.0" />
          </font>

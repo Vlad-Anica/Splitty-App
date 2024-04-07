@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import commons.*;
+import commons.Currency;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
@@ -19,10 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class AddExpenseCtrl {
 
@@ -39,6 +37,16 @@ public class AddExpenseCtrl {
     @FXML
     private TextField descriptionField;
     @FXML
+    private Label descText;
+    @FXML
+    private Label title;
+    @FXML
+    private Label payerText;
+    @FXML
+    private Label amountText;
+    @FXML
+    private Label typeText;
+    @FXML
     private TextField amountField;
     @FXML
     private TextField tagNameField;
@@ -46,6 +54,8 @@ public class AddExpenseCtrl {
     private TextField tagClrField;
     @FXML
     private DatePicker dateField;
+    @FXML
+    private Label chooseText;
     @FXML
     private Label dateLabel;
     @FXML
@@ -79,6 +89,10 @@ public class AddExpenseCtrl {
     private EventOverviewCtrl eventOverviewCtrl;
     private ServerUtils server;
     private Event event;
+    private String warningTitle;
+    private String warningText;
+    private String alertTitle;
+    private String alertText;
 
     @Inject
     public AddExpenseCtrl(MainCtrl mainCtrl, EventOverviewCtrl eventOverviewCtrl, ServerUtils server) {
@@ -124,6 +138,7 @@ public class AddExpenseCtrl {
 
             checkPersonBoxes(new ActionEvent());
             expenses = new ArrayList<>();
+            setTextLanguage();
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -132,6 +147,32 @@ public class AddExpenseCtrl {
             alert.showAndWait();
             return;
         }
+    }
+
+    public void setTextLanguage() {
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        payerComboBox.setPromptText(resourceBundle.getString("ChooseAPayer"));
+        title.setText(resourceBundle.getString("Editexpense"));
+        backButton.setText(resourceBundle.getString("Back"));
+        goHomeButton.setText(resourceBundle.getString("Home"));
+        payerText.setText(resourceBundle.getString("WhoPaid"));
+        descText.setText(resourceBundle.getString("WhatFor"));
+        currencyComboBox.setPromptText(resourceBundle.getString("Currency"));
+        amountField.setText(resourceBundle.getString("HowMuch"));
+        dateLabel.setText(resourceBundle.getString("When"));
+        chooseText.setText(resourceBundle.getString("HowToSplit"));
+        splitEvenButton.setText(resourceBundle.getString("SplitEvenly"));
+        splitButton.setText(resourceBundle.getString("SomePeople"));
+        typeText.setText(resourceBundle.getString("ExpenseType"));
+        typeComboBox.setPromptText(resourceBundle.getString("ChooseAType"));
+        addTagButton.setText(resourceBundle.getString("AddTag"));
+        cancelButton.setText(resourceBundle.getString("Cancel"));
+        addButton.setText(resourceBundle.getString("Add"));
+        warningTitle = resourceBundle.getString("CreateExpenseWarning");
+        warningText = resourceBundle.getString("Pleasefillallfieldscorrectly");
+        alertTitle = resourceBundle.getString("AddingExpenseConfirmationAlert");
+        alertText = resourceBundle.getString("Doyouwanttoaddthisexpense");
     }
 
     public void createExpense() throws RuntimeException  {
@@ -143,15 +184,15 @@ public class AddExpenseCtrl {
                 statusLabel.setTextFill(Color.RED);
                 statusLabel.setText("Fill out every field correctly!");
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Create Expense Warning");
-                alert.setContentText("Please fill all fields correctly!");
+                alert.setTitle(warningTitle);
+                alert.setContentText(warningText);
                 alert.showAndWait();
                 System.out.println("Every field needs to filled properly");
                 return;
             }
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Adding Expense Confirmation Alert");
-            alert.setContentText("Do you want to add this expense?");
+            alert.setTitle(alertTitle);
+            alert.setContentText(alertText);
             Optional<ButtonType> result = alert.showAndWait();
             if(result.get() == ButtonType.OK) {
                 String description;
