@@ -16,7 +16,7 @@
       <ComboBox fx:id="selectOrdering" layoutX="36.0" layoutY="36.0" prefWidth="150.0" promptText="Select how to see events" />
       <ComboBox fx:id="selectAscDesc" layoutX="199.0" layoutY="36.0" prefWidth="150.0" />
       <TextField fx:id="eventToDeleteId" layoutX="50.0" layoutY="345.0" />
-      <Button fx:id="btnDownload" layoutX="210.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0"> 
+      <Button fx:id="btnDownload" layoutX="210.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0"/>
       <Button fx:id="btnDeleteEvent" layoutX="297.0" layoutY="345.0" mnemonicParsing="false" onAction="#deleteEventById" text="Button" />
       <Button fx:id="btnImport" layoutX="499.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Button" />
       <Pane fx:id="importPane" layoutX="107.0" layoutY="74.0" prefHeight="252.0" prefWidth="380.0" style="-fx-background-color: #dfdede;">
