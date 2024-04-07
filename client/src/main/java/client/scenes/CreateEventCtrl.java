@@ -20,7 +20,6 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class CreateEventCtrl {
 
