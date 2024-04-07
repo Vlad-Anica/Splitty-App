@@ -27,7 +27,7 @@
       <Pane fx:id="importPane" layoutX="107.0" layoutY="74.0" prefHeight="252.0" prefWidth="380.0" style="-fx-background-color: #dfdede;">
          <children>
             <TextArea fx:id="jsonDumpField" layoutX="17.0" layoutY="52.0" prefHeight="149.0" prefWidth="346.0" />
-            <Label layoutX="27.0" layoutY="23.0" prefHeight="17.0" prefWidth="197.0" text="Paste your JSON in the field below:" />
+            <Label fx:id="jsonImportLabel" layoutX="27.0" layoutY="23.0" prefHeight="17.0" prefWidth="197.0" text="Paste your JSON in the field below:" />
             <Button fx:id="btnImportOK" layoutX="265.0" layoutY="213.0" mnemonicParsing="false" text="OK" />
             <Button fx:id="btnImportCancel" layoutX="311.0" layoutY="213.0" mnemonicParsing="false" text="Cancel" />
          </children>

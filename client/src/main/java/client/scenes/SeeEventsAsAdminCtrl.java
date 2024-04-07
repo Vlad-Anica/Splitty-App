@@ -33,6 +33,8 @@ public class SeeEventsAsAdminCtrl {
     @FXML
     Button btnImportCancel;
     @FXML
+    Label jsonImportLabel;
+    @FXML
     TextField eventToDeleteId;
     @FXML
     Button btnManagementOverview;
@@ -261,6 +263,7 @@ public class SeeEventsAsAdminCtrl {
         eventTable.getColumns().get(3).setText(resourceBundle.getString("UpdatedAt"));
         eventTable.getColumns().get(4).setText(resourceBundle.getString("NrParticipants"));
         btnImportCancel.setText(resourceBundle.getString("Cancel"));
+        jsonImportLabel.setText(resourceBundle.getString("JSONPasteLabel"));
 
     }
 
