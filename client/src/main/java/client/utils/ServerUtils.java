@@ -18,6 +18,8 @@ package client.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
+import commons.Event;
+import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -25,30 +27,51 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
 	private static String SERVER = "http://localhost:8080/";
+
+	private static String WEBSOCKETSERVER = "ws://localhost:8080/websocket";
+
 	private static final int NO_CONTENT_STATUS = 204;
+
 
 	public void setSERVER(String server) {
 		SERVER = server;
 	}
 	public String getSERVER() {
 		return SERVER;
+	}
+
+	public String getWEBSOCKETSERVER() {
+		return WEBSOCKETSERVER;
+	}
+	public void setWEBSOCKETSERVER(String ws) {
+		WEBSOCKETSERVER = ws;
 	}
 	public boolean isOnline(String SERVER_IP_ADDRESS, Integer PORT) {
 		boolean b = true;
@@ -127,13 +150,11 @@ public class ServerUtils {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonEvent = objectMapper.writeValueAsString(newEvent);
 			System.out.println("Received Event object: " + jsonEvent);
-
 			return ClientBuilder.newClient(new ClientConfig())
 					.target(SERVER).path("api/events/" + id)
 					.request(APPLICATION_JSON)
 					.accept(APPLICATION_JSON)
 					.put(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
-
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			return null;
@@ -483,6 +504,45 @@ public class ServerUtils {
 		}
 	}
 
+	private static StompSession session;
+
+	private StompSession connect(String URL) {
+
+		var client = new StandardWebSocketClient();
+		var stomp = new WebSocketStompClient(client);
+		stomp.setMessageConverter(new MappingJackson2MessageConverter());
+		try {
+            return stomp.connectAsync(URL, new StompSessionHandlerAdapter() {
+			}).get();
+		} catch (ExecutionException e) {
+			System.out.println(e.getMessage());
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+        }
+        return null;
+	}
+	public void startConnection(){
+		System.out.println(WEBSOCKETSERVER);
+		session = connect(WEBSOCKETSERVER);
+	}
+
+	public <T> void registerForAddition(String destination, Class<T> type, Consumer<T> consumer) {
+		session.subscribe(destination, new StompFrameHandler() {
+			@Override
+			public Type getPayloadType(StompHeaders headers) {
+				return type;
+			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				consumer.accept((T) payload);
+			}
+		});
+	}
+
+	public void send(String destination, Object o) {
+		session.send(destination, o);
+}
 	private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 	public void registerForUpdates(Consumer<Event> consumer) {
 		EXEC.submit(() -> {
@@ -511,5 +571,24 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.delete();
+	}
+
+	public void downloadJSONDump(Long eventId) throws URISyntaxException, IOException {
+
+		Client client = ClientBuilder.newClient();
+		Response res = client
+				.target(SERVER).path("api/events/" + eventId + "/download")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get();
+		if (res.getStatus() == Response.Status.OK.getStatusCode()) {
+			Desktop.getDesktop().browse(new URI(SERVER + "api/events/" + eventId + "/download"));
+		}
+		else {
+			System.out.println(res.getStatus());
+		}
+
+		res.close();
+		client.close();
 	}
 }
