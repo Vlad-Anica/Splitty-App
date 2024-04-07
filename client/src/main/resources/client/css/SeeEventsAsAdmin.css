@@ -1,19 +1,23 @@
 .button {
+    -fx-background-color: #72a4ff;
     -fx-text-background-color: #72a4ff;
     -fx-text-fill: #fffaf4;
 }
 
 .combo-box {
+    -fx-background-color: #72a4ff;
     -fx-text-background-color: #72a4ff;
     -fx-text-fill: #fffaf4;
     -fx-font-weight: bold;
 }
 
 .combo-box .list-cell {
+    -fx-background-color: #72a4ff;
     -fx-text-background-color: #72a4ff;
     -fx-text-fill: #fffaf4;
 }
 .table-view .column-header .label {
+    -fx-background-color: #72a4ff;
     -fx-text-background-color: #72a4ff;
     -fx-text-fill: #fffaf4;
     -fx-font-family: 'Rowdies';
