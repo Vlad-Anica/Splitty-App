@@ -117,28 +117,21 @@ public class CreateEventCtrl {
                 currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, newEvent, currentUser));
         // server.createEvent(newEvent);
         server.send("/app/events", newEvent);
-
+        server.createEvent(newEvent);
         statusLabel.setTextFill(Color.BLACK);
         ClipboardContent inviteCodeClipboard = new ClipboardContent();
         inviteCodeClipboard.putString(newEvent.getInviteCode());
         clipboard.setContent(inviteCodeClipboard);
         statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
 
-            server.createEvent(newEvent);
-            statusLabel.setTextFill(Color.BLACK);
-            ClipboardContent inviteCodeClipboard = new ClipboardContent();
-            inviteCodeClipboard.putString(newEvent.getInviteCode());
-            clipboard.setContent(inviteCodeClipboard);
-            statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
-
-            //We Send the emails;
-            String emails = inviteField.getText();
-            Scanner mailScanner = new Scanner(emails);
-            mailScanner.useDelimiter("\n");
-            while (mailScanner.hasNext()){
-                String email = mailScanner.nextLine();
-                sendMailToParticipants(email, newEvent.getInviteCode(), nameField.getText());
-                System.out.println("Email sent to: " + email);
+        //We Send the emails;
+        String emails = inviteField.getText();
+        Scanner mailScanner = new Scanner(emails);
+        mailScanner.useDelimiter("\n");
+        while (mailScanner.hasNext()){
+            String email = mailScanner.nextLine();
+            sendMailToParticipants(email, newEvent.getInviteCode(), nameField.getText());
+            System.out.println("Email sent to: " + email);
             }
         }
         else{
