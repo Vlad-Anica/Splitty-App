@@ -131,7 +131,7 @@ public class MainCtrl {
             }
             save(languageData);
         }
-        System.out.println("LAnguages: "+languages);
+        System.out.println("LAnguages: " + languages);
 
         this.language = languages.get(languageIndex);
         this.primaryStage = primaryStage;
@@ -198,10 +198,10 @@ public class MainCtrl {
     public String getLanguageWithoutImagePath() {
         return languages.get(languageIndex).split(";")[0];
     }
+
     public String getPathToFlagImage() {
         return languages.get(languageIndex).split(";")[1];
     }
-
 
 
     public void getLastKnownInfo() {
@@ -213,7 +213,8 @@ public class MainCtrl {
             try {
                 fileScanner = new Scanner(userConfig);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();;
+                e.printStackTrace();
+                ;
             }
             languageIndex = fileScanner.nextInt();
             userId = fileScanner.nextLong();
@@ -223,7 +224,8 @@ public class MainCtrl {
     public int getLanguageIndex() {
         return languageIndex;
     }
-    public String getLanguage(){
+
+    public String getLanguage() {
         return language;
     }
 
@@ -235,9 +237,10 @@ public class MainCtrl {
         this.restart = restart;
     }
 
-    public boolean getRestart(){
+    public boolean getRestart() {
         return restart;
     }
+
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
 
@@ -255,6 +258,7 @@ public class MainCtrl {
 
     /**
      * returns or creates a new file given a file path
+     *
      * @param path the file path provided
      * @return the file which is returned or created
      */
@@ -269,8 +273,10 @@ public class MainCtrl {
         }
         return file;
     }
+
     /**
      * get from the IPAddresses file the ip addresses used before
+     *
      * @return list of ip addresses used
      */
     public List<String> getUsedIPAddresses() {
@@ -291,6 +297,7 @@ public class MainCtrl {
 
     /**
      * check if a provided IP address has been used before
+     *
      * @param IPAddress the provided IP address
      * @return true if the user has been connected to it before
      */
@@ -300,6 +307,7 @@ public class MainCtrl {
 
     /**
      * adds a new IP address to the list of IP addresses used before
+     *
      * @param IPAddress the IP address provided
      */
     public void addNewIPAddress(String IPAddress) {
@@ -313,7 +321,7 @@ public class MainCtrl {
             e.printStackTrace();
         }
 
-        for (String address: IPAddresses) {
+        for (String address : IPAddresses) {
             assert writer != null;
             writer.println(address);
         }
@@ -323,6 +331,7 @@ public class MainCtrl {
 
     /**
      * returns the position of the IP address in the
+     *
      * @param IPAddress
      * @return
      */
@@ -330,10 +339,11 @@ public class MainCtrl {
         return getUsedIPAddresses().indexOf(IPAddress);
     }
 
-    public void setLanguage(String language){
+    public void setLanguage(String language) {
         this.language = language;
     }
-    public void save(Pair<Integer,List<String>> list) {
+
+    public void save(Pair<Integer, List<String>> list) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./src/main/resources/languages/languages.txt"))) {
             oos.writeObject(list);
         } catch (IOException e) {
@@ -341,10 +351,10 @@ public class MainCtrl {
         }
     }
 
-    public static Pair<Integer,List<String>> readFromFile(String filename) {
+    public static Pair<Integer, List<String>> readFromFile(String filename) {
         System.out.println(filename);
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            Pair<Integer,List<String>> list = (Pair<Integer,List<String>>) ois.readObject();
+            Pair<Integer, List<String>> list = (Pair<Integer, List<String>>) ois.readObject();
             return list;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -497,18 +507,33 @@ public class MainCtrl {
         primaryStage.setScene(statisticsScene);
 
     }
-    public void showManagementOverview(){
+
+    public void showManagementOverview() {
         primaryStage.setTitle("Management Overview");
         primaryStage.setScene(managementOverviewScene);
         managementOverviewCtrl.setUp();
     }
-    public void showAddLanguage(){
+
+    public void showAddLanguage() {
         primaryStage.setTitle("Add Language");
         primaryStage.setScene(addLanguageScene);
         addLanguageCtrl.setUp();
+        addLanguageScene.getStylesheets().add("/client/scenes/opendebts.css");
+        addLanguageScene.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case BACK_SPACE -> {
+                    try {
+                        addLanguageCtrl.goHome(new ActionEvent());
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                case ENTER -> addLanguageCtrl.addLanguage(new ActionEvent());
+            }
+        });
     }
 
-    public Stage getPrimaryStage(){
+    public Stage getPrimaryStage() {
         return primaryStage;
     }
 
@@ -519,9 +544,11 @@ public class MainCtrl {
     public Long getUserId() {
         return userId;
     }
+
     public File getUserConfig() {
         return userConfig;
     }
+
     public void setIPAddress(String IPAddress) {
         this.currentIPAddress = IPAddress;
         this.userConfig = new File("userConfig" + getIPAddressPosition(IPAddress));

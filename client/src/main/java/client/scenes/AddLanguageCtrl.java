@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Pair;
 
 import java.io.*;
@@ -29,7 +30,7 @@ public class AddLanguageCtrl{
     @FXML
     private Button addButton;
     @FXML
-    private Label notFilledIn;
+    private Text notFilledIn;
     @FXML
     private TableView<String> table;
     @FXML
@@ -71,7 +72,7 @@ public class AddLanguageCtrl{
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK) {
             System.out.println("Adding language... name: " + nameField.getText());
-            String filePath = "client/src/main/resources/languages/language_" + nameField.getText() + ".properties";
+            String filePath = "./src/main/resources/languages/language_" + nameField.getText() + ".properties";
             File f = new File(filePath);
             if (f.exists()) {
                 Alert alert1 = new Alert(Alert.AlertType.WARNING);
@@ -90,7 +91,7 @@ public class AddLanguageCtrl{
                 System.out.println("Lines have been written to the file successfully.");
                 notFilledIn.setText(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("RestartLanguage"));
                 mainCtrl.setRestart(true);
-                notFilledIn.setTextFill(Color.rgb(10, 170, 32));
+                notFilledIn.setFill(Color.rgb(10, 170, 32));
             } catch (IOException e) {
                 System.out.println("An error occurred while writing to the file: " + e.getMessage());
                 e.printStackTrace();
@@ -124,11 +125,12 @@ public class AddLanguageCtrl{
         addButton.setText(resourceBundle.getString("Add"));
         languageColumn.setText(mainCtrl.getLanguage().split(";")[0]);
         yourLanguageColumn.setText(resourceBundle.getString("YourLanguage"));
+        mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("AddLanguage"));
     }
     public HashMap<String, String> getPhrases() {
         HashMap<String, String> result = new HashMap<>();
         try {
-            File file = new File("client/src/main/resources/languages/language_" + mainCtrl.getLanguageWithoutImagePath() + ".properties");
+            File file = new File("./src/main/resources/languages/language_" + mainCtrl.getLanguageWithoutImagePath() + ".properties");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
