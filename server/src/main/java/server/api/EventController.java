@@ -128,6 +128,16 @@ public class EventController {
         return event;
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Event> update(@PathVariable Long id, @RequestBody Event updatedEvent) {
+
+        if (updatedEvent.getId() != id)
+            return ResponseEntity.badRequest().build();
+        if (!eventService.existsById(id))
+            return add(updatedEvent);
+        return ResponseEntity.ok(eventService.save(updatedEvent));
+    }
+
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Event> add(@RequestBody Event event) {
 

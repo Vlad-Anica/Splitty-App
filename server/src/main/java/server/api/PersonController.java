@@ -147,6 +147,12 @@ public class PersonController {
             return add(updatedPerson);
         return ResponseEntity.ok(personService.save(updatedPerson));
     }
+
+    @PutMapping("/persist")
+    public ResponseEntity<Person> persistPerson(@RequestBody Person person) {
+        return ResponseEntity.ok(personService.save(person));
+    }
+
     @PutMapping("/{id}/newDebt")
     public ResponseEntity<Person> addDebt(@PathVariable Long id, @RequestBody Debt debt) {
         Person person = getById(id).getBody();

@@ -127,13 +127,11 @@ public class ServerUtils {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonEvent = objectMapper.writeValueAsString(newEvent);
 			System.out.println("Received Event object: " + jsonEvent);
-
 			return ClientBuilder.newClient(new ClientConfig())
 					.target(SERVER).path("api/events/" + id)
 					.request(APPLICATION_JSON)
 					.accept(APPLICATION_JSON)
 					.put(Entity.entity(jsonEvent, MediaType.APPLICATION_JSON), Event.class);
-
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			return null;
