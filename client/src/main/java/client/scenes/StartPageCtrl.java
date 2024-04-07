@@ -117,6 +117,7 @@ public class StartPageCtrl {
     }
 
     public void setup() {
+        setTextLanguage();
         currencyComboBox.setItems(FXCollections.observableList(
                 List.of(Currency.EUR, Currency.USD,
                         Currency.CHF, Currency.GBP)));
