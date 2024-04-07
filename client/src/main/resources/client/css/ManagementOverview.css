@@ -2,14 +2,21 @@
     -fx-blue-color: #72a4ff;
     -fx-offwhite-color: #fffaf4;
     -fx-font-family: Rowdies;
+    -fx-font-weight: bold;
+}
+
+#anchorPane {
+    -fx-background-color: #fffaf4;
 }
 
 .button {
     -fx-background-color: #72a4ff;
+    -fx-text-background-color: #72a4ff;
     -fx-text-fill: #fffaf4;
 }
 
 #welcomeLabel {
+    -fx-text-background-color:#72a4ff;
     -fx-text-fill: #394d72;
     -fx-text-alignment: center;
     -fx-font-weight: bold;

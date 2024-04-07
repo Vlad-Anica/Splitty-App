@@ -378,6 +378,7 @@ public class MainCtrl {
     public void showSeeEventsAsAdmin() {
         seeEventsAsAdminCtrl.setup();
         primaryStage.setTitle("See Events As admin");
+        seeEventsAsAdminScene.getStylesheets().add("client/css/SeeEventsAsAdmin.css");
         primaryStage.setScene(seeEventsAsAdminScene);
     }
 
@@ -512,6 +513,7 @@ public class MainCtrl {
     public void showManagementOverview() {
         primaryStage.setTitle("Management Overview");
         primaryStage.setScene(managementOverviewScene);
+        managementOverviewScene.getStylesheets().add("client/css/ManagementOverview.css");
         managementOverviewCtrl.setUp();
     }
 
