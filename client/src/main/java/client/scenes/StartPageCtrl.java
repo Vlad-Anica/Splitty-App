@@ -132,7 +132,7 @@ public class StartPageCtrl {
             );
             message.setSubject("Welcome to Splitty " + Name + "!");
             message.setText(
-                    "We're thrilled to have Dear " + Name +",\n" +
+                    "We're thrilled to have you here " + Name +",\n" +
                     "\n" +
                     "Welcome to Splitty, your go-to app for managing and processing expenses with ease! We're thrilled to have you on board as a new user, and we can't wait for you to experience the convenience and efficiency that Splitty offers.\n" +
                     "\n" +

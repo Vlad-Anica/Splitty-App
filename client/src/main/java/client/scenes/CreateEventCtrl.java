@@ -16,11 +16,11 @@ import jakarta.mail.*;
 import jakarta.mail.internet.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-
-import static com.sun.prism.impl.PrismSettings.debug;
+import java.util.regex.Pattern;
 
 public class CreateEventCtrl {
 
@@ -88,7 +88,6 @@ public class CreateEventCtrl {
 
     @FXML
     public void createEvent(ActionEvent event) {
-        sendMail();
         if (!isValidInput()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Event Creation Warning");
@@ -117,6 +116,16 @@ public class CreateEventCtrl {
             inviteCodeClipboard.putString(newEvent.getInviteCode());
             clipboard.setContent(inviteCodeClipboard);
             statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
+
+            //We Send the emails;
+            String emails = inviteField.getText();
+            Scanner mailScanner = new Scanner(emails);
+            mailScanner.useDelimiter("\n");
+            while (mailScanner.hasNext()){
+                String email = mailScanner.nextLine();
+                sendMailToParticipants(email, newEvent.getInviteCode(), nameField.getText());
+                System.out.println("Email sent to: " + email);
+            }
         }
         else{
             nameField.setText(null);
@@ -135,7 +144,7 @@ public class CreateEventCtrl {
 
     }
 
-    public void sendMail(){
+    public void sendMailToParticipants(String mail, String inviteCode, String eventName){
         final String username = "use.splitty";
         final String password = "sbfs akue pjrj oiqt";
 
@@ -151,19 +160,39 @@ public class CreateEventCtrl {
                         return new PasswordAuthentication(username, password);
                     }
                 });
-
-
         try {
-
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("use.splitty@gmail.com"));
+            message.setFrom(new InternetAddress("use.splitty@gmail.com", "Splitty App"));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse("duco.floris@gmail.com")
+                    InternetAddress.parse(mail)
             );
-            message.setSubject("Testing Gmail SSL");
-            message.setText("Dear Mail Crawler,"
-                    + "\n\n Please do not spam my email!");
+            message.setSubject("You're Invited to Join " +  eventName+ " - Use Your Invite Code!");
+            message.setText("Hello,\n" +
+                    "\n" +
+                    "You're invited to join an exclusive event on Splitty, your go-to expenses processing app!\n" +
+                    "\n" +
+                    "Event Details:\n" +
+                    "\n" +
+                    "Event Name: " + eventName + "\n" +
+                    "To join the event, simply follow these steps:\n" +
+                    "\n" +
+                    "Open the Splitty app on your device.\n" +
+                    "\n" +
+                    "On the home screen, locate the option to join an event.\n" +
+                    "\n" +
+                    "Enter the invite code provided below:\n" +
+                    "\n" +
+                    "Invite Code: " + inviteCode +"\n" +
+                    "\n" +
+                    "Once you've entered the invite code, you'll gain instant access to the event and all its exciting activities. Don't miss out on this opportunity to connect with others and enjoy a memorable experience!\n" +
+                    "\n" +
+                    "If you encounter any issues or have questions, feel free to reach out to our support team at use.splitty@gmail.com. We're here to help ensure you have a seamless experience joining the event.\n" +
+                    "\n" +
+                    "We look forward to seeing you at the event on Splitty!\n" +
+                    "\n" +
+                    "Best regards,\n" +
+                    "The Splitty Team");
 
             Transport.send(message);
 
@@ -171,6 +200,8 @@ public class CreateEventCtrl {
 
         } catch (MessagingException e) {
             e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
