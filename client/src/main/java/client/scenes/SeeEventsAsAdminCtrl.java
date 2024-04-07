@@ -9,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
@@ -75,7 +74,16 @@ public class SeeEventsAsAdminCtrl {
         });
         btnDownload.setOnAction(event -> {
             try {
-                downloadJSONDump();
+                int languageIndex = mainCtrl.getLanguageIndex();
+                if (languageIndex < 0)
+                    languageIndex = 0;
+                ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Download alert");
+                alert.setContentText(resourceBundle.getString("DownloadThisEvent"));
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK)
+                  downloadJSONDump();
             } catch (URISyntaxException e) {
                 System.out.println(e.getMessage());
             } catch (IOException e) {
@@ -90,7 +98,7 @@ public class SeeEventsAsAdminCtrl {
                 languageIndex = 0;
             ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("User Creation Confirmation Alert");
+            alert.setTitle("Import Alert");
             alert.setContentText(resourceBundle.getString("ImportThisEvent"));
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK)
