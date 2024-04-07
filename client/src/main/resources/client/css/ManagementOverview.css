@@ -2,6 +2,11 @@
     -fx-blue-color: #72a4ff;
     -fx-offwhite-color: #fffaf4;
     -fx-font-family: Rowdies;
+    -fx-font-weight: bold;
+}
+
+#anchorPane {
+    -fx-background-color: #fffaf4;
 }
 
 .button {
