@@ -486,11 +486,6 @@ public class MainCtrl {
         });
     }
 
-    public void showEventOverview() {
-        primaryStage.setTitle("Event Overview");
-        primaryStage.setScene(eventOverviewScene);
-    }
-
     public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);

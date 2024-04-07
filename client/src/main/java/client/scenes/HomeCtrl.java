@@ -203,10 +203,6 @@ public class HomeCtrl {
         refresh();
     }
 
-    public void goToEventOverview(ActionEvent event) throws IOException {
-        mainCtrl.showEventOverview();
-    }
-
     public void goToAddLanguage(ActionEvent event) throws IOException {
         mainCtrl.showAddLanguage();
     }

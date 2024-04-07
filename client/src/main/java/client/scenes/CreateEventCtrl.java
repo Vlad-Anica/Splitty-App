@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Person;
 import commons.Tag;
 import commons.User;
 import jakarta.inject.Inject;
@@ -166,10 +167,10 @@ public class CreateEventCtrl {
 
     public boolean isValidInput() {
 
-        if (nameField == null || nameField.getText().isEmpty())
+        if (nameField == null || nameField.getText() == null || nameField.getText().isEmpty())
             return false;
 
-        if (descField == null || descField.getText().isEmpty())
+        if (descField == null || descField.getText() == null || descField.getText().isEmpty())
             return false;
 
         if (dateField == null || dateField.getEditor().getText().isEmpty())
