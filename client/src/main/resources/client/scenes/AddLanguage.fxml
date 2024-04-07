@@ -2,19 +2,123 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddLanguageCtrl">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: fffaf4;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddLanguageCtrl">
    <children>
        <TableView fx:id="table" layoutX="16.0" layoutY="71.0" prefHeight="257.0" prefWidth="568.0">
            <columns>
                <TableColumn fx:id="languageColumn" prefWidth="288.0" text="Language" />
-               <TableColumn fx:id="yourLanguageColumn" minWidth="0.0" prefWidth="279.0" text="Your language" />
+               <TableColumn fx:id="yourLanguageColumn" minWidth="0.0" prefWidth="265.0" text="Your language" />
            </columns>
        </TableView>
-      <Button fx:id="goHomeButton" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" text="%Home" />
-      <TextField fx:id="nameField" layoutX="226.0" layoutY="37.0" promptText="English(US)" />
-      <Label fx:id="languageName" layoutX="253.0" layoutY="16.0" text="%LanguageName" />
-      <Button fx:id="addButton" layoutX="273.0" layoutY="351.0" mnemonicParsing="false" onAction="#addLanguage" text="%Add" />
-      <Label fx:id="notFilledIn" layoutX="230.0" layoutY="378.0" textFill="RED" />
+       <Rectangle arcHeight="5.0" arcWidth="5.0" height="40.0" layoutX="501.0" layoutY="26.0" strokeType="INSIDE" width="87.0">
+           <stroke>
+               <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
+                   <stops>
+                       <Stop>
+                           <color>
+                               <Color />
+                           </color>
+                       </Stop>
+                       <Stop offset="0.006729475100942127">
+                           <color>
+                               <Color red="0.4470588266849518" green="0.6431372761726379" blue="1.0" />
+                           </color>
+                       </Stop>
+                       <Stop offset="1.0">
+                           <color>
+                               <Color red="0.2235294133424759" green="0.3019607961177826" blue="0.4470588266849518" />
+                           </color>
+                       </Stop>
+                   </stops>
+               </LinearGradient>
+           </stroke>
+           <fill>
+               <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
+                   <stops>
+                       <Stop>
+                           <color>
+                               <Color />
+                           </color>
+                       </Stop>
+                       <Stop offset="0.006729475100942127">
+                           <color>
+                               <Color red="0.4470588266849518" green="0.6431372761726379" blue="1.0" />
+                           </color>
+                       </Stop>
+                       <Stop offset="0.5181695827725437">
+                           <color>
+                               <Color red="0.2235294133424759" green="0.3019607961177826" blue="0.4470588266849518" />
+                           </color>
+                       </Stop>
+                       <Stop offset="1.0">
+                           <color>
+                               <Color red="0.2235294133424759" green="0.3019607961177826" blue="0.4470588266849518" />
+                           </color>
+                       </Stop>
+                   </stops>
+               </LinearGradient>
+           </fill>
+       </Rectangle>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="25.0" layoutX="275.0" layoutY="352.0" strokeType="INSIDE" width="39.0">
+         <stroke>
+            <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.006729475100942127">
+                     <color>
+                        <Color red="0.4470588266849518" green="0.6431372761726379" blue="1.0" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.2235294133424759" green="0.3019607961177826" blue="0.4470588266849518" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </stroke>
+         <fill>
+            <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.006729475100942127">
+                     <color>
+                        <Color red="0.4470588266849518" green="0.6431372761726379" blue="1.0" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.5181695827725437">
+                     <color>
+                        <Color red="0.2235294133424759" green="0.3019607961177826" blue="0.4470588266849518" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.2235294133424759" green="0.3019607961177826" blue="0.4470588266849518" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+       <Button fx:id="goHomeButton" layoutX="496.0" layoutY="20.0" mnemonicParsing="false" onAction="#goHome" prefHeight="38.0" prefWidth="87.0" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" text="%Home" textFill="#fffaf4">
+           <font>
+               <Font size="18.0" />
+           </font></Button>
+      <TextField fx:id="nameField" layoutX="211.0" layoutY="37.0" promptText="English(US)" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693; -fx-font-family: Rowdies; -fx-font-size: 12.0" />
+      <Label fx:id="languageName" layoutX="253.0" layoutY="16.0" style="-fx-font-family: Rowdies;" text="%LanguageName" textFill="#394d72" />
+      <Button fx:id="addButton" layoutX="273.0" layoutY="351.0" mnemonicParsing="false" onAction="#addLanguage" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" text="%Add" textFill="#fffaf4" />
+      <Text fx:id="notFilledIn" fill="RED" layoutX="6.0" layoutY="390.0" style="-fx-font-family: Rowdies;" textAlignment="CENTER" wrappingWidth="589.0" />
    </children>
 </Pane>

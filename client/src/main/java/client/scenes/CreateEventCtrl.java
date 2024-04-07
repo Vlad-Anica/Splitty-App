@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Tag;
+import commons.User;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -130,15 +132,20 @@ public class CreateEventCtrl {
             LocalDate localDate = dateField.getValue();
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            Event newEvent = new Event(nameField.getText(), descField.getText(),
-                    new ArrayList<>(), date, new ArrayList<>(), new ArrayList<>());
+        Event newEvent = new Event(nameField.getText(), descField.getText(),
+                new ArrayList<>(), date, new ArrayList<>(), new ArrayList<>());
+        User currentUser = server.getUserById(mainCtrl.getUserId());
+        newEvent.getParticipants().add(new Person(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getIBAN(),
+                currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, newEvent, currentUser));
+        // server.createEvent(newEvent);
+        server.send("/app/events", newEvent);
 
-            server.createEvent(newEvent);
-            statusLabel.setTextFill(Color.BLACK);
-            ClipboardContent inviteCodeClipboard = new ClipboardContent();
-            inviteCodeClipboard.putString(newEvent.getInviteCode());
-            clipboard.setContent(inviteCodeClipboard);
-            statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
+        statusLabel.setTextFill(Color.BLACK);
+        ClipboardContent inviteCodeClipboard = new ClipboardContent();
+        inviteCodeClipboard.putString(newEvent.getInviteCode());
+        clipboard.setContent(inviteCodeClipboard);
+        statusLabel.setText("Invite code: " + newEvent.getInviteCode() + " (Copied to clipboard!)");
+
         }
         else{
             nameField.setText(null);

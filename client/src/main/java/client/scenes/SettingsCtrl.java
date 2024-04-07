@@ -22,6 +22,10 @@ public class SettingsCtrl {
     private Text settingsTitle;
     @FXML
     private Button btnHome;
+    @FXML
+    private Text currencyText;
+    @FXML
+    private Text publicUsernameText;
     private MainCtrl mainCtrl;
     private String alertTitle;
     private String alertText;
@@ -44,11 +48,14 @@ public class SettingsCtrl {
     public void setLanguageText() {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("Settings"));
         btnSubmitAll.setText(resourceBundle.getString("Submit"));
         settingsTitle.setText(resourceBundle.getString("Settings"));
         btnHome.setText(resourceBundle.getString("Home"));
         alertTitle = resourceBundle.getString("SubmitAlert");
         alertText = resourceBundle.getString("Areyousureyouwanttosubmit");
+        currencyText.setText(resourceBundle.getString("PreferredCurrency"));
+        publicUsernameText.setText(resourceBundle.getString("PublicUsername"));
 
     }
     public void clickBtnSubmitAll() {

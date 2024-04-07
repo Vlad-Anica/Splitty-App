@@ -120,8 +120,8 @@ public class ExpenseController {
     }
 
 
-    @GetMapping("participants/{id}")
-    public List<Debt> getParticipantsById(@PathVariable("id") long id) {
+    @GetMapping("debts/{id}")
+    public List<Debt> getDebtsListById(@PathVariable("id") long id) {
         if (id < 0 || !expenseService.existsById(id)) {
             return null;
         }

@@ -2,13 +2,18 @@ package client.scenes;
 
 import client.sceneSupportClasses.EventInfo;
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class SeeEventsAsAdminCtrl {
@@ -16,6 +21,20 @@ public class SeeEventsAsAdminCtrl {
     ServerUtils server;
     @FXML
     Button btnDeleteEvent;
+    @FXML
+    Button btnDownload;
+    @FXML
+    Button btnImport;
+    @FXML
+    Pane importPane;
+    @FXML
+    TextArea jsonDumpField;
+    @FXML
+    Button btnImportOK;
+    @FXML
+    Button btnImportCancel;
+    @FXML
+    Label jsonImportLabel;
     @FXML
     TextField eventToDeleteId;
     @FXML
@@ -29,6 +48,7 @@ public class SeeEventsAsAdminCtrl {
     List<String> types = new ArrayList<>(List.of("name", "creationDate", "lastUpdate"));
     List<String> ascDesc = new ArrayList<>(List.of("asc", "desc"));
     List<Event> events;
+    ObservableList<Event> data;
     Boolean ascending;
 
     @Inject
@@ -37,9 +57,19 @@ public class SeeEventsAsAdminCtrl {
         this.server = sever;
     }
 
+    public void refresh() {
+        events = server.getAllEvents();
+        data = FXCollections.observableList(events);
+        eventTable.setItems(FXCollections.observableList(data.stream()
+                .map(e -> new EventInfo(e.getId(), e.getName(),
+                        e.getCreatedAt(), e.getUpdatedAt(), e.getParticipants().size()))
+                .toList()));
+    }
     public void setup() {
+
         createTable();
         setTextLanguage();
+        hideImportPane();
         ascending = false;
         selectOrdering.setItems(FXCollections.observableList(types.stream().toList()));
         selectAscDesc.setItems(FXCollections.observableList(ascDesc.stream().toList()));
@@ -54,6 +84,42 @@ public class SeeEventsAsAdminCtrl {
                     printToTable();
                 }
             }
+        });
+        btnDownload.setOnAction(event -> {
+            try {
+                int languageIndex = mainCtrl.getLanguageIndex();
+                if (languageIndex < 0)
+                    languageIndex = 0;
+                ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Download alert");
+                alert.setContentText(resourceBundle.getString("DownloadThisEvent"));
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK)
+                  downloadJSONDump();
+            } catch (URISyntaxException e) {
+                System.out.println(e.getMessage());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+        btnImport.setOnAction(event -> showImportPane());
+        btnImportOK.setOnAction(event -> {
+
+            int languageIndex = mainCtrl.getLanguageIndex();
+            if (languageIndex < 0)
+                languageIndex = 0;
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Import Alert");
+            alert.setContentText(resourceBundle.getString("ImportThisEvent"));
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK)
+                importJSONDump();
+
+        });
+        btnImportCancel.setOnAction(event -> {
+            hideImportPane();
         });
         selectOrdering.setOnAction(event -> {
             printSortedEvents();
@@ -121,6 +187,47 @@ public class SeeEventsAsAdminCtrl {
 
     }
 
+    /**
+     * download a json dump of the event with the specified id
+     * @throws URISyntaxException
+     * @throws IOException
+     */
+    public void downloadJSONDump() throws URISyntaxException, IOException {
+        Long eventId = Long.parseLong(eventToDeleteId.getText());
+        server.downloadJSONDump(eventId);
+    }
+
+    /**
+     * Import a json dump of an event and map it to an event object
+     *
+     */
+    public void importJSONDump()  {
+
+        try {
+            if (jsonDumpField == null || jsonDumpField.getText().isEmpty())
+                return;
+            ObjectMapper mapper = new ObjectMapper();
+            Event event = mapper.readValue(jsonDumpField.getText().getBytes(), Event.class);
+            server.createEvent(event);
+            hideImportPane();
+        } catch (IOException e) {
+            System.out.println("Invalid JSON Format");
+        }
+
+    }
+
+    public void showImportPane() {
+
+        importPane.setVisible(true);
+        importPane.setDisable(false);
+    }
+
+    public void hideImportPane() {
+        jsonDumpField.clear();
+        importPane.setDisable(true);
+        importPane.setVisible(false);
+    }
+
     public void stop() {
         server.stop();
     }
@@ -150,6 +257,8 @@ public class SeeEventsAsAdminCtrl {
             languageIndex = 0;
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         btnDeleteEvent.setText(resourceBundle.getString("DeleteEvent"));
+        btnDownload.setText(resourceBundle.getString("Download"));
+        btnImport.setText(resourceBundle.getString("Import"));
         eventToDeleteId.setPromptText(resourceBundle.getString("EventId"));
         btnManagementOverview.setText(resourceBundle.getString("ManagementOverview"));
         selectAscDesc.setPromptText(resourceBundle.getString("SelectAscDesc"));
@@ -164,6 +273,8 @@ public class SeeEventsAsAdminCtrl {
         eventTable.getColumns().get(2).setText(resourceBundle.getString("CreatedAt"));
         eventTable.getColumns().get(3).setText(resourceBundle.getString("UpdatedAt"));
         eventTable.getColumns().get(4).setText(resourceBundle.getString("NrParticipants"));
+        btnImportCancel.setText(resourceBundle.getString("Cancel"));
+        jsonImportLabel.setText(resourceBundle.getString("JSONPasteLabel"));
 
     }
 
