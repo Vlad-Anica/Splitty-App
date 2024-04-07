@@ -424,7 +424,7 @@ public class MainCtrl {
     public void showOpenDebts() {
         primaryStage.setScene(openDebtsScene);
         openDebtsCtrl.setup();
-        openDebtsScene.getStylesheets().add("/client/scenes/opendebts.css");
+        openDebtsScene.getStylesheets().add("/client/css/opendebts.css");
 
         openDebtsScene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.BACK_SPACE) {
@@ -476,7 +476,7 @@ public class MainCtrl {
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpenseScene);
         addExpenseCtrl.initializePage(eventID);
-        addExpenseScene.getStylesheets().add("/client/scenes/addExpense.css");
+        addExpenseScene.getStylesheets().add("/client/css/addExpense.css");
         addExpenseScene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
                 case ENTER -> addExpenseCtrl.createExpense();
