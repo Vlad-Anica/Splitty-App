@@ -68,15 +68,15 @@ public class DebtController {
      * @param amount amount to be paid
      * @return a Debt
      */
-    @PostMapping("/")
-    public Debt createDebt(@RequestParam("giver") Long giverId,
-                           @RequestParam("receiver") Long receiverId, @RequestParam("expense") Long expenseId,
-                           @RequestParam("amount") Double amount) {
-        Debt debt = new Debt(personService.getReferenceById(giverId), personService.getReferenceById(receiverId),
-                expenseService.getReferenceById(expenseId), amount);
-        debtService.save(debt);
-        return debt;
-    }
+//    @PostMapping("/")
+//    public Debt createDebt(@RequestParam("giver") Long giverId,
+//                           @RequestParam("receiver") Long receiverId, @RequestParam("expense") Long expenseId,
+//                           @RequestParam("amount") Double amount) {
+//        Debt debt = new Debt(personService.getReferenceById(giverId), personService.getReferenceById(receiverId),
+//                expenseService.getReferenceById(expenseId), amount);
+//        debtService.save(debt);
+//        return debt;
+//    }
     /**
     * endpoint for udating debt
     * @param id id of debt to update

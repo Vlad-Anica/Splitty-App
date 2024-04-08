@@ -52,16 +52,16 @@ public class Debt {
     //@JsonBackReference(value = "receiver-debt")
     private Person receiver;
     @ManyToOne
-    @JoinColumn(name = "EXPENSE_ID")
-    private Expense expense;
+    @JoinColumn(name = "EVENT_ID")
+    private Event event;
     @Column(name = "amount")
     private double amount;
     @Column(name = "settled")
     private boolean settled;
-    public Debt(Person giver, Person receiver, Expense expense, double amount) {
+    public Debt(Person giver, Person receiver, Event event, double amount) {
         this.giver = giver;
         this.receiver = receiver;
-        this.expense = expense;
+        this.event = event;
         this.amount = amount;
         this.settled = false;
     }
@@ -93,8 +93,8 @@ public class Debt {
     public Person getReceiver() {
         return receiver;
     }
-    public Expense getExpense() {
-        return expense;
+    public Event getEvent() {
+        return event;
     }
     public double getAmount() {
         return amount;
@@ -108,8 +108,8 @@ public class Debt {
     public void setReceiver(Person receiver) {
         this.receiver = receiver;
     }
-    public void setExpense(Expense expense) {
-        this.expense = expense;
+    public void setEvent(Event event) {
+        this.event = event;
     }
     public void setAmount(double amount) {
         this.amount = amount;
