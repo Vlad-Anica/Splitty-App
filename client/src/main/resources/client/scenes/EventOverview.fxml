@@ -67,6 +67,7 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="355.0" />
             <TextField fx:id="editTitleTextField" layoutX="27.0" layoutY="77.0" prefHeight="46.0" prefWidth="174.0" promptText="New Text" />
             <Button fx:id="SubmitEditButton" layoutX="244.0" layoutY="87.0" mnemonicParsing="false" onAction="#UpdateTitle" text="Submit" />
+            <Button fx:id="hideEditPage" layoutX="315.0" layoutY="14.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="25.0" prefWidth="26.0" text="X" />
          </children>
       </Pane>
     </children>

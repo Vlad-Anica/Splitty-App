@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EventOverviewCtrl {
 
@@ -99,6 +100,8 @@ public class EventOverviewCtrl {
     private TextField editTitleTextField;
     @FXML
     private Button SubmitEditButton;
+    @FXML
+    private Button hideEditPage;
 
 
     private MainCtrl mainCtrl;
@@ -724,24 +727,42 @@ public class EventOverviewCtrl {
     }
 
     public void showEditPage(ActionEvent event){
-        EditTitlePane.setVisible(true);
+        if (EditTitlePane.isVisible()){
+            EditTitlePane.setVisible(false);
+        }
+        else {
+            EditTitlePane.setVisible(true);
+        }
     }
 
-    public void UpdateTitle(ActionEvent event){
+    public void UpdateTitle(ActionEvent event) {
         String newTitle = editTitleTextField.getText();
-        Event currentEvent = null;
-        try {
-            currentEvent = server.getEvent(eventId);
-        } catch (Exception e){
-            System.out.println("An error occured while fetching the current event!");
+        if (newTitle.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("ERROR");
+            alert.setContentText("Please provide a valid title!");
+            alert.showAndWait();
+            return;
         }
-        currentEvent.setName(newTitle);
-        try {
-            server.updateEvent(currentEvent);
-        } catch (Exception e){
-            System.out.println("An error occured whilst trying to persist the event!");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Are you sure?");
+        alert.setContentText("Are you sure you want to update the title of this event?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Event currentEvent = null;
+            try {
+                currentEvent = server.getEvent(eventId);
+            } catch (Exception e) {
+                System.out.println("An error occured while fetching the current event!");
+            }
+            currentEvent.setName(newTitle);
+            try {
+                server.updateEvent(currentEvent);
+            } catch (Exception e) {
+                System.out.println("An error occured whilst trying to persist the event!");
+            }
+            mainCtrl.showEventOverview(eventId);
         }
-        mainCtrl.showEventOverview(eventId);
     }
 
 }
