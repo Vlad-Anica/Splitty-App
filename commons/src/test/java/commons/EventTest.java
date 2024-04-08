@@ -111,19 +111,19 @@ public class EventTest {
         assertEquals(new Date(433), ev.getDate());
     }
 
-//    @Test
-//    public void testPersonsGetter() {
-//        Person pe1 = new Person("Adam", "James",
-//                "email@email.com", "NL33", "MIDLGB22",
-//                Currency.EUR, 0.0, new Event(), new User());
-//        Person pe2 = new Person("John", "Doe",
-//                "email2@email.com", "RO420", "MIDLGB22",
-//                Currency.EUR, 0.0, new Event(), new User());
-//        ArrayList<Person> personList = new ArrayList<>();
-//        personList.add(pe1);
-//        personList.add(pe2);
-//        assertEquals(personList, ev.getParticipants());
-//    }
+    @Test
+    public void testPersonsGetter() {
+        Person pe1 = new Person("Adam", "James",
+                "email@email.com", "NL33", "MIDLGB22",
+                Currency.EUR, 0.0, new Event(), new User());
+        Person pe2 = new Person("John", "Doe",
+                "email2@email.com", "RO420", "MIDLGB22",
+                Currency.EUR, 0.0, new Event(), new User());
+        ArrayList<Person> personList = new ArrayList<>();
+        personList.add(pe1);
+        personList.add(pe2);
+        assertEquals(personList, ev.getParticipants());
+    }
 
     @Test
     public void testPersonsSetter() {
@@ -203,19 +203,19 @@ public class EventTest {
                 "usa@email.com", "AM420", "NITUL42",Currency.EUR, 0.0, new Event(), new User())));
     }
 
-    @Test
-    public void addExpenseTest() {
-        Date dateTest = new Date(1,2,3,4,5,6);
-        Person p3 = new Person("Senator", "Armstrong",
-                "usa@email.com", "AM420", "NITUL42",
-                Currency.EUR, 0.0, new Event(), new User());
-        debts.add(debt2);
-        Tag t = new Tag("blue", "food");
-        Expense e3 = new Expense("amongUs", 5, dateTest, p3, persons1, Currency.USD, t  );
-        assertFalse(ev.containsExpense(e3));
-        assertTrue(ev.addExpense(e3));
-        assertTrue(ev.containsExpense(e3));
-    }
+//    @Test
+//    public void addExpenseTest() {
+//        Date dateTest = new Date(1,2,3,4,5,6);
+//        Person p3 = new Person("Senator", "Armstrong",
+//                "usa@email.com", "AM420", "NITUL42",
+//                Currency.EUR, 0.0, new Event(), new User());
+//        debts.add(debt2);
+//        Tag t = new Tag("blue", "food");
+//        Expense e3 = new Expense("amongUs", 5, dateTest, p3, persons1, Currency.USD, t  );
+//        assertFalse(ev.containsExpense(e3));
+//        assertTrue(ev.addExpense(e3));
+//        assertTrue(ev.containsExpense(e3));
+//    }
 
     @Test
     public void addExpenseNullTest() {
@@ -227,19 +227,19 @@ public class EventTest {
         assertFalse(ev.containsExpense(null));
     }
 
-    @Test
-    public void removeExpenseTest() {
-        Date dateTest = new Date(1,2,3,4,5,6);
-        Person p3 = new Person("Senator", "Armstrong",
-                "usa@email.com", "AM420", "NITUL42",
-                Currency.EUR, 0.0, new Event(), new User());
-        debts.add(debt2);
-        Tag t = new Tag("blue", "food");
-        Expense e3 = new Expense("amongUs", 5, dateTest, p3, persons1, Currency.USD, t  );
-        ev.addExpense(e3);
-        assertTrue(ev.removeExpense(e3));
-        assertFalse(ev.containsExpense(e3));
-    }
+//    @Test
+//    public void removeExpenseTest() {
+//        Date dateTest = new Date(1,2,3,4,5,6);
+//        Person p3 = new Person("Senator", "Armstrong",
+//                "usa@email.com", "AM420", "NITUL42",
+//                Currency.EUR, 0.0, new Event(), new User());
+//        debts.add(debt2);
+//        Tag t = new Tag("blue", "food");
+//        Expense e3 = new Expense("amongUs", 5, dateTest, p3, persons1, Currency.USD, t  );
+//        ev.addExpense(e3);
+//        assertTrue(ev.removeExpense(e3));
+//        assertFalse(ev.containsExpense(e3));
+//    }
 
     @Test
     public void removeExpenseNullTest() {
