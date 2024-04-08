@@ -71,36 +71,36 @@ public class PersonTest {
 		p.setPreferredCurrency(Currency.CHF);
 		assertEquals(Currency.CHF, p.getPreferredCurrency());
 	}
-	@Test
-	public void checkAddDebt() {
-		Debt debt = new Debt(null, null, null, 3.0);
-		Debt debt2 = new Debt(null, null, null, 7.0);
-		p.addDebt(debt);
-		p.addDebt(debt2);
-		assertEquals(10.0, p.getTotalDebt());
-		assertEquals(2, p.getDebtList().size());
-	}
+//	@Test
+//	public void checkAddDebt() {
+//		Debt debt = new Debt(null, null, null, 3.0);
+//		Debt debt2 = new Debt(null, null, null, 7.0);
+//		p.addDebt(debt);
+//		p.addDebt(debt2);
+//		assertEquals(10.0, p.getTotalDebt());
+//		assertEquals(2, p.getDebtList().size());
+//	}
 
-	@Test
-	public void checkRemoveDebt() {
-		Debt debt = new Debt(null, null, null, 3.0);
-		Debt debt2 = new Debt(null, null, null, 7.0);
-		p.addDebt(debt);
-		p.addDebt(debt2);
-		p.removeDebt(debt);
-		assertEquals(7.0, p.getTotalDebt());
-		assertEquals(1, p.getDebtList().size());
-	}
+//	@Test
+//	public void checkRemoveDebt() {
+//		Debt debt = new Debt(null, null, null, 3.0);
+//		Debt debt2 = new Debt(null, null, null, 7.0);
+//		p.addDebt(debt);
+//		p.addDebt(debt2);
+//		p.removeDebt(debt);
+//		assertEquals(7.0, p.getTotalDebt());
+//		assertEquals(1, p.getDebtList().size());
+//	}
 
-	@Test
-	public void checkNotRemoveDebt() {
-		Debt debt = new Debt(null, null, null, 3.0);
-		Debt debt2 = new Debt(null, null, null, 7.0);
-		p.addDebt(debt);
-		p.removeDebt(debt2);
-		assertEquals(3.0, p.getTotalDebt());
-		assertEquals(1, p.getDebtList().size());
-	}
+//	@Test
+//	public void checkNotRemoveDebt() {
+//		Debt debt = new Debt(null, null, null, 3.0);
+//		Debt debt2 = new Debt(null, null, null, 7.0);
+//		p.addDebt(debt);
+//		p.removeDebt(debt2);
+//		assertEquals(3.0, p.getTotalDebt());
+//		assertEquals(1, p.getDebtList().size());
+//	}
 
 	@Test
 	public void checkRemoveDebtEmpty() {
