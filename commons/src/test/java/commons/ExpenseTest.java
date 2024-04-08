@@ -11,12 +11,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class ExpenseTest {
 
     Person p = new Person("a","b");
+    ArrayList<Person> persons = new ArrayList<>(List.of(p));
     List<Debt> debtList = new ArrayList<>();
     Tag t = new Tag("blue", "food");
     Date d = new Date(4000);
-    Expense e = new Expense("test", 2.5, d, p, debtList, Currency.EUR, t );
-    Expense e2 = new Expense("test3", 2.5, d, p, debtList, Currency.EUR, t );
-    Expense e3 = new Expense("test", 2.5, d, p, debtList, Currency.EUR, t );
+    Expense e = new Expense("test", 2.5, d, p, persons, Currency.EUR, t );
+    Expense e2 = new Expense("test3", 2.5, d, p, persons, Currency.EUR, t );
+    Expense e3 = new Expense("test", 2.5, d, p, persons, Currency.EUR, t );
 
     @Test
     void getDescription() {
@@ -38,10 +39,6 @@ class ExpenseTest {
         assertEquals(p, e.getReceiver());
     }
 
-    @Test
-    void getDebtList() {
-        assertEquals(debtList, e.getDebtList());
-    }
 
     @Test
     void getCurrency() {
@@ -78,13 +75,13 @@ class ExpenseTest {
         e.setReceiver(re);
         assertEquals(re,e.getReceiver());
     }
-
-    @Test
-    void setGivers() {
-        List<Debt> debts = new ArrayList<>();
-        e.setDebtList(debts);
-        assertEquals(debts ,e.getDebtList());
-    }
+//
+//    @Test
+//    void setGivers() {
+//        List<Debt> debts = new ArrayList<>();
+//        e.setDebtList(debts);
+//        assertEquals(debts ,e.getDebtList());
+//    }
 
     @Test
     void setCurrency() {
@@ -134,11 +131,6 @@ class ExpenseTest {
     @Test
     void receiverNotNull(){
         assertNotNull(e.getReceiver());
-    }
-
-    @Test
-    void debtsNotNull(){
-        assertNotNull(e.getDebtList());
     }
 
     @Test

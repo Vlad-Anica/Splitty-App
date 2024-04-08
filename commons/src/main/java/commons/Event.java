@@ -57,10 +57,16 @@ public class Event {
     private List<Person> participants;
     @OneToMany (cascade = CascadeType.ALL)
     private List<Expense> expenses;
+    @OneToMany (cascade = CascadeType.ALL)
+    private List<Debt> debts;
     private String inviteCode;
 
     @SuppressWarnings("Unused")
     public Event() {
+        debts = new ArrayList<>();
+        participants = new ArrayList<>();
+        expenses = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
     /**
@@ -84,6 +90,82 @@ public class Event {
         this.participants = Objects.requireNonNullElseGet(participants, ArrayList::new);
         this.expenses = Objects.requireNonNullElseGet(expenses, ArrayList::new);
         this.inviteCode = generateInviteCode();
+        debts = new ArrayList<>();
+        calculateDebts(expenses);
+    }
+
+    public void calculateDebts(List<Expense> newExpenses) {
+        List<Double> shares = new ArrayList<>();
+        for (Person participant: participants) {
+            shares.add(participant.getTotalDebt());
+        }
+
+        for (Expense expense: newExpenses) {
+            double share = (double) expense.getAmount() / (1.0 + expense.getGivers().size());
+            int receiverIndex = participants.indexOf(expense.getReceiver());
+            shares.set(receiverIndex, shares.get(receiverIndex) - expense.getAmount() + share);
+
+            for (Person giver: expense.getGivers()) {
+                int giverIndex = participants.indexOf(giver);
+                shares.set(giverIndex, shares.get(giverIndex) + share);
+            }
+        }
+
+        removeAllDebts();
+        List<Integer> giverIndexes = new ArrayList<>();
+        List<Integer> receiverIndexes = new ArrayList<>();
+
+        for (int i = 0; i < participants.size(); i++) {
+            if (shares.get(i) > 0) {
+                giverIndexes.add(i);
+            } else if (shares.get(i) < 0) {
+                receiverIndexes.add(i);
+            }
+        }
+
+        int j = 0;
+        for (int i = 0; i < giverIndexes.size(); i++) {
+            double giverShare = shares.get(giverIndexes.get(i));
+            Person giver = participants.get(giverIndexes.get(i));
+
+            while (giverShare < 0) {
+                double receiverShare = shares.get(receiverIndexes.get(i));
+                Person receiver = participants.get(receiverIndexes.get(i));
+
+                if (receiverShare > -giverShare) {
+                    addDebt(new Debt(giver, receiver, this, -giverShare));
+                    shares.set(receiverIndexes.get(i), receiverShare + giverShare);
+                } else {
+                    addDebt(new Debt(giver, receiver, this, receiverShare));
+                    giverShare += receiverShare;
+                    j++;
+                }
+            }
+        }
+
+    }
+
+    public void removeDebt(Debt debt) {
+        if (!debts.contains(debt)) {
+            return;
+        }
+        debt.getReceiver().removeDebt(debt);
+        debt.getGiver().removeDebt(debt);
+        debts.remove(debt);
+    }
+
+    public void addDebt(Debt debt) {
+        debt.getReceiver().addDebt(debt);
+        debt.getGiver().addDebt(debt);
+        debts.add(debt);
+    }
+
+    public void removeAllDebts() {
+        for (Debt debt: debts) {
+            debt.getReceiver().removeDebt(debt);
+            debt.getGiver().removeDebt(debt);
+        }
+        debts = new ArrayList<>();
     }
 
     /**
@@ -296,6 +378,7 @@ public class Event {
             return false;
         }
         this.getParticipants().add(person);
+        person.setEvent(this);
         return true;
     }
 
@@ -357,6 +440,7 @@ public class Event {
             return false;
         }
         this.getExpenses().add(expense);
+        calculateDebts(new ArrayList<>(List.of(expense)));
         return true;
     }
 
@@ -370,10 +454,9 @@ public class Event {
         if(expense == null || !this.getExpenses().contains(expense)) {
             return false;
         }
-        for(Debt debt : expense.getDebtList()) {
-            debt.getGiver().getDebtList().remove(debt);
-        }
+        removeAllDebts();
         this.getExpenses().remove(expense);
+        calculateDebts(new ArrayList<>(List.of(expense)));
         return true;
     }
 

@@ -46,7 +46,7 @@ public class ExpenseController {
      * @param amount amount spend on the Expense
      * @param date date the Expense took place
      * @param receiverID ID of the one who footed the bill
-     * @param debtIDs IDs of the respective debts associated with the Expense
+     * @param giverIDs IDs of the respective givers associated with the Expense
      * @param currency Currency the Expense was executed in
      * @param tagID Tag ID associated with the expense
      * @return the Expense object created
@@ -56,7 +56,7 @@ public class ExpenseController {
                                  @RequestParam("amount") Double amount,
                                  @RequestParam("date") Date date,
                                  @RequestParam("receiver") Long receiverID,
-                                 @RequestParam("debts") List<Long> debtIDs,
+                                 @RequestParam("givers") List<Long> giverIDs,
                                  @RequestParam("currency") Currency currency,
                                  @RequestParam("tag") Long tagID) {
         if(description == null || amount == null || date == null || currency == null) {
@@ -66,22 +66,18 @@ public class ExpenseController {
         
         ArrayList<Debt> debts = new ArrayList<>();
         Expense expense = null;
+        Person receiver = null;
+        List<Person> givers = new ArrayList<>();
+
         boolean validEntry = true;
         try {
-            personService.getReferenceById(receiverID);
-        }
-        catch (EntityNotFoundException e) {
-            System.out.println("Invalid ID, no Person found.");
-            validEntry = false;
-        }
-        try {
-            for (Long dID : debtIDs) {
-                debtService.getReferenceById(dID);
-                debts.add(debtService.getReferenceById(dID));
+            receiver = personService.getReferenceById(receiverID);
+            for (Long giverID: giverIDs) {
+                givers.add(personService.getReferenceById(giverID));
             }
         }
         catch (EntityNotFoundException e) {
-            System.out.println("Invalid ID, no Debt found for an entry.");
+            System.out.println("Invalid ID, no Person found.");
             validEntry = false;
         }
         try {
@@ -94,7 +90,7 @@ public class ExpenseController {
         if(!validEntry) {
             return null;
         }
-        expense = new Expense(description, amount, date, personService.getReferenceById(receiverID), debts, currency, tagService.getReferenceById(tagID));
+        expense = new Expense(description, amount, date, personService.getReferenceById(receiverID), givers, currency, tagService.getReferenceById(tagID));
         expenseService.save(expense);
         return expense;
     }
@@ -120,13 +116,13 @@ public class ExpenseController {
     }
 
 
-    @GetMapping("debts/{id}")
-    public List<Debt> getDebtsListById(@PathVariable("id") long id) {
-        if (id < 0 || !expenseService.existsById(id)) {
-            return null;
-        }
-        return expenseService.findById(id).get().getDebtList();
-    }
+//    @GetMapping("debts/{id}")
+//    public List<Debt> getDebtsListById(@PathVariable("id") long id) {
+//        if (id < 0 || !expenseService.existsById(id)) {
+//            return null;
+//        }
+//        return expenseService.findById(id).get().getDebtList();
+//    }
 
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();

@@ -211,6 +211,7 @@ public class AddExpenseCtrl {
     public void createExpense() throws RuntimeException  {
 
         try {
+
             if (!isValidInput())
             {
                 statusLabel.setStyle("-fx-font-weight: bold");
@@ -242,23 +243,13 @@ public class AddExpenseCtrl {
             double amountPerPerson = splitEvenButton.isSelected() ?
                     realAmount / getAllGivers().size() : realAmount / selectedBoxesNumber();
 
-            List<Debt> debts = new ArrayList<>();
-
-                for (Person p : getAllGivers()) {
-                    Debt debt = new Debt(getPayerData(), p, null, amountPerPerson);
-                    // server.addDebt(debt);
-                    debts.add(debt);
-
-                }
                 //convert LocalDate to date
                 LocalDate localDate = dateField.getValue();
                 Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
-                Expense e = new Expense(description, amount, date, getPayerData(), debts,
+                Expense e = new Expense(description, amount, date, getPayerData(), getAllGivers(),
                     getCurrencyData(), getTypeData());
 
-               for (Debt debt : debts)
-                 debt.setExpense(e);
                if (inEditMode) {
                    event.getExpenses().remove(expenseToEdit);
                    server.updateEvent(event.getId(), event);
@@ -266,6 +257,8 @@ public class AddExpenseCtrl {
                 }
                else
                 server.addExpenseToEvent(this.event.getId(), e);
+               server.addExpenseToEvent(this.event.getId(), e);
+
                System.out.println("Created expense");
                statusLabel.setText("Expense created!");
                clearFields();
