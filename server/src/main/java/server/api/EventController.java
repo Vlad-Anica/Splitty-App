@@ -173,18 +173,8 @@ public class EventController {
         Event event = getById(eventId).getBody();
         if (event == null)
             return ResponseEntity.badRequest().build();
-        List<Debt> debts = expense.getDebtList();
-        expense.setDebtList(new ArrayList<>());
         expenseService.add(expense);
-
-
-        for (Debt debt : debts) {
-            debt.setExpense(expense); // Set the Expense on each Debt entity
-            debtService.save(debt); // Save each Debt entity
-        }
-        expense.setDebtList(debts);
-        expenseService.add(expense);
-        event.getExpenses().add(expense);
+        event.addExpense(expense);
         return ResponseEntity.ok(eventService.save(event));
     }
 
