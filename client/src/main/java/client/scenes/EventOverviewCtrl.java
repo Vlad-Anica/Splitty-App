@@ -19,6 +19,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -513,9 +515,12 @@ public class EventOverviewCtrl {
             }
             int y = 5;
             for (Expense e : selectedExpenses) {
+                Double realAmount = BigDecimal.valueOf(e.getAmount() / 1.168958841856)
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .doubleValue();
                 CheckBox newBox = new CheckBox(
                         //e.getTag().getType() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName()
-                        e.getReceiver().getFirstName() + " paid " + e.getAmount() / 1.168958841856 +
+                        e.getReceiver().getFirstName() + " paid " + realAmount +
                                 e.getCurrency() + " for " + e.getDescription()
                 );
                 filteringExpensesPane.getChildren().add(newBox);

@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import commons.*;
 import commons.Currency;
 import jakarta.inject.Inject;
@@ -22,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class AddExpenseCtrl {
@@ -161,9 +161,11 @@ public class AddExpenseCtrl {
                 payerComboBox.setValue(expenseToEdit.getReceiver().getFirstName() + " " +
                         expenseToEdit.getReceiver().getLastName());
                 checkPersonBoxes(new ActionEvent());
-                dateField.getEditor().setText(String.valueOf(expenseToEdit.getDate().toInstant()
+                LocalDate shownDate = expenseToEdit.getDate().toInstant()
                         .atZone(ZoneId.systemDefault())
-                        .toLocalDate()));
+                        .toLocalDate();
+                String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
+                dateField.getEditor().setText(parsedDate);
                 typeComboBox.setValue(expense.getTag().getType());
                 descriptionField.setText(expenseToEdit.getDescription());
                 amountField.setText(BigDecimal.valueOf(expense.getAmount() / 1.168958841856)
@@ -188,7 +190,7 @@ public class AddExpenseCtrl {
         backButton.setText(resourceBundle.getString("Back"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         whoPaidString = resourceBundle.getString("WhoPaid");
-        payerText.setText(whoPaidString);
+        payerComboBox.setPromptText(whoPaidString);
         descText.setText(resourceBundle.getString("WhatFor"));
         currencyComboBox.setPromptText(resourceBundle.getString("Currency"));
         amountText.setText(resourceBundle.getString("HowMuch"));
@@ -196,9 +198,9 @@ public class AddExpenseCtrl {
         chooseText.setText(resourceBundle.getString("HowToSplit"));
         splitEvenButton.setText(resourceBundle.getString("SplitEvenly"));
         splitButton.setText(resourceBundle.getString("SomePeople"));
-        whatTypeString = resourceBundle.getString("ExpenseType");
-        typeText.setText(whatTypeString);
-        typeComboBox.setPromptText(resourceBundle.getString("ChooseAType"));
+        typeText.setText(resourceBundle.getString("ExpenseType"));
+        whatTypeString = resourceBundle.getString("ChooseAType");
+        typeComboBox.setPromptText(whatTypeString);
         addTagButton.setText(resourceBundle.getString("AddTag"));
         cancelButton.setText(resourceBundle.getString("Cancel"));
         addButton.setText(resourceBundle.getString("Add"));
@@ -236,7 +238,7 @@ public class AddExpenseCtrl {
                     description = descriptionField.getText();
 
                 Double amount = Double.valueOf(amountField.getText());
-                Double realAmount = BigDecimal.valueOf(amount)
+                Double realAmount = BigDecimal.valueOf(amount / 1.168958841856)
                         .setScale(2, RoundingMode.HALF_UP)
                         .doubleValue();
 
@@ -251,13 +253,16 @@ public class AddExpenseCtrl {
                     getCurrencyData(), getTypeData());
 
                if (inEditMode) {
-                   event.getExpenses().remove(expenseToEdit);
+                   event.removeExpense(expenseToEdit);
+                   event.addExpense(e);
                    server.updateEvent(event.getId(), event);
-                   server.addExpenseToEvent(this.event.getId(), e);
+                   //server.addExpenseToEvent(this.event.getId(), e);
                 }
-               else
-                server.addExpenseToEvent(this.event.getId(), e);
-               server.addExpenseToEvent(this.event.getId(), e);
+               else {
+                   event.addExpense(e);
+                   server.updateEvent(event.getId(), event);
+               }
+
 
                System.out.println("Created expense");
                statusLabel.setText("Expense created!");
@@ -273,10 +278,7 @@ public class AddExpenseCtrl {
 
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            System.out.println(e.getMessage());
         }
-
 
     }
     public void checkPersonBoxes(ActionEvent event) {
@@ -307,11 +309,6 @@ public class AddExpenseCtrl {
         }
     }
 
-    public void editExpense(Expense expense, Expense newExpense) {
-
-
-
-    }
     public boolean isValidInput() {
 
         if (getPayerData() == null)
@@ -393,11 +390,12 @@ public class AddExpenseCtrl {
 
     public void clearFields() {
 
-        payerComboBox.setValue(whoPaidString);
+        payerComboBox.setPromptText(whoPaidString);
         amountField.clear();
         descriptionField.clear();
         dateField.getEditor().clear();
-        typeComboBox.setValue(whatTypeString);
+        typeComboBox.setPromptText(whatTypeString);
+
     }
 
     public void cancel() {

@@ -61,7 +61,7 @@ public class Expense {
     @ManyToOne
     private Person receiver;
 
-    @OneToMany
+    @ManyToMany
     private List<Person> givers;
 
     private Currency currency;
