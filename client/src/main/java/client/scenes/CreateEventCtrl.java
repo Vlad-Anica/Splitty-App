@@ -141,9 +141,7 @@ public class CreateEventCtrl {
         User currentUser = server.getUserById(mainCtrl.getUserId());
         newEvent.getParticipants().add(new Person(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getIBAN(),
                 currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, newEvent, currentUser));
-        // server.createEvent(newEvent);
         server.send("/app/events", newEvent);
-        server.createEvent(newEvent);
         statusLabel.setTextFill(Color.BLACK);
         ClipboardContent inviteCodeClipboard = new ClipboardContent();
         inviteCodeClipboard.putString(newEvent.getInviteCode());

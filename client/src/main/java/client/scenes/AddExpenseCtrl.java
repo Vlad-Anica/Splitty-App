@@ -89,6 +89,7 @@ public class AddExpenseCtrl {
     private EventOverviewCtrl eventOverviewCtrl;
     private ServerUtils server;
     private Event event;
+    private Expense expenseToEdit;
     private String warningTitle;
     private String warningText;
     private String alertTitle;
@@ -101,9 +102,18 @@ public class AddExpenseCtrl {
         this.server = server;
     }
 
-    public void initializePage(long eventID)  {
+    public Expense getExpenseToEdit() {
+        return expenseToEdit;
+    }
+
+    public void setExpenseToEdit(Expense expenseToEdit) {
+        this.expenseToEdit = expenseToEdit;
+    }
+
+    public void initializePage(long eventID, boolean isInEditMode, Expense expense)  {
 
         try {
+
             event = server.getEvent(eventID);
             participants = new ArrayList<>();
             participants.addAll(server.getPersons());
@@ -139,6 +149,15 @@ public class AddExpenseCtrl {
             checkPersonBoxes(new ActionEvent());
             expenses = new ArrayList<>();
             setTextLanguage();
+
+            if (isInEditMode) {
+                setExpenseToEdit(expense);
+                payerComboBox.setValue(expenseToEdit.getReceiver().getFirstName() + " " +
+                        expenseToEdit.getReceiver().getLastName());
+                checkPersonBoxes(new ActionEvent());
+                descriptionField.setText(expenseToEdit.getDescription());
+                amountField.setText(""+expenseToEdit.getAmount());
+            }
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -159,7 +178,7 @@ public class AddExpenseCtrl {
         payerText.setText(resourceBundle.getString("WhoPaid"));
         descText.setText(resourceBundle.getString("WhatFor"));
         currencyComboBox.setPromptText(resourceBundle.getString("Currency"));
-        amountField.setText(resourceBundle.getString("HowMuch"));
+        amountText.setText(resourceBundle.getString("HowMuch"));
         dateLabel.setText(resourceBundle.getString("When"));
         chooseText.setText(resourceBundle.getString("HowToSplit"));
         splitEvenButton.setText(resourceBundle.getString("SplitEvenly"));
@@ -270,6 +289,13 @@ public class AddExpenseCtrl {
                 }
             }
         }
+    }
+
+    public void editExpense(Expense expense, Expense newExpense) {
+
+        event.getExpenses().remove(expense);
+        event.getExpenses().add(newExpense);
+
     }
     public boolean isValidInput() {
 

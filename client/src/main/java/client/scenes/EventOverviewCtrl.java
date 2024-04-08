@@ -559,16 +559,16 @@ public class EventOverviewCtrl {
     }
 
     public void goToAddExpense(ActionEvent e) throws IOException {
-        mainCtrl.showAddExpense(event.getId());
+        mainCtrl.showAddExpense(event.getId(), false, null);
     }
 
     /**
      * Method that redirects the User to an Edit Expense page if only one was selected.
      *
-     * @param event
+     * @param e
      * @throws IOException IO Exception that could occur
      */
-    public void goToEditExpense(ActionEvent event) throws IOException {
+    public void goToEditExpense(ActionEvent e) throws IOException {
         if (selectedExpenses == null || selectedExpenses.isEmpty()) {
             System.out.println("Cannot edit expense as none was selected!");
             return;
@@ -577,7 +577,11 @@ public class EventOverviewCtrl {
             System.out.println("Cannot edit expense as multiple expenses have been selected at once.");
             return;
         }
-        //goToExpenseEdit stuff tbi
+
+        Expense expense = selectedExpenses.get(0);
+        System.out.println(expense);
+        mainCtrl.showAddExpense(event.getId(), true, expense);
+
         return;
     }
 

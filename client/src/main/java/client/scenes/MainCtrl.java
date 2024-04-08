@@ -18,6 +18,7 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -473,10 +474,11 @@ public class MainCtrl {
         });
     }
 
-    public void showAddExpense(long eventID) {
+    public void showAddExpense(long eventID, boolean  isInEditMode, Expense expenseToEdit) {
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpenseScene);
-        addExpenseCtrl.initializePage(eventID);
+        addExpenseCtrl.initializePage(eventID, isInEditMode, expenseToEdit);
+
         addExpenseScene.getStylesheets().add("/client/css/addExpense.css");
         addExpenseScene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
