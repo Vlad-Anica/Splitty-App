@@ -6,30 +6,41 @@ import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class StatisticsCtrl implements Initializable {
 
 
 private final EventOverviewCtrl eventController;
+private final MainCtrl mainCtrl;
 private Event event;
 private String eventTitle;
 private ServerUtils server;
 private ArrayList<Tag> tags;
 private ArrayList<Expense> allExpenses;
+private double totalAmount;
 
 @FXML
 Button temporaryButton;
 
 @FXML
+private Label totalExpensesLabel;
+
+@FXML
 PieChart PieChartExpenses;
+
+@FXML
+Button goBackButton;
 @FXML
 ObservableList<PieChart.Data> pieChartExpensesData =
         FXCollections.observableArrayList(
@@ -40,9 +51,10 @@ ObservableList<PieChart.Data> pieChartExpensesData =
                 new PieChart.Data("Apples", 30));
 
     @Inject
-    public StatisticsCtrl(EventOverviewCtrl eventController, ServerUtils server){
+    public StatisticsCtrl(EventOverviewCtrl eventController, ServerUtils server, MainCtrl mainCtrl){
         this.eventController = eventController;
         this.server = server;
+        this.mainCtrl = mainCtrl;
     }
 
     public void setup(Long eventId) {
@@ -97,14 +109,33 @@ ObservableList<PieChart.Data> pieChartExpensesData =
             pieChartExpensesData.add(new PieChart.Data("Whoops No Data Found", 1));
             return;
         }
+        PieChartExpenses.setTitle(eventTitle);
+        setTotalExpenses();
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        totalExpensesLabel.setText(resourceBundle.getString("Totalamountis"));
+        totalExpensesLabel.setText(totalExpensesLabel.getText() + " " + Math.round(totalAmount * 100.0) / 100.0);
+
     }
 
 
     @Override
 public void initialize(URL location, ResourceBundle resources) {
     PieChartExpenses.setData(pieChartExpensesData);
-    PieChartExpenses.setTitle(eventTitle);
-}
+    }
+
+
+    public void setTotalExpenses(){
+        List<Expense> allExpenses = event.getExpenses();
+        totalAmount = 0;
+        for (Expense expense : allExpenses){
+            totalAmount += expense.getAmount();
+        }
+    }
+
+    public void goHome(ActionEvent event){
+        mainCtrl.showEventOverview(this.event.getId());
+    }
 
 
 }
