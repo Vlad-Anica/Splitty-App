@@ -485,6 +485,28 @@ public class ServerUtils {
 
 	/***
 	 *
+	 * @param newExpense expense to be updated
+	 * @return new expense
+	 */
+	public Expense updateExpense(Long id, Expense newExpense) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonExpense = objectMapper.writeValueAsString(newExpense);
+			System.out.println("Received Event object: " + jsonExpense);
+
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("api/expenses/" + id)
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.put(Entity.entity(jsonExpense, MediaType.APPLICATION_JSON), Expense.class);
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	/***
+	 *
 	 * @param eventId the id of the event to find in the DB
 	 * @param expense expense to be added to event
 	 * @return updated event

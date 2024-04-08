@@ -87,6 +87,8 @@ public class Person {
 	//@JsonBackReference
 	private User user;
 
+	@ManyToMany
+	private List<Expense> expenses;
 	@OneToMany
 	//@JsonManagedReference
 	private List<Debt> debtList;
@@ -107,6 +109,7 @@ public class Person {
 		this.email = email;
 		this.totalDebt = totalDebt;
 		this.debtList = new ArrayList<>();
+		this.expenses = new ArrayList<>();
 		this.IBAN = IBAN;
 		this.BIC = BIC;
 		this.event = event;
