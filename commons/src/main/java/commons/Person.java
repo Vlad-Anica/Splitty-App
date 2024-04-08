@@ -188,7 +188,12 @@ public class Person {
 		this.user = user;
 	}
 	public void addDebt(Debt debt) {
-		totalDebt += debt.getAmount();
+		if (this.equals(debt.getGiver())) {
+			totalDebt += debt.getAmount();
+		}
+		else {
+			totalDebt -= debt.getAmount();
+		}
 		debtList.add(debt);
 		debt.setGiver(this);
 	}
