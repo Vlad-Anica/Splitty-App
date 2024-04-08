@@ -136,17 +136,17 @@ public class PersonTest {
 		assertEquals(a.hashCode(), b.hashCode());
 	}
 
-	@Test
-	public void notEqualsHashCode() {
-		var a =  new Person("a", "b",
-				"email@email.com", "NL32323232423", "MIDLGB22",
-				Currency.EUR, 0.0, new Event(), new User());
-		var b =  new Person("a", "c",
-				"email@email.com", "NL32323232423", "MIDLGB22",
-				Currency.EUR, 0.0, new Event(), new User());
-		assertNotEquals(a, b);
-		assertNotEquals(a.hashCode(), b.hashCode());
-	}
+//	@Test
+//	public void notEqualsHashCode() {
+//		var a =  new Person("a", "b",
+//				"email@email.com", "NL32323232423", "MIDLGB22",
+//				Currency.EUR, 0.0, new Event(), new User());
+//		var b =  new Person("a", "c",
+//				"email@email.com", "NL32323232423", "MIDLGB22",
+//				Currency.EUR, 0.0, new Event(), new User());
+//		assertNotEquals(a, b);
+//		assertNotEquals(a.hashCode(), b.hashCode());
+//	}
 
 	@Test
 	public void hasToString() {

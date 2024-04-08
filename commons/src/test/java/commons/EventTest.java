@@ -168,6 +168,7 @@ public class EventTest {
         Person p3 = new Person("Senator", "Armstrong",
                 "usa@email.com", "AM420", "NITUL42",
                 Currency.EUR, 0.0, new Event(), new User());
+        p3.setId(3);
         assertFalse(ev.isAttending(p3));
         assertTrue(ev.addParticipant(p3));
         assertTrue(ev.isAttending(p3));
@@ -187,6 +188,7 @@ public class EventTest {
         Person p3 = new Person("Senator", "Armstrong",
                 "usa@email.com", "AM420", "NITUL42",
                 Currency.EUR, 0.0, new Event(), new User());
+        p3.setId(3);
         ev.addParticipant(p3);
         assertTrue(ev.removeParticipant(p3));
         assertFalse(ev.isAttending(p3));
@@ -199,8 +201,10 @@ public class EventTest {
 
     @Test
     public void removeNonParticipantTest() {
-        assertFalse(ev.removeParticipant(new Person("Senator", "Armstrong",
-                "usa@email.com", "AM420", "NITUL42",Currency.EUR, 0.0, new Event(), new User())));
+        Person p1 = new Person("Senator", "Armstrong",
+                "usa@email.com", "AM420", "NITUL42",Currency.EUR, 0.0, new Event(), new User());
+        p1.setId(3);
+        assertFalse(ev.removeParticipant(p1));
     }
 
 //    @Test
