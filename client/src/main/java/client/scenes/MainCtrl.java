@@ -516,7 +516,7 @@ public class MainCtrl {
         primaryStage.setTitle("Add Language");
         primaryStage.setScene(addLanguageScene);
         addLanguageCtrl.setUp();
-        addLanguageScene.getStylesheets().add("/client/scenes/opendebts.css");
+        addLanguageScene.getStylesheets().add("/client/css/opendebts.css");
         addLanguageScene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
                 case BACK_SPACE -> {
