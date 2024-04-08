@@ -57,6 +57,8 @@ public class Event {
     private List<Person> participants;
     @OneToMany (cascade = CascadeType.ALL)
     private List<Expense> expenses;
+    @OneToMany (cascade = CascadeType.ALL)
+    private List<Debt> debts;
     private String inviteCode;
 
     @SuppressWarnings("Unused")
@@ -84,6 +86,27 @@ public class Event {
         this.participants = Objects.requireNonNullElseGet(participants, ArrayList::new);
         this.expenses = Objects.requireNonNullElseGet(expenses, ArrayList::new);
         this.inviteCode = generateInviteCode();
+        calculateDebts();
+    }
+
+    public void calculateDebts() {
+        debts = new ArrayList<>();
+        for (Expense expense: expenses) {
+            double share = expense.getAmount() / (1 + expense.getGivers().size());
+            for (Person giver: expense.getGivers()) {
+                Debt debt = new Debt(giver, expense.getReceiver(), this, share);
+                debts.add(debt);
+                giver.addDebt(debt);
+                expense.getReceiver().addDebt(debt);
+            }
+        }
+    }
+
+    public void removeAllDebts() {
+        for (Debt debt: debts) {
+            debt.getReceiver().removeDebt(debt);
+            debt.getGiver().removeDebt(debt);
+        }
     }
 
     /**
@@ -356,7 +379,9 @@ public class Event {
         if(expense == null || this.getExpenses().contains(expense)) {
             return false;
         }
+        removeAllDebts();
         this.getExpenses().add(expense);
+        calculateDebts();
         return true;
     }
 
@@ -370,10 +395,9 @@ public class Event {
         if(expense == null || !this.getExpenses().contains(expense)) {
             return false;
         }
-        for(Debt debt : expense.getDebtList()) {
-            debt.getGiver().getDebtList().remove(debt);
-        }
+        removeAllDebts();
         this.getExpenses().remove(expense);
+        calculateDebts();
         return true;
     }
 
