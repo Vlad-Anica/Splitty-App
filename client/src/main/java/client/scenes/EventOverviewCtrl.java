@@ -273,7 +273,6 @@ public class EventOverviewCtrl {
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-            return;
         }
     }
 
@@ -361,7 +360,6 @@ public class EventOverviewCtrl {
             this.filteringExpensesPane.setVisible(false);
             this.goToEditExpenseButton.setVisible(false);
             this.removeExpensesButton.setVisible(false);
-            return;
         } else {
             this.filteringExpensesPane.setVisible(true);
             this.goToEditExpenseButton.setVisible(true);
@@ -539,7 +537,6 @@ public class EventOverviewCtrl {
                         .setScale(2, RoundingMode.HALF_UP)
                         .doubleValue();
                 CheckBox newBox = new CheckBox(
-                        //e.getTag().getType() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName()
                         e.getReceiver().getFirstName() + " paid " + realAmount +
                                 e.getCurrency() + " for " + e.getDescription()
                 );
@@ -609,7 +606,6 @@ public class EventOverviewCtrl {
         Expense expense = selectedExpenses.get(0);
         System.out.println(expense);
         mainCtrl.showAddExpense(event.getId(), true, expense);
-
         return;
     }
 
@@ -784,16 +780,16 @@ public class EventOverviewCtrl {
             System.out.println("No email has been detected!");
             return false;
         }
-
+        this.sendMailToParticipants(emailField.getText(), this.event.getInviteCode(), this.getEventName());
         System.out.println("Successfully sent out an Email!");
         return true;
     }
 
     /**
-     * Sends out an email to the specified Address in order to give an Invite to the Event.
-     * @param mail
-     * @param inviteCode
-     * @param eventName
+     * Sends out an email to the specified Address in order to give an invite to the Event.
+     * @param mail mail field that's filled in by the User. Represents the email address to send an invite to
+     * @param inviteCode invite code to the current event to provide in the email
+     * @param eventName name of the Event to use within the invite email
      */
     public void sendMailToParticipants(String mail, String inviteCode, String eventName){
         CreateEventCtrl.sendInviteMailToParticipants(mail, inviteCode, eventName, server);
