@@ -154,6 +154,7 @@ public class HomeCtrl {
         btnSearchEvent.setText(resourceBundle.getString("Search"));
         inviteCodeText.setPromptText(resourceBundle.getString("InviteCode"));
         goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
+        createEventBtn.setText(resourceBundle.getString("CreateEvent"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         goSettingsButton.setText(resourceBundle.getString("Settings"));
         goEventButton.setText(resourceBundle.getString("Submit"));
