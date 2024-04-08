@@ -18,6 +18,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -94,6 +96,9 @@ public class AddExpenseCtrl {
     private String warningText;
     private String alertTitle;
     private String alertText;
+    private String whoPaidString;
+    private String whatTypeString;
+    private boolean inEditMode;
 
     @Inject
     public AddExpenseCtrl(MainCtrl mainCtrl, EventOverviewCtrl eventOverviewCtrl, ServerUtils server) {
@@ -114,6 +119,7 @@ public class AddExpenseCtrl {
 
         try {
 
+            inEditMode = isInEditMode;
             event = server.getEvent(eventID);
             participants = new ArrayList<>();
             participants.addAll(server.getPersons());
@@ -155,8 +161,14 @@ public class AddExpenseCtrl {
                 payerComboBox.setValue(expenseToEdit.getReceiver().getFirstName() + " " +
                         expenseToEdit.getReceiver().getLastName());
                 checkPersonBoxes(new ActionEvent());
+                dateField.getEditor().setText(String.valueOf(expenseToEdit.getDate().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()));
+                typeComboBox.setValue(expense.getTag().getType());
                 descriptionField.setText(expenseToEdit.getDescription());
-                amountField.setText(""+expenseToEdit.getAmount());
+                amountField.setText(BigDecimal.valueOf(expense.getAmount() / 1.168958841856)
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .doubleValue()+"");
             }
         } catch (WebApplicationException e) {
 
@@ -175,7 +187,8 @@ public class AddExpenseCtrl {
         title.setText(resourceBundle.getString("Editexpense"));
         backButton.setText(resourceBundle.getString("Back"));
         goHomeButton.setText(resourceBundle.getString("Home"));
-        payerText.setText(resourceBundle.getString("WhoPaid"));
+        whoPaidString = resourceBundle.getString("WhoPaid");
+        payerText.setText(whoPaidString);
         descText.setText(resourceBundle.getString("WhatFor"));
         currencyComboBox.setPromptText(resourceBundle.getString("Currency"));
         amountText.setText(resourceBundle.getString("HowMuch"));
@@ -183,7 +196,8 @@ public class AddExpenseCtrl {
         chooseText.setText(resourceBundle.getString("HowToSplit"));
         splitEvenButton.setText(resourceBundle.getString("SplitEvenly"));
         splitButton.setText(resourceBundle.getString("SomePeople"));
-        typeText.setText(resourceBundle.getString("ExpenseType"));
+        whatTypeString = resourceBundle.getString("ExpenseType");
+        typeText.setText(whatTypeString);
         typeComboBox.setPromptText(resourceBundle.getString("ChooseAType"));
         addTagButton.setText(resourceBundle.getString("AddTag"));
         cancelButton.setText(resourceBundle.getString("Cancel"));
@@ -220,10 +234,13 @@ public class AddExpenseCtrl {
                 else
                     description = descriptionField.getText();
 
-                double amount = Double.parseDouble(amountField.getText());
+                Double amount = Double.valueOf(amountField.getText());
+                Double realAmount = BigDecimal.valueOf(amount)
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .doubleValue();
 
             double amountPerPerson = splitEvenButton.isSelected() ?
-                    amount / getAllGivers().size() : amount / selectedBoxesNumber();
+                    realAmount / getAllGivers().size() : realAmount / selectedBoxesNumber();
 
             List<Debt> debts = new ArrayList<>();
 
@@ -242,7 +259,13 @@ public class AddExpenseCtrl {
 
                for (Debt debt : debts)
                  debt.setExpense(e);
-               server.addExpenseToEvent(this.event.getId(), e);
+               if (inEditMode) {
+                   event.getExpenses().remove(expenseToEdit);
+                   server.updateEvent(event.getId(), event);
+                   server.addExpenseToEvent(this.event.getId(), e);
+                }
+               else
+                server.addExpenseToEvent(this.event.getId(), e);
                System.out.println("Created expense");
                statusLabel.setText("Expense created!");
                clearFields();
@@ -293,8 +316,7 @@ public class AddExpenseCtrl {
 
     public void editExpense(Expense expense, Expense newExpense) {
 
-        event.getExpenses().remove(expense);
-        event.getExpenses().add(newExpense);
+
 
     }
     public boolean isValidInput() {
@@ -378,11 +400,11 @@ public class AddExpenseCtrl {
 
     public void clearFields() {
 
-        payerComboBox.setValue(null);
+        payerComboBox.setValue(whoPaidString);
         amountField.clear();
         descriptionField.clear();
         dateField.getEditor().clear();
-        typeComboBox.setValue(null);
+        typeComboBox.setValue(whatTypeString);
     }
 
     public void cancel() {

@@ -189,9 +189,8 @@ public class EventOverviewCtrl {
                 continue;
             }
             for (Expense e : this.event.getExpenses()) {
-                if ((e.getTag() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName()).equals(text)) {
-                    this.selectedExpenses.add(e);
-                    return;
+                if ((e.getReceiver().getFirstName() + " paid " + e.getAmount() + e.getCurrency() + " for " + e.getDescription()).equals(text)) {
+                    expenses.add(e);
                 }
             }
             return;
@@ -251,6 +250,7 @@ public class EventOverviewCtrl {
         }
         this.overviewLabel.setText(event.getName());
         try {
+            selectedExpenses = new ArrayList<>();
             participants = new ArrayList<>();
             participants.addAll(event.getParticipants());
             showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(
@@ -265,7 +265,6 @@ public class EventOverviewCtrl {
                 this.goToEditPersonButton.setVisible(true);
                 this.removePersonButton.setVisible(true);
             }
-
             this.filteringExpensesPane.setVisible(false);
             this.goToEditExpenseButton.setVisible(false);
             this.removeExpensesButton.setVisible(false);
@@ -515,9 +514,15 @@ public class EventOverviewCtrl {
             int y = 5;
             for (Expense e : selectedExpenses) {
                 CheckBox newBox = new CheckBox(
-                        e.getTag() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName());
+                        //e.getTag().getType() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName()
+                        e.getReceiver().getFirstName() + " paid " + e.getAmount() / 1.168958841856 +
+                                e.getCurrency() + " for " + e.getDescription()
+                );
                 filteringExpensesPane.getChildren().add(newBox);
-                newBox.setOnAction(event -> toggleInSelectedExpenses(e));
+                newBox.setOnAction(event -> {
+                    toggleInSelectedExpenses(e);
+                    //computeSelectedExpenses();
+                });
                 newBox.setLayoutY(y);
                 y += 25;
             }
