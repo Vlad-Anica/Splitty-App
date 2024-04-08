@@ -3,6 +3,9 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.*;
 import jakarta.inject.Inject;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -19,11 +22,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 public class EventOverviewCtrl {
 
@@ -732,12 +737,23 @@ public class EventOverviewCtrl {
             return false;
         }
         String email = this.emailField.getText();
-        if (email == null) {
+        if (email == null || email.isEmpty()) {
             System.out.println("No email has been detected!");
             return false;
         }
-        // <INSERT METHOD> someCreativeName(email, inviteCode)
+
+        System.out.println("Successfully sent out an Email!");
         return true;
+    }
+
+    /**
+     * Sends out an email to the specified Address in order to give an Invite to the Event.
+     * @param mail
+     * @param inviteCode
+     * @param eventName
+     */
+    public void sendMailToParticipants(String mail, String inviteCode, String eventName){
+        CreateEventCtrl.sendInviteMailToParticipants(mail, inviteCode, eventName, server);
     }
 
     public void showEditPage(ActionEvent event){

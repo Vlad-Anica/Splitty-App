@@ -176,6 +176,10 @@ public class CreateEventCtrl {
     }
 
     public void sendMailToParticipants(String mail, String inviteCode, String eventName){
+        sendInviteMailToParticipants(mail, inviteCode, eventName, server);
+    }
+
+    static void sendInviteMailToParticipants(String mail, String inviteCode, String eventName, ServerUtils server) {
         final String username = "use.splitty";
         final String password = "sbfs akue pjrj oiqt";
         String serverAddress = server.getSERVER();
@@ -189,7 +193,7 @@ public class CreateEventCtrl {
         prop.put("mail.smtp.starttls.enable", "true");
 
         Session session = Session.getInstance(prop,
-                new jakarta.mail.Authenticator() {
+                new Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(username, password);
                     }
