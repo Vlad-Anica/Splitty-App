@@ -221,8 +221,15 @@ public class Person {
 	public void setPreferredCurrency(Currency currency) {
 		this.preferredCurrency = currency;
 	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 	@Override
 	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 		if (obj.getClass() == this.getClass()) {
 			Person other = (Person) obj;
 			if (other.getId() == this.getId()) {
