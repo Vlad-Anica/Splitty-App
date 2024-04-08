@@ -57,8 +57,6 @@ public class EventOverviewCtrl {
     @FXML
     private ComboBox<String> showAllParticipantsInEventComboBox;
     @FXML
-    private AnchorPane choosePersonsPane;
-    @FXML
     private Button goToEditPersonButton;
     @FXML
     private Button removePersonButton;
@@ -169,15 +167,14 @@ public class EventOverviewCtrl {
     }
 
     /**
-     * Method that computes the currently SelectedPerson. Additionally sets UI elements to reflect this change.
+     * Method that computes the currently SelectedPerson. Additionally, sets UI elements to reflect this change.
      */
     public void computeSelectedPerson() {
-        String fullName = null;
-        Person person = null;
+        String fullName;
         if (showAllParticipantsInEventComboBox.getValue() != null) {
             fullName = showAllParticipantsInEventComboBox.getValue();
         } else {
-            this.selectedPerson = person;
+            this.selectedPerson = null;
             this.renameFilters();
             return;
         }
@@ -254,7 +251,6 @@ public class EventOverviewCtrl {
             ));
             showAllParticipantsInEventComboBox.setOnAction(this::showAllParticipantsInEvent);
 
-            this.choosePersonsPane.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
             if (validPersonSelection()) {
@@ -281,12 +277,9 @@ public class EventOverviewCtrl {
      */
     public void choosePersonsVisibilityCheck() {
         if (this.selectedPerson == null) {
-            resetPersonsPane();
-            this.choosePersonsPane.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
         } else {
-            this.choosePersonsPane.setVisible(true);
             this.goToEditPersonButton.setVisible(true);
             this.removePersonButton.setVisible(true);
         }
@@ -405,14 +398,6 @@ public class EventOverviewCtrl {
         this.filteringExpensesPane.setLayoutY(160);
         this.filteringExpensesPane.setPrefHeight(174);
         this.filteringExpensesPane.setPrefWidth(80);
-    }
-
-    private void resetPersonsPane() {
-        this.choosePersonsPane.getChildren().removeAll();
-        this.choosePersonsPane.setLayoutX(14);
-        this.choosePersonsPane.setLayoutY(120);
-        this.choosePersonsPane.setPrefHeight(216);
-        this.choosePersonsPane.setPrefWidth(149);
     }
 
     /**
@@ -590,10 +575,9 @@ public class EventOverviewCtrl {
     /**
      * Method that redirects the User to an Edit Expense page if only one was selected.
      *
-     * @param e
-     * @throws IOException IO Exception that could occur
+     * @param e event that triggers the method
      */
-    public void goToEditExpense(ActionEvent e) throws IOException {
+    public void goToEditExpense(ActionEvent e){
         if (selectedExpenses == null || selectedExpenses.isEmpty()) {
             System.out.println("Cannot edit expense as none was selected!");
             return;
@@ -609,7 +593,11 @@ public class EventOverviewCtrl {
         return;
     }
 
-    public void removeExpenses(ActionEvent event) throws IOException {
+    /**
+     * Method that removes the Selected Expenses from the Event.
+     * @param event event that triggers the method
+     */
+    public void removeExpenses(ActionEvent event){
         if (this.selectedExpenses == null || this.selectedExpenses.isEmpty()) {
             System.out.println("Cannot remove Expense as none was selected.");
         } else {
@@ -703,14 +691,13 @@ public class EventOverviewCtrl {
             return;
         }
         //goToEdiTag stuff tbi
-        return;
     }
 
     /**
      * Method that removes the Selected Tags from the Event. Is only carried out if no Expenses are associated with said
      * Tags. If they are, the method will remove elements in the order they were selected until a Tag in use is
      * discovered.
-     * @param event
+     * @param event event that triggers the method
      */
     public void removeTags(ActionEvent event) {
         if (this.selectedTags == null || this.selectedTags.isEmpty()) {
@@ -830,13 +817,13 @@ public class EventOverviewCtrl {
             try {
                 currentEvent = server.getEvent(eventId);
             } catch (Exception e) {
-                System.out.println("An error occured while fetching the current event!");
+                System.out.println("An error occurred while fetching the current event!");
             }
             currentEvent.setName(newTitle);
             try {
                 server.updateEvent(currentEvent);
             } catch (Exception e) {
-                System.out.println("An error occured whilst trying to persist the event!");
+                System.out.println("An error occurred whilst trying to persist the event!");
             }
             mainCtrl.showEventOverview(eventId);
         }
