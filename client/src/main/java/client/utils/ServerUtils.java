@@ -489,7 +489,7 @@ public class ServerUtils {
 
 		try {
 			Event event = getEvent(eventId);
-			event.getExpenses().add(expense);
+			event.addExpense(expense);
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonEvent = objectMapper.writeValueAsString(expense);
 			System.out.println("Received Event object: " + jsonEvent);
