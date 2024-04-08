@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
@@ -20,6 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EventOverviewCtrl {
 
@@ -90,6 +92,17 @@ public class EventOverviewCtrl {
     private Button goToEditTagButton;
     @FXML
     private Button removeTagButton;
+    @FXML
+    private Pane EditTitlePane;
+    @FXML
+    private Button editTitleButton;
+    @FXML
+    private TextField editTitleTextField;
+    @FXML
+    private Button SubmitEditButton;
+    @FXML
+    private Button hideEditPage;
+
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
@@ -214,7 +227,7 @@ public class EventOverviewCtrl {
      * @param eventID event ID that represents the Event being parsed here.
      */
     public void setup(Long eventID) {
-
+        EditTitlePane.setVisible(false);
         try {
             this.showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList());
             eventId = eventID;
@@ -711,6 +724,45 @@ public class EventOverviewCtrl {
         }
         // <INSERT METHOD> someCreativeName(email, inviteCode)
         return true;
+    }
+
+    public void showEditPage(ActionEvent event){
+        if (EditTitlePane.isVisible()){
+            EditTitlePane.setVisible(false);
+        }
+        else {
+            EditTitlePane.setVisible(true);
+        }
+    }
+
+    public void UpdateTitle(ActionEvent event) {
+        String newTitle = editTitleTextField.getText();
+        if (newTitle.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("ERROR");
+            alert.setContentText("Please provide a valid title!");
+            alert.showAndWait();
+            return;
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Are you sure?");
+        alert.setContentText("Are you sure you want to update the title of this event?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Event currentEvent = null;
+            try {
+                currentEvent = server.getEvent(eventId);
+            } catch (Exception e) {
+                System.out.println("An error occured while fetching the current event!");
+            }
+            currentEvent.setName(newTitle);
+            try {
+                server.updateEvent(currentEvent);
+            } catch (Exception e) {
+                System.out.println("An error occured whilst trying to persist the event!");
+            }
+            mainCtrl.showEventOverview(eventId);
+        }
     }
 
 }
