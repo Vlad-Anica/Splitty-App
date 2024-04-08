@@ -87,7 +87,7 @@ public class Person {
 	//@JsonBackReference
 	private User user;
 
-	@OneToMany(cascade = CascadeType.PERSIST)
+	@OneToMany
 	//@JsonManagedReference
 	private List<Debt> debtList;
 	@SuppressWarnings("unused")
@@ -200,7 +200,11 @@ public class Person {
 	public void removeDebt(Debt debt) {
 		if (!debtList.contains(debt))
 			return;
-		totalDebt -= debt.getAmount();
+		if (debt.getGiver().equals(this)) {
+			totalDebt -= debt.getAmount();
+		} else {
+			totalDebt += debt.getAmount();
+		}
 		debtList.remove(debt);
 	}
 	public Event getEvent() {
@@ -219,6 +223,12 @@ public class Person {
 	}
 	@Override
 	public boolean equals(Object obj) {
+		if (obj.getClass() == this.getClass()) {
+			Person other = (Person) obj;
+			if (other.getId() == this.getId()) {
+				return true;
+			}
+		}
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}
 
