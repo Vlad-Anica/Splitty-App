@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Debt;
+import commons.Event;
 import commons.Expense;
 import commons.Person;
 import jakarta.inject.Inject;
@@ -59,9 +60,6 @@ public class OpenDebtsCtrl {
     private TableColumn<Debt, String> columnGiver;
 
     @FXML
-    private TableColumn<Debt, String> columnExpense;
-
-    @FXML
     private TableColumn<Debt, Long> columnId;
 
     @FXML
@@ -87,7 +85,7 @@ public class OpenDebtsCtrl {
 //        List<Debt> debts = server.getDebts(); //gets debt from server but for now uses debts from list created below for testing
         Expense e = new Expense();
         e.setDescription("We do that stuff");
-        List<Debt> testDebts = List.of(new Debt(new Person("Frank", "Verkoren"), new Person("Duco", "Lam"), e, 2.50), new Debt(new Person("Duco", "Lam"), new Person("Frank", "Verkoren"), new Expense(), 404));
+        List<Debt> testDebts = List.of(new Debt(new Person("Frank", "Verkoren"), new Person("Duco", "Lam"), new Event(), 2.50), new Debt(new Person("Duco", "Lam"), new Person("Frank", "Verkoren"), new Event(), 404));
         ObservableList<Debt> debtsList = FXCollections.observableList(testDebts.stream().filter(x -> !x.getSettled()).toList());
         columnReceiver.setCellValueFactory(cellData -> {
             SimpleStringProperty property = new SimpleStringProperty();
@@ -100,13 +98,6 @@ public class OpenDebtsCtrl {
             SimpleStringProperty property = new SimpleStringProperty();
             if (cellData.getValue() != null && cellData.getValue().getGiver() != null) {
                 property.set(cellData.getValue().getGiver().getFirstName() + " " + cellData.getValue().getGiver().getLastName());
-            }
-            return property;
-        });
-        columnExpense.setCellValueFactory(cellData -> {
-            SimpleStringProperty property = new SimpleStringProperty();
-            if (cellData.getValue() != null && cellData.getValue().getExpense() != null) {
-                property.set(cellData.getValue().getExpense().getDescription());
             }
             return property;
         });
@@ -180,7 +171,6 @@ public class OpenDebtsCtrl {
         columnReceiver.setText(resourceBundle.getString("Receiver"));
         columnAmount.setText(resourceBundle.getString("Amount"));
         columnGiver.setText(resourceBundle.getString("Giver"));
-        columnExpense.setText(resourceBundle.getString("Expense"));
         columnId.setText(resourceBundle.getString("Id"));
         columnRemind.setText(resourceBundle.getString("Remind"));
         columnSettle.setText(resourceBundle.getString("Settle"));
