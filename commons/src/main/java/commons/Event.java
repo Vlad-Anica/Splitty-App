@@ -378,6 +378,7 @@ public class Event {
             return false;
         }
         this.getParticipants().add(person);
+        person.setEvent(this);
         return true;
     }
 
