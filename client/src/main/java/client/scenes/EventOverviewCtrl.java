@@ -273,6 +273,7 @@ public class EventOverviewCtrl {
 
             this.goToEditTagButton.setVisible(false);
             this.removeTagButton.setVisible(false);
+            refreshLastVisited();
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -281,6 +282,17 @@ public class EventOverviewCtrl {
             alert.showAndWait();
             return;
         }
+    }
+
+    public void refreshLastVisited() {
+        for (Person person: participants) {
+            if (person.getUser().getId() == mainCtrl.getUserId()) {
+                person.updateLastVisited();
+                System.out.println("REFRESHED!!! " + person.getLastVisited());
+            }
+        }
+
+        server.updateEvent(event.getId(), event);
     }
 
     public void choosePersonsVisibilityCheck() {
