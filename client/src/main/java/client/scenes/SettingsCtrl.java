@@ -26,9 +26,13 @@ public class SettingsCtrl {
     private Text currencyText;
     @FXML
     private Text publicUsernameText;
+    @FXML
+    private Button btnSelectServer;
     private MainCtrl mainCtrl;
     private String alertTitle;
     private String alertText;
+    private String alertServerSwitchText;
+    private String alertServerSwitchTitle;
 
     private String currentUsername = "Sapunaru";
     private String currency = "EUR";
@@ -54,8 +58,11 @@ public class SettingsCtrl {
         btnHome.setText(resourceBundle.getString("Home"));
         alertTitle = resourceBundle.getString("SubmitAlert");
         alertText = resourceBundle.getString("Areyousureyouwanttosubmit");
+        alertServerSwitchTitle = resourceBundle.getString("ServerSwitch");
+        alertServerSwitchText = resourceBundle.getString("ConfirmServerSwitch");
         currencyText.setText(resourceBundle.getString("PreferredCurrency"));
         publicUsernameText.setText(resourceBundle.getString("PublicUsername"));
+        btnSelectServer.setText("ChangeServer");
 
     }
     public void clickBtnSubmitAll() {
@@ -70,6 +77,14 @@ public class SettingsCtrl {
         else{
             publicUsername.setText(null);
         }
+    }
+    public void goToSelectServer() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(alertServerSwitchTitle);
+        alert.setContentText(alertServerSwitchText);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK)
+            mainCtrl.showSelectServer();
     }
 
     public void clickBtnHome() {
