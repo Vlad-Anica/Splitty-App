@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import commons.Event;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -400,12 +401,17 @@ public class ServerUtils {
 	 * @return Event associated with the ID
 	 */
 	public Event getEvent(Long eventID) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER)
-				.path("api/events/" + eventID)
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get(new GenericType<Event>(){});
+		try {
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER)
+					.path("api/events/" + eventID)
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.get(new GenericType<Event>(){});
+		} catch (BadRequestException e) {
+			return null;
+		}
+
 	}
 
 	public Event getEventByInviteCode(String inviteCode) {
