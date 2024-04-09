@@ -419,6 +419,7 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Home");
         primaryStage.setScene(homeScene);
+        homeCtrl.setUserName(userId);
         homeCtrl.setup();
         homeCtrl.refresh();
     }

@@ -11,7 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
-
+import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -38,6 +38,8 @@ public class SeeEventsAsAdminCtrl {
     @FXML
     TextField eventToDeleteId;
     @FXML
+    Label statusLabel;
+    @FXML
     Button btnManagementOverview;
     @FXML
     TableView<EventInfo> eventTable;
@@ -50,7 +52,9 @@ public class SeeEventsAsAdminCtrl {
     List<Event> events;
     ObservableList<Event> data;
     Boolean ascending;
-
+    String statusNonExistentEvent;
+    String downloadEventSucces;
+    String deleteEventSucces;
     @Inject
     public SeeEventsAsAdminCtrl(MainCtrl mainCtrl, ServerUtils sever) {
         this.mainCtrl = mainCtrl;
@@ -86,11 +90,18 @@ public class SeeEventsAsAdminCtrl {
             }
         });
         btnDownload.setOnAction(event -> {
+
+            int languageIndex = mainCtrl.getLanguageIndex();
+            if (languageIndex < 0)
+                languageIndex = 0;
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
             try {
-                int languageIndex = mainCtrl.getLanguageIndex();
-                if (languageIndex < 0)
-                    languageIndex = 0;
-                ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+                Long eventId = Long.parseLong(eventToDeleteId.getText());
+                if (server.getEvent(eventId) == null) {
+                    statusLabel.setText(statusNonExistentEvent);
+                    statusLabel.setTextFill(Color.RED);
+                    return;
+                }
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Download alert");
                 alert.setContentText(resourceBundle.getString("DownloadThisEvent"));
@@ -101,6 +112,9 @@ public class SeeEventsAsAdminCtrl {
                 System.out.println(e.getMessage());
             } catch (IOException e) {
                 System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
+                statusLabel.setTextFill(Color.RED);
+                statusLabel.setText(resourceBundle.getString("InputProperEventId"));
             }
         });
         btnImport.setOnAction(event -> showImportPane());
@@ -194,6 +208,8 @@ public class SeeEventsAsAdminCtrl {
      */
     public void downloadJSONDump() throws URISyntaxException, IOException {
         Long eventId = Long.parseLong(eventToDeleteId.getText());
+        statusLabel.setText(downloadEventSucces);
+        statusLabel.setTextFill(Color.BLACK);
         server.downloadJSONDump(eventId);
     }
 
@@ -249,6 +265,8 @@ public class SeeEventsAsAdminCtrl {
             }
             printToTable();
         }
+        statusLabel.setTextFill(Color.BLACK);
+        statusLabel.setText(deleteEventSucces);
     }
 
     public void setTextLanguage() {
@@ -265,6 +283,9 @@ public class SeeEventsAsAdminCtrl {
         ascDesc.set(0, resourceBundle.getString("Ascending"));
         ascDesc.set(1, resourceBundle.getString("Descending"));
         selectOrdering.setPromptText(resourceBundle.getString("SelectHowToSeeEvents"));
+        statusNonExistentEvent = resourceBundle.getString("NonExistentInputEvent");
+        deleteEventSucces = resourceBundle.getString("DeleteEventSuccess");
+        downloadEventSucces = resourceBundle.getString("DownloadEventSuccess");
         types.set(0, resourceBundle.getString("ByName"));
         types.set(1, resourceBundle.getString("ByCreationDate"));
         types.set(2, resourceBundle.getString("ByLastUpdate"));
