@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Event;
 import commons.Person;
 import commons.Currency;
 import jakarta.inject.Inject;
@@ -44,6 +45,10 @@ public class AddParticipantCtrl {
     private Label firstNameLabel;
     @FXML
     private Label lastNameLabel;
+    private String participantEditedSuccess;
+    private String participantAddedSuccess;
+    private String participantInvalidWarning;
+    private String participantAlreadyAdded;
     List<Person> participants = new ArrayList<>();
 
     private MainCtrl mainCtrl;
@@ -55,14 +60,32 @@ public class AddParticipantCtrl {
     private String warningText2;
     private String alertTitle;
     private String alertText;
-
+    private Person participantToEdit;
+    private Event currentEvent;
+    private boolean isInEditMode;
     @Inject
     public AddParticipantCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
-    public void setup() {
+    public void setup(Long eventId, boolean isInEditMode, Person participantToEdit) {
+        this.currentEvent = server.getEvent(eventId);
+        this.isInEditMode = isInEditMode;
+        this.participantToEdit = participantToEdit;
+
+        if (isInEditMode) {
+            firstName.setText(participantToEdit.getFirstName());
+            lastName.setText(participantToEdit.getLastName());
+            IBAN.setText(participantToEdit.getIBAN());
+            BIC.setText(participantToEdit.getBIC());
+            if (participantToEdit.getEmail() != null && !participantToEdit.getEmail().equals("-1"))
+             email.setText(participantToEdit.getEmail());
+        }
+        else {
+            clearFields();
+        }
+
         setTextLanguage();
     }
     public void setTextLanguage() {
@@ -81,41 +104,73 @@ public class AddParticipantCtrl {
         warningText2 =resourceBundle.getString("Pleasefillallfieldscorrectly");
         alertTitle =resourceBundle.getString("AddingParticipantAlert");
         alertText =resourceBundle.getString("Doyouwanttoaddthisparticipant");
+
+        participantAddedSuccess = resourceBundle.getString("ParticipantAdded");
+        participantEditedSuccess = resourceBundle.getString("ParticipantEdited");
+        participantInvalidWarning = resourceBundle.getString("InvalidInputParticipant");
+        participantAlreadyAdded = resourceBundle.getString("ParticipantAlreadyAdded");
     }
 
     @FXML
     public void addParticipant(ActionEvent event) {
 
-        if (isValidInput()) {
-            try {
-                Person p = getParticipant();
-                if (participants.contains(p))
-                {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle(warningTitle);
-                    alert.setContentText(warningText + p.getFirstName() +" "+ warningText1);
-                    alert.showAndWait();
-                    participantAdded.setText(p.getFirstName() + " was already added");
-                    participantAdded.setTextFill(Color.RED);
-                    participantAdded.setStyle("-fx-font-weight: bold");
-                    return;
+        if (!isValidInput()) {
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(warningTitle2);
+            alert.setContentText(warningText2);
+            alert.showAndWait();
+            participantAdded.setText(participantInvalidWarning);
+            participantAdded.setTextFill(Color.RED);
+            participantAdded.setStyle("-fx-font-weight: bold");
+            return;
+        }
+
+        try {
+            Person p = getParticipant();
+            if (participants.contains(p))
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle(warningTitle);
+                alert.setContentText(warningText + p.getFirstName() +" "+ warningText1);
+                alert.showAndWait();
+                participantAdded.setText(p.getFirstName() + " " + participantAlreadyAdded);
+                participantAdded.setTextFill(Color.RED);
+                participantAdded.setStyle("-fx-font-weight: bold");
+                return;
+            }
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle(alertTitle);
+            alert.setContentText(alertText);
+            Optional<ButtonType> result = alert.showAndWait();
+             if(result.get() == ButtonType.OK) {
+
+                if (isInEditMode) {
+                    if (currentEvent.getParticipants().contains(participantToEdit))
+                      currentEvent.getParticipants().remove(participantToEdit);
+
+                    participantToEdit.setFirstName(p.getFirstName());
+                    participantToEdit.setLastName(p.getLastName());
+                    participantToEdit.setEmail(p.getEmail());
+                    participantToEdit.setIBAN(p.getIBAN());
+                    participantToEdit.setBIC(p.getBIC());
+                    server.updatePerson(participantToEdit.getId(), participantToEdit);
+                    if (!currentEvent.getParticipants().contains(participantToEdit))
+                     currentEvent.getParticipants().add(participantToEdit);
+                    participantAdded.setText(participantEditedSuccess);
                 }
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle(alertTitle);
-                alert.setContentText(alertText);
-                Optional<ButtonType> result = alert.showAndWait();
-                if(result.get() == ButtonType.OK) {
-                    server.addPerson(p);
-                    participants.add(p);
-                    System.out.println(p);
+                else {
+                    currentEvent.addParticipant(p);
+                    participantAdded.setText(participantAddedSuccess);
                 }
-                else{
-                    firstName.setText(null);
-                    lastName.setText(null);
-                    email.setText(null);
-                    IBAN.setText(null);
-                    BIC.setText(null);
-                }
+                server.updateEvent(currentEvent.getId(), currentEvent);
+                 participantAdded.setTextFill(Color.BLACK);
+                System.out.println(p);
+             }
+             else {
+                clearFields();
+             }
             } catch (WebApplicationException e) {
 
                 var alert = new Alert(Alert.AlertType.ERROR);
@@ -125,26 +180,10 @@ public class AddParticipantCtrl {
                 return;
             }
 
-            Random random = new Random();
-            //generate a random alphanumeric code
-            String inviteCode = random.ints(48, 123)
-                    .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                    .limit(7)
-                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                    .toString();
-            participantAdded.setText("Sent invite to " + firstName.getText() + "! Invite code: " + inviteCode);
-            participantAdded.setTextFill(Color.BLACK);
-            participantAdded.setStyle("-fx-font-weight: light");
-        }
-        else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(warningTitle2);
-            alert.setContentText(warningText2);
-            alert.showAndWait();
-            participantAdded.setText("Please fill out all fields correctly!");
-            participantAdded.setTextFill(Color.RED);
-            participantAdded.setStyle("-fx-font-weight: bold");
-        }
+
+
+
+
 
     }
 
@@ -153,15 +192,23 @@ public class AddParticipantCtrl {
         if (email == null || email.getText().isEmpty())
         {
             p = new Person(firstName.getText(), lastName.getText(), null,
-                    IBAN.getText(), BIC.getText(), Currency.EUR, 0.0, null, null);
+                    IBAN.getText(), BIC.getText(), Currency.EUR, 0.0, currentEvent, null);
         }
         else
         {
             p = new Person(firstName.getText(), lastName.getText(), email.getText(),
-                    IBAN.getText(), BIC.getText(), Currency.EUR, 0.0, null, null);
+                    IBAN.getText(), BIC.getText(), Currency.EUR, 0.0, currentEvent, null);
         }
 
         return p;
+    }
+
+    public void clearFields() {
+        firstName.setText(null);
+        lastName.setText(null);
+        email.setText(null);
+        IBAN.setText(null);
+        BIC.setText(null);
     }
     public boolean isValidInput() {
 
@@ -174,12 +221,6 @@ public class AddParticipantCtrl {
         if (email != null && !email.getText().isEmpty() &&
         !email.getText().contains("@") && !email.getText().contains(".com"))
             return false;
-
-        if (IBAN == null || IBAN.getText().length() < 34)
-            return false;
-
-        if (BIC == null || BIC.getText().isEmpty())
-             return false;
 
         return true;
     }

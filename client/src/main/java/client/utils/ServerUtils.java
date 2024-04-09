@@ -178,6 +178,15 @@ public class ServerUtils {
 		   return null;
 	   }
    }
+
+   public void deletePerson(Long id) {
+
+	   ClientBuilder.newClient(new ClientConfig())
+			   .target(SERVER).path("api/persons/" + id)
+			   .request(APPLICATION_JSON)
+			   .accept(APPLICATION_JSON)
+			   .delete();
+   }
 	public List<Debt> getDebts() {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/debts") //

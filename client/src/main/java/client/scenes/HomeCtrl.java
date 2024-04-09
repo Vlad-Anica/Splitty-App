@@ -202,7 +202,6 @@ public class HomeCtrl {
 
 
     public void goToAddParticipant(ActionEvent event) throws IOException {
-        mainCtrl.showAddParticipant();
     }
 
     public void goToAddExpense(ActionEvent event) throws IOException {
