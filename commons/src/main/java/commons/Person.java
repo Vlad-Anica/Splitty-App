@@ -48,6 +48,9 @@ public class Person {
 	@Column(name = "updated_at", nullable = false, updatable = true)
 	private java.util.Date updatedAt;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "last_visited", nullable = false, unique = true)
+	private java.util.Date lastVisited;
 	/**
 	 * Upon initial creation of the Object, the Date will be stored.
 	 */
@@ -100,6 +103,7 @@ public class Person {
 	public Person(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
+		lastVisited = new java.util.Date();
 	}
 
 	public Person(String firstName, String lastName, String email, String IBAN, String BIC,
@@ -115,10 +119,18 @@ public class Person {
 		this.event = event;
 		this.preferredCurrency = preferredCurrency;
 		this.user = user;
+		lastVisited = new java.util.Date();
 	}
 
 	public long getId() {
 		return id;
+	}
+	public void updateLastVisited() {
+		lastVisited = new java.util.Date();
+	}
+
+	public java.util.Date getLastVisited() {
+		return lastVisited;
 	}
 
 	/**
