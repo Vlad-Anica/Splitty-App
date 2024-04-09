@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
     <children>
         <Button fx:id="goHomeButton" layoutX="675.0" layoutY="15.0" mnemonicParsing="false" onAction="#goHome" prefHeight="33.0" prefWidth="100.0" text="Home" />
         <Button fx:id="inviteButton" alignment="CENTER" layoutX="475.0" layoutY="82.0" mnemonicParsing="false" onAction="#sendInvite" prefHeight="25.0" prefWidth="150.0" text="Invite" />
@@ -20,7 +20,7 @@
         <Button fx:id="showExpensesFromPersonButton" layoutX="275.0" layoutY="142.0" mnemonicParsing="false" onAction="#showAllExpensesFromPerson" prefHeight="27.0" prefWidth="175.0" style="-fx-border-color: rgb(128,128,128);" text="Select a Person!" />
         <Button fx:id="showExpensesWithPersonButton" layoutX="450.0" layoutY="142.0" mnemonicParsing="false" onAction="#showAllExpensesWithPerson" prefHeight="27.0" prefWidth="175.0" style="-fx-border-color: rgb(128,128,128);" text="Select a Person!" />
         <Label alignment="CENTER" layoutX="175.0" layoutY="115.0" prefHeight="27.0" prefWidth="450.0" style="-fx-border-color: rgb(128,128,128);" text="Expenses" />
-        <Label fx:id="eventDateLabel" alignment="CENTER" layoutX="175.0" layoutY="55.0" prefHeight="27.0" prefWidth="150.0" text="&lt;&lt;DATE&gt;&gt;" />
+        <Label fx:id="eventDateLabel" alignment="CENTER" layoutX="175.0" layoutY="55.0" prefHeight="27.0" prefWidth="150.0" style="-fx-border-color: rgb(128,128,128);" text="&lt;&lt;DATE&gt;&gt;" />
         <Label fx:id="overviewLabel" alignment="CENTER" layoutX="300.0" layoutY="10.0" prefHeight="43.0" prefWidth="200.0" text="OVERVIEW">
             <font>
                 <Font size="29.0" />
@@ -48,8 +48,8 @@
         <Button fx:id="goToAddExpenseButton" layoutX="595.0" layoutY="115.0" maxHeight="27.0" mnemonicParsing="false" onAction="#goToAddExpense" prefHeight="27.0" prefWidth="30.0" text="+" textAlignment="CENTER" />
       <Button fx:id="removeTagButton" layoutX="722.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeTags" prefHeight="40.0" prefWidth="59.0" text="Remove" />
       <Button fx:id="showAllTagsInEvent" layoutX="625.0" layoutY="115.0" mnemonicParsing="false" onAction="#showAllTagsInEvent" prefHeight="27.0" prefWidth="150.0" text="Tags" />
-      <Button fx:id="refreshInviteCodeButton" layoutX="445.0" layoutY="55.0" mnemonicParsing="false" onAction="#refreshInviteCode" prefHeight="27.0" prefWidth="30.0" text="Refresh" />
       <Button fx:id="editTitleButton" layoutX="475.0" layoutY="55.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="27.0" prefWidth="150.0" text="Edit Title" />
+      <Button fx:id="refreshInviteCodeButton" layoutX="445.0" layoutY="55.0" maxHeight="27.0" maxWidth="30.0" minHeight="27.0" minWidth="30.0" mnemonicParsing="false" onAction="#refreshInviteCode" prefHeight="27.0" prefWidth="30.0" text="Refresh" />
       <Pane fx:id="EditTitlePane" layoutX="222.5" layoutY="169.0" prefHeight="200.0" prefWidth="355.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="355.0" />

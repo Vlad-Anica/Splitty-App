@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -21,8 +22,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class EventOverviewCtrl {
@@ -228,6 +233,11 @@ public class EventOverviewCtrl {
     public void setup(Long eventID) {
         EditTitlePane.setVisible(false);
         try {
+            Image refreshImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/client/images/Refresh.png")));
+            ImageView refreshImageView = new ImageView(refreshImage);
+            refreshImageView.setFitHeight(27);
+            refreshImageView.setFitWidth(30);
+            refreshInviteCodeButton.setGraphic(refreshImageView);
             this.showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(new ArrayList<String>(List.of("Participants"))));
             eventId = eventID;
             this.event = server.getEvent(eventID);
