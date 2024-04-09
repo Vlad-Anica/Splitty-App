@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import server.database.EventRepository;
+import server.database.PersonRepository;
 import server.database.UserRepository;
 import server.services.interfaces.UserService;
 
@@ -28,13 +29,15 @@ public class UserServiceTest {
     private UserRepository repo;
     @Mock
     private EventRepository eventRepo;
+    @Mock
+    private PersonRepository personRepo;
     private User user1;
     private User user2;
     private List<User> users;
 
     @BeforeEach
     public void setup(){
-        userService = new UserServiceImpl(repo, eventRepo);
+        userService = new UserServiceImpl(repo, eventRepo, personRepo);
 
         user1 = User.builder().id(1L).firstName("John").lastName("Smith").IBAN("").BIC("11111111")
                 .email("john.smith@gmail.com").preferredCurrency(USD).build();
