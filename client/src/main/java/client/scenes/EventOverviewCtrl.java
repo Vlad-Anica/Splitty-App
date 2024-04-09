@@ -228,7 +228,7 @@ public class EventOverviewCtrl {
     public void setup(Long eventID) {
         EditTitlePane.setVisible(false);
         try {
-            this.showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList());
+            this.showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(new ArrayList<String>(List.of("Participants"))));
             eventId = eventID;
             this.event = server.getEvent(eventID);
             eventDateLabel.setText(event.getDate().toString());
@@ -394,10 +394,10 @@ public class EventOverviewCtrl {
             }
         }
         this.filteringExpensesPane.getChildren().removeAll();
-        this.filteringExpensesPane.setLayoutX(163);
-        this.filteringExpensesPane.setLayoutY(160);
-        this.filteringExpensesPane.setPrefHeight(174);
-        this.filteringExpensesPane.setPrefWidth(80);
+        this.filteringExpensesPane.setLayoutX(175);
+        this.filteringExpensesPane.setLayoutY(170);
+        this.filteringExpensesPane.setPrefWidth(85);
+        this.filteringExpensesPane.setPrefHeight(280);
     }
 
     /**
@@ -411,10 +411,10 @@ public class EventOverviewCtrl {
             }
         }
         this.chooseTagsPane.getChildren().removeAll();
-        this.chooseTagsPane.setLayoutX(454);
-        this.chooseTagsPane.setLayoutY(133);
-        this.chooseTagsPane.setPrefHeight(200);
-        this.chooseTagsPane.setPrefWidth(143);
+        this.chooseTagsPane.setLayoutX(625);
+        this.chooseTagsPane.setLayoutY(142);
+        this.chooseTagsPane.setPrefWidth(100);
+        this.chooseTagsPane.setPrefHeight(280);
     }
 
     /**
