@@ -80,6 +80,7 @@ public class HomeCtrl {
     private String alertTitle;
     private String alertText;
     private String welcomeText;
+    private String firstName;
     @Inject
     public HomeCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
@@ -142,7 +143,7 @@ public class HomeCtrl {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         welcomeText = resourceBundle.getString("WelcomeText");
         User user = server.getUserById(userId);
-        String firstName = user.getFirstName();
+        firstName = user.getFirstName();
         homeWelcomeLabel.setText(welcomeText + " " + firstName + "!");
     }
 
@@ -163,6 +164,7 @@ public class HomeCtrl {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         btnSearchEvent.setText(resourceBundle.getString("Search"));
         welcomeText = resourceBundle.getString("WelcomeText");
+        homeWelcomeLabel.setText(welcomeText + " " + firstName + "!");
         inviteCodeText.setPromptText(resourceBundle.getString("InviteCode"));
         goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         createEventBtn.setText(resourceBundle.getString("CreateEvent"));
