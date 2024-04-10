@@ -115,7 +115,20 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.findById(id).get());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Expense> update(@PathVariable("id") Long id, @RequestBody Expense newExpense) {
 
+        if (newExpense.getId() != id)
+            return ResponseEntity.badRequest().build();
+        if (!expenseService.existsById(id))
+            return add(newExpense);
+        return ResponseEntity.ok(expenseService.save(newExpense));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Expense> delete(@PathVariable("id") Long id) {
+        return expenseService.delete(id);
+    }
 //    @GetMapping("debts/{id}")
 //    public List<Debt> getDebtsListById(@PathVariable("id") long id) {
 //        if (id < 0 || !expenseService.existsById(id)) {

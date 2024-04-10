@@ -168,7 +168,7 @@ public class AddExpenseCtrl {
                 dateField.getEditor().setText(parsedDate);
                 typeComboBox.setValue(expense.getTag().getType());
                 descriptionField.setText(expenseToEdit.getDescription());
-                amountField.setText(BigDecimal.valueOf(expense.getAmount() / 1.168958841856)
+                amountField.setText(BigDecimal.valueOf(expense.getAmount() + 0.0)
                         .setScale(2, RoundingMode.HALF_UP)
                         .doubleValue()+"");
             }
@@ -238,25 +238,36 @@ public class AddExpenseCtrl {
                     description = descriptionField.getText();
 
                 Double amount = Double.valueOf(amountField.getText());
-                Double realAmount = BigDecimal.valueOf(amount / 1.168958841856)
-                        .setScale(2, RoundingMode.HALF_UP)
-                        .doubleValue();
 
             double amountPerPerson = splitEvenButton.isSelected() ?
-                    realAmount / getAllGivers().size() : realAmount / selectedBoxesNumber();
+                    amount / getAllGivers().size() : amount / selectedBoxesNumber();
 
                 //convert LocalDate to date
                 LocalDate localDate = dateField.getValue();
                 Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
-                Expense e = new Expense(description, amount, date, getPayerData(), getAllGivers(),
+                Expense e = new Expense(description, 0.0, date, getPayerData(), getAllGivers(),
                     getCurrencyData(), getTypeData());
+                e.setAmount(0.0 + amount);
 
                if (inEditMode) {
-                   event.removeExpense(expenseToEdit);
-                   event.addExpense(e);
+                   if (event.containsExpense(expenseToEdit))
+                     event.removeExpense(expenseToEdit);
+
+                   expenseToEdit.setAmount(e.getAmount());
+                   expenseToEdit.setDescription(e.getDescription());
+                   expenseToEdit.setReceiver(e.getReceiver());
+                   expenseToEdit.setDate(e.getDate());
+                   expenseToEdit.setCurrency(e.getCurrency());
+                   expenseToEdit.setTag(e.getTag());
+                   expenseToEdit.setGivers(e.getGivers());
+
+                   server.updateExpense(expenseToEdit.getId(), expenseToEdit);
+
+                   if (!event.containsExpense(expenseToEdit))
+                     event.addExpense(expenseToEdit);
+
                    server.updateEvent(event.getId(), event);
-                   //server.addExpenseToEvent(this.event.getId(), e);
                }
                else {
                    event.addExpense(e);

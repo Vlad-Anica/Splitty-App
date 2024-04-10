@@ -21,6 +21,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -525,14 +528,18 @@ public class EventOverviewCtrl {
             }
             int y = 5;
             for (Expense e : selectedExpenses) {
-                Double realAmount = BigDecimal.valueOf(e.getAmount() / 1.168958841856)
+                Double amount = e.getAmount();
+                Double realAmount = BigDecimal.valueOf(amount)
                         .setScale(2, RoundingMode.HALF_UP)
                         .doubleValue();
+                LocalDate shownDate = e.getDate().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate();
+                String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
                 CheckBox newBox = new CheckBox(
-                        //e.getTag().getType() + ", paid by " + e.getReceiver().getFirstName() + " " + e.getReceiver().getLastName()
                         e.getReceiver().getFirstName() + " paid " + realAmount +
-                                e.getCurrency() + " for " + e.getDescription()
-                );
+                                e.getCurrency() + " for " + e.getDescription() +
+                                " at " + parsedDate);
                 filteringExpensesPane.getChildren().add(newBox);
                 newBox.setOnAction(event -> {
                     toggleInSelectedExpenses(e);
@@ -637,6 +644,7 @@ public class EventOverviewCtrl {
             return false;
         }
         this.event.removeExpense(expense);
+        server.deleteExpense(expense.getId());
         server.updateEvent(this.event.getId(), this.event);
         this.setup(eventId);
         return true;
