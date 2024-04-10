@@ -1,9 +1,6 @@
 package server.api;
 
-import commons.Debt;
-import commons.Event;
-import commons.Person;
-import commons.User;
+import commons.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -206,6 +203,11 @@ public class PersonController {
 
         return update(id, person);
 
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Person> deletePerson(@PathVariable("id") Long id) {
+        return personService.delete(id);
     }
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();

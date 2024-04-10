@@ -19,6 +19,7 @@ import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
+import commons.Person;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -411,9 +412,10 @@ public class MainCtrl {
         });
     }
 
-    public void showAddParticipant() {
+    public void showAddParticipant(Long eventId, boolean isInEditMode, Person participantToEdit) {
         primaryStage.setTitle("Show Participants");
         primaryStage.setScene(addParticipantScene);
+        addParticipantCtrl.setup(eventId, isInEditMode, participantToEdit);
     }
 
     public void showHome() {

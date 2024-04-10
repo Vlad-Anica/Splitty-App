@@ -52,8 +52,6 @@ public class EventOverviewCtrl {
     private TextField emailField;
     @FXML
     private Button inviteButton;
-
-
     @FXML
     private ComboBox<String> showAllParticipantsInEventComboBox;
     @FXML
@@ -234,12 +232,6 @@ public class EventOverviewCtrl {
             eventId = eventID;
             this.event = server.getEvent(eventID);
 
-            /*
-            if(this.event.getInviteCode().equals("OW99THEL")) {
-
-                this.event.addParticipant(new Person("Obama", "bARACK", "34", "444", "343", Currency.EUR, 0, this.event, new User()));
-            }
-            */
             eventDateLabel.setText(event.getDate().toString());
             inviteCodeLabel.setText(event.getInviteCode());
         } catch (Exception e) {
@@ -258,7 +250,11 @@ public class EventOverviewCtrl {
             showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(
                     participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
             ));
-            showAllParticipantsInEventComboBox.setOnAction(this::showAllParticipantsInEvent);
+            showAllParticipantsInEventComboBox.setOnAction(e -> {
+                computeSelectedPerson();
+                showAllParticipantsInEvent(e);
+            });
+            //showAllParticipantsInEventComboBox.setOnAction(this::showAllParticipantsInEvent);
 
             this.choosePersonsPane.setVisible(false);
             this.goToEditPersonButton.setVisible(false);
@@ -317,7 +313,7 @@ public class EventOverviewCtrl {
         if (!validPersonSelection()) {
             System.out.println("Cannot edit Person as none was selected.");
         } else {
-            //goToEditPerson() tbi etc
+            mainCtrl.showAddParticipant(eventId, true, selectedPerson);
         }
     }
 
@@ -344,6 +340,8 @@ public class EventOverviewCtrl {
             return false;
         }
         this.event.severPersonConnection(person);
+        this.event.getParticipants().remove(person);
+        server.deletePerson(person.getId());
         server.updateEvent(this.event.getId(), this.event);
         this.setup(eventId);
         return true;
