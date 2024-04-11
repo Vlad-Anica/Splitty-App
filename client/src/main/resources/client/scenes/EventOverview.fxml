@@ -6,6 +6,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -62,13 +63,19 @@
       <Button fx:id="showAllTagsInEvent" layoutX="454.0" layoutY="106.0" mnemonicParsing="false" onAction="#showAllTagsInEvent" prefHeight="27.0" prefWidth="139.0" text="Tags" />
       <Button fx:id="refreshInviteCodeButton" layoutX="200.0" layoutY="70.0" mnemonicParsing="false" onAction="#refreshInviteCode" prefHeight="25.0" prefWidth="26.0" text="Refresh" />
       <Button fx:id="editTitleButton" layoutX="369.0" layoutY="14.0" mnemonicParsing="false" onAction="#showEditPage" text="Edit" />
-      <Pane fx:id="EditTitlePane" layoutX="132.0" layoutY="100.0" prefHeight="200.0" prefWidth="355.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutX="14.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" width="355.0" />
-            <TextField fx:id="editTitleTextField" layoutX="27.0" layoutY="77.0" prefHeight="46.0" prefWidth="174.0" promptText="New Text" />
-            <Button fx:id="SubmitEditButton" layoutX="244.0" layoutY="87.0" mnemonicParsing="false" onAction="#UpdateTitle" text="Submit" />
-            <Button fx:id="hideEditPage" layoutX="315.0" layoutY="14.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="25.0" prefWidth="26.0" text="X" />
-         </children>
-      </Pane>
+
+        <ScrollPane hbarPolicy="NEVER" layoutX="164.0" layoutY="160.0" pannable="true" prefHeight="174.0" prefWidth="289.0" vbarPolicy="ALWAYS">
+         <content>
+            <ListView fx:id="expenseListView" prefHeight="171.0" prefWidth="287.0" />
+         </content>
+      </ScrollPane>
+        <Pane fx:id="EditTitlePane" layoutX="132.0" layoutY="100.0" prefHeight="200.0" prefWidth="355.0" visible="false">
+            <children>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="355.0" />
+                <TextField fx:id="editTitleTextField" layoutX="27.0" layoutY="77.0" prefHeight="46.0" prefWidth="174.0" promptText="New Text" />
+                <Button fx:id="SubmitEditButton" layoutX="244.0" layoutY="87.0" mnemonicParsing="false" onAction="#UpdateTitle" text="Submit" />
+                <Button fx:id="hideEditPage" layoutX="315.0" layoutY="14.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="25.0" prefWidth="26.0" text="X" />
+            </children>
+        </Pane>
     </children>
 </Pane>

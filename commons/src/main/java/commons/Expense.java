@@ -9,6 +9,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -303,7 +306,12 @@ public class Expense {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
+        LocalDate shownDate = getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
+        return receiver.getFirstName() + " " + receiver.getLastName() + " paid " + amount + currency +
+                " for " + description + " at " + parsedDate;
     }
 }
 

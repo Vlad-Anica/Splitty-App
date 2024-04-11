@@ -3,7 +3,10 @@ package server.api;
 import commons.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import server.services.interfaces.DebtService;
 import server.services.interfaces.ExpenseService;
@@ -13,6 +16,7 @@ import server.services.interfaces.TagService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 
 @RestController
@@ -40,6 +44,21 @@ public class ExpenseController {
         this.tagService = tagService;
     }
 
+    /***
+     *
+     * @param expense expense to be added
+     * @return added expense
+     */
+    @MessageMapping("/expenses")
+    @SendTo("/topic/expenses")
+    public Expense addExpense(Expense expense) {
+
+        ResponseEntity<Expense> response = add(expense);
+        if (response.getStatusCode().equals(HttpStatus.BAD_REQUEST))
+            return null;
+
+        return expense;
+    }
     /**
      * Creates a corresponding Expense based on the given parameters. In normal usage, debtIDs should be empty...
      * @param description description to use for the Expense

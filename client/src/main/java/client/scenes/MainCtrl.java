@@ -388,6 +388,7 @@ public class MainCtrl {
         eventOverviewCtrl.setup(eventId);
         primaryStage.setTitle("Event Overview");
         primaryStage.setScene(eventOverviewScene);
+        eventOverviewCtrl.refresh();
     }
 
     public void showCreateEvent() {
