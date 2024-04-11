@@ -94,6 +94,10 @@ public class Event {
         calculateDebts(expenses);
     }
 
+    /**
+     * Method that calculates the new Debt list for the associated List of Expenses
+     * @param newExpenses Expenses to analyze
+     */
     public void calculateDebts(List<Expense> newExpenses) {
         List<Double> shares = new ArrayList<>();
         for (Person participant: participants) {
@@ -123,7 +127,6 @@ public class Event {
             }
         }
 
-        int j = 0;
         for (int i = 0; i < giverIndexes.size(); i++) {
             double giverShare = shares.get(giverIndexes.get(i));
             Person giver = participants.get(giverIndexes.get(i));
@@ -138,13 +141,16 @@ public class Event {
                 } else {
                     addDebt(new Debt(giver, receiver, this, receiverShare));
                     giverShare += receiverShare;
-                    j++;
                 }
             }
         }
 
     }
 
+    /**
+     * Method that removes a Debt from its association to an Event,
+     * @param debt Debt to remove.
+     */
     public void removeDebt(Debt debt) {
         if (!debts.contains(debt)) {
             return;
@@ -153,13 +159,20 @@ public class Event {
         debt.getGiver().removeDebt(debt);
         debts.remove(debt);
     }
-
+    /**
+     *
+     * Method that adds a Debt to an Event,
+     * @param debt Debt to add.
+     */
     public void addDebt(Debt debt) {
         debt.getReceiver().addDebt(debt);
         debt.getGiver().addDebt(debt);
         debts.add(debt);
     }
 
+    /**
+     * Method that removes all associated debts from an Event.
+     */
     public void removeAllDebts() {
         for (Debt debt: debts) {
             debt.getReceiver().removeDebt(debt);
