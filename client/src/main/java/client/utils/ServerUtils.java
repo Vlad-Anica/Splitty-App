@@ -582,6 +582,19 @@ public class ServerUtils {
 		});
 	}
 
+	public <T> void registerForUpdate(String destination, Class <T> type, Consumer<T> consumer) {
+		session.subscribe(destination, new StompFrameHandler() {
+			@Override
+			public Type getPayloadType(StompHeaders headers) {
+				return type;
+			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				consumer.accept((T) payload);
+			}
+		});
+	}
 	public void send(String destination, Object o) {
 		session.send(destination, o);
 }

@@ -389,6 +389,7 @@ public class MainCtrl {
         primaryStage.setTitle("Event Overview");
         eventOverviewScene.getStylesheets().add("client/css/EventOverview.css");
         primaryStage.setScene(eventOverviewScene);
+        eventOverviewCtrl.refresh();
     }
 
     public void showCreateEvent() {

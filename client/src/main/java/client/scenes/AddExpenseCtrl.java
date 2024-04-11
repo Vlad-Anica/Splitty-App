@@ -259,8 +259,9 @@ public class AddExpenseCtrl {
                    //server.addExpenseToEvent(this.event.getId(), e);
                }
                else {
+                   server.send("/app/expenses", e);
                    event.addExpense(e);
-                   server.updateEvent(event.getId(), event);
+                   server.send("/app/events", event);
                }
 
 
