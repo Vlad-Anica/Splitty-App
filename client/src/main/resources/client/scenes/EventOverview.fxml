@@ -39,17 +39,26 @@
             <Insets top="2.0" />
          </opaqueInsets>
       </Label>
-      <Button fx:id="goToEditExpenseButton" layoutX="175.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditExpense" prefHeight="40.0" prefWidth="391.0" style="-fx-border-color: rgb(128,128,128);" text="Edit the Expense!" />
-      <Button fx:id="removeExpensesButton" layoutX="566.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeExpenses" prefHeight="40.0" prefWidth="59.0" text="Remove" />
-      <Button fx:id="goToEditPersonButton" layoutX="25.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditPerson" prefHeight="40.0" prefWidth="91.0" text="Edit their info!" />
-      <Button fx:id="removePersonButton" layoutX="116.0" layoutY="450.0" mnemonicParsing="false" onAction="#removePerson" prefHeight="40.0" prefWidth="59.0" text="Remove" />
+      <Button fx:id="goToEditExpenseButton" layoutX="175.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditExpense" prefHeight="40.0" prefWidth="410.0" style="-fx-border-color: rgb(128,128,128);" text="Edit the Expense!" />
+      <Button fx:id="removeExpensesButton" layoutX="585.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeExpenses" prefHeight="40.0" prefWidth="40.0" text="---">
+         <font>
+            <Font name="Arial Nova Cond" size="12.0" />
+         </font></Button>
+      <Button fx:id="goToEditPersonButton" layoutX="25.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditPerson" prefHeight="40.0" prefWidth="110.0" text="Edit their info!" />
+      <Button fx:id="removePersonButton" layoutX="135.0" layoutY="450.0" mnemonicParsing="false" onAction="#removePerson" prefHeight="40.0" prefWidth="40.0" text="---">
+         <font>
+            <Font name="Arial Nova Cond" size="12.0" />
+         </font></Button>
       <AnchorPane fx:id="chooseTagsPane" layoutX="625.0" layoutY="142.0" prefHeight="280.0" prefWidth="100.0" />
-      <Button fx:id="goToEditTagButton" layoutX="625.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditTag" prefHeight="40.0" prefWidth="97.0" text="Edit the Tag!" />
+      <Button fx:id="goToEditTagButton" layoutX="625.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditTag" prefHeight="40.0" prefWidth="110.0" text="Edit the Tag!" />
         <Button fx:id="goToAddExpenseButton" layoutX="595.0" layoutY="115.0" maxHeight="27.0" mnemonicParsing="false" onAction="#goToAddExpense" prefHeight="27.0" prefWidth="30.0" text="+" textAlignment="CENTER" />
-      <Button fx:id="removeTagButton" layoutX="722.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeTags" prefHeight="40.0" prefWidth="59.0" text="Remove" />
+      <Button fx:id="removeTagButton" layoutX="735.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeTags" prefHeight="40.0" prefWidth="40.0" text="---">
+         <font>
+            <Font name="Arial Nova Cond" size="12.0" />
+         </font></Button>
       <Button fx:id="showAllTagsInEvent" layoutX="625.0" layoutY="115.0" mnemonicParsing="false" onAction="#showAllTagsInEvent" prefHeight="27.0" prefWidth="150.0" text="Tags" />
       <Button fx:id="editTitleButton" layoutX="475.0" layoutY="55.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="27.0" prefWidth="150.0" text="Edit Title" />
-      <Button fx:id="refreshInviteCodeButton" layoutX="445.0" layoutY="55.0" maxHeight="27.0" maxWidth="30.0" minHeight="27.0" minWidth="30.0" mnemonicParsing="false" onAction="#refreshInviteCode" prefHeight="27.0" prefWidth="30.0" text="Refresh" />
+      <Button fx:id="refreshInviteCodeButton" alignment="CENTER_RIGHT" layoutX="445.0" layoutY="55.0" maxHeight="27.0" maxWidth="30.0" minHeight="27.0" minWidth="30.0" mnemonicParsing="false" onAction="#refreshInviteCode" prefHeight="27.0" prefWidth="30.0" text="Refresh" />
       <Pane fx:id="EditTitlePane" layoutX="222.5" layoutY="169.0" prefHeight="200.0" prefWidth="355.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="355.0" />
