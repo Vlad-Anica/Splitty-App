@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import commons.*;
 import commons.Currency;
 import jakarta.inject.Inject;
@@ -18,8 +17,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class AddExpenseCtrl {
@@ -89,10 +91,14 @@ public class AddExpenseCtrl {
     private EventOverviewCtrl eventOverviewCtrl;
     private ServerUtils server;
     private Event event;
+    private Expense expenseToEdit;
     private String warningTitle;
     private String warningText;
     private String alertTitle;
     private String alertText;
+    private String whoPaidString;
+    private String whatTypeString;
+    private boolean inEditMode;
 
     @Inject
     public AddExpenseCtrl(MainCtrl mainCtrl, EventOverviewCtrl eventOverviewCtrl, ServerUtils server) {
@@ -101,9 +107,19 @@ public class AddExpenseCtrl {
         this.server = server;
     }
 
-    public void initializePage(long eventID)  {
+    public Expense getExpenseToEdit() {
+        return expenseToEdit;
+    }
+
+    public void setExpenseToEdit(Expense expenseToEdit) {
+        this.expenseToEdit = expenseToEdit;
+    }
+
+    public void initializePage(long eventID, boolean isInEditMode, Expense expense)  {
 
         try {
+
+            inEditMode = isInEditMode;
             event = server.getEvent(eventID);
             participants = new ArrayList<>();
             participants.addAll(server.getPersons());
@@ -139,6 +155,23 @@ public class AddExpenseCtrl {
             checkPersonBoxes(new ActionEvent());
             expenses = new ArrayList<>();
             setTextLanguage();
+
+            if (isInEditMode) {
+                setExpenseToEdit(expense);
+                payerComboBox.setValue(expenseToEdit.getReceiver().getFirstName() + " " +
+                        expenseToEdit.getReceiver().getLastName());
+                checkPersonBoxes(new ActionEvent());
+                LocalDate shownDate = expenseToEdit.getDate().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate();
+                String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
+                dateField.getEditor().setText(parsedDate);
+                typeComboBox.setValue(expense.getTag().getType());
+                descriptionField.setText(expenseToEdit.getDescription());
+                amountField.setText(BigDecimal.valueOf(expense.getAmount() / 1.168958841856)
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .doubleValue()+"");
+            }
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -156,16 +189,18 @@ public class AddExpenseCtrl {
         title.setText(resourceBundle.getString("Editexpense"));
         backButton.setText(resourceBundle.getString("Back"));
         goHomeButton.setText(resourceBundle.getString("Home"));
-        payerText.setText(resourceBundle.getString("WhoPaid"));
+        whoPaidString = resourceBundle.getString("WhoPaid");
+        payerComboBox.setPromptText(whoPaidString);
         descText.setText(resourceBundle.getString("WhatFor"));
         currencyComboBox.setPromptText(resourceBundle.getString("Currency"));
-        amountField.setText(resourceBundle.getString("HowMuch"));
+        amountText.setText(resourceBundle.getString("HowMuch"));
         dateLabel.setText(resourceBundle.getString("When"));
         chooseText.setText(resourceBundle.getString("HowToSplit"));
         splitEvenButton.setText(resourceBundle.getString("SplitEvenly"));
         splitButton.setText(resourceBundle.getString("SomePeople"));
         typeText.setText(resourceBundle.getString("ExpenseType"));
-        typeComboBox.setPromptText(resourceBundle.getString("ChooseAType"));
+        whatTypeString = resourceBundle.getString("ChooseAType");
+        typeComboBox.setPromptText(whatTypeString);
         addTagButton.setText(resourceBundle.getString("AddTag"));
         cancelButton.setText(resourceBundle.getString("Cancel"));
         addButton.setText(resourceBundle.getString("Add"));
@@ -178,6 +213,7 @@ public class AddExpenseCtrl {
     public void createExpense() throws RuntimeException  {
 
         try {
+
             if (!isValidInput())
             {
                 statusLabel.setStyle("-fx-font-weight: bold");
@@ -201,29 +237,33 @@ public class AddExpenseCtrl {
                 else
                     description = descriptionField.getText();
 
-                double amount = Double.parseDouble(amountField.getText());
+                Double amount = Double.valueOf(amountField.getText());
+                Double realAmount = BigDecimal.valueOf(amount / 1.168958841856)
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .doubleValue();
 
             double amountPerPerson = splitEvenButton.isSelected() ?
-                    amount / getAllGivers().size() : amount / selectedBoxesNumber();
+                    realAmount / getAllGivers().size() : realAmount / selectedBoxesNumber();
 
-            List<Debt> debts = new ArrayList<>();
-
-                for (Person p : getAllGivers()) {
-                    Debt debt = new Debt(getPayerData(), p, null, amountPerPerson);
-                    // server.addDebt(debt);
-                    debts.add(debt);
-
-                }
                 //convert LocalDate to date
                 LocalDate localDate = dateField.getValue();
                 Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
-                Expense e = new Expense(description, amount, date, getPayerData(), debts,
+                Expense e = new Expense(description, amount, date, getPayerData(), getAllGivers(),
                     getCurrencyData(), getTypeData());
 
-               for (Debt debt : debts)
-                 debt.setExpense(e);
-               server.addExpenseToEvent(this.event.getId(), e);
+               if (inEditMode) {
+                   event.removeExpense(expenseToEdit);
+                   event.addExpense(e);
+                   server.updateEvent(event.getId(), event);
+                   //server.addExpenseToEvent(this.event.getId(), e);
+               }
+               else {
+                   event.addExpense(e);
+                   server.updateEvent(event.getId(), event);
+               }
+
+
                System.out.println("Created expense");
                statusLabel.setText("Expense created!");
                clearFields();
@@ -238,10 +278,7 @@ public class AddExpenseCtrl {
 
         } catch (RuntimeException e) {
             e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            System.out.println(e.getMessage());
         }
-
 
     }
     public void checkPersonBoxes(ActionEvent event) {
@@ -271,6 +308,7 @@ public class AddExpenseCtrl {
             }
         }
     }
+
     public boolean isValidInput() {
 
         if (getPayerData() == null)
@@ -352,11 +390,12 @@ public class AddExpenseCtrl {
 
     public void clearFields() {
 
-        payerComboBox.setValue(null);
+        payerComboBox.setPromptText(whoPaidString);
         amountField.clear();
         descriptionField.clear();
         dateField.getEditor().clear();
-        typeComboBox.setValue(null);
+        typeComboBox.setPromptText(whatTypeString);
+
     }
 
     public void cancel() {

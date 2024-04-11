@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import commons.Event;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -177,6 +178,15 @@ public class ServerUtils {
 		   return null;
 	   }
    }
+
+   public void deletePerson(Long id) {
+
+	   ClientBuilder.newClient(new ClientConfig())
+			   .target(SERVER).path("api/persons/" + id)
+			   .request(APPLICATION_JSON)
+			   .accept(APPLICATION_JSON)
+			   .delete();
+   }
 	public List<Debt> getDebts() {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/debts") //
@@ -205,10 +215,7 @@ public class ServerUtils {
     public Debt addDebtToPerson(Long personId, Debt debt) {
 		try {
 			Person person = getPersonById(personId);
-			person.getDebtList().add(debt);
-
-			double totalDebt = person.getTotalDebt() + debt.getAmount();
-			person.setTotalDebt(totalDebt);
+			person.addDebt(debt);
             updatePerson(personId, person);
 
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -237,10 +244,9 @@ public class ServerUtils {
 			debt.setSettled(true);
 
 			Person giver = getPersonById(debt.getGiver().getId());
-			giver.getDebtList().remove(debt);
-
-			double totalDebt = giver.getTotalDebt() - debt.getAmount();
-			giver.setTotalDebt(totalDebt >= 0 ? totalDebt : 0);
+			giver.removeDebt(debt);
+			Person receiver = getPersonById(debt.getReceiver().getId());
+			receiver.removeDebt(debt);
 			updatePerson(giver.getId(), giver);
 
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -259,7 +265,7 @@ public class ServerUtils {
 
 	public Debt payDebtPartially(long id, double amount) {
 
-		try {
+		//try {
 			Debt debt = ClientBuilder.newClient(new ClientConfig())//
 					.target(SERVER).path("api/debts/" + id)//
 					.request(APPLICATION_JSON)//
@@ -267,30 +273,39 @@ public class ServerUtils {
 					.get(new GenericType<Debt>() {
 					});
 
+			Event event = debt.getEvent();
+			Person giver = getPersonById(debt.getGiver().getId());
+			Person receiver = getPersonById(debt.getReceiver().getId());
+			giver.removeDebt(debt);
+			receiver.removeDebt(debt);
+			event.removeDebt(debt);
+
 			double totalAmount = debt.getAmount() - amount;
 			debt.setAmount(totalAmount >= 0 ? totalAmount : 0);
 
-			if (debt.getAmount() <= 0)
-				return settleDebt(id);
-
-			Person giver = getPersonById(debt.getGiver().getId());
-			double totalDebt = giver.getTotalDebt() - amount;
-			giver.setTotalDebt(totalDebt);
+			if (debt.getAmount() > 0) {
+				giver.addDebt(debt);
+				receiver.addDebt(debt);
+				event.addDebt(debt);
+			}
 
 			updatePerson(giver.getId(), giver);
+			updatePerson(receiver.getId(), receiver);
+			updateEvent(event.getId(), event);
+			return debt;
 
-			ObjectMapper objectMapper = new ObjectMapper();
-			String jsonDebt = objectMapper.writeValueAsString(debt);
-
-			return ClientBuilder.newClient(new ClientConfig())//
-					.target(SERVER).path("api/debts/" + id)//
-					.request(APPLICATION_JSON)//
-					.accept(APPLICATION_JSON)//
-					.put(Entity.entity(jsonDebt, MediaType.APPLICATION_JSON), Debt.class);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			return null;
-		}
+//			ObjectMapper objectMapper = new ObjectMapper();
+//			String jsonDebt = objectMapper.writeValueAsString(debt);
+////
+//			return ClientBuilder.newClient(new ClientConfig())//
+//					.target(SERVER).path("api/debts/" + id)//
+//					.request(APPLICATION_JSON)//
+//					.accept(APPLICATION_JSON)//
+//					.put(Entity.entity(jsonDebt, MediaType.APPLICATION_JSON), Debt.class);
+//		} catch (JsonProcessingException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
 	}
 
 	public List<Event> getEvents(Long userId) {
@@ -395,12 +410,17 @@ public class ServerUtils {
 	 * @return Event associated with the ID
 	 */
 	public Event getEvent(Long eventID) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER)
-				.path("api/events/" + eventID)
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get(new GenericType<Event>(){});
+		try {
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER)
+					.path("api/events/" + eventID)
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.get(new GenericType<Event>(){});
+		} catch (BadRequestException e) {
+			return null;
+		}
+
 	}
 
 	public Event getEventByInviteCode(String inviteCode) {
@@ -480,6 +500,28 @@ public class ServerUtils {
 
 	/***
 	 *
+	 * @param newExpense expense to be updated
+	 * @return new expense
+	 */
+	public Expense updateExpense(Long id, Expense newExpense) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonExpense = objectMapper.writeValueAsString(newExpense);
+			System.out.println("Received Event object: " + jsonExpense);
+
+			return ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("api/expenses/" + id)
+					.request(APPLICATION_JSON)
+					.accept(APPLICATION_JSON)
+					.put(Entity.entity(jsonExpense, MediaType.APPLICATION_JSON), Expense.class);
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	/***
+	 *
 	 * @param eventId the id of the event to find in the DB
 	 * @param expense expense to be added to event
 	 * @return updated event
@@ -489,7 +531,7 @@ public class ServerUtils {
 
 		try {
 			Event event = getEvent(eventId);
-			event.getExpenses().add(expense);
+			event.addExpense(expense);
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonEvent = objectMapper.writeValueAsString(expense);
 			System.out.println("Received Event object: " + jsonEvent);

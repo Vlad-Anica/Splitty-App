@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
+import server.database.PersonRepository;
 import server.database.UserRepository;
 import server.services.interfaces.UserService;
 
@@ -19,10 +20,13 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRep;
     @Autowired
     private EventRepository eventRep;
+    @Autowired
+    private PersonRepository personRep;
 
-    public UserServiceImpl(UserRepository userRep, EventRepository eventRep) {
+    public UserServiceImpl(UserRepository userRep, EventRepository eventRep, PersonRepository personRep) {
         this.userRep = userRep;
         this.eventRep = eventRep;
+        this.personRep = personRep;
     }
     @Override
     public ResponseEntity<List<Event>> getEvents(Long userId) {
@@ -30,16 +34,15 @@ public class UserServiceImpl implements UserService {
         if (userId < 0 || !userRep.existsById(userId))
             return ResponseEntity.badRequest().build();
         List<Event> result = new ArrayList<>();
-        List<Event> events = eventRep.findAll();
-        for (Event event : events)
+        List<Person> persons = personRep.findAllByOrderByLastVisitedDesc().get();
+
+        for (Person person: persons)
         {
-            System.out.println(event.getParticipants().size());
-            for (Person p : event.getParticipants())
-                if (p.getUser().getId() == userId && !result.contains(event))
-                    result.add(event);
-
+            System.out.println(person.getLastVisited());
+            if (person.getUser().getId() == userId) {
+                result.add(eventRep.getReferenceById(person.getEvent().getId()));
+            }
         }
-
         return ResponseEntity.ok(result);
     }
 

@@ -18,6 +18,8 @@ package client.scenes;
 import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
+import commons.Person;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -385,6 +387,7 @@ public class MainCtrl {
     public void showEventOverview(Long eventId) {
         eventOverviewCtrl.setup(eventId);
         primaryStage.setTitle("Event Overview");
+        eventOverviewScene.getStylesheets().add("client/css/EventOverview.css");
         primaryStage.setScene(eventOverviewScene);
     }
 
@@ -410,14 +413,16 @@ public class MainCtrl {
         });
     }
 
-    public void showAddParticipant() {
+    public void showAddParticipant(Long eventId, boolean isInEditMode, Person participantToEdit) {
         primaryStage.setTitle("Show Participants");
         primaryStage.setScene(addParticipantScene);
+        addParticipantCtrl.setup(eventId, isInEditMode, participantToEdit);
     }
 
     public void showHome() {
         primaryStage.setTitle("Home");
         primaryStage.setScene(homeScene);
+        homeCtrl.setUserName(userId);
         homeCtrl.setup();
         homeCtrl.refresh();
     }
@@ -473,10 +478,11 @@ public class MainCtrl {
         });
     }
 
-    public void showAddExpense(long eventID) {
+    public void showAddExpense(long eventID, boolean  isInEditMode, Expense expenseToEdit) {
         primaryStage.setTitle("Add Expense");
         primaryStage.setScene(addExpenseScene);
-        addExpenseCtrl.initializePage(eventID);
+        addExpenseCtrl.initializePage(eventID, isInEditMode, expenseToEdit);
+
         addExpenseScene.getStylesheets().add("/client/css/addExpense.css");
         addExpenseScene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
@@ -516,7 +522,7 @@ public class MainCtrl {
         primaryStage.setTitle("Add Language");
         primaryStage.setScene(addLanguageScene);
         addLanguageCtrl.setUp();
-        addLanguageScene.getStylesheets().add("/client/scenes/opendebts.css");
+        addLanguageScene.getStylesheets().add("/client/css/opendebts.css");
         addLanguageScene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
                 case BACK_SPACE -> {

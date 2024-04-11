@@ -48,6 +48,9 @@ public class Person {
 	@Column(name = "updated_at", nullable = false, updatable = true)
 	private java.util.Date updatedAt;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "last_visited", nullable = false, unique = true)
+	private java.util.Date lastVisited;
 	/**
 	 * Upon initial creation of the Object, the Date will be stored.
 	 */
@@ -87,7 +90,7 @@ public class Person {
 	//@JsonBackReference
 	private User user;
 
-	@OneToMany(cascade = CascadeType.PERSIST)
+	@OneToMany
 	//@JsonManagedReference
 	private List<Debt> debtList;
 	@SuppressWarnings("unused")
@@ -98,6 +101,7 @@ public class Person {
 	public Person(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
+		lastVisited = new java.util.Date();
 	}
 
 	public Person(String firstName, String lastName, String email, String IBAN, String BIC,
@@ -107,15 +111,24 @@ public class Person {
 		this.email = email;
 		this.totalDebt = totalDebt;
 		this.debtList = new ArrayList<>();
+		//this.expenses = new ArrayList<>();
 		this.IBAN = IBAN;
 		this.BIC = BIC;
 		this.event = event;
 		this.preferredCurrency = preferredCurrency;
 		this.user = user;
+		lastVisited = new java.util.Date();
 	}
 
 	public long getId() {
 		return id;
+	}
+	public void updateLastVisited() {
+		lastVisited = new java.util.Date();
+	}
+
+	public java.util.Date getLastVisited() {
+		return lastVisited;
 	}
 
 	/**
@@ -188,14 +201,23 @@ public class Person {
 		this.user = user;
 	}
 	public void addDebt(Debt debt) {
-		totalDebt += debt.getAmount();
+		if (this.equals(debt.getGiver())) {
+			totalDebt += debt.getAmount();
+		}
+		else {
+			totalDebt -= debt.getAmount();
+		}
 		debtList.add(debt);
 		debt.setGiver(this);
 	}
 	public void removeDebt(Debt debt) {
 		if (!debtList.contains(debt))
 			return;
-		totalDebt -= debt.getAmount();
+		if (debt.getGiver().equals(this)) {
+			totalDebt -= debt.getAmount();
+		} else {
+			totalDebt += debt.getAmount();
+		}
 		debtList.remove(debt);
 	}
 	public Event getEvent() {
@@ -212,8 +234,21 @@ public class Person {
 	public void setPreferredCurrency(Currency currency) {
 		this.preferredCurrency = currency;
 	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 	@Override
 	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj.getClass() == this.getClass()) {
+			Person other = (Person) obj;
+			if (other.getId() == this.getId()) {
+				return true;
+			}
+		}
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}
 

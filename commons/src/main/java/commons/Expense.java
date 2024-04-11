@@ -58,12 +58,12 @@ public class Expense {
     private String description;
     private double amount;
     private Date date;
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     private Person receiver;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Debt> debtList;
-    
+    @ManyToMany
+    private List<Person> givers;
+
     private Currency currency;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Tag tag;
@@ -74,17 +74,17 @@ public class Expense {
      * @param amount how much people need to pay
      * @param date when is the expense from
      * @param receiver who is receiving the money
-     * @param debtList list of debts split between the participants
+     * @param givers list of people who need to pay the receiver
      * @param currency the type of currency used
      * @param tag the tag of the expense
      */
     public Expense(String description, double amount, Date date, Person receiver,
-                   List<Debt> debtList, Currency currency, Tag tag) {
+                   List<Person> givers, Currency currency, Tag tag) {
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.receiver = receiver;
-        this.debtList = debtList;
+        this.givers = givers;
         this.currency = currency;
         this.tag = tag;
     }
@@ -156,8 +156,8 @@ public class Expense {
      * returns the list of people who need to pay
      * @return
      */
-    public List<Debt> getDebtList() {
-        return debtList;
+    public List<Person> getGivers() {
+        return givers;
     }
 
     /***
@@ -210,10 +210,10 @@ public class Expense {
 
     /***
      * updates givers
-     * @param debtList new arraylist of debts
+     * @param givers list of persons
      */
-    public void setDebtList(List<Debt> debtList) {
-        this.debtList = debtList;
+    public void setGivers(List<Person> givers) {
+        this.givers = givers;
     };
 
     /***
@@ -238,16 +238,7 @@ public class Expense {
         if(this.getReceiver() != null) {
             persons.add(this.getReceiver());
         }
-        if(this.getDebtList() != null && !this.getDebtList().isEmpty()) {
-            for(Debt debt: debtList) {
-                if(!persons.contains(debt.getGiver()) && debt.getGiver() != null) {
-                    persons.add(debt.getGiver());
-                }
-                if(!persons.contains(debt.getReceiver()) && debt.getReceiver() != null) {
-                    persons.add(debt.getReceiver());
-                }
-            }
-        }
+        persons.addAll(givers);
         return persons;
     }
 
