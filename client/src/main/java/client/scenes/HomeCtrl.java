@@ -43,6 +43,8 @@ public class HomeCtrl {
     @FXML
     private Button addLanguageButton;
     @FXML
+    Label homeWelcomeLabel;
+    @FXML
     private Stage stage;
     @FXML
     private Scene scene;
@@ -77,7 +79,8 @@ public class HomeCtrl {
     private String warningText;
     private String alertTitle;
     private String alertText;
-
+    private String welcomeText;
+    private String firstName;
     @Inject
     public HomeCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
@@ -136,6 +139,14 @@ public class HomeCtrl {
         eventList.setItems(FXCollections.observableList(eventData.stream().map(Event::getName).toList()));
 
     }
+    public void setUserName(long userId){
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        welcomeText = resourceBundle.getString("WelcomeText");
+        User user = server.getUserById(userId);
+        firstName = user.getFirstName();
+        homeWelcomeLabel.setText(welcomeText + " " + firstName + "!");
+    }
+
     public void searchAndGoToEvent() {
         Event event = server.getEventByInviteCode(inviteCodeText.getText());
         User currentUser = server.getUserById(mainCtrl.getUserId());
@@ -152,6 +163,8 @@ public class HomeCtrl {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         btnSearchEvent.setText(resourceBundle.getString("Search"));
+        welcomeText = resourceBundle.getString("WelcomeText");
+        homeWelcomeLabel.setText(welcomeText + " " + firstName + "!");
         inviteCodeText.setPromptText(resourceBundle.getString("InviteCode"));
         goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         createEventBtn.setText(resourceBundle.getString("CreateEvent"));
@@ -189,7 +202,6 @@ public class HomeCtrl {
 
 
     public void goToAddParticipant(ActionEvent event) throws IOException {
-        mainCtrl.showAddParticipant();
     }
 
     public void goToAddExpense(ActionEvent event) throws IOException {

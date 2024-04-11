@@ -61,7 +61,7 @@
       <Button fx:id="refreshInviteCodeButton" alignment="CENTER_RIGHT" layoutX="445.0" layoutY="55.0" maxHeight="27.0" maxWidth="30.0" minHeight="27.0" minWidth="30.0" mnemonicParsing="false" onAction="#refreshInviteCode" prefHeight="27.0" prefWidth="30.0" text="Refresh" />
       <Pane fx:id="EditTitlePane" layoutX="222.5" layoutY="169.0" prefHeight="200.0" prefWidth="355.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="355.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutX="14.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" width="355.0" />
             <TextField fx:id="editTitleTextField" layoutX="27.0" layoutY="77.0" prefHeight="46.0" prefWidth="174.0" promptText="New Text" />
             <Button fx:id="SubmitEditButton" layoutX="244.0" layoutY="87.0" mnemonicParsing="false" onAction="#UpdateTitle" text="Submit" />
             <Button fx:id="hideEditPage" layoutX="315.0" layoutY="14.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="25.0" prefWidth="26.0" text="X" />
