@@ -618,8 +618,6 @@ public class EventOverviewCtrl implements Initializable {
 
         System.out.println(selectedExpense);
         mainCtrl.showAddExpense(event.getId(), true, selectedExpense);
-
-        return;
     }
     /**
      * Method that removes the Selected Expense from the Event.
@@ -628,11 +626,12 @@ public class EventOverviewCtrl implements Initializable {
     public void removeExpenses(ActionEvent event) throws IOException {
         Expense selectedExpense = expenseListView.getSelectionModel().getSelectedItem();
         if (selectedExpense == null) {
-            Expense expense = selectedExpenses.get(0);
-            System.out.println(expense);
-            mainCtrl.showAddExpense(this.event.getId(), true, expense);
             return;
         }
+
+        severExpenseConnection(selectedExpense);
+        refresh();
+
     }
 
 
