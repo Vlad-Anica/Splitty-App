@@ -134,6 +134,26 @@ public class EventOverviewCtrl implements Initializable {
 
 
     }
+    public void setLanguageText() {
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("EventOverview"));
+        setLanguageIndicator();
+        goHomeButton.setText(resourceBundle.getString("Home"));
+        editTitleButton.setText(resourceBundle.getString("EditTitle"));
+        goToStatsButton.setText(resourceBundle.getString("Stats"));
+        inviteButton.setText(resourceBundle.getString("Invite"));
+        showAllParticipantsInEventComboBox.setPromptText(resourceBundle.getString("Participants"));
+        showAllExpensesButton.setText(resourceBundle.getString("All"));
+        showExpensesWithPersonButton.setText(resourceBundle.getString("SelectPerson"));
+        showExpensesFromPersonButton.setText(resourceBundle.getString("SelectPerson"));
+        showAllTagsInEvent.setText(resourceBundle.getString("Tags"));
+        emailField.setPromptText(resourceBundle.getString("EmailPromptText"));
+        goToEditPersonButton.setText(resourceBundle.getString("Edit"));
+        removePersonButton.setText(resourceBundle.getString("Delete"));
+        removeExpensesButton.setText(resourceBundle.getString("Delete"));
+        goToEditExpenseButton.setText(resourceBundle.getString("EditExpense"));
+    }
 
     public void refresh() {
         event = server.getEvent(eventId);
@@ -145,7 +165,10 @@ public class EventOverviewCtrl implements Initializable {
     }
     public void setLanguageIndicator() {
         ImageView flagImage = new ImageView(mainCtrl.getPathToFlagImage());
+        flagImage.setFitWidth(20);
+        flagImage.setFitHeight(15);
         Text language = new Text(mainCtrl.getLanguageWithoutImagePath());
+        languageIndicator.getChildren().clear();
         languageIndicator.getChildren().addAll(language, flagImage);
     }
 
@@ -245,6 +268,7 @@ public class EventOverviewCtrl implements Initializable {
      * @param eventID event ID that represents the Event being parsed here.
      */
     public void setup(Long eventID) {
+        setLanguageText();
 
         server.registerForAddition("/topic/expenses", Expense.class, e -> {
             Platform.runLater(() -> {
@@ -468,15 +492,16 @@ public class EventOverviewCtrl implements Initializable {
      * Upon selecting a Person, this method should be called in order to rename the filters.
      */
     public void renameFilters() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         if (!validPersonSelection()) {
             System.out.println("Selected Person is null!!! Filter refresh aborted and reset to normal.");
-            this.showExpensesWithPersonButton.setText("Select a Person!");
-            this.showExpensesFromPersonButton.setText("Select a Person!");
+            this.showExpensesWithPersonButton.setText(resourceBundle.getString("SelectPerson"));
+            this.showExpensesFromPersonButton.setText(resourceBundle.getString("SelectPerson"));
             return;
         }
         try {
-            showExpensesFromPersonButton.setText("From " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
-            showExpensesWithPersonButton.setText("Including " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
+            showExpensesFromPersonButton.setText(resourceBundle.getString("From") + " " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
+            showExpensesWithPersonButton.setText(resourceBundle.getString("Including") + " " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
 
             System.out.println("Successful filter refresh!");
         } catch (Exception e) {
