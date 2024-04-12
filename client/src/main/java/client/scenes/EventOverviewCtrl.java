@@ -385,7 +385,6 @@ public class EventOverviewCtrl implements Initializable {
             return;
         }
         this.event.severPersonConnection(person);
-        this.event.getParticipants().remove(person);
         server.deletePerson(person.getId());
         server.updateEvent(this.event.getId(), this.event);
         this.setup(eventId);

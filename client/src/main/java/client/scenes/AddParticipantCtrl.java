@@ -22,6 +22,8 @@ public class AddParticipantCtrl {
     @FXML
     private Button goHomeButton;
     @FXML
+    private Button goBackButton;
+    @FXML
     private Stage stage;
     @FXML
     private Scene scene;
@@ -96,6 +98,7 @@ public class AddParticipantCtrl {
         lastName.setPromptText(resourceBundle.getString("LastName"));
         lastNameLabel.setText(resourceBundle.getString("LastName"));
         goHomeButton.setText(resourceBundle.getString("Home"));
+        goBackButton.setText(resourceBundle.getString("Back"));
         addParticipantButton.setText(resourceBundle.getString("AddParticipant"));
         warningTitle =resourceBundle.getString("ParticipantAddedWarning");
         warningText =resourceBundle.getString("Theparticipant");
@@ -229,5 +232,8 @@ public class AddParticipantCtrl {
         mainCtrl.showHome();
     }
 
+    public void goToEventOverview() {
+        mainCtrl.showEventOverview(this.currentEvent.getId());
+    }
 
 }
