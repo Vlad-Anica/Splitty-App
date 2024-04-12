@@ -368,6 +368,7 @@ public class EventOverviewCtrl implements Initializable {
         } else {
             this.severPersonConnection(selectedPerson);
         }
+        refresh();
     }
 
     /**
@@ -392,24 +393,21 @@ public class EventOverviewCtrl implements Initializable {
         for(Expense expense : expenseList) {
             if(expense.getInvolved().contains(person)) {
                 if(expense.getReceiver().equals(person)) {
-                    this.event.removeExpense(expense);
                     expense.setReceiver(null);
                     server.updateExpense(expense.getId(), expense);
-                    server.deleteExpense(expense.getId());
+                    severExpenseConnection(expense);
                 } else {
                     List<Person> persons = expense.getInvolved();
                     persons.remove(expense.getReceiver());
-                    expense.setReceiver(null);
-                    server.updateExpense(expense.getId(), expense);
                     if(persons.size() == 1) {
-                        this.event.removeExpense(expense);
-                        server.deleteExpense(expense.getId());
+                        expense.setReceiver(null);
+                        server.updateExpense(expense.getId(), expense);
+                        severExpenseConnection(expense);
                     }
                 }
             }
         }
         this.event.removeParticipant(person);
-        server.deletePerson(person.getId());
         server.updateEvent(this.event.getId(), this.event);
         server.deletePerson(person.getId());
         this.setup(eventId);
@@ -701,8 +699,8 @@ public class EventOverviewCtrl implements Initializable {
             return false;
         }
         this.event.removeExpense(expense);
-        server.deleteExpense(expense.getId());
         server.updateEvent(this.event.getId(), this.event);
+        server.deleteExpense(expense.getId());
         this.setup(eventId);
         return true;
     }
