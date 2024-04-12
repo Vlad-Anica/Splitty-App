@@ -125,6 +125,7 @@ public class MainCtrl {
             languages = new ArrayList<>();
             languages.add("English(US);client/images/EnglishFlag.jpg");
             languages.add("Nederlands;client/images/DutchFlag.png");
+            languages.add("Romana;client/images/RomanianFlag.png");
             Pair<Integer, List<String>> languageData = new Pair<>(0, languages);
             try {
                 languageFile.createNewFile();
