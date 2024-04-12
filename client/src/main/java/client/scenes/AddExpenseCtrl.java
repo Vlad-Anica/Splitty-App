@@ -124,7 +124,7 @@ public class AddExpenseCtrl {
             inEditMode = isInEditMode;
             event = server.getEvent(eventID);
             participants = new ArrayList<>();
-            participants.addAll(server.getPersons());
+            participants.addAll(event.getParticipants());
             int y = 5;
             for (Person p : participants) {
                 CheckBox newBox = new CheckBox(
