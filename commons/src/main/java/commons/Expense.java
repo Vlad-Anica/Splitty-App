@@ -248,47 +248,47 @@ public class Expense {
      * updates the amount number depending on the currency
      */
     public void convertCurrency(Currency newCurrency){
-        switch (this.currency){
-            case EUR: {
-                switch(newCurrency){
-                    case EUR: {
-                        break;
-                    }
-                    case USD: {
-                        this.amount = this.amount * 1.09;
-                    }
-                    case CHF:{
-                        this.amount = this.amount * 0.96;
-                    }
-                }
-            }
-            case USD: {
-                switch(newCurrency){
-                    case EUR: {
-                        this.amount = this.amount * 0.92;
-                    }
-                    case USD: {
-                        break;
-                    }
-                    case CHF:{
-                        this.amount = this.amount * 0.88;
-                    }
-                }
-            }
-            case CHF:{
-                switch(newCurrency){
-                    case EUR: {
-                        this.amount = this.amount * 1.04;
-                    }
-                    case USD: {
-                        this.amount = this.amount * 1.13;
-                    }
-                    case CHF:{
-                        break;
-                    }
-                }
-            }
-        }
+//        switch (this.currency){
+//            case EUR: {
+//                switch(newCurrency){
+//                    case EUR: {
+//                        break;
+//                    }
+//                    case USD: {
+//                        this.amount = this.amount * 1.09;
+//                    }
+//                    case CHF:{
+//                        this.amount = this.amount * 0.96;
+//                    }
+//                }
+//            }
+//            case USD: {
+//                switch(newCurrency){
+//                    case EUR: {
+//                        this.amount = this.amount * 0.92;
+//                    }
+//                    case USD: {
+//                        break;
+//                    }
+//                    case CHF:{
+//                        this.amount = this.amount * 0.88;
+//                    }
+//                }
+//            }
+//            case CHF:{
+//                switch(newCurrency){
+//                    case EUR: {
+//                        this.amount = this.amount * 1.04;
+//                    }
+//                    case USD: {
+//                        this.amount = this.amount * 1.13;
+//                    }
+//                    case CHF:{
+//                        break;
+//                    }
+//                }
+//            }
+//        }
 
     }
 
