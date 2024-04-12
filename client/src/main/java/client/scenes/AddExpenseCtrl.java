@@ -98,6 +98,8 @@ public class AddExpenseCtrl {
     private String alertText;
     private String whoPaidString;
     private String whatTypeString;
+    private String expenseCreatedSuccess;
+    private String expenseEditedSuccess;
     private boolean inEditMode;
 
     @Inject
@@ -118,7 +120,7 @@ public class AddExpenseCtrl {
     public void initializePage(long eventID, boolean isInEditMode, Expense expense)  {
 
         try {
-
+            clearFields();
             inEditMode = isInEditMode;
             event = server.getEvent(eventID);
             participants = new ArrayList<>();
@@ -168,7 +170,7 @@ public class AddExpenseCtrl {
                 dateField.getEditor().setText(parsedDate);
                 typeComboBox.setValue(expense.getTag().getType());
                 descriptionField.setText(expenseToEdit.getDescription());
-                amountField.setText(BigDecimal.valueOf(expense.getAmount() + 0.0)
+                amountField.setText(BigDecimal.valueOf(expense.getAmount())
                         .setScale(2, RoundingMode.HALF_UP)
                         .doubleValue()+"");
             }
@@ -197,6 +199,8 @@ public class AddExpenseCtrl {
         dateLabel.setText(resourceBundle.getString("When"));
         chooseText.setText(resourceBundle.getString("HowToSplit"));
         splitEvenButton.setText(resourceBundle.getString("SplitEvenly"));
+        expenseCreatedSuccess = resourceBundle.getString("ExpenseCreated");
+        expenseEditedSuccess = resourceBundle.getString("ExpenseEdited");
         splitButton.setText(resourceBundle.getString("SomePeople"));
         typeText.setText(resourceBundle.getString("ExpenseType"));
         whatTypeString = resourceBundle.getString("ChooseAType");
@@ -218,7 +222,7 @@ public class AddExpenseCtrl {
             {
                 statusLabel.setStyle("-fx-font-weight: bold");
                 statusLabel.setTextFill(Color.RED);
-                statusLabel.setText("Fill out every field correctly!");
+                statusLabel.setText(warningText);
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle(warningTitle);
                 alert.setContentText(warningText);
@@ -246,9 +250,8 @@ public class AddExpenseCtrl {
                 LocalDate localDate = dateField.getValue();
                 Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
-                Expense e = new Expense(description, 0.0, date, getPayerData(), getAllGivers(),
+                Expense e = new Expense(description, amount, date, getPayerData(), getAllGivers(),
                     getCurrencyData(), getTypeData());
-                e.setAmount(0.0 + amount);
 
                if (inEditMode) {
                    if (event.containsExpense(expenseToEdit))
@@ -268,16 +271,19 @@ public class AddExpenseCtrl {
                      event.addExpense(expenseToEdit);
 
                    server.updateEvent(event.getId(), event);
+                   statusLabel.setText(expenseEditedSuccess);
                }
                else {
-                  // server.send("/app/expenses", e);
+                   //server.send("/app/expenses", e);
                    event.addExpense(e);
                    server.send("/app/events", event);
+                   statusLabel.setText(expenseCreatedSuccess);
                }
 
 
                System.out.println("Created expense");
-               statusLabel.setText("Expense created!");
+
+               statusLabel.setTextFill(Color.BLACK);
                clearFields();
             }
             else{
@@ -407,6 +413,7 @@ public class AddExpenseCtrl {
         descriptionField.clear();
         dateField.getEditor().clear();
         typeComboBox.setPromptText(whatTypeString);
+        statusLabel.setText("");
 
     }
 

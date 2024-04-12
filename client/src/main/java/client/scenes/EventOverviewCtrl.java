@@ -25,9 +25,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -255,6 +252,12 @@ public class EventOverviewCtrl implements Initializable {
                 refresh();
             });
 
+        });
+        server.registerForUpdate("/topic/events", Expense.class, e -> {
+            Platform.runLater(() -> {
+                expenseData.add(e);
+                refresh();
+            });
         });
         EditTitlePane.setVisible(false);
         try {
@@ -584,31 +587,8 @@ public class EventOverviewCtrl implements Initializable {
                 filteringExpensesPane.getChildren().add(label);
                 label.setLayoutY(5);
             }
-            int y = 5;
-            for (Expense e : selectedExpenses) {
-                Double amount = e.getAmount();
-                Double realAmount = BigDecimal.valueOf(amount)
-                        .setScale(2, RoundingMode.HALF_UP)
-                        .doubleValue();
-                LocalDate shownDate = e.getDate().toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
-                String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
-                CheckBox newBox = new CheckBox(
-                        e.getReceiver().getFirstName() + " paid " + realAmount +
-                                e.getCurrency() + " for " + e.getDescription() +
-                                " at " + parsedDate);
-                filteringExpensesPane.getChildren().add(newBox);
-                newBox.setOnAction(event -> {
-                    toggleInSelectedExpenses(e);
-                    //computeSelectedExpenses();
-                });
-                newBox.setLayoutY(y);
-                y += 25;
-                return;
-            }
+
             expenseListView.setItems(FXCollections.observableList(selectedExpenses));
-            expenseCheckBoxes = filteringExpensesPane.getChildren().stream().map(t -> (CheckBox) t).toList();
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
