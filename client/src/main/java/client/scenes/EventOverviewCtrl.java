@@ -342,10 +342,29 @@ public class EventOverviewCtrl {
             System.out.println("Event doesn't contain the Person!");
             return false;
         }
-        this.event.severPersonConnection(person);
-        this.event.getParticipants().remove(person);
-        server.deletePerson(person.getId());
+        List<Expense> expenseList = new ArrayList<>(event.getExpenses());
+        for(Expense expense : expenseList) {
+            if(expense.getInvolved().contains(person)) {
+                if(expense.getReceiver().equals(person)) {
+                    this.event.removeExpense(expense);
+                    expense.setReceiver(null);
+                    server.updateExpense(expense.getId(), expense);
+                    server.deleteExpense(expense.getId());
+                } else {
+                    List<Person> persons = expense.getInvolved();
+                    persons.remove(expense.getReceiver());
+                    expense.setReceiver(null);
+                    server.updateExpense(expense.getId(), expense);
+                    if(persons.size() == 1) {
+                        this.event.removeExpense(expense);
+                        server.deleteExpense(expense.getId());
+                    }
+                }
+            }
+        }
+        this.event.removeParticipant(person);
         server.updateEvent(this.event.getId(), this.event);
+        server.deletePerson(person.getId());
         this.setup(eventId);
         return true;
     }

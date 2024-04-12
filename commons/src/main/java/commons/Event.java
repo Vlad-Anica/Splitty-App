@@ -401,7 +401,8 @@ public class Event {
      * @param person Person to remove from the Event
      */
     public void severPersonConnection(Person person) {
-        for(Expense expense : this.getExpenses()) {
+        List<Expense> expenseList = new ArrayList<>(getExpenses());
+        for(Expense expense : expenseList) {
             if(expense.getInvolved().contains(person)) {
                 if(expense.getReceiver().equals(person)) {
                     this.removeExpense(expense);
