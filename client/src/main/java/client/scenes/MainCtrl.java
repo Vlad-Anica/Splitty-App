@@ -417,6 +417,7 @@ public class MainCtrl {
     public void showAddParticipant(Long eventId, boolean isInEditMode, Person participantToEdit) {
         primaryStage.setTitle("Show Participants");
         primaryStage.setScene(addParticipantScene);
+        addParticipantScene.getStylesheets().add("/client/css/addParticipant.css");
         addParticipantCtrl.setup(eventId, isInEditMode, participantToEdit);
     }
 
