@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddParticipantCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddParticipantCtrl" style=" -fx-background-color: #fffaf4;">
     <children>
         <Button fx:id="addParticipantButton" layoutX="225.0" layoutY="317.0" mnemonicParsing="false" onAction="#addParticipant" text="Add Participant" textAlignment="CENTER" />
         <TextField fx:id="firstName" layoutX="117.0" layoutY="109.0" prefHeight="25.0" prefWidth="138.0" promptText="First Name" />
