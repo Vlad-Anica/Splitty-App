@@ -277,6 +277,12 @@ public class EventOverviewCtrl implements Initializable {
             });
 
         });
+        server.registerForUpdate("/topic/events", Expense.class, e -> {
+            Platform.runLater(() -> {
+                expenseData.add(e);
+                refresh();
+            });
+        });
         EditTitlePane.setVisible(false);
         try {
             Image refreshImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/client/images/Refresh.png")));
@@ -389,6 +395,7 @@ public class EventOverviewCtrl implements Initializable {
         } else {
             this.severPersonConnection(selectedPerson);
         }
+        refresh();
     }
 
     /**
@@ -409,9 +416,27 @@ public class EventOverviewCtrl implements Initializable {
             System.out.println("Event doesn't contain the Person!");
             return;
         }
-        this.event.severPersonConnection(person);
-        server.deletePerson(person.getId());
+        List<Expense> expenseList = new ArrayList<>(event.getExpenses());
+        for(Expense expense : expenseList) {
+            if(expense.getInvolved().contains(person)) {
+                if(expense.getReceiver().equals(person)) {
+                    expense.setReceiver(null);
+                    server.updateExpense(expense.getId(), expense);
+                    severExpenseConnection(expense);
+                } else {
+                    List<Person> persons = expense.getInvolved();
+                    persons.remove(expense.getReceiver());
+                    if(persons.size() == 1) {
+                        expense.setReceiver(null);
+                        server.updateExpense(expense.getId(), expense);
+                        severExpenseConnection(expense);
+                    }
+                }
+            }
+        }
+        this.event.removeParticipant(person);
         server.updateEvent(this.event.getId(), this.event);
+        server.deletePerson(person.getId());
         this.setup(eventId);
     }
 
@@ -586,10 +611,9 @@ public class EventOverviewCtrl implements Initializable {
                 Label label = new Label("There's nothing to display, silly!");
                 filteringExpensesPane.getChildren().add(label);
                 label.setLayoutY(5);
-                return;
             }
+
             expenseListView.setItems(FXCollections.observableList(selectedExpenses));
-            expenseCheckBoxes = filteringExpensesPane.getChildren().stream().map(t -> (CheckBox) t).toList();
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -681,6 +705,7 @@ public class EventOverviewCtrl implements Initializable {
         }
         this.event.removeExpense(expense);
         server.updateEvent(this.event.getId(), this.event);
+        server.deleteExpense(expense.getId());
         this.setup(eventId);
         return true;
     }

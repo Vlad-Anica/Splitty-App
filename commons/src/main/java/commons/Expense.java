@@ -9,6 +9,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -308,9 +310,12 @@ public class Expense {
         LocalDate shownDate = getDate().toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
+        String truncatedAmount = BigDecimal.valueOf(amount)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue()+"";
         String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
-        return receiver.getFirstName() + " " + receiver.getLastName() + " paid " + amount + currency +
-                " for " + description + " at " + parsedDate;
+        return receiver.getFirstName() + " " + receiver.getLastName() + " paid " + truncatedAmount +
+                currency + " for " + description + " at " + parsedDate;
     }
 }
 
