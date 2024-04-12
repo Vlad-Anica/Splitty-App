@@ -257,8 +257,9 @@ public class EventOverviewCtrl implements Initializable {
         try {
             Image refreshImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/client/images/Refresh.png")));
             ImageView refreshImageView = new ImageView(refreshImage);
-            refreshImageView.setFitHeight(27);
-            refreshImageView.setFitWidth(30);
+            refreshImageView.setTranslateX(-4);
+            refreshImageView.setFitHeight(20);
+            refreshImageView.setFitWidth(20);
             refreshInviteCodeButton.setGraphic(refreshImageView);
             this.showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(new ArrayList<String>(List.of("Participants"))));
             eventId = eventID;
