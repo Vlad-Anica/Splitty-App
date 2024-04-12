@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddParticipantCtrl" style=" -fx-background-color: #fffaf4;">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style=" -fx-background-color: #fffaf4;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddParticipantCtrl">
     <children>
         <Button fx:id="addParticipantButton" layoutX="225.0" layoutY="317.0" mnemonicParsing="false" onAction="#addParticipant" text="Add Participant" textAlignment="CENTER" />
         <TextField fx:id="firstName" layoutX="117.0" layoutY="109.0" prefHeight="25.0" prefWidth="138.0" promptText="First Name" />
@@ -20,6 +20,6 @@
       <TextField fx:id="BIC" layoutX="292.0" layoutY="254.0" prefHeight="25.0" prefWidth="138.0" promptText="BIC" />
       <Label layoutX="300.0" layoutY="227.0" text="BIC" />
       <Button fx:id="goHomeButton" layoutX="537.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
-      <Button fx:id="goBackButton" layoutX="468.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToEventOverview" text="Back" />
+      <Button fx:id="goBackButton" layoutX="461.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToEventOverview" prefHeight="25.0" prefWidth="64.0" text="Back" />
     </children>
 </AnchorPane>
