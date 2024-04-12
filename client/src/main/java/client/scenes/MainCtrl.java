@@ -387,7 +387,9 @@ public class MainCtrl {
     public void showEventOverview(Long eventId) {
         eventOverviewCtrl.setup(eventId);
         primaryStage.setTitle("Event Overview");
+        eventOverviewScene.getStylesheets().add("client/css/EventOverview.css");
         primaryStage.setScene(eventOverviewScene);
+        eventOverviewCtrl.refresh();
     }
 
     public void showCreateEvent() {
@@ -415,6 +417,7 @@ public class MainCtrl {
     public void showAddParticipant(Long eventId, boolean isInEditMode, Person participantToEdit) {
         primaryStage.setTitle("Show Participants");
         primaryStage.setScene(addParticipantScene);
+        addParticipantScene.getStylesheets().add("/client/css/addParticipant.css");
         addParticipantCtrl.setup(eventId, isInEditMode, participantToEdit);
     }
 

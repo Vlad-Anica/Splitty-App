@@ -94,6 +94,7 @@ public class HomeCtrl {
 
         server.registerForAddition("/topic/events", Event.class, e -> {
             eventData.add(e);
+            eventIds.add(e.getId());
             System.out.println("refreshed");
             refresh();
         });
@@ -136,6 +137,7 @@ public class HomeCtrl {
     public void refresh() {
         var events = server.getEvents(mainCtrl.getUserId());
         eventData = FXCollections.observableList(events);
+        eventIds = events.stream().map(e -> e.getId()).toList();
         eventList.setItems(FXCollections.observableList(eventData.stream().map(Event::getName).toList()));
 
     }

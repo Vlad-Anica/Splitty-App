@@ -270,8 +270,9 @@ public class AddExpenseCtrl {
                    server.updateEvent(event.getId(), event);
                }
                else {
+                  // server.send("/app/expenses", e);
                    event.addExpense(e);
-                   server.updateEvent(event.getId(), event);
+                   server.send("/app/events", event);
                }
 
 
