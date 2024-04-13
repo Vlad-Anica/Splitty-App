@@ -51,6 +51,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
 public class ServerUtils {
 
@@ -647,6 +648,25 @@ public class ServerUtils {
 				.get();
 		if (res.getStatus() == Response.Status.OK.getStatusCode()) {
 			Desktop.getDesktop().browse(new URI(SERVER + "api/events/" + eventId + "/download"));
+		}
+		else {
+			System.out.println(res.getStatus());
+		}
+
+		res.close();
+		client.close();
+	}
+
+	public void downloadLanguageTemplate() throws URISyntaxException, IOException {
+
+		Client client = ClientBuilder.newClient();
+		Response res = client.target(SERVER).path("api/downloads/languageTemplate")
+				.request(TEXT_PLAIN)
+				.accept(TEXT_PLAIN)
+				.get();
+
+		if (res.getStatus() == Response.Status.OK.getStatusCode()) {
+			Desktop.getDesktop().browse(new URI(SERVER + "api/downloads/languageTemplate"));
 		}
 		else {
 			System.out.println(res.getStatus());
