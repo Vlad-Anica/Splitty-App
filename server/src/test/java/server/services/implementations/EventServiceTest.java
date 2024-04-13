@@ -112,7 +112,7 @@ class EventServiceTest {
     }
 
     @Test
-    void getEventsOrderedByUpdatedAt(){
+    void testGetEventsOrderedByUpdatedAt(){
         events.add(event2);
         events.add(event1);
 
@@ -124,7 +124,7 @@ class EventServiceTest {
     }
 
     @Test
-    void getEventsOrderedByCreatedAt(){
+    void testGetEventsOrderedByCreatedAt(){
         events.add(event1);
         events.add(event2);
 
@@ -136,7 +136,7 @@ class EventServiceTest {
     }
 
     @Test
-    void getEventsOrderedByName(){
+    void testGetEventsOrderedByName(){
         events.add(event1);
         events.add(event2);
 
