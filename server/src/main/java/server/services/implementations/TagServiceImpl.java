@@ -1,6 +1,5 @@
 package server.services.implementations;
 
-import commons.Expense;
 import commons.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
