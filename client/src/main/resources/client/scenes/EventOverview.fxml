@@ -74,5 +74,6 @@
                 <Button fx:id="hideEditPage" layoutX="315.0" layoutY="14.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="25.0" prefWidth="26.0" text="X" />
             </children>
         </Pane>
+      <Button fx:id="showExpenseOverviewButton" layoutX="635.0" layoutY="69.0" mnemonicParsing="false" onAction="#showExpenseOverview" prefHeight="27.0" prefWidth="150.0" text="Expense Details" />
     </children>
 </Pane>

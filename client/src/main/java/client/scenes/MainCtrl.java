@@ -91,6 +91,8 @@ public class MainCtrl {
     private Scene seeEventsAsAdminScene;
     private Scene selectServerScene;
     private SelectServerCtrl selectServerCtrl;
+    private Scene expenseOverviewScene;
+    private ExpenseOverviewCtrl expenseOverviewCtrl;
 
 
     private ServerUtils server;
@@ -114,7 +116,7 @@ public class MainCtrl {
                            Pair<ManagementOverviewCtrl, Parent> managementOverview, Pair<AddLanguageCtrl, Parent> addLanguage,
                            Pair<StartPageCtrl, Parent> startPage, Pair<SeeEventsAsAdminCtrl, Parent> seeEventsAsAdmin,
                            Pair<CreateEventCtrl, Parent> createEvent, Pair<SelectServerCtrl, Parent> selectServer,
-                           ServerUtils server) {
+                           ServerUtils server, Pair<ExpenseOverviewCtrl, Parent> expenseOverview) {
         this.emailAddress = "";
         this.emailPort = "";
         this.smtp = "";
@@ -182,6 +184,9 @@ public class MainCtrl {
 
         this.selectServerCtrl = selectServer.getKey();
         this.selectServerScene = new Scene(selectServer.getValue());
+
+        this.expenseOverviewCtrl = expenseOverview.getKey();
+        this.expenseOverviewScene = new Scene(expenseOverview.getValue());
 
         this.server = server;
 
@@ -604,6 +609,12 @@ public class MainCtrl {
         primaryStage.setTitle("Statistics");
         primaryStage.setScene(statisticsScene);
 
+    }
+
+    public void showExpenseOverview(Long eventId, Long expenseId){
+        expenseOverviewCtrl.setup(eventId, expenseId);
+        primaryStage.setTitle("Expense");
+        primaryStage.setScene(expenseOverviewScene);
     }
 
     public void showManagementOverview() {

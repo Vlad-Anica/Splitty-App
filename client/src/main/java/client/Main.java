@@ -52,10 +52,11 @@ public class Main extends Application {
         var seeEventsAsAdmin = FXML.load(SeeEventsAsAdminCtrl.class, bundle, "client", "scenes", "SeeEventsAsAdmin.fxml");
         var createEvent =  FXML.load(CreateEventCtrl.class, bundle, "client", "scenes", "CreateEvent.fxml");
         var selectServer = FXML.load(SelectServerCtrl.class, bundle, "client", "scenes", "SelectServer.fxml");
+        var expenseOverview = FXML.load(ExpenseOverviewCtrl.class, bundle, "client", "scenes", "ExpenseOverview.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         ServerUtils server = INJECTOR.getInstance(ServerUtils.class);
-        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, managementOverview, addLanguage, startPage, seeEventsAsAdmin, createEvent, selectServer, server);
+        mainCtrl.initialize(primaryStage, settings, addParticipant, home, openDebts, addExpense, eventOverview, statistics, managementOverview, addLanguage, startPage, seeEventsAsAdmin, createEvent, selectServer, server, expenseOverview);
         primaryStage.setOnCloseRequest(e -> {
             seeEventsAsAdmin.getKey().stop();
         });
