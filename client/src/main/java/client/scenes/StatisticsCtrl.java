@@ -12,9 +12,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -42,7 +44,8 @@ private Label totalExpensesLabel;
 
 @FXML
 PieChart PieChartExpenses;
-
+@FXML
+Label pieChartDataLabel;
 @FXML
 Button goBackButton;
 @FXML
@@ -80,10 +83,10 @@ ObservableList<PieChart.Data> pieChartExpensesData =
         } catch (Exception e){
             System.out.println("An error has occured when fetching the expenses!");
         }
+        HashMap<Tag, Double> map = new HashMap<Tag, Double>();
         try{
-            tags = new ArrayList<>();
             for (Expense e : allExpenses){
-                tags.add(e.getTag());
+                map.merge(e.getTag(), e.getAmount(), Double::sum);
             }
         } catch (Exception e){
             System.out.println("Whoopsie, an error has occured!");
@@ -91,23 +94,8 @@ ObservableList<PieChart.Data> pieChartExpensesData =
         }
         //pieChartExpensesData.clear();
         try{
-            ArrayList<String> uniqueTags = new ArrayList<>();
-            ArrayList<String> allTagNames = new ArrayList<>();
-            for (Tag tag : tags){
+            map.forEach((tag, amount)->{
                 String tagName = tag.getType();
-                if(!uniqueTags.contains(tagName)){
-                    uniqueTags.add(tagName);
-                    allTagNames.add(tagName);
-                }
-                else {
-                    allTagNames.add(tagName);
-                }
-            }
-            for (String tagName : uniqueTags){
-                int amount = 0;
-                for (String allTags : allTagNames){
-                    if (allTags.equals(tagName)) amount++;
-                }
                 boolean checker = false;
                 for (PieChart.Data piedata : pieChartExpensesData){
                     if (piedata.getName().equals(tagName)){
@@ -116,13 +104,29 @@ ObservableList<PieChart.Data> pieChartExpensesData =
                     }
                 }
                 if (!checker) pieChartExpensesData.add(new PieChart.Data(tagName, amount));
-            }
+            });
         } catch (Exception e){
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
             System.out.println("An error occured when processing the tags!");
             pieChartExpensesData.add(new PieChart.Data("Whoops No Data Found", 1));
         }
+
+        for (final PieChart.Data data : PieChartExpenses.getData()) {
+            data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,
+                    e -> {
+                        double total = 0;
+                        for (PieChart.Data d : PieChartExpenses.getData()) {
+                            total += d.getPieValue();
+                        }
+                        pieChartDataLabel.setTranslateX(e.getSceneX() - mainCtrl.getPrimaryStage().getWidth()/4);
+                        pieChartDataLabel.setTranslateY(e.getSceneY() - mainCtrl.getPrimaryStage().getHeight()/2.5);
+                        String text = data.getPieValue() + "(" + String.format("%.1f%%", 100*data.getPieValue()/total) + "%)" ;
+                        pieChartDataLabel.setText(text);
+                    }
+            );
+        }
+
         setTotalExpenses();
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
