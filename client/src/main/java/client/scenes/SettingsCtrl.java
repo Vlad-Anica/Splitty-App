@@ -68,9 +68,12 @@ public class SettingsCtrl {
     public void setup() {
         selectedCurrency.setItems(FXCollections.observableList(Stream.of("EUR", "USD", "CHF", "GBP").toList()));
         selectedCurrency.getSelectionModel().select(currency);
+
         firstNameField.setText(mainCtrl.getFirstName());
         lastNameField.setText(mainCtrl.getLastName());
+
         emailField.setText(mainCtrl.getEmailAddress());
+        System.out.println("Settings email check: " + mainCtrl.getEmailPort());
         portField.setText(mainCtrl.getEmailPort());
         smtpField.setText(mainCtrl.getSmtp());
         passwordField.setText(mainCtrl.getEmailPassword());
