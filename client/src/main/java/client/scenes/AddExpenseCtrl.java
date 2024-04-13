@@ -143,10 +143,12 @@ public class AddExpenseCtrl {
             tags.addAll(event.getTags());
             typeComboBox.setItems(FXCollections.observableArrayList(
                     tags.stream().map(Tag::getType).toList()));
-
-            currencyComboBox.setItems(FXCollections.observableList(
-                    List.of(Currency.EUR, Currency.USD,
-                            Currency.CHF, Currency.GBP)));
+            typeComboBox.setOnAction(e -> System.out.println(typeComboBox.getValue()));
+            if(currencyComboBox.getItems().isEmpty()) {
+                currencyComboBox.setItems(FXCollections.observableList(
+                        List.of(Currency.EUR, Currency.USD,
+                                Currency.CHF, Currency.GBP)));
+            }
             currencyComboBox.getSelectionModel().selectFirst();
 
             checkPersonBoxes(new ActionEvent());
@@ -380,6 +382,7 @@ public class AddExpenseCtrl {
         Tag t = null;
         if (typeComboBox.getValue() != null) {
             String tagName = typeComboBox.getValue();
+            System.out.println(tagName);
             for (Tag tag : tags)
                 if (tag.getType().equals(tagName))
                     t = tag;

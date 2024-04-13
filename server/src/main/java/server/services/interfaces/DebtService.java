@@ -11,4 +11,6 @@ public interface DebtService {
     public Debt save(Debt debt);
     public boolean existsById(long id);
     public Debt getReferenceById(long id);
+
+    List<Debt> getByPersonId(long id);
 }
