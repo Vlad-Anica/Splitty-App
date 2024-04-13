@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -39,33 +41,38 @@
             <Insets top="2.0" />
          </opaqueInsets>
       </Label>
-      <Button fx:id="goToEditExpenseButton" layoutX="175.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditExpense" prefHeight="40.0" prefWidth="410.0" style="-fx-border-color: rgb(128,128,128);" text="Edit the Expense!" />
-      <Button fx:id="removeExpensesButton" layoutX="585.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeExpenses" prefHeight="40.0" prefWidth="40.0" text="---">
+      <Button fx:id="goToEditExpenseButton" layoutX="175.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditExpense" prefHeight="40.0" prefWidth="250.0" style="-fx-border-color: rgb(128,128,128);" text="Edit the Expense!" />
+      <Button fx:id="removeExpensesButton" layoutX="425.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeExpenses" prefHeight="40.0" prefWidth="200.0" text="Delete">
          <font>
             <Font name="Arial Nova Cond" size="12.0" />
          </font></Button>
-      <Button fx:id="goToEditPersonButton" layoutX="25.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditPerson" prefHeight="40.0" prefWidth="110.0" text="Edit their info!" />
-      <Button fx:id="removePersonButton" layoutX="135.0" layoutY="450.0" mnemonicParsing="false" onAction="#removePerson" prefHeight="40.0" prefWidth="40.0" text="---">
+      <Button fx:id="goToEditPersonButton" layoutX="18.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditPerson" prefHeight="40.0" prefWidth="74.0" text="Edit" />
+      <Button fx:id="removePersonButton" layoutX="92.0" layoutY="450.0" mnemonicParsing="false" onAction="#removePerson" prefHeight="40.0" prefWidth="74.0" text="Delete">
          <font>
             <Font name="Arial Nova Cond" size="12.0" />
          </font></Button>
       <AnchorPane fx:id="chooseTagsPane" layoutX="625.0" layoutY="142.0" prefHeight="280.0" prefWidth="100.0" />
-      <Button fx:id="goToEditTagButton" layoutX="625.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditTag" prefHeight="40.0" prefWidth="110.0" text="Edit the Tag!" />
+      <Button fx:id="goToEditTagButton" layoutX="635.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditTag" prefHeight="40.0" prefWidth="100.0" text="Edit the Tag!" />
         <Button fx:id="goToAddExpenseButton" layoutX="595.0" layoutY="115.0" maxHeight="27.0" mnemonicParsing="false" onAction="#goToAddExpense" prefHeight="27.0" prefWidth="30.0" text="+" textAlignment="CENTER" />
-      <Button fx:id="removeTagButton" layoutX="735.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeTags" prefHeight="40.0" prefWidth="40.0" text="---">
+      <Button fx:id="removeTagButton" layoutX="735.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeTags" prefHeight="40.0" prefWidth="60.0" text="Delete">
          <font>
             <Font name="Arial Nova Cond" size="12.0" />
          </font></Button>
       <Button fx:id="showAllTagsInEvent" layoutX="625.0" layoutY="115.0" mnemonicParsing="false" onAction="#showAllTagsInEvent" prefHeight="27.0" prefWidth="150.0" text="Tags" />
       <Button fx:id="editTitleButton" layoutX="475.0" layoutY="55.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="27.0" prefWidth="150.0" text="Edit Title" />
       <Button fx:id="refreshInviteCodeButton" alignment="CENTER_RIGHT" layoutX="445.0" layoutY="55.0" maxHeight="27.0" maxWidth="30.0" minHeight="27.0" minWidth="30.0" mnemonicParsing="false" onAction="#refreshInviteCode" prefHeight="27.0" prefWidth="30.0" text="Refresh" />
-      <Pane fx:id="EditTitlePane" layoutX="222.5" layoutY="169.0" prefHeight="200.0" prefWidth="355.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutX="14.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" width="355.0" />
-            <TextField fx:id="editTitleTextField" layoutX="27.0" layoutY="77.0" prefHeight="46.0" prefWidth="174.0" promptText="New Text" />
-            <Button fx:id="SubmitEditButton" layoutX="244.0" layoutY="87.0" mnemonicParsing="false" onAction="#UpdateTitle" text="Submit" />
-            <Button fx:id="hideEditPage" layoutX="315.0" layoutY="14.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="25.0" prefWidth="26.0" text="X" />
-         </children>
-      </Pane>
+        <ScrollPane hbarPolicy="NEVER" layoutX="175.0" layoutY="170.0" pannable="true" prefHeight="280.0" prefWidth="450.0" vbarPolicy="ALWAYS">
+            <content>
+                <ListView fx:id="expenseListView" prefHeight="463.0" prefWidth="437.0" />
+            </content>
+        </ScrollPane>
+        <Pane fx:id="EditTitlePane" layoutX="132.0" layoutY="100.0" prefHeight="200.0" prefWidth="355.0" visible="false">
+            <children>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="355.0" />
+                <TextField fx:id="editTitleTextField" layoutX="27.0" layoutY="77.0" prefHeight="46.0" prefWidth="174.0" promptText="New Text" />
+                <Button fx:id="SubmitEditButton" layoutX="244.0" layoutY="87.0" mnemonicParsing="false" onAction="#UpdateTitle" text="Submit" />
+                <Button fx:id="hideEditPage" layoutX="315.0" layoutY="14.0" mnemonicParsing="false" onAction="#showEditPage" prefHeight="25.0" prefWidth="26.0" text="X" />
+            </children>
+        </Pane>
     </children>
 </Pane>

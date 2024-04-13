@@ -1,0 +1,11 @@
+* {
+    -fx-blue-color: #72a4ff;
+    -fx-offwhite-color: #fffaf4;
+    -fx-font-family: Rowdies;
+}
+
+.button {
+    -fx-background-color: -fx-blue-color;
+    -fx-text-background-color: -fx-blue-color;
+    -fx-text-fill: -fx-offwhite-color;
+}

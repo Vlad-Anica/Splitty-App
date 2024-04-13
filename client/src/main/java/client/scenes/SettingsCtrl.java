@@ -62,7 +62,7 @@ public class SettingsCtrl {
         alertServerSwitchText = resourceBundle.getString("ConfirmServerSwitch");
         currencyText.setText(resourceBundle.getString("PreferredCurrency"));
         publicUsernameText.setText(resourceBundle.getString("PublicUsername"));
-        btnSelectServer.setText("ChangeServer");
+        btnSelectServer.setText(resourceBundle.getString("ChangeServer"));
 
     }
     public void clickBtnSubmitAll() {
