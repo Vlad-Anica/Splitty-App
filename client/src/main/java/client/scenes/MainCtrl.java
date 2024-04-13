@@ -20,6 +20,7 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Person;
+import commons.User;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -102,9 +103,7 @@ public class MainCtrl {
     private String currentIPAddress;
     private File userConfig;
     private Integer currentPort;
-
-    private File mailConfig = new File("./src/main/resources/userConfig/mailConfig.txt");
-
+    private String emailAddress, smtp, emailPort, emailPassword;
 
     private final Image logo = new Image("/logos/splittyLogo256.png");
 
@@ -116,15 +115,16 @@ public class MainCtrl {
                            Pair<StartPageCtrl, Parent> startPage, Pair<SeeEventsAsAdminCtrl, Parent> seeEventsAsAdmin,
                            Pair<CreateEventCtrl, Parent> createEvent, Pair<SelectServerCtrl, Parent> selectServer,
                            ServerUtils server) {
+        this.emailAddress = "";
+        this.emailPort = "";
+        this.smtp = "";
+        this.emailPassword = "";
+        this.userId = -1;
         File languageFile = new File("./src/main/resources/languages/languages.txt");
         System.out.println(languageFile.getAbsolutePath());
         if (languageFile.exists()) {
             Pair<Integer, List<String>> pair = readFromFile(languageFile.getAbsolutePath());
-            if (pair == null) {
-                System.out.println("NULLLLLL");
-            }
             assert pair != null;
-
             this.languages = pair.getValue();
         } else {
             languages = new ArrayList<>();
@@ -214,19 +214,42 @@ public class MainCtrl {
 
     public void getLastKnownInfo() {
         if (!userConfig.exists()) {
-            languageIndex = 0;
-            userId = -1;
+            setLanguageIndex(0);
         } else {
             Scanner fileScanner = null;
             try {
                 fileScanner = new Scanner(userConfig);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                ;
             }
-            languageIndex = fileScanner.nextInt();
-            userId = fileScanner.nextLong();
+            languageIndex = Integer.parseInt(fileScanner.nextLine());
+            userId = Long.parseLong(fileScanner.nextLine());
+            emailAddress = fileScanner.nextLine();
+            emailPort = fileScanner.nextLine();
+            smtp = fileScanner.nextLine();
+            emailPassword = fileScanner.nextLine();
         }
+    }
+
+    public void updateUserConfig() {
+        if (!userConfig.exists()) {
+            return;
+        }
+
+        try {
+            PrintWriter writer = new PrintWriter(userConfig);
+            writer.println(languageIndex);
+            writer.println(userId);
+            writer.println(emailAddress);
+            writer.println(emailPort);
+            writer.println(smtp);
+            writer.println(emailPassword);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+
     }
 
     public int getLanguageIndex() {
@@ -251,17 +274,30 @@ public class MainCtrl {
 
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
-
-
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter(userConfig);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        pw.println(this.languageIndex);
-        pw.println(this.userId);
-        pw.close();
+        updateUserConfig();
+    }
+    public void setUserId(long userId) {
+        this.userId = userId;
+        updateUserConfig();
+    }
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+        User u = server.getUserById(userId);
+        u.setEmail(emailAddress);
+        server.saveUser(u);
+        updateUserConfig();
+    }
+    public void setSmtp(String smtp) {
+        this.smtp = smtp;
+        updateUserConfig();
+    }
+    public void setEmailPort(String emailPort) {
+        this.emailPort = emailPort;
+        updateUserConfig();
+    }
+    public void setEmailPassword(String emailPassword) {
+        this.emailPassword = emailPassword;
+        updateUserConfig();
     }
 
     /**
@@ -467,6 +503,25 @@ public class MainCtrl {
         homeCtrl.refresh();
     }
 
+    public void setFirstName(String firstName) {
+        User u = server.getUserById(userId);
+        u.setFirstName(firstName);
+        server.saveUser(u);
+    }
+
+    public void setLastName(String lastName) {
+        User u = server.getUserById(userId);
+        u.setLastName(lastName);
+        server.saveUser(u);
+    }
+
+    public String getFirstName() {
+        return server.getUserById(userId).getFirstName();
+    }
+
+    public String getLastName() {
+        return server.getUserById(userId).getLastName();
+    }
     public void showOpenDebts() {
         primaryStage.setScene(openDebtsScene);
         openDebtsCtrl.setup();
@@ -594,15 +649,56 @@ public class MainCtrl {
     }
 
 
-    public File getMailConfig() {
-        return mailConfig;
-    }
-
 
     public void setServerInfo(String IPAddress, Integer port) {
         this.currentIPAddress = IPAddress;
         this.currentPort = port;
         this.userConfig = new File("userConfig" + getServerInfoPosition(IPAddress, port));
+        try {
+            userConfig.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean sendEmail(String fromEmailAddress, String smtp, String password, String port
+            , String toEmailAddress, String mailMessage, String mailSubject) {
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", smtp);
+        prop.put("mail.smtp.port", port);
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+        Session session = Session.getInstance(prop,
+                new jakarta.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(fromEmailAddress, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(emailAddress));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(toEmailAddress)
+            );
+
+            message.setSubject(mailSubject);
+            message.setText(mailMessage);
+
+            Transport.send(message);
+        }catch (MessagingException e) {
+            //e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkEmailConfig() {
+        return sendEmail(getEmailAddress(), getSmtp(), getEmailPassword(),
+                getEmailPort(), "use.splitty@gmail.com", "",
+                "test connection");
     }
 
 
@@ -622,8 +718,6 @@ public class MainCtrl {
                         return new PasswordAuthentication(username, password);
                     }
                 });
-
-
 
 
         try {
@@ -670,15 +764,16 @@ public class MainCtrl {
         }
     }
 
-    public String getUserMail(){
-        Scanner mailScanner = null;
-        try {
-            mailScanner = new Scanner(mailConfig);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            ;
-        }
-        String userMail = mailScanner.next();
-        return userMail;
+    public String getEmailAddress(){
+        return emailAddress;
+    }
+    public String getSmtp() {
+        return smtp;
+    }
+    public String getEmailPort() {
+        return emailPort;
+    }
+    public String getEmailPassword() {
+        return emailPassword;
     }
 }
