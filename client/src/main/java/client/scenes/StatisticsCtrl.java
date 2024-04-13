@@ -197,6 +197,8 @@ public class StatisticsCtrl implements Initializable {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         totalExpensesLabel.setText(resourceBundle.getString("Totalamounts") + " " + Math.round(totalAmount * 100.0) / 100.0);
+        PieChartPersons.setTitle(resourceBundle.getString("PersonsAreOwed"));
+        PieChartPersons1.setTitle(resourceBundle.getString("PersonsOwed"));
         //HERE IS THE ERROR, AFTER THIS LINE
     }
 
