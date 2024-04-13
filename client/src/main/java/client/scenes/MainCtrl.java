@@ -20,6 +20,9 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Person;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,10 +33,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 
 public class MainCtrl {
 
@@ -100,6 +100,9 @@ public class MainCtrl {
     private boolean restart = false;
     private String currentIPAddress;
     private File userConfig;
+
+    private File mailConfig = new File("./src/main/resources/userConfig/mailConfig.txt");
+
 
     private final Image logo = new Image("/logos/splittyLogo256.png");
 
@@ -553,8 +556,90 @@ public class MainCtrl {
         return userConfig;
     }
 
+
+    public File getMailConfig() {
+        return mailConfig;
+    }
+
     public void setIPAddress(String IPAddress) {
         this.currentIPAddress = IPAddress;
         this.userConfig = new File("userConfig" + getIPAddressPosition(IPAddress));
+    }
+
+
+    public void sendWelcomeMail(String mailAddress, String Name){
+        final String username = "use.splitty";
+        final String password = "sbfs akue pjrj oiqt";
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(prop,
+                new jakarta.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+
+
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("use.splitty@gmail.com", "Splitty App"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(mailAddress)
+            );
+            message.setSubject("Welcome to Splitty " + Name + "!");
+            message.setText(
+                    "We're thrilled to have you here " + Name +",\n" +
+                            "\n" +
+                            "Welcome to Splitty, your go-to app for managing and processing expenses with ease! We're thrilled to have you on board as a new user, and we can't wait for you to experience the convenience and efficiency that Splitty offers.\n" +
+                            "\n" +
+                            "Here's what you can expect from Splitty:\n" +
+                            "\n" +
+                            "Simplified Expense Management: Say goodbye to the hassle of tracking and managing expenses manually. With Splitty, you can effortlessly track your expenses, split debts, and keep your finances organized in one place.\n" +
+                            "\n" +
+                            "Seamless Debt Splitting: Whether you're splitting bills with friends, family, or colleagues, Splitty makes it simple to divide expenses and settle debts fairly. No more awkward conversations or endless calculations – Splitty does the hard work for you.\n" +
+                            "\n" +
+                            "Secure and Private: We take the security and privacy of your financial data seriously. Rest assured that your information is safe and encrypted, so you can use Splitty with confidence.\n" +
+                            "\n" +
+                            "User-Friendly Interface: Splitty is designed with simplicity and ease of use in mind. Our intuitive interface makes it easy for you to navigate the app and access all its features effortlessly.\n" +
+                            "\n" +
+                            "If you have any questions or need assistance, our dedicated support team is here to help. Feel free to reach out to us at use.splitty@gmail.com – we're always happy to assist you.\n" +
+                            "\n" +
+                            "Once again, welcome to Splitty! We're excited to embark on this financial journey with you.\n" +
+                            "\n" +
+                            "Best regards,\n" +
+                            "The Splitty Team\n" +
+                            "\n" +
+                            "Email: use.splitty@gmail.com");
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getUserMail(){
+        Scanner mailScanner = null;
+        try {
+            mailScanner = new Scanner(mailConfig);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            ;
+        }
+        String userMail = mailScanner.next();
+        return userMail;
     }
 }
