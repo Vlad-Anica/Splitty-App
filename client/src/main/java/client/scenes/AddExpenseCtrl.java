@@ -446,6 +446,7 @@ public class AddExpenseCtrl {
         Tag tag = (new Tag(tagColorPicker.getValue().toString(), tagNameField.getText()));
         tags.add(tag);
         typeComboBox.getItems().add(tag.getType());
+        this.event.addTag(tag);
         server.addTag(tag);
         tagColorPicker.setDisable(true);
         tagColorPicker.setVisible(false);

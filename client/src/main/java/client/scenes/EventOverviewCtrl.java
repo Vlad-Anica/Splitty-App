@@ -316,7 +316,6 @@ public class EventOverviewCtrl implements Initializable {
                 computeSelectedPerson();
                 showAllParticipantsInEvent(e);
             });
-            //showAllParticipantsInEventComboBox.setOnAction(this::showAllParticipantsInEvent);
 
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
@@ -325,8 +324,6 @@ public class EventOverviewCtrl implements Initializable {
                 this.removePersonButton.setVisible(true);
             }
             this.filteringExpensesPane.setVisible(false);
-            this.goToEditExpenseButton.setVisible(false);
-            this.removeExpensesButton.setVisible(false);
 
             this.goToEditTagButton.setVisible(false);
             this.removeTagButton.setVisible(false);
@@ -444,16 +441,9 @@ public class EventOverviewCtrl implements Initializable {
      * Method that sets or resets visibility to buttons related to filtering and selecting Expenses.
      */
     public void expenseFilteringVisibilityCheck() {
-        if (this.selectedPerson == null) {
-            resetExpenseFilteringPane();
-            this.filteringExpensesPane.setVisible(false);
-            this.goToEditExpenseButton.setVisible(false);
-            this.removeExpensesButton.setVisible(false);
-        } else {
             this.filteringExpensesPane.setVisible(true);
             this.goToEditExpenseButton.setVisible(true);
             this.removeExpensesButton.setVisible(true);
-        }
     }
 
     /**
