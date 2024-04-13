@@ -70,7 +70,7 @@ public class UserController {
     public ResponseEntity<List<Expense>> getExpenses(@PathVariable("id") long id) {
         return userService.getExpenses(id);
     }
-    @GetMapping(path = {"/add"})
+    @PostMapping(path = {"/add"})
     public ResponseEntity<User> add(@RequestBody User user){
         User savedUser = userService.save(user);
         if(savedUser == null) {

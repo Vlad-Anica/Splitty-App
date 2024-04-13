@@ -412,6 +412,16 @@ public class ServerUtils {
 				.post(Entity.entity(new User(firstName,lastName,email,preferredCurency), APPLICATION_JSON), User.class);
 	}
 
+	public User saveUser(User user){
+		System.out.println("Server: " + getSERVER());
+
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("/user/add")
+				.request(APPLICATION_JSON)
+				.post(Entity.entity(user, APPLICATION_JSON), User.class);
+	}
+
 	/**
 	 * Returns an Event Object associated with the iD if possible. TO-DO FINISH
 	 * @param eventID long, representing the Event's ID
