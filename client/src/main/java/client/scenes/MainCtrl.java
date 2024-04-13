@@ -339,6 +339,7 @@ public class MainCtrl {
         List<String> IPAddresses = getUsedIPAddresses();
         IPAddresses.add(IPAddress);
         List<Integer> ports = getUsedPorts();
+        ports.add(port);
         File file = getOrCreateFile("./src/main/resources/userInfo/IPAddresses.txt");
         PrintWriter writer = null;
         try {
@@ -347,10 +348,9 @@ public class MainCtrl {
             e.printStackTrace();
         }
 
-        for (String address : IPAddresses) {
-            assert writer != null;
-            writer.print(address + " ");
-            writer.println(port);
+        assert writer != null;
+        for (int i = 0; i < ports.size(); i++) {
+            writer.println(IPAddresses.get(i) + " " + ports.get(i));
         }
         writer.close();
         setServerInfo(IPAddress, port);
