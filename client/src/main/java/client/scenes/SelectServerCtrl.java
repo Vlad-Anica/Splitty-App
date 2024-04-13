@@ -69,18 +69,18 @@ public class SelectServerCtrl {
             showErrorMessage("ServerNotFound");
             return;
         }
-
-        if (mainCtrl.hasBeenConnected(IPAddress)) {
-            mainCtrl.setIPAddress(IPAddress);
+        mainCtrl.setServerInfo(IPAddress, port);
+        if (mainCtrl.hasBeenConnected(IPAddress, port)) {
             mainCtrl.getLastKnownInfo();
             mainCtrl.showHome();
         } else {
             System.out.println("SIUUUU");
-            mainCtrl.addNewIPAddress(IPAddress);
+            mainCtrl.addNewServerInfo(IPAddress, port);
             mainCtrl.showStartPage();
         }
 
     }
+
 
     /**
      * displays and error message at the bottom of the page

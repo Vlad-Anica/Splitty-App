@@ -18,7 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -81,6 +82,7 @@ public class HomeCtrl {
     private String alertText;
     private String welcomeText;
     private String firstName;
+    private String downloadString;
     @Inject
     public HomeCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
@@ -111,7 +113,18 @@ public class HomeCtrl {
 
             languageList.setItems(FXCollections.observableList(languages));
             languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
+            languageList.getItems().add(downloadString);
             languageList.setOnAction(event -> {
+                if (languageList.getValue().equals(downloadString)) {
+                    try {
+                        downloadTemplate();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return;
+                }
                 int selection = languageList.getSelectionModel().getSelectedIndex();
                 System.out.println("selection: " + selection);
                 if (selection >= 0) {
@@ -184,6 +197,7 @@ public class HomeCtrl {
         warningText = resourceBundle.getString("Pleaseinputthecorrectpassword");
         alertTitle = resourceBundle.getString("AdminLoginAlert");
         alertText = resourceBundle.getString("Doyouwanttologinasadmin");
+        downloadString = resourceBundle.getString("DownloadTemplate");
         if (!adminPasswordMessage.getText().isEmpty()) {
             adminPasswordMessage.setText(resourceBundle.getString("IncorrectPassword"));
         }
@@ -251,5 +265,8 @@ public class HomeCtrl {
         adminPasswordField.clear();
     }
 
+    public void downloadTemplate() throws IOException, URISyntaxException {
 
+        server.downloadLanguageTemplate();
+    }
 }
