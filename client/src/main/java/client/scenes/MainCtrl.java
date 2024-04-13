@@ -60,6 +60,7 @@ public class MainCtrl {
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebtsScene;
 
+
     private StartPageCtrl startPageCtrl;
     private Scene startPageScene;
 
@@ -100,6 +101,7 @@ public class MainCtrl {
     private boolean restart = false;
     private String currentIPAddress;
     private File userConfig;
+    private Integer currentPort;
 
     private File mailConfig = new File("./src/main/resources/userConfig/mailConfig.txt");
 
@@ -296,9 +298,24 @@ public class MainCtrl {
         }
 
         while (scanner.hasNextLine()) {
-            IPAddresses.add(scanner.nextLine());
+            IPAddresses.add((scanner.nextLine().split(" ")[0]));
         }
         return IPAddresses;
+    }
+    public List<Integer> getUsedPorts() {
+        File file = getOrCreateFile("./src/main/resources/userInfo/IPAddresses.txt");
+        List<Integer> ports = new ArrayList<>();
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        while (scanner.hasNextLine()) {
+            ports.add(Integer.parseInt(scanner.nextLine().split(" ")[1]));
+        }
+        return ports;
     }
 
     /**
@@ -307,8 +324,16 @@ public class MainCtrl {
      * @param IPAddress the provided IP address
      * @return true if the user has been connected to it before
      */
-    public boolean hasBeenConnected(String IPAddress) {
-        return getUsedIPAddresses().contains(IPAddress);
+    public boolean hasBeenConnected(String IPAddress, Integer port) {
+        List<String> IPAddresses = getUsedIPAddresses();
+        List<Integer> ports = getUsedPorts();
+
+        for (int i = 0; i < ports.size(); i++) {
+            if (IPAddresses.get(i).equals(IPAddress) && ports.get(i).equals(port)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -316,9 +341,11 @@ public class MainCtrl {
      *
      * @param IPAddress the IP address provided
      */
-    public void addNewIPAddress(String IPAddress) {
+    public void addNewServerInfo(String IPAddress, Integer port) {
         List<String> IPAddresses = getUsedIPAddresses();
         IPAddresses.add(IPAddress);
+        List<Integer> ports = getUsedPorts();
+        ports.add(port);
         File file = getOrCreateFile("./src/main/resources/userInfo/IPAddresses.txt");
         PrintWriter writer = null;
         try {
@@ -327,12 +354,12 @@ public class MainCtrl {
             e.printStackTrace();
         }
 
-        for (String address : IPAddresses) {
-            assert writer != null;
-            writer.println(address);
+        assert writer != null;
+        for (int i = 0; i < ports.size(); i++) {
+            writer.println(IPAddresses.get(i) + " " + ports.get(i));
         }
         writer.close();
-        setIPAddress(IPAddress);
+        setServerInfo(IPAddress, port);
     }
 
     /**
@@ -341,8 +368,16 @@ public class MainCtrl {
      * @param IPAddress
      * @return
      */
-    public int getIPAddressPosition(String IPAddress) {
-        return getUsedIPAddresses().indexOf(IPAddress);
+    public int getServerInfoPosition(String IPAddress, Integer port) {
+        List<String> IPAddresses = getUsedIPAddresses();
+        List<Integer> ports = getUsedPorts();
+
+        for (int i = 0; i < ports.size(); i++) {
+            if (IPAddresses.get(i).equals(IPAddress) && ports.get(i).equals(port)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public void setLanguage(String language) {
@@ -563,9 +598,11 @@ public class MainCtrl {
         return mailConfig;
     }
 
-    public void setIPAddress(String IPAddress) {
+
+    public void setServerInfo(String IPAddress, Integer port) {
         this.currentIPAddress = IPAddress;
-        this.userConfig = new File("userConfig" + getIPAddressPosition(IPAddress));
+        this.currentPort = port;
+        this.userConfig = new File("userConfig" + getServerInfoPosition(IPAddress, port));
     }
 
 
