@@ -743,6 +743,7 @@ public class EventOverviewCtrl implements Initializable {
     public void showAllTagsInEvent(ActionEvent event) {
         tagsVisibilityCheck();
         resetTagsPane();
+        this.selectedTags = new ArrayList<>();
         showAllTags(this.event.getTags());
     }
 
@@ -756,7 +757,14 @@ public class EventOverviewCtrl implements Initializable {
         for (Tag t : tags) {
             CheckBox newBox = new CheckBox(t.getType());
             newBox.setOnAction(event -> toggleInSelectedTags(t));
-            newBox.setStyle("-fx-background-color:" + t.getColor() + ";-fx-text-fill: white;");
+            String tagColour;
+            if(t.getColor().equals("red") || t.getColor().equals("blue") || t.getColor().equals("green")) {
+                tagColour = t.getColor();
+            } else {
+                tagColour = "#" + t.getColor().substring(2);
+            }
+
+            newBox.setStyle("-fx-background-color:" + tagColour + ";-fx-text-fill: white;");
 
             chooseTagsPane.getChildren().add(newBox);
             newBox.setLayoutY(y);
@@ -796,18 +804,18 @@ public class EventOverviewCtrl implements Initializable {
             for (Tag tag : selectedTags) {
                 if (tag.equalsWithoutId(Event.foodTag) || tag.equalsWithoutId(Event.travelTag) || tag.equalsWithoutId(Event.entranceFeesTag)) {
                     System.out.println("Cannot proceed with operation as Tag is a default one.");
+                    return;
                 }
-
                 for (Expense expense : this.event.getExpenses()) {
                     if (expense.getTag().equals(tag)) {
                         System.out.println("Cannot proceed with operation as Tag is currently in use or is default.");
+                        return;
                     }
-                    return;
                 }
                 if (this.severTagConnection(tag)) {
                     System.out.println("Successfully severed the connection with a Tag of the type: " + tag.getType());
                 } else {
-                    System.out.println("Could not successfully sever the connection with the ");
+                    System.out.println("Could not successfully sever the connection with the Tag of type" + tag.getType());
                 }
 
             }

@@ -139,15 +139,10 @@ public class AddExpenseCtrl {
 
             checkBoxes = splitPersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
 
-            List<Tag> defaultTags = List.of(
-                    new Tag("green", "Food"),
-                    new Tag("blue", "Entrance Fees"),
-                    new Tag("red", "Travel")
-            );
             tags = new ArrayList<>();
-            tags.addAll(defaultTags);
+            tags.addAll(event.getTags());
             typeComboBox.setItems(FXCollections.observableArrayList(
-                    defaultTags.stream().map(Tag::getType).toList()));
+                    tags.stream().map(Tag::getType).toList()));
 
             currencyComboBox.setItems(FXCollections.observableList(
                     List.of(Currency.EUR, Currency.USD,
@@ -282,6 +277,7 @@ public class AddExpenseCtrl {
 
 
                System.out.println("Created expense");
+                System.out.println(e);
 
                statusLabel.setTextFill(Color.BLACK);
                clearFields();
