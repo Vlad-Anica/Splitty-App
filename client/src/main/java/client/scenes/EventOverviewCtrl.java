@@ -343,7 +343,7 @@ public class EventOverviewCtrl implements Initializable {
                 this.goToEditPersonButton.setVisible(true);
                 this.removePersonButton.setVisible(true);
             }
-            this.filteringExpensesPane.setVisible(false);
+            this.filteringExpensesPane.setVisible(true);
 
             this.goToEditTagButton.setVisible(false);
             this.removeTagButton.setVisible(false);
@@ -369,13 +369,8 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void choosePersonsVisibilityCheck() {
-        if (this.selectedPerson == null) {
-            this.goToEditPersonButton.setVisible(false);
-            this.removePersonButton.setVisible(false);
-        } else {
             this.goToEditPersonButton.setVisible(true);
             this.removePersonButton.setVisible(true);
-        }
     }
 
     /**
@@ -622,12 +617,25 @@ public class EventOverviewCtrl implements Initializable {
             }
             if (selectedExpenses.isEmpty()) {
                 System.out.println("The Event has no such Expenses associated with it.");
-                Label label = new Label("There's nothing to display, silly!");
-                filteringExpensesPane.getChildren().add(label);
-                label.setLayoutY(5);
             }
-
             expenseListView.setItems(FXCollections.observableList(selectedExpenses));
+            int y = 5;
+            for(Expense expense: selectedExpenses) {
+                Label label = new Label();
+                Tag t = expense.getTag();
+                String tagColour;
+                if (t.getColor().equals("red") || t.getColor().equals("blue") || t.getColor().equals("green")) {
+                    tagColour = t.getColor();
+                } else {
+                    tagColour = "#" + t.getColor().substring(2);
+                }
+
+                label.setText(t.getType());
+                label.setStyle("-fx-background-color:" + tagColour + ";-fx-text-fill: white;");
+                filteringExpensesPane.getChildren().add(label);
+                label.setLayoutY(y);
+                y += 25;
+            }
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -728,20 +736,13 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     /**
-     * Method that toggles between visible and invisible modes for several UI elements related to Tag selection
+     * Method that toggles visibility for several UI elements related to Tag selection
      * based on whether they should logically be shown.
      */
     public void tagsVisibilityCheck() {
-        if (this.goToEditTagButton.isVisible()) {
-            resetTagsPane();
-            this.chooseTagsPane.setVisible(false);
-            this.goToEditTagButton.setVisible(false);
-            this.removeTagButton.setVisible(false);
-        } else {
             this.chooseTagsPane.setVisible(true);
             this.goToEditTagButton.setVisible(true);
             this.removeTagButton.setVisible(true);
-        }
     }
 
     /**
@@ -839,9 +840,13 @@ public class EventOverviewCtrl implements Initializable {
                 tagColorPicker.setDisable(true);
                 tagColorPicker.setVisible(false);
                 tagNameField.clear();
-                tagPane.setDisable(true);
-                tagPane.setVisible(false);
-                this.setup(eventId);
+                if(chooseTagsPane.isVisible()) {
+                    showAllTagsInEvent(new ActionEvent());
+                    showAllTagsInEvent(new ActionEvent());
+                } else {
+                    showAllTagsInEvent(new ActionEvent());
+                }
+                this.refresh();
                 return;
             }
         }
@@ -882,7 +887,8 @@ public class EventOverviewCtrl implements Initializable {
                 } else {
                     System.out.println("Could not successfully sever the connection with the Tag of type " + tag.getType());
                 }
-
+                showAllTagsInEvent(new ActionEvent());
+                refresh();
             }
 
         }
