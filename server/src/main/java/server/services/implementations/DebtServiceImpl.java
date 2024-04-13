@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import server.database.DebtRepository;
 import server.services.interfaces.DebtService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
