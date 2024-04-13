@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.interfaces.EmailService;
 import server.services.interfaces.EventService;
+import server.services.interfaces.PersonService;
 import server.services.interfaces.UserService;
 
 import java.util.List;
@@ -17,15 +18,17 @@ public class UserController {
     private EmailService emailService;
     private UserService userService;
     private EventService eventService;
+    private PersonService personService;
     /**
      * constructor for a User
      * @param emailService email repository to work with the db
      * @param userService user repository to work with the db
      */
-    public UserController(EmailService emailService, UserService userService, EventService eventService) {
+    public UserController(EmailService emailService, UserService userService, EventService eventService, PersonService personService) {
         this.emailService = emailService;
         this.userService = userService;
         this.eventService = eventService;
+        this.personService = personService;
     }
 
     /**
@@ -105,5 +108,9 @@ public class UserController {
         }
 
         return ResponseEntity.ok(sum);
+    }
+    @GetMapping("/person/{id}")
+    public ResponseEntity<List<Person>> getPersons(@PathVariable("id")long id){
+         return ResponseEntity.ok(personService.findPersonsByUserId(id));
     }
 }

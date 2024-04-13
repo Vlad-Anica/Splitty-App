@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.services.interfaces.EmailService;
 import server.services.interfaces.EventService;
+import server.services.interfaces.PersonService;
 import server.services.interfaces.UserService;
 
 import java.util.ArrayList;
@@ -31,12 +32,14 @@ class UserControllerTest {
     private EmailService emailService;
     @Mock
     private EventService eventService;
+    @Mock
+    private PersonService personService;
     private User user1;
     private User user2;
 
     @BeforeEach
     public void setUp() {
-        userController = new UserController(emailService , userService, eventService);
+        userController = new UserController(emailService , userService, eventService, personService);
         user1 = User.builder().id(1L).firstName("John").lastName("Smith").IBAN("").BIC("11111111")
                 .email("john.smith@gmail.com").preferredCurrency(USD).build();
 

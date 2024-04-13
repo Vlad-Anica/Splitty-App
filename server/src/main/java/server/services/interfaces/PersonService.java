@@ -14,4 +14,5 @@ public interface PersonService {
     public Person getReferenceById(long id);
 
     public ResponseEntity<Person> delete(Long id);
+    List<Person> findPersonsByUserId(Long userId);
 }
