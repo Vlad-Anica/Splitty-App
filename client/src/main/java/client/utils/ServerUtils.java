@@ -194,6 +194,13 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<List<Debt>>(){});
 	}
+	public List<Debt> getDebtsByUserId(long id) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/debts/user/"+id) //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Debt>>(){});
+	}
 
 	public Debt addDebt(Debt debt) {
 		try {
@@ -654,5 +661,13 @@ public class ServerUtils {
 
 		res.close();
 		client.close();
+	}
+	public List<Person> getPersonsByUserId(long id){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("user/person/" + id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<>(){});
 	}
 }

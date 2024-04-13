@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import server.database.DebtRepository;
 import server.services.interfaces.DebtService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,5 +41,9 @@ public class DebtServiceImpl implements DebtService {
     @Override
     public Debt getReferenceById(long id) {
         return debtRep.getReferenceById(id);
+    }
+    @Override
+    public List<Debt> getByPersonId(long id) {
+        return debtRep.findDebtsByGiverIdOrReceiverId(id, id);
     }
 }

@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Debt;
+import commons.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import server.services.interfaces.DebtService;
 import server.services.interfaces.ExpenseService;
 import server.services.interfaces.PersonService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -45,6 +47,15 @@ public class DebtController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(debtService.findById(id).get());
+    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<Debt>> getByUserId(@PathVariable("id") long id) {
+        List<Person> persons = personService.findPersonsByUserId(id);
+        List<Debt> debts = new ArrayList<>();
+        for (Person p:persons) {
+            debts.addAll(debtService.getByPersonId(p.getId()));
+        }
+        return ResponseEntity.ok(debts);
     }
     /**
      * endpoint for creating a debt

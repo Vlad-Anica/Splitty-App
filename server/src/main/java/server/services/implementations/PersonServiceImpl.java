@@ -54,4 +54,6 @@ public class PersonServiceImpl implements PersonService {
         personRep.delete(person);
         return ResponseEntity.ok(person);
     }
+    @Override
+    public List<Person> findPersonsByUserId(Long userId){return personRep.findPersonsByUserId(userId);}
 }
