@@ -66,32 +66,19 @@ public class StartPageCtrl {
                 String emailHolder = "-1";
                 if (!(email.getText().isEmpty())) {
                     emailHolder = email.getText();
+                    mainCtrl.setEmailAddress(emailHolder);
                     //sendWelcomeMail(emailHolder, firstname.getText());
                 }
                 User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData());
-
                 u = server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData());
-                File file = mainCtrl.getUserConfig();
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                PrintWriter pw = new PrintWriter(file);
-                pw.println(mainCtrl.getLanguageIndex());
-                pw.println(u.getId());
-                System.out.println(u.getId());
-                pw.close();
+
+                mainCtrl.setUserId(u.getId());
+
                 System.out.println("User Created Successfully !!!");
 
-                File mailFile = mainCtrl.getMailConfig();
-                if (!mailFile.exists()){
-                    mailFile.createNewFile();
-                }
-                PrintWriter mailPw = new PrintWriter(mailFile);
-                mailPw.println(emailHolder);
-                mailPw.close();
                 System.out.println("Saved email in the mailConfig.txt!");
 
-                String userMail = mainCtrl.getUserMail();
+                String userMail = mainCtrl.getEmailAddress();
                 mainCtrl.sendWelcomeMail(userMail, u.getFirstName());
 
                 mainCtrl.getLastKnownInfo();
