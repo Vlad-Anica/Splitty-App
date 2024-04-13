@@ -472,7 +472,7 @@ public class ServerUtils {
 			System.out.println("Received object: " + jsonTag);
 
 			return ClientBuilder.newClient(new ClientConfig())//
-					.target(SERVER).path("api/tags" + id)//
+					.target(SERVER).path("api/tags/" + id)//
 					.request(APPLICATION_JSON)//
 					.accept(APPLICATION_JSON)//
 					.put(Entity.entity(jsonTag, MediaType.APPLICATION_JSON), Tag.class);
