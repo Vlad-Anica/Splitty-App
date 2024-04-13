@@ -41,4 +41,8 @@ public class DebtServiceImpl implements DebtService {
     public Debt getReferenceById(long id) {
         return debtRep.getReferenceById(id);
     }
+    @Override
+    public List<Debt> getByPersonId(long id) {
+        return debtRep.findDebtsByGiverIdOrReceiverId(id, id);
+    }
 }

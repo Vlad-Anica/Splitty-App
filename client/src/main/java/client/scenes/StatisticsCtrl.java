@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+
 public class StatisticsCtrl implements Initializable {
 
 
@@ -29,6 +30,9 @@ private ServerUtils server;
 private ArrayList<Tag> tags;
 private ArrayList<Expense> allExpenses;
 private double totalAmount;
+private boolean check = false;
+
+private long eventId;
 
 @FXML
 Button temporaryButton;
@@ -43,12 +47,7 @@ PieChart PieChartExpenses;
 Button goBackButton;
 @FXML
 ObservableList<PieChart.Data> pieChartExpensesData =
-        FXCollections.observableArrayList(
-                new PieChart.Data("Grapefruit", 13),
-                new PieChart.Data("Oranges", 25),
-                new PieChart.Data("Plums", 10),
-                new PieChart.Data("Pears", 22),
-                new PieChart.Data("Apples", 30));
+        FXCollections.observableArrayList();
 
     @Inject
     public StatisticsCtrl(EventOverviewCtrl eventController, ServerUtils server, MainCtrl mainCtrl){
@@ -58,6 +57,7 @@ ObservableList<PieChart.Data> pieChartExpensesData =
     }
 
     public void setup(Long eventId) {
+        System.out.println("Setting up");
         try {
             event = server.getEvent(eventId);
             eventTitle = event.getName();
@@ -69,6 +69,12 @@ ObservableList<PieChart.Data> pieChartExpensesData =
             System.out.println("Cannot find associated Event within the repository!");
             return;
         }
+        PieChartExpenses.setTitle(eventTitle);
+        this.eventId = eventId;
+        loadExpenses(eventId);
+    }
+
+    public void loadExpenses(Long eventId){
         try{
             allExpenses = (ArrayList<Expense>) event.getExpenses();
         } catch (Exception e){
@@ -83,8 +89,8 @@ ObservableList<PieChart.Data> pieChartExpensesData =
             System.out.println("Whoopsie, an error has occured!");
             return;
         }
+        //pieChartExpensesData.clear();
         try{
-            pieChartExpensesData.clear();
             ArrayList<String> uniqueTags = new ArrayList<>();
             ArrayList<String> allTagNames = new ArrayList<>();
             for (Tag tag : tags){
@@ -102,26 +108,32 @@ ObservableList<PieChart.Data> pieChartExpensesData =
                 for (String allTags : allTagNames){
                     if (allTags.equals(tagName)) amount++;
                 }
-                pieChartExpensesData.add(new PieChart.Data(tagName, amount));
+                boolean checker = false;
+                for (PieChart.Data piedata : pieChartExpensesData){
+                    if (piedata.getName().equals(tagName)){
+                        checker = true;
+                        if (piedata.getPieValue() != amount) piedata.setPieValue(amount);
+                    }
+                }
+                if (!checker) pieChartExpensesData.add(new PieChart.Data(tagName, amount));
             }
         } catch (Exception e){
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
             System.out.println("An error occured when processing the tags!");
             pieChartExpensesData.add(new PieChart.Data("Whoops No Data Found", 1));
-            return;
         }
-        PieChartExpenses.setTitle(eventTitle);
         setTotalExpenses();
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
-        totalExpensesLabel.setText(resourceBundle.getString("Totalamountis"));
-        totalExpensesLabel.setText(totalExpensesLabel.getText() + " " + Math.round(totalAmount * 100.0) / 100.0);
-
+        totalExpensesLabel.setText(resourceBundle.getString("Totalamounts") + " " + Math.round(totalAmount * 100.0) / 100.0);
+        //HERE IS THE ERROR, AFTER THIS LINE
     }
 
 
     @Override
-public void initialize(URL location, ResourceBundle resources) {
-    PieChartExpenses.setData(pieChartExpensesData);
+    public void initialize(URL location, ResourceBundle resources) {
+        PieChartExpenses.setData(pieChartExpensesData);
     }
 
 
@@ -134,7 +146,7 @@ public void initialize(URL location, ResourceBundle resources) {
     }
 
     public void goHome(ActionEvent event){
-        mainCtrl.showEventOverview(this.event.getId());
+        mainCtrl.showEventOverview(eventId);
     }
 
 
