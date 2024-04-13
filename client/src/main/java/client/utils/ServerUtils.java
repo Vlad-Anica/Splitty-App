@@ -382,28 +382,7 @@ public class ServerUtils {
 		}
 	}
 
-	/**
-	 * method that updates a Tag
-	 * @param tag Tag to update.
-	 * @return Tag that has been updated
-	 */
-	public Tag updateTag(Tag tag) {
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			String jsonTag = objectMapper.writeValueAsString(tag);
-			System.out.println("Received object: " + jsonTag);
 
-			return ClientBuilder.newClient(new ClientConfig())//
-					.target(SERVER).path("api/tags")//
-					.request(APPLICATION_JSON)//
-					.accept(APPLICATION_JSON)//
-					.put(Entity.entity(jsonTag, MediaType.APPLICATION_JSON), Tag.class);
-
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
 	public List<Expense> getExpensesForUser(long userId) {
 
@@ -480,6 +459,28 @@ public class ServerUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	/**
+	 * method that updates a Tag
+	 * @param tag Tag to update.
+	 * @return Tag that has been updated
+	 */
+	public Tag updateTag(Long id, Tag tag) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonTag = objectMapper.writeValueAsString(tag);
+			System.out.println("Received object: " + jsonTag);
+
+			return ClientBuilder.newClient(new ClientConfig())//
+					.target(SERVER).path("api/tags" + id)//
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.put(Entity.entity(jsonTag, MediaType.APPLICATION_JSON), Tag.class);
+
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	public Event createEvent(Event event) {
 

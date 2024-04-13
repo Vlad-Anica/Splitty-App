@@ -836,7 +836,7 @@ public class EventOverviewCtrl implements Initializable {
             if (tag.equalsWithoutId(selectedTags.get(0))) {
                 tag.setColor(tagColorPicker.getValue().toString());
                 tag.setType(tagNameField.getText());
-                server.updateTag(tag);
+                server.updateTag(tag.getId(), tag);
                 tagColorPicker.setDisable(true);
                 tagColorPicker.setVisible(false);
                 tagNameField.clear();
