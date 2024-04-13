@@ -15,7 +15,7 @@
     <children>
         <ComboBox fx:id="selectedCurrency" layoutX="225.0" layoutY="117.0" prefHeight="27.0" prefWidth="182.0" promptText="EUR" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-font-family: Rowdies; -fx-border-color: #999693;" />
         <TextField fx:id="publicUsername" layoutX="225.0" layoutY="184.0" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693; -fx-font-family: Rowdies; -fx-font-size: 12.0" text="Cristian Sapunaru #01" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="39.0" layoutX="262.0" layoutY="253.0" strokeType="INSIDE" width="87.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="39.0" layoutX="254.0" layoutY="253.0" strokeType="INSIDE" width="103.0">
          <stroke>
             <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
                <stops>
@@ -118,7 +118,7 @@
             <font>
                 <Font size="18.0" />
             </font></Button>
-        <Button fx:id="btnSubmitAll" layoutX="260.0" layoutY="250.0" mnemonicParsing="false" onAction="#clickBtnSubmitAll" prefHeight="38.0" prefWidth="87.0" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" text="Submit" textFill="#fffaf4">
+        <Button fx:id="btnSubmitAll" layoutX="252.0" layoutY="250.0" mnemonicParsing="false" onAction="#clickBtnSubmitAll" prefHeight="39.0" prefWidth="103.0" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" text="Submit" textFill="#fffaf4">
             <font>
                 <Font size="18.0" />
             </font></Button>

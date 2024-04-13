@@ -55,7 +55,18 @@ public class ExpenseServiceImpl implements ExpenseService {
         return expenseRep.getReferenceById(id);
     }
 
+    @Override
+    public ResponseEntity<Expense> delete(Long id) {
 
+            if (!expenseRep.existsById(id))
+                return ResponseEntity.badRequest().build();
+            if (findById(id).isEmpty())
+                return ResponseEntity.badRequest().build();
+            Expense expense = findById(id).get();
+            expenseRep.delete(expense);
+            return ResponseEntity.ok(expense);
+
+    }
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }

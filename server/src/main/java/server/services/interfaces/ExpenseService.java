@@ -13,4 +13,6 @@ public interface ExpenseService {
     public Optional<Expense> findById(long id);
     public ResponseEntity<Expense> add(Expense expense);
     public Expense getReferenceById(long id);
+
+    public ResponseEntity<Expense> delete(Long id);
 }
