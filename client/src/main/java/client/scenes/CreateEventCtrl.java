@@ -67,9 +67,6 @@ public class CreateEventCtrl {
     @FXML
     private ComboBox<String> tagComboBox;
 
-    @FXML
-    private Button addTagBtn;
-
     private MainCtrl mainCtrl;
     private ServerUtils server;
     private String warningTitle;
@@ -106,7 +103,6 @@ public class CreateEventCtrl {
         homeBtn.setText(resourceBundle.getString("Home"));
         inviteLabel.setText(resourceBundle.getString("Invitesomepeople"));
         tagComboBox.setPromptText(resourceBundle.getString("ChooseTag"));
-        addTagBtn.setText(resourceBundle.getString("NewTag"));
         clearBtn.setText(resourceBundle.getString("Clear"));
         createBtn.setText(resourceBundle.getString("Create"));
         warningText = resourceBundle.getString("Pleasefillallfieldscorrectly");
@@ -169,10 +165,6 @@ public class CreateEventCtrl {
     @FXML
     public void goHome(ActionEvent event) throws IOException {
        mainCtrl.showHome();
-    }
-
-    public void addTag() {
-
     }
 
     public void sendMailToParticipants(String mail, String inviteCode, String eventName){
