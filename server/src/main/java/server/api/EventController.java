@@ -162,12 +162,17 @@ public class EventController {
     @SendTo("/topic/events")
     public Event addEvent(Event event) {
 
-        ResponseEntity<Event> response = add(event);
+        ResponseEntity<Event> response;
+        if (expenseService.existsById(event.getId()))
+            response = update(event.getId(), event);
+        else response = add(event);
+
         if (response.getStatusCode().equals(HttpStatus.BAD_REQUEST))
             return null;
 
         return event;
     }
+
     @PutMapping("{id}/newExpense")
     public ResponseEntity<Event> addExpense(@PathVariable("id") long eventId, @RequestBody Expense expense) {
         Event event = getById(eventId).getBody();

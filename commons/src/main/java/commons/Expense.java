@@ -7,13 +7,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 /***
  * import java.util.Objects;
@@ -246,47 +250,47 @@ public class Expense {
      * updates the amount number depending on the currency
      */
     public void convertCurrency(Currency newCurrency){
-        switch (this.currency){
-            case EUR: {
-                switch(newCurrency){
-                    case EUR: {
-                        break;
-                    }
-                    case USD: {
-                        this.amount = this.amount * 1.09;
-                    }
-                    case CHF:{
-                        this.amount = this.amount * 0.96;
-                    }
-                }
-            }
-            case USD: {
-                switch(newCurrency){
-                    case EUR: {
-                        this.amount = this.amount * 0.92;
-                    }
-                    case USD: {
-                        break;
-                    }
-                    case CHF:{
-                        this.amount = this.amount * 0.88;
-                    }
-                }
-            }
-            case CHF:{
-                switch(newCurrency){
-                    case EUR: {
-                        this.amount = this.amount * 1.04;
-                    }
-                    case USD: {
-                        this.amount = this.amount * 1.13;
-                    }
-                    case CHF:{
-                        break;
-                    }
-                }
-            }
-        }
+//        switch (this.currency){
+//            case EUR: {
+//                switch(newCurrency){
+//                    case EUR: {
+//                        break;
+//                    }
+//                    case USD: {
+//                        this.amount = this.amount * 1.09;
+//                    }
+//                    case CHF:{
+//                        this.amount = this.amount * 0.96;
+//                    }
+//                }
+//            }
+//            case USD: {
+//                switch(newCurrency){
+//                    case EUR: {
+//                        this.amount = this.amount * 0.92;
+//                    }
+//                    case USD: {
+//                        break;
+//                    }
+//                    case CHF:{
+//                        this.amount = this.amount * 0.88;
+//                    }
+//                }
+//            }
+//            case CHF:{
+//                switch(newCurrency){
+//                    case EUR: {
+//                        this.amount = this.amount * 1.04;
+//                    }
+//                    case USD: {
+//                        this.amount = this.amount * 1.13;
+//                    }
+//                    case CHF:{
+//                        break;
+//                    }
+//                }
+//            }
+//        }
 
     }
 
@@ -303,7 +307,15 @@ public class Expense {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
+        LocalDate shownDate = getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        String truncatedAmount = BigDecimal.valueOf(amount)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue()+"";
+        String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
+        return receiver.getFirstName() + " " + receiver.getLastName() + " paid " + truncatedAmount +
+                currency + " for " + description + " at " + parsedDate;
     }
 }
 

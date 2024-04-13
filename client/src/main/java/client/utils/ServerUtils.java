@@ -507,7 +507,7 @@ public class ServerUtils {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonExpense = objectMapper.writeValueAsString(newExpense);
-			System.out.println("Received Event object: " + jsonExpense);
+			System.out.println("Received Expense object: " + jsonExpense);
 
 			return ClientBuilder.newClient(new ClientConfig())
 					.target(SERVER).path("api/expenses/" + id)
@@ -519,6 +519,15 @@ public class ServerUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public void deleteExpense(Long id) {
+
+		ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/expenses/" + id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.delete();
 	}
 	/***
 	 *
@@ -582,6 +591,19 @@ public class ServerUtils {
 		});
 	}
 
+	public <T> void registerForUpdate(String destination, Class <T> type, Consumer<T> consumer) {
+		session.subscribe(destination, new StompFrameHandler() {
+			@Override
+			public Type getPayloadType(StompHeaders headers) {
+				return type;
+			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				consumer.accept((T) payload);
+			}
+		});
+	}
 	public void send(String destination, Object o) {
 		session.send(destination, o);
 }

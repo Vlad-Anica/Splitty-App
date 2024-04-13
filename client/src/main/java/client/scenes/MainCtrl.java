@@ -128,6 +128,7 @@ public class MainCtrl {
             languages = new ArrayList<>();
             languages.add("English(US);client/images/EnglishFlag.jpg");
             languages.add("Nederlands;client/images/DutchFlag.png");
+            languages.add("Romana;client/images/RomanianFlag.png");
             Pair<Integer, List<String>> languageData = new Pair<>(0, languages);
             try {
                 languageFile.createNewFile();
@@ -389,9 +390,9 @@ public class MainCtrl {
 
     public void showEventOverview(Long eventId) {
         eventOverviewCtrl.setup(eventId);
-        primaryStage.setTitle("Event Overview");
         eventOverviewScene.getStylesheets().add("client/css/EventOverview.css");
         primaryStage.setScene(eventOverviewScene);
+        eventOverviewCtrl.refresh();
     }
 
     public void showCreateEvent() {
@@ -419,6 +420,7 @@ public class MainCtrl {
     public void showAddParticipant(Long eventId, boolean isInEditMode, Person participantToEdit) {
         primaryStage.setTitle("Show Participants");
         primaryStage.setScene(addParticipantScene);
+        addParticipantScene.getStylesheets().add("/client/css/addParticipant.css");
         addParticipantCtrl.setup(eventId, isInEditMode, participantToEdit);
     }
 

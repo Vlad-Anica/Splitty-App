@@ -138,7 +138,7 @@ public class StartPageCtrl {
                 List.of(Currency.EUR, Currency.USD,
                         Currency.CHF, Currency.GBP)));
         currencyComboBox.getSelectionModel().selectFirst();
-        languages = new ArrayList<>(List.of("English", "Nederlands"));
+        languages = new ArrayList<>(List.of("English", "Nederlands", "Romana"));
         languageComboBox.setItems(FXCollections.observableList(languages.stream().toList()));
         languageComboBox.getSelectionModel().select(mainCtrl.getLanguageIndex());
         languageComboBox.setOnAction(event -> {
