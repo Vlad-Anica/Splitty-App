@@ -35,15 +35,6 @@ public class TagController {
         return service.add(tag);
     }
 
-/*
-    @PutMapping("/{id}")
-    public ResponseEntity<Tag> update(@PathVariable long id, @RequestBody Tag updatedTag) {
-
-        return service.update(id, updatedTag);
-    }
-    */
-
-
     @PutMapping("/{id}")
     public ResponseEntity<Tag> update(@PathVariable("id") Long id, @RequestBody Tag newTag) {
 
