@@ -13,5 +13,7 @@ public interface TagService {
     public ResponseEntity<Tag> update(long id, Tag updatedTag);
     public ResponseEntity<Tag> delete(long id);
     public Tag getReferenceById(long id);
+    public Tag save(Tag tag);
+    public boolean existsById(long id);
 
 }

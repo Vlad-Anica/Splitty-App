@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Expense;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import server.services.interfaces.TagService;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/tags")
@@ -34,10 +36,22 @@ public class TagController {
         return service.add(tag);
     }
 
+    /*
     @PutMapping("/{id}")
     public ResponseEntity<Tag> update(@PathVariable long id, @RequestBody Tag updatedTag) {
 
         return service.update(id, updatedTag);
+    }
+    */
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Tag> update(@PathVariable("id") Long id, @RequestBody Tag newTag) {
+
+        if (!Objects.equals(newTag.getId(), id))
+            return ResponseEntity.badRequest().build();
+        if (!service.existsById(id))
+            return add(newTag);
+        return ResponseEntity.ok(service.save(newTag));
     }
 
     @DeleteMapping("/{id}")

@@ -108,6 +108,17 @@ public class EventOverviewCtrl implements Initializable {
     @FXML
     private Button hideEditPage;
 
+    @FXML
+    private Pane tagPane;
+    @FXML
+    private TextField tagNameField;
+    @FXML
+    private ColorPicker tagColorPicker;
+    @FXML
+    private Button okButton;
+    @FXML
+    private Button tagCancelButton;
+
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
@@ -758,7 +769,7 @@ public class EventOverviewCtrl implements Initializable {
             CheckBox newBox = new CheckBox(t.getType());
             newBox.setOnAction(event -> toggleInSelectedTags(t));
             String tagColour;
-            if(t.getColor().equals("red") || t.getColor().equals("blue") || t.getColor().equals("green")) {
+            if (t.getColor().equals("red") || t.getColor().equals("blue") || t.getColor().equals("green")) {
                 tagColour = t.getColor();
             } else {
                 tagColour = "#" + t.getColor().substring(2);
@@ -774,11 +785,11 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     /**
-     * Method that redirects the User to a page to modify their selected Tag.
+     * Method that pops up a smaller page for the User to modify their selected Tag.
      *
      * @param event event that triggers the method
      */
-    public void goToEditTag(ActionEvent event) {
+    public void showEditTag(ActionEvent event) {
         if (selectedTags == null || selectedTags.isEmpty()) {
             System.out.println("Cannot edit tag as none was selected!");
             return;
@@ -787,7 +798,54 @@ public class EventOverviewCtrl implements Initializable {
             System.out.println("Cannot edit tag as multiple tags have been selected at once.");
             return;
         }
-        //goToEdiTag stuff tbi
+        if (selectedTags.get(0).equalsWithoutId(Event.foodTag) || selectedTags.get(0).equalsWithoutId(Event.entranceFeesTag) || selectedTags.get(0).equalsWithoutId(Event.travelTag)) {
+            System.out.println("Cannot edit Tag as it is a basic one.");
+            return;
+        }
+        tagPane.setDisable(false);
+        tagPane.setVisible(true);
+        tagColorPicker.setDisable(false);
+        tagColorPicker.setVisible(true);
+    }
+
+    /**
+     * Method that hides the Edit Tag page.
+     *
+     * @param event Event that triggered the Action.
+     */
+    public void hideEditTag(ActionEvent event) {
+        tagColorPicker.setDisable(true);
+        tagColorPicker.setVisible(false);
+        tagNameField.clear();
+        tagPane.setDisable(true);
+        tagPane.setVisible(false);
+    }
+
+    /**
+     * Method that saves the newly edited Tag
+     *
+     * @param event Event that triggered the method
+     */
+    public void saveTag(ActionEvent event) {
+
+        if (tagNameField == null || tagNameField.getText().isEmpty())
+            return;
+        if (tagColorPicker == null || tagColorPicker.getValue() == null || Objects.equals(tagColorPicker.getValue().toString(), ""))
+            return;
+        for (Tag tag : this.event.getTags()) {
+            if (tag.equalsWithoutId(selectedTags.get(0))) {
+                tag.setColor(tagColorPicker.getValue().toString());
+                tag.setType(tagNameField.getText());
+                server.updateTag(tag);
+                tagColorPicker.setDisable(true);
+                tagColorPicker.setVisible(false);
+                tagNameField.clear();
+                tagPane.setDisable(true);
+                tagPane.setVisible(false);
+                this.setup(eventId);
+                return;
+            }
+        }
     }
 
     /**
@@ -803,19 +861,27 @@ public class EventOverviewCtrl implements Initializable {
         } else {
             for (Tag tag : selectedTags) {
                 if (tag.equalsWithoutId(Event.foodTag) || tag.equalsWithoutId(Event.travelTag) || tag.equalsWithoutId(Event.entranceFeesTag)) {
-                    System.out.println("Cannot proceed with operation as Tag is a default one.");
+                    System.out.println("Cannot proceed with deletion as Tag <" + tag.getType() + "> is a default one.");
                     return;
                 }
                 for (Expense expense : this.event.getExpenses()) {
                     if (expense.getTag().equals(tag)) {
-                        System.out.println("Cannot proceed with operation as Tag is currently in use or is default.");
+                        System.out.println("Cannot proceed with deletion as Tag <\" + tag.getType() + \"> is currently in use or is default.");
                         return;
                     }
                 }
                 if (this.severTagConnection(tag)) {
                     System.out.println("Successfully severed the connection with a Tag of the type: " + tag.getType());
+                    for (Object element : this.chooseTagsPane.getChildren()) {
+                        CheckBox box = new CheckBox();
+                        if (element.getClass() == box.getClass()) {
+                            if (((CheckBox) element).getText().equals(tag.getType())) {
+                                ((CheckBox) element).setVisible(false);
+                            }
+                        }
+                    }
                 } else {
-                    System.out.println("Could not successfully sever the connection with the Tag of type" + tag.getType());
+                    System.out.println("Could not successfully sever the connection with the Tag of type " + tag.getType());
                 }
 
             }

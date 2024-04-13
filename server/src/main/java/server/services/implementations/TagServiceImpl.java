@@ -1,5 +1,6 @@
 package server.services.implementations;
 
+import commons.Expense;
 import commons.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,15 @@ public class TagServiceImpl implements TagService {
         if (tag.isPresent())
             return ResponseEntity.ok(tag.get());
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    @Override
+    public Tag save(Tag tag) {
+        return db.save(tag);
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return db.existsById(id);
     }
 
     public ResponseEntity<Tag> add(Tag tag) {
