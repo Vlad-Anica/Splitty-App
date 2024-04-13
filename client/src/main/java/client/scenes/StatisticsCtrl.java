@@ -113,24 +113,33 @@ public class StatisticsCtrl implements Initializable {
         }
         //pieChartExpensesData.clear();
         try {
+            List<PieChart.Data> deleteOld = new ArrayList<>(pieChartExpensesData.stream().toList());
             tagMap.forEach((tag, amount) -> {
                 String tagName = tag.getType();
+                if(tagName == null) tagName = "null";
                 boolean checker = false;
                 for (PieChart.Data piedata : pieChartExpensesData) {
                     if (piedata.getName().equals(tagName)) {
+                        deleteOld.remove(piedata);
                         checker = true;
                         if (piedata.getPieValue() != amount) piedata.setPieValue(amount);
                     }
                 }
                 if (!checker) pieChartExpensesData.add(new PieChart.Data(tagName, amount));
             });
+            pieChartExpensesData.removeAll(deleteOld);
+            List<PieChart.Data> deleteOld1 = new ArrayList<>(pieChartPersonsData.stream().toList());
+            List<PieChart.Data> deleteOld2 = new ArrayList<>(pieChartPersonsData1.stream().toList());
             owedMap.forEach((person, amount) -> {
                 String name = person.getFirstName() + " " + person.getLastName();
                 boolean checker = false;
                 for (PieChart.Data piedata : pieChartPersonsData) {
                     if (piedata.getName().equals(name)) {
                         checker = true;
-                        if (piedata.getPieValue() != amount && amount > 0) piedata.setPieValue(amount);
+                        if (amount > 0) {
+                            if(piedata.getPieValue() != amount) piedata.setPieValue(amount);
+                            deleteOld1.remove(piedata);
+                        }
                     }
                 }
                 if (!checker && amount > 0) pieChartPersonsData.add(new PieChart.Data(name, amount));
@@ -138,11 +147,18 @@ public class StatisticsCtrl implements Initializable {
                 for (PieChart.Data piedata : pieChartPersonsData1) {
                     if (piedata.getName().equals(name)) {
                         checker = true;
-                        if (piedata.getPieValue() != amount && amount < 0) piedata.setPieValue(-amount);
+                        if (amount < 0) {
+                            if (piedata.getPieValue() != amount) piedata.setPieValue(-amount);
+                            deleteOld2.remove(piedata);
+                            System.out.println(piedata);
+                        }
                     }
                 }
                 if (!checker && amount < 0) pieChartPersonsData1.add(new PieChart.Data(name, -amount));
             });
+            pieChartPersonsData.removeAll(deleteOld1);
+            pieChartPersonsData1.removeAll(deleteOld2);
+            System.out.println(deleteOld2);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
