@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/debts")
 public class DebtController {
-    @Autowired
     private DebtService debtService;
     private PersonService personService;
     private ExpenseService expenseService;
@@ -28,6 +27,7 @@ public class DebtController {
      * @param personService service class for debts
      * @param expenseService service class for debts
      */
+    @Autowired
     public DebtController(DebtServiceImpl debtService, PersonServiceImpl personService, ExpenseServiceImpl expenseService) {
         this.debtService = debtService;
         this.personService = personService;

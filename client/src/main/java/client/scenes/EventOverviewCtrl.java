@@ -4,9 +4,12 @@ import client.utils.ServerUtils;
 import commons.*;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -22,12 +25,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class EventOverviewCtrl {
+public class EventOverviewCtrl implements Initializable {
 
     @FXML
     private Stage stage;
@@ -60,7 +65,6 @@ public class EventOverviewCtrl {
     private Button goToEditPersonButton;
     @FXML
     private Button removePersonButton;
-
     @FXML
     private Label expensesLabel;
     @FXML
@@ -116,16 +120,55 @@ public class EventOverviewCtrl {
     private List<Tag> tags;
     private List<Tag> selectedTags;
 
-
+    private ObservableList<Expense> expenseData;
+    @FXML
+    private ListView<Expense> expenseListView;
     @Inject
     public EventOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+
+    }
+    public void setLanguageText() {
+        String language = mainCtrl.getLanguage();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+        mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("EventOverview"));
+        setLanguageIndicator();
+        goHomeButton.setText(resourceBundle.getString("Home"));
+        editTitleButton.setText(resourceBundle.getString("EditTitle"));
+        goToStatsButton.setText(resourceBundle.getString("Stats"));
+        inviteButton.setText(resourceBundle.getString("Invite"));
+        showAllParticipantsInEventComboBox.setPromptText(resourceBundle.getString("Participants"));
+        showAllExpensesButton.setText(resourceBundle.getString("All"));
+        showExpensesWithPersonButton.setText(resourceBundle.getString("SelectPerson"));
+        showExpensesFromPersonButton.setText(resourceBundle.getString("SelectPerson"));
+        showAllTagsInEvent.setText(resourceBundle.getString("Tags"));
+        emailField.setPromptText(resourceBundle.getString("EmailPromptText"));
+        goToEditPersonButton.setText(resourceBundle.getString("Edit"));
+        removePersonButton.setText(resourceBundle.getString("Delete"));
+        removeExpensesButton.setText(resourceBundle.getString("Delete"));
+        goToEditExpenseButton.setText(resourceBundle.getString("EditExpense"));
+    }
+
+    public void refresh() {
+        event = server.getEvent(eventId);
+        var expenses = event.getExpenses();
+        expenseData = FXCollections.observableList(expenses);
+        expenseListView.setItems(expenseData);
+        showAllExpensesInEvent(new ActionEvent());
+
+    }
     public void setLanguageIndicator() {
         ImageView flagImage = new ImageView(mainCtrl.getPathToFlagImage());
+        flagImage.setFitWidth(20);
+        flagImage.setFitHeight(15);
         Text language = new Text(mainCtrl.getLanguageWithoutImagePath());
+        languageIndicator.getChildren().clear();
         languageIndicator.getChildren().addAll(language, flagImage);
     }
 
@@ -219,19 +262,34 @@ public class EventOverviewCtrl {
             this.selectedTags.add(tag);
         }
     }
-
     /**
      * Method that initialises the page and other useful fields.
      *
      * @param eventID event ID that represents the Event being parsed here.
      */
     public void setup(Long eventID) {
+        setLanguageText();
+
+        server.registerForAddition("/topic/expenses", Expense.class, e -> {
+            Platform.runLater(() -> {
+                expenseData.add(e);
+                refresh();
+            });
+
+        });
+        server.registerForUpdate("/topic/events", Expense.class, e -> {
+            Platform.runLater(() -> {
+                expenseData.add(e);
+                refresh();
+            });
+        });
         EditTitlePane.setVisible(false);
         try {
             Image refreshImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/client/images/Refresh.png")));
             ImageView refreshImageView = new ImageView(refreshImage);
-            refreshImageView.setFitHeight(27);
-            refreshImageView.setFitWidth(30);
+            refreshImageView.setTranslateX(-4);
+            refreshImageView.setFitHeight(20);
+            refreshImageView.setFitWidth(20);
             refreshInviteCodeButton.setGraphic(refreshImageView);
             this.showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(new ArrayList<String>(List.of("Participants"))));
             eventId = eventID;
@@ -337,6 +395,7 @@ public class EventOverviewCtrl {
         } else {
             this.severPersonConnection(selectedPerson);
         }
+        refresh();
     }
 
     /**
@@ -357,10 +416,27 @@ public class EventOverviewCtrl {
             System.out.println("Event doesn't contain the Person!");
             return;
         }
-        this.event.severPersonConnection(person);
-        this.event.getParticipants().remove(person);
-        server.deletePerson(person.getId());
+        List<Expense> expenseList = new ArrayList<>(event.getExpenses());
+        for(Expense expense : expenseList) {
+            if(expense.getInvolved().contains(person)) {
+                if(expense.getReceiver().equals(person)) {
+                    expense.setReceiver(null);
+                    server.updateExpense(expense.getId(), expense);
+                    severExpenseConnection(expense);
+                } else {
+                    List<Person> persons = expense.getInvolved();
+                    persons.remove(expense.getReceiver());
+                    if(persons.size() == 1) {
+                        expense.setReceiver(null);
+                        server.updateExpense(expense.getId(), expense);
+                        severExpenseConnection(expense);
+                    }
+                }
+            }
+        }
+        this.event.removeParticipant(person);
         server.updateEvent(this.event.getId(), this.event);
+        server.deletePerson(person.getId());
         this.setup(eventId);
     }
 
@@ -441,15 +517,16 @@ public class EventOverviewCtrl {
      * Upon selecting a Person, this method should be called in order to rename the filters.
      */
     public void renameFilters() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         if (!validPersonSelection()) {
             System.out.println("Selected Person is null!!! Filter refresh aborted and reset to normal.");
-            this.showExpensesWithPersonButton.setText("Select a Person!");
-            this.showExpensesFromPersonButton.setText("Select a Person!");
+            this.showExpensesWithPersonButton.setText(resourceBundle.getString("SelectPerson"));
+            this.showExpensesFromPersonButton.setText(resourceBundle.getString("SelectPerson"));
             return;
         }
         try {
-            showExpensesFromPersonButton.setText("From " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
-            showExpensesWithPersonButton.setText("Including " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
+            showExpensesFromPersonButton.setText(resourceBundle.getString("From") + " " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
+            showExpensesWithPersonButton.setText(resourceBundle.getString("Including") + " " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName());
 
             System.out.println("Successful filter refresh!");
         } catch (Exception e) {
@@ -534,26 +611,9 @@ public class EventOverviewCtrl {
                 Label label = new Label("There's nothing to display, silly!");
                 filteringExpensesPane.getChildren().add(label);
                 label.setLayoutY(5);
-                return;
             }
-            int y = 5;
-            for (Expense e : selectedExpenses) {
-                double realAmount = BigDecimal.valueOf(e.getAmount() / 1.168958841856)
-                        .setScale(2, RoundingMode.HALF_UP)
-                        .doubleValue();
-                CheckBox newBox = new CheckBox(
-                        e.getReceiver().getFirstName() + " paid " + realAmount +
-                                e.getCurrency() + " for " + e.getDescription()
-                );
-                filteringExpensesPane.getChildren().add(newBox);
-                newBox.setOnAction(event -> {
-                    toggleInSelectedExpenses(e);
-                    //computeSelectedExpenses();
-                });
-                newBox.setLayoutY(y);
-                y += 25;
-            }
-            expenseCheckBoxes = filteringExpensesPane.getChildren().stream().map(t -> (CheckBox) t).toList();
+
+            expenseListView.setItems(FXCollections.observableList(selectedExpenses));
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -597,37 +657,32 @@ public class EventOverviewCtrl {
      *
      * @param e event that triggers the method
      */
-    public void goToEditExpense(ActionEvent e){
-        if (selectedExpenses == null || selectedExpenses.isEmpty()) {
+
+    public void goToEditExpense(ActionEvent e) throws IOException {
+        Expense selectedExpense = expenseListView.getSelectionModel().getSelectedItem();
+        if (selectedExpense == null) {
             System.out.println("Cannot edit expense as none was selected!");
             return;
         }
-        if (selectedExpenses.size() >= 2) {
-            System.out.println("Cannot edit expense as multiple expenses have been selected at once.");
+
+        System.out.println(selectedExpense);
+        mainCtrl.showAddExpense(event.getId(), true, selectedExpense);
+    }
+    /**
+     * Method that removes the Selected Expense from the Event.
+     * @param event event that triggers the method
+     */
+    public void removeExpenses(ActionEvent event) throws IOException {
+        Expense selectedExpense = expenseListView.getSelectionModel().getSelectedItem();
+        if (selectedExpense == null) {
             return;
         }
 
-        Expense expense = selectedExpenses.get(0);
-        System.out.println(expense);
-        mainCtrl.showAddExpense(event.getId(), true, expense);
-        return;
+        severExpenseConnection(selectedExpense);
+        refresh();
+
     }
 
-    /**
-     * Method that removes the Selected Expenses from the Event.
-     * @param event event that triggers the method
-     */
-    public void removeExpenses(ActionEvent event){
-        if (this.selectedExpenses == null || this.selectedExpenses.isEmpty()) {
-            System.out.println("Cannot remove Expense as none was selected.");
-        } else {
-            for (Expense expense : this.selectedExpenses) {
-                this.severExpenseConnection(expense);
-                this.selectedExpenses.remove(expense);
-            }
-            this.setup(eventId);
-        }
-    }
 
     /**
      * Removes an Expense from its association to Event
@@ -650,6 +705,7 @@ public class EventOverviewCtrl {
         }
         this.event.removeExpense(expense);
         server.updateEvent(this.event.getId(), this.event);
+        server.deleteExpense(expense.getId());
         this.setup(eventId);
         return true;
     }
@@ -759,10 +815,20 @@ public class EventOverviewCtrl {
         this.setup(eventId);
     }
 
+    public String getExpenseShownData(Expense e) {
+
+        Double realAmount = BigDecimal.valueOf(e.getAmount() / 1.168958841856)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+       return e.getReceiver().getFirstName() + " paid " + realAmount +
+                        e.getCurrency() + " for " + e.getDescription();
+
+    }
     /**
      * Method that provides the currently selected Event's name
      * @return String, representing the Event's name
      */
+
     public String getEventName() {
         return overviewLabel.getText();
     }

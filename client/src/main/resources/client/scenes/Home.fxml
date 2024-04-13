@@ -14,7 +14,7 @@
 <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: fffaf4;" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
     <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="23.0" layoutX="529.0" layoutY="355.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="65.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="25.0" layoutX="393.0" layoutY="81.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="51.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="25.0" layoutX="367.0" layoutY="81.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="72.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="23.0" layoutX="26.0" layoutY="96.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="99.0" />
       <Pane layoutX="164.0" layoutY="368.0">
          <children>
@@ -58,9 +58,9 @@
             <font>
                 <Font size="16.1" />
             </font></Button>
-        <TextField fx:id="inviteCodeText" layoutX="447.0" layoutY="78.0" prefHeight="25.0" prefWidth="142.0" promptText="Invite Code" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693; -fx-font-family: Rowdies; -fx-font-size: 12.0" styleClass="homePageTextBox">
+        <TextField fx:id="inviteCodeText" layoutX="447.0" layoutY="78.0" prefHeight="28.0" prefWidth="142.0" promptText="Invite Code" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693; -fx-font-family: Rowdies; -fx-font-size: 12.0" styleClass="homePageTextBox">
             </TextField>
-        <Button fx:id="btnSearchEvent" layoutX="392.0" layoutY="77.0" mnemonicParsing="false" onAction="#searchAndGoToEvent" prefHeight="25.0" prefWidth="51.0" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Join" textFill="WHITE" />
+        <Button fx:id="btnSearchEvent" layoutX="355.0" layoutY="76.0" mnemonicParsing="false" onAction="#searchAndGoToEvent" prefHeight="25.0" prefWidth="80.0" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Join" textFill="WHITE" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#999693" height="35.0" layoutX="149.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#999693" height="35.0" layoutX="278.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#999693" height="35.0" layoutX="502.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0" />
