@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -123,6 +124,7 @@ public class EventOverviewCtrl implements Initializable {
     private ObservableList<Expense> expenseData;
     @FXML
     private ListView<Expense> expenseListView;
+
     @Inject
     public EventOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.server = server;
@@ -134,6 +136,7 @@ public class EventOverviewCtrl implements Initializable {
 
 
     }
+
     public void setLanguageText() {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
@@ -163,6 +166,7 @@ public class EventOverviewCtrl implements Initializable {
         showAllExpensesInEvent(new ActionEvent());
 
     }
+
     public void setLanguageIndicator() {
         ImageView flagImage = new ImageView(mainCtrl.getPathToFlagImage());
         flagImage.setFitWidth(20);
@@ -174,6 +178,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Action that opens up the Stats Page for the associated Event.
+     *
      * @param event event that triggers the method
      * @throws IOException Possible IO Exception due to bad arguments
      */
@@ -193,6 +198,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Method that refreshes an Event's invite code and reflects it on the Server.
+     *
      * @param event event that triggers the method
      */
     public void refreshInviteCode(ActionEvent event) {
@@ -203,6 +209,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Getter for the current Event shown on the page.
+     *
      * @return Event object being shown.
      */
     public Event getEvent() {
@@ -235,6 +242,7 @@ public class EventOverviewCtrl implements Initializable {
     /**
      * Method that whenever is called adds/removes the respective Expense argument from
      * the list of currently selected Expenses.
+     *
      * @param expense Expense to add
      */
     public void toggleInSelectedExpenses(Expense expense) {
@@ -250,6 +258,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Method that whenever is called adds/removes the respective Tag argument from the list of currently selected Tags
+     *
      * @param tag Tag to add/remove
      */
     public void toggleInSelectedTags(Tag tag) {
@@ -262,6 +271,7 @@ public class EventOverviewCtrl implements Initializable {
             this.selectedTags.add(tag);
         }
     }
+
     /**
      * Method that initialises the page and other useful fields.
      *
@@ -338,7 +348,7 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void refreshLastVisited() {
-        for (Person person: participants) {
+        for (Person person : participants) {
             if (person.getUser().getId() == mainCtrl.getUserId()) {
                 person.updateLastVisited();
                 System.out.println("REFRESHED!!! " + person.getLastVisited());
@@ -360,6 +370,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Method that handles all logic for selecting a Person and all buttons related to it.
+     *
      * @param event event that triggers the method
      */
     public void showAllParticipantsInEvent(ActionEvent event) {
@@ -369,6 +380,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Method that redirects the User to another Page where they can edit the Details of the selected Person.
+     *
      * @param event event that triggers the method
      * @throws IOException Possible IOException due to bad arguments
      */
@@ -383,6 +395,7 @@ public class EventOverviewCtrl implements Initializable {
     /**
      * Method that removes the Selected Person, if possible, from the associated Event and persists the change
      * to the Database.
+     *
      * @param event event that triggers the method
      * @throws IOException Possible IOException due to bad arguments
      */
@@ -398,6 +411,7 @@ public class EventOverviewCtrl implements Initializable {
     /**
      * Method that removes any association a Person has with the current Event and persists the change
      * to the database.
+     *
      * @param person Person to remove from the Event.
      */
     public void severPersonConnection(Person person) {
@@ -414,16 +428,16 @@ public class EventOverviewCtrl implements Initializable {
             return;
         }
         List<Expense> expenseList = new ArrayList<>(event.getExpenses());
-        for(Expense expense : expenseList) {
-            if(expense.getInvolved().contains(person)) {
-                if(expense.getReceiver().equals(person)) {
+        for (Expense expense : expenseList) {
+            if (expense.getInvolved().contains(person)) {
+                if (expense.getReceiver().equals(person)) {
                     expense.setReceiver(null);
                     server.updateExpense(expense.getId(), expense);
                     severExpenseConnection(expense);
                 } else {
                     List<Person> persons = expense.getInvolved();
                     persons.remove(expense.getReceiver());
-                    if(persons.size() == 1) {
+                    if (persons.size() == 1) {
                         expense.setReceiver(null);
                         server.updateExpense(expense.getId(), expense);
                         severExpenseConnection(expense);
@@ -441,9 +455,9 @@ public class EventOverviewCtrl implements Initializable {
      * Method that sets or resets visibility to buttons related to filtering and selecting Expenses.
      */
     public void expenseFilteringVisibilityCheck() {
-            this.filteringExpensesPane.setVisible(true);
-            this.goToEditExpenseButton.setVisible(true);
-            this.removeExpensesButton.setVisible(true);
+        this.filteringExpensesPane.setVisible(true);
+        this.goToEditExpenseButton.setVisible(true);
+        this.removeExpensesButton.setVisible(true);
     }
 
     /**
@@ -658,13 +672,16 @@ public class EventOverviewCtrl implements Initializable {
         System.out.println(selectedExpense);
         mainCtrl.showAddExpense(event.getId(), true, selectedExpense);
     }
+
     /**
      * Method that removes the Selected Expense from the Event.
+     *
      * @param event event that triggers the method
      */
     public void removeExpenses(ActionEvent event) throws IOException {
         Expense selectedExpense = expenseListView.getSelectionModel().getSelectedItem();
         if (selectedExpense == null) {
+            System.out.println("No Expenses have been selected to remove.");
             return;
         }
 
@@ -717,8 +734,10 @@ public class EventOverviewCtrl implements Initializable {
         }
     }
 
-    /**4
+    /**
+     * 4
      * Method that shows all the Tags in the Event as CheckBoxes.
+     *
      * @param event event that triggers the method
      */
     public void showAllTagsInEvent(ActionEvent event) {
@@ -729,6 +748,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Method that populates and displays CheckBoxes filled with Tags on the Page to allow for selection.
+     *
      * @param tags tags to populate the Pane with.
      */
     public void showAllTags(List<Tag> tags) {
@@ -736,6 +756,8 @@ public class EventOverviewCtrl implements Initializable {
         for (Tag t : tags) {
             CheckBox newBox = new CheckBox(t.getType());
             newBox.setOnAction(event -> toggleInSelectedTags(t));
+            newBox.setStyle("-fx-background-color:" + t.getColor() + ";-fx-text-fill: white;");
+
             chooseTagsPane.getChildren().add(newBox);
             newBox.setLayoutY(y);
             y += 25;
@@ -745,6 +767,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Method that redirects the User to a page to modify their selected Tag.
+     *
      * @param event event that triggers the method
      */
     public void goToEditTag(ActionEvent event) {
@@ -763,46 +786,59 @@ public class EventOverviewCtrl implements Initializable {
      * Method that removes the Selected Tags from the Event. Is only carried out if no Expenses are associated with said
      * Tags. If they are, the method will remove elements in the order they were selected until a Tag in use is
      * discovered.
+     *
      * @param event event that triggers the method
      */
     public void removeTags(ActionEvent event) {
         if (this.selectedTags == null || this.selectedTags.isEmpty()) {
             System.out.println("Cannot remove Tag as none was selected.");
         } else {
-            for (Tag tag : this.event.getTags()) {
+            for (Tag tag : selectedTags) {
+                if (tag.equalsWithoutId(Event.foodTag) || tag.equalsWithoutId(Event.travelTag) || tag.equalsWithoutId(Event.entranceFeesTag)) {
+                    System.out.println("Cannot proceed with operation as Tag is a default one.");
+                }
+
                 for (Expense expense : this.event.getExpenses()) {
                     if (expense.getTag().equals(tag)) {
-                        System.out.println("Cannot proceed with operation as Tag is currently in use.");
-                        return;
+                        System.out.println("Cannot proceed with operation as Tag is currently in use or is default.");
                     }
-                    this.severTagConnection(tag);
-                    System.out.println("Successfully severed the connection with a Tag of the type: " + tag.getType());
+                    return;
                 }
+                if (this.severTagConnection(tag)) {
+                    System.out.println("Successfully severed the connection with a Tag of the type: " + tag.getType());
+                } else {
+                    System.out.println("Could not successfully sever the connection with the ");
+                }
+
             }
+
         }
+
     }
 
     /**
      * Method that removes a specified Tag from an Event. Does not check if it is in use, only if it is associated
      * with the Event's List of Tags
+     *
      * @param tag Tag to remove.
      */
-    public void severTagConnection(Tag tag) {
+    public boolean severTagConnection(Tag tag) {
         if (this.event == null) {
             System.out.println("Event is null!");
-            return;
+            return false;
         }
         if (tag == null) {
             System.out.println("Tag is null!");
-            return;
+            return false;
         }
         if (!this.event.containsTag(tag)) {
             System.out.println("Event doesn't contain the Tag!");
-            return;
+            return false;
         }
         this.event.deprecateTag(tag);
         server.updateEvent(this.event.getId(), this.event);
         this.setup(eventId);
+        return true;
     }
 
     public String getExpenseShownData(Expense e) {
@@ -810,12 +846,14 @@ public class EventOverviewCtrl implements Initializable {
         Double realAmount = BigDecimal.valueOf(e.getAmount() / 1.168958841856)
                 .setScale(2, RoundingMode.HALF_UP)
                 .doubleValue();
-       return e.getReceiver().getFirstName() + " paid " + realAmount +
-                        e.getCurrency() + " for " + e.getDescription();
+        return e.getReceiver().getFirstName() + " paid " + realAmount +
+                e.getCurrency() + " for " + e.getDescription();
 
     }
+
     /**
      * Method that provides the currently selected Event's name
+     *
      * @return String, representing the Event's name
      */
 
@@ -850,29 +888,31 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Sends out an email to the specified Address in order to give an invite to the Event.
-     * @param mail mail field that's filled in by the User. Represents the email address to send an invite to
+     *
+     * @param mail       mail field that's filled in by the User. Represents the email address to send an invite to
      * @param inviteCode invite code to the current event to provide in the email
-     * @param eventName name of the Event to use within the invite email
+     * @param eventName  name of the Event to use within the invite email
      */
-    public void sendMailToParticipants(String mail, String inviteCode, String eventName){
+    public void sendMailToParticipants(String mail, String inviteCode, String eventName) {
         CreateEventCtrl.sendInviteMailToParticipants(mail, inviteCode, eventName, server);
     }
 
     /**
      * Method that shows the popup for editing an Event's name.
+     *
      * @param event event that triggers the method
      */
-    public void showEditPage(ActionEvent event){
-        if (EditTitlePane.isVisible()){
+    public void showEditPage(ActionEvent event) {
+        if (EditTitlePane.isVisible()) {
             EditTitlePane.setVisible(false);
-        }
-        else {
+        } else {
             EditTitlePane.setVisible(true);
         }
     }
 
     /**
      * Method that updates the Title of the Event within the popup.
+     *
      * @param event event that triggers the method
      */
     public void UpdateTitle(ActionEvent event) {
