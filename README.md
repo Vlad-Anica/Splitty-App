@@ -38,6 +38,11 @@ To Actually run the project follow these two simple steps:
 ![server main right clicked](images/serverMainRightclicked.png)
 This should start running the server and once you see the admin password in the console that opened up after a few second you can continue to the next step.
 ![server is running](images/serverRunning.png)
-- Click the dropdown menu at the top right of your screen that now shows Main running. Now select ClientMain (Or the other name you gave the configuration) and click the green run button.
-![Run the client](images/runClient.png)
+- Before running the client you should go to settings, Build, Execution, Deployment, Select Gradle and make sure the Gradle JVM is a jdk-21 (Make sure to click apply)
+![Run the client](images/settings.png)
+![Run the client](images/gradle21.png)
+-Once you have done this you can go to the Gradle elephant icon on the right of your screen and click on app, Tasks, application, run.
+![Run the client](images/gradleIcon.png)
+![Run the client](images/gradleClientRun.png)
 - A new window has now opened with the application running!
+- If you are using the standard server you can connect to it using localhost and the port 8080, have fun!
