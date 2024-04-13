@@ -53,8 +53,6 @@ public class AddExpenseCtrl {
     @FXML
     private TextField tagNameField;
     @FXML
-    private TextField tagClrField;
-    @FXML
     private DatePicker dateField;
     @FXML
     private Label chooseText;
@@ -80,6 +78,8 @@ public class AddExpenseCtrl {
     private Button backButton;
     @FXML
     private Button addTagButton;
+    @FXML
+    private ColorPicker tagColorPicker;
     @FXML
     private Label statusLabel;
     @FXML
@@ -292,7 +292,7 @@ public class AddExpenseCtrl {
                 amountField.setText(null);
                 typeComboBox.cancelEdit();
             }
-            
+
 
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -425,10 +425,13 @@ public class AddExpenseCtrl {
     public void showAddTag(ActionEvent event) throws IOException {
         tagPane.setDisable(false);
         tagPane.setVisible(true);
+        tagColorPicker.setDisable(false);
+        tagColorPicker.setVisible(true);
     }
 
     public void hideAddTag(ActionEvent event) {
-        tagClrField.clear();
+        tagColorPicker.setDisable(true);
+        tagColorPicker.setVisible(false);
         tagNameField.clear();
         tagPane.setDisable(true);
         tagPane.setVisible(false);
@@ -438,13 +441,14 @@ public class AddExpenseCtrl {
 
         if (tagNameField == null || tagNameField.getText().isEmpty())
             return;
-        if (tagClrField == null || tagClrField.getText().isEmpty())
+        if (tagColorPicker == null || tagColorPicker.getValue() == null || Objects.equals(tagColorPicker.getValue().toString(), ""))
             return;
-        Tag tag = (new Tag(tagClrField.getText(), tagNameField.getText()));
+        Tag tag = (new Tag(tagColorPicker.getValue().toString(), tagNameField.getText()));
         tags.add(tag);
         typeComboBox.getItems().add(tag.getType());
         server.addTag(tag);
-        tagClrField.clear();
+        tagColorPicker.setDisable(true);
+        tagColorPicker.setVisible(false);
         tagNameField.clear();
         tagPane.setDisable(true);
         tagPane.setVisible(false);
