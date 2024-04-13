@@ -137,19 +137,16 @@ public class AddExpenseCtrl {
 
             checkBoxes = splitPersonsPane.getChildren().stream().map(t -> (CheckBox) t).toList();
 
-            List<Tag> defaultTags = List.of(
-                    new Tag("green", "Food"),
-                    new Tag("blue", "Entrance Fees"),
-                    new Tag("red", "Travel")
-            );
             tags = new ArrayList<>();
-            tags.addAll(defaultTags);
+            tags.addAll(event.getTags());
             typeComboBox.setItems(FXCollections.observableArrayList(
-                    defaultTags.stream().map(Tag::getType).toList()));
-
-            currencyComboBox.setItems(FXCollections.observableList(
-                    List.of(Currency.EUR, Currency.USD,
-                            Currency.CHF, Currency.GBP)));
+                    tags.stream().map(Tag::getType).toList()));
+            typeComboBox.setOnAction(e -> System.out.println(typeComboBox.getValue()));
+            if(currencyComboBox.getItems().isEmpty()) {
+                currencyComboBox.setItems(FXCollections.observableList(
+                        List.of(Currency.EUR, Currency.USD,
+                                Currency.CHF, Currency.GBP)));
+            }
             currencyComboBox.getSelectionModel().selectFirst();
 
             checkPersonBoxes(new ActionEvent());
@@ -366,6 +363,7 @@ public class AddExpenseCtrl {
         Tag t = null;
         if (typeComboBox.getValue() != null) {
             String tagName = typeComboBox.getValue();
+            System.out.println(tagName);
             for (Tag tag : tags)
                 if (tag.getType().equals(tagName))
                     t = tag;
@@ -424,7 +422,8 @@ public class AddExpenseCtrl {
         Tag tag = (new Tag(tagClrField.getText(), tagNameField.getText()));
         tags.add(tag);
         typeComboBox.getItems().add(tag.getType());
-        server.addTag(tag);
+        this.event.getTags().add(tag);
+        server.updateEvent(this.event.getId(), this.event);
         tagClrField.clear();
         tagNameField.clear();
         tagPane.setDisable(true);

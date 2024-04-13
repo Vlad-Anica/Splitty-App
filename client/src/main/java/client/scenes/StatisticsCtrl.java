@@ -105,6 +105,8 @@ ObservableList<PieChart.Data> pieChartExpensesData =
                 pieChartExpensesData.add(new PieChart.Data(tagName, amount));
             }
         } catch (Exception e){
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
             System.out.println("An error occured when processing the tags!");
             pieChartExpensesData.add(new PieChart.Data("Whoops No Data Found", 1));
             return;
@@ -113,8 +115,8 @@ ObservableList<PieChart.Data> pieChartExpensesData =
         setTotalExpenses();
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
-        totalExpensesLabel.setText(resourceBundle.getString("Totalamountis"));
-        totalExpensesLabel.setText(totalExpensesLabel.getText() + " " + Math.round(totalAmount * 100.0) / 100.0);
+        //totalExpensesLabel.setText(resourceBundle.getString("Totalamounts"));
+        totalExpensesLabel.setText(" " + Math.round(totalAmount * 100.0) / 100.0);
 
     }
 
