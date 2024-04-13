@@ -7,6 +7,7 @@ import commons.Event;
 import commons.Person;
 import commons.User;
 import jakarta.inject.Inject;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -92,11 +93,13 @@ public class HomeCtrl {
      */
     public void setup() {
 
-        server.registerForAddition("/topic/events", Event.class, e -> {
-            eventData.add(e);
-            eventIds.add(e.getId());
-            System.out.println("refreshed");
-            refresh();
+        server.registerForUpdate("/topic/events", Event.class, e -> {
+            Platform.runLater(() -> {
+                eventData.add(e);
+                System.out.println("refreshed");
+                refresh();
+            });
+
         });
 
         System.out.println("!!!!! " + server.getAllEvents().size());
@@ -138,7 +141,7 @@ public class HomeCtrl {
         var events = server.getEvents(mainCtrl.getUserId());
         eventData = FXCollections.observableList(events);
         eventIds = events.stream().map(e -> e.getId()).toList();
-        eventList.setItems(FXCollections.observableList(eventData.stream().map(Event::getName).toList()));
+        eventList.setItems(FXCollections.observableList(events.stream().map(Event::getName).toList()));
 
     }
     public void setUserName(long userId){

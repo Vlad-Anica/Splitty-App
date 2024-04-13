@@ -121,6 +121,7 @@ public class EventOverviewCtrl implements Initializable {
     private List<Tag> selectedTags;
 
     private ObservableList<Expense> expenseData;
+    private ObservableList<String> participantData;
     @FXML
     private ListView<Expense> expenseListView;
     @Inject
@@ -156,10 +157,17 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void refresh() {
+        Stage stage = (Stage) goHomeButton.getScene().getWindow();
+        stage.setTitle(event.getName());
         event = server.getEvent(eventId);
         var expenses = event.getExpenses();
+        var participants = event.getParticipants();
         expenseData = FXCollections.observableList(expenses);
         expenseListView.setItems(expenseData);
+        participantData = FXCollections.observableList(
+                participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
+        );
+        showAllParticipantsInEventComboBox.setItems(participantData);
         showAllExpensesInEvent(new ActionEvent());
 
     }
@@ -269,7 +277,6 @@ public class EventOverviewCtrl implements Initializable {
      */
     public void setup(Long eventID) {
         setLanguageText();
-
         server.registerForAddition("/topic/expenses", Expense.class, e -> {
             Platform.runLater(() -> {
                 expenseData.add(e);
@@ -280,6 +287,13 @@ public class EventOverviewCtrl implements Initializable {
         server.registerForUpdate("/topic/events", Expense.class, e -> {
             Platform.runLater(() -> {
                 expenseData.add(e);
+                refresh();
+            });
+        });
+
+        server.registerForUpdate("/topic/events", Person.class, p -> {
+            Platform.runLater(() -> {
+                participantData.add(p.getFirstName() + " " + p.getLastName());
                 refresh();
             });
         });
@@ -435,7 +449,8 @@ public class EventOverviewCtrl implements Initializable {
             }
         }
         this.event.removeParticipant(person);
-        server.updateEvent(this.event.getId(), this.event);
+        server.send("/app/events", this.event);
+        refresh();
         server.deletePerson(person.getId());
         this.setup(eventId);
     }
@@ -640,7 +655,7 @@ public class EventOverviewCtrl implements Initializable {
             return false;
         }
         this.event.addExpense(newExpense);
-        server.updateEvent(this.event.getId(), this.event);
+        server.send("/app/events", event);
         return true;
     }
 
@@ -704,7 +719,7 @@ public class EventOverviewCtrl implements Initializable {
             return false;
         }
         this.event.removeExpense(expense);
-        server.updateEvent(this.event.getId(), this.event);
+        server.send("/app/events", event);
         server.deleteExpense(expense.getId());
         this.setup(eventId);
         return true;
@@ -811,7 +826,7 @@ public class EventOverviewCtrl implements Initializable {
             return;
         }
         this.event.deprecateTag(tag);
-        server.updateEvent(this.event.getId(), this.event);
+        server.send("/app/events", event);
         this.setup(eventId);
     }
 
@@ -907,7 +922,8 @@ public class EventOverviewCtrl implements Initializable {
             }
             currentEvent.setName(newTitle);
             try {
-                server.updateEvent(currentEvent);
+                server.send("/app/events", currentEvent);
+                refresh();
             } catch (Exception e) {
                 System.out.println("An error occurred whilst trying to persist the event!");
             }

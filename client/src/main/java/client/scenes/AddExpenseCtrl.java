@@ -267,7 +267,7 @@ public class AddExpenseCtrl {
                    if (!event.containsExpense(expenseToEdit))
                      event.addExpense(expenseToEdit);
 
-                   server.updateEvent(event.getId(), event);
+                   server.send("/app/events", event);
                    statusLabel.setText(expenseEditedSuccess);
                }
                else {

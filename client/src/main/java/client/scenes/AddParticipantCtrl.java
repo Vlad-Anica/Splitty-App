@@ -167,7 +167,7 @@ public class AddParticipantCtrl {
                     currentEvent.addParticipant(p);
                     participantAdded.setText(participantAddedSuccess);
                 }
-                server.updateEvent(currentEvent.getId(), currentEvent);
+                 server.send("/app/events", currentEvent);
                  participantAdded.setTextFill(Color.BLACK);
                 System.out.println(p);
              }
