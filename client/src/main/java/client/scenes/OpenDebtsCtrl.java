@@ -83,12 +83,12 @@ public class OpenDebtsCtrl {
     public void setup() {
         setTextLanguage();
 //        List<Debt> debts = server.getDebts(); //gets debt from server but for now uses debts from list created below for testing
-        List<Person> persons = server.getPersonsByUserId(1);
+        List<Person> persons = server.getPersonsByUserId(mainCtrl.getUserId());
         for (Person p: persons
              ) {
             System.out.println(p);
         }
-        List<Debt> debtTest = server.getDebtsByUserId(53);
+        List<Debt> debtTest = server.getDebtsByUserId(mainCtrl.getUserId());
         System.out.println(debtTest.size());
         for (Debt d:debtTest) {
             System.out.println(d);
