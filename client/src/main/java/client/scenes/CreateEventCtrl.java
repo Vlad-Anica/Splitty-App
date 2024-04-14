@@ -62,9 +62,6 @@ public class CreateEventCtrl {
 
     @FXML
     private Label statusLabel;
-
-    @FXML
-    private ComboBox<String> tagComboBox;
     private MainCtrl mainCtrl;
     private ServerUtils server;
     private String warningTitle;
@@ -100,7 +97,6 @@ public class CreateEventCtrl {
         dateLabel.setText(resourceBundle.getString("Date"));
         homeBtn.setText(resourceBundle.getString("Home"));
         inviteLabel.setText(resourceBundle.getString("Invitesomepeople"));
-        tagComboBox.setPromptText(resourceBundle.getString("ChooseTag"));
         clearBtn.setText(resourceBundle.getString("Clear"));
         createBtn.setText(resourceBundle.getString("Create"));
         warningText = resourceBundle.getString("Pleasefillallfieldscorrectly");

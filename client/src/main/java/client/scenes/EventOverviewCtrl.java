@@ -137,6 +137,8 @@ public class EventOverviewCtrl implements Initializable {
     private ObservableList<String> participantData;
     @FXML
     private ListView<Expense> expenseListView;
+    @FXML
+    private Button goOpenDebtsButton;
 
     @Inject
     public EventOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -149,12 +151,16 @@ public class EventOverviewCtrl implements Initializable {
 
 
     }
+    public void goOpenDebts() {
+        mainCtrl.showOpenDebts(this.event);
+    }
 
     public void setLanguageText() {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("EventOverview"));
         setLanguageIndicator();
+        goOpenDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         editTitleButton.setText(resourceBundle.getString("EditTitle"));
         goToStatsButton.setText(resourceBundle.getString("Stats"));
@@ -169,11 +175,11 @@ public class EventOverviewCtrl implements Initializable {
         removePersonButton.setText(resourceBundle.getString("Delete"));
         removeExpensesButton.setText(resourceBundle.getString("Delete"));
         goToEditExpenseButton.setText(resourceBundle.getString("EditExpense"));
+        goToEditTagButton.setText(resourceBundle.getString("EditTag"));
+        removeTagButton.setText(resourceBundle.getString("RemoveTag"));
     }
 
     public void refresh() {
-        Stage stage = (Stage) goHomeButton.getScene().getWindow();
-        stage.setTitle(event.getName());
         event = server.getEvent(eventId);
         var expenses = event.getExpenses();
         var participants = event.getParticipants();
@@ -183,6 +189,7 @@ public class EventOverviewCtrl implements Initializable {
                 participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
         );
         showAllParticipantsInEventComboBox.setItems(participantData);
+        showAllParticipantsInEventComboBox.setStyle("-fx-background-color: #72a4ff;-fx-text-background-color: #72a4ff;-fx-text-fill: #fffaf4;");
         showAllExpensesInEvent(new ActionEvent());
 
     }
@@ -328,7 +335,7 @@ public class EventOverviewCtrl implements Initializable {
             refreshImageView.setFitWidth(20);
             refreshInviteCodeButton.setGraphic(refreshImageView);
             this.showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(new ArrayList<String>(List.of("Participants"))));
-            eventId = eventID;
+            this.eventId = eventID;
             this.event = server.getEvent(eventID);
             eventDateLabel.setText(event.getDate().toString());
             inviteCodeLabel.setText(event.getInviteCode());
@@ -388,8 +395,8 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void choosePersonsVisibilityCheck() {
-            this.goToEditPersonButton.setVisible(true);
-            this.removePersonButton.setVisible(true);
+        this.goToEditPersonButton.setVisible(true);
+        this.removePersonButton.setVisible(true);
     }
 
     /**
@@ -470,6 +477,9 @@ public class EventOverviewCtrl implements Initializable {
             }
         }
         this.event.removeParticipant(person);
+        if(person.getUpdatedAt().after(event.getUpdatedAt())) {
+            event.setUpdatedAt(person.getUpdatedAt());
+        }
         server.send("/app/events", this.event);
         refresh();
         server.deletePerson(person.getId());
@@ -508,17 +518,6 @@ public class EventOverviewCtrl implements Initializable {
      * Method that resets the parameters of the expense filtering pane as needed.
      */
     private void resetExpenseFilteringPane() {
-
-        CheckBox box = new CheckBox();
-        Label label = new Label();
-        for (Object element : this.filteringExpensesPane.getChildren()) {
-            if (element.getClass() == box.getClass()) {
-                ((CheckBox) element).setVisible(false);
-            }
-            if (element.getClass() == label.getClass()) {
-                ((Label) element).setVisible(false);
-            }
-        }
         this.filteringExpensesPane.getChildren().removeAll();
         this.filteringExpensesPane.setLayoutX(175);
         this.filteringExpensesPane.setLayoutY(170);
@@ -640,23 +639,6 @@ public class EventOverviewCtrl implements Initializable {
                 System.out.println("The Event has no such Expenses associated with it.");
             }
             expenseListView.setItems(FXCollections.observableList(selectedExpenses));
-            int y = 5;
-            for(Expense expense: selectedExpenses) {
-                Label label = new Label();
-                Tag t = expense.getTag();
-                String tagColour;
-                if (t.getColor().equals("red") || t.getColor().equals("blue") || t.getColor().equals("green")) {
-                    tagColour = t.getColor();
-                } else {
-                    tagColour = "#" + t.getColor().substring(2);
-                }
-
-                label.setText(t.getType());
-                label.setStyle("-fx-background-color:" + tagColour + ";-fx-text-fill: white;");
-                filteringExpensesPane.getChildren().add(label);
-                label.setLayoutY(y);
-                y += 25;
-            }
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -750,6 +732,9 @@ public class EventOverviewCtrl implements Initializable {
             return false;
         }
         this.event.removeExpense(expense);
+        if(expense.getUpdatedAt().after(event.getUpdatedAt())) {
+            event.setUpdatedAt(expense.getUpdatedAt());
+        }
         server.send("/app/events", event);
         server.deleteExpense(expense.getId());
         this.setup(eventId);
@@ -761,9 +746,9 @@ public class EventOverviewCtrl implements Initializable {
      * based on whether they should logically be shown.
      */
     public void tagsVisibilityCheck() {
-            this.chooseTagsPane.setVisible(true);
-            this.goToEditTagButton.setVisible(true);
-            this.removeTagButton.setVisible(true);
+        this.chooseTagsPane.setVisible(true);
+        this.goToEditTagButton.setVisible(true);
+        this.removeTagButton.setVisible(true);
     }
 
     /**
@@ -891,7 +876,7 @@ public class EventOverviewCtrl implements Initializable {
                 }
                 for (Expense expense : this.event.getExpenses()) {
                     if (expense.getTag().equals(tag)) {
-                        System.out.println("Cannot proceed with deletion as Tag <\" + tag.getType() + \"> is currently in use or is default.");
+                        System.out.println("Cannot proceed with deletion as Tag <" + tag.getType() + "> is currently in use or is default.");
                         return;
                     }
                 }
@@ -1015,7 +1000,7 @@ public class EventOverviewCtrl implements Initializable {
      *
      * @param event event that triggers the method
      */
-    public void UpdateTitle(ActionEvent event) {
+    public void updateTitle(ActionEvent event) {
         String newTitle = editTitleTextField.getText();
         if (newTitle.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);

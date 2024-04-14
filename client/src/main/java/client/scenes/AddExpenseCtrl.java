@@ -240,49 +240,50 @@ public class AddExpenseCtrl {
 
                 Double amount = Double.valueOf(amountField.getText());
 
-            double amountPerPerson = splitEvenButton.isSelected() ?
-                    amount / getAllGivers().size() : amount / selectedBoxesNumber();
+                double amountPerPerson = splitEvenButton.isSelected() ?
+                        amount / getAllGivers().size() : amount / selectedBoxesNumber();
 
                 //convert LocalDate to date
                 LocalDate localDate = dateField.getValue();
                 Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 System.out.println(getPayerData() + " " + getCurrencyData() + " " + getTypeData());
                 Expense e = new Expense(description, amount, date, getPayerData(), getAllGivers(),
-                    getCurrencyData(), getTypeData());
+                        getCurrencyData(), getTypeData());
 
-               if (inEditMode) {
-                   if (event.containsExpense(expenseToEdit))
-                     event.removeExpense(expenseToEdit);
+                if (inEditMode) {
+                    if (event.containsExpense(expenseToEdit))
+                        event.removeExpense(expenseToEdit);
 
-                   expenseToEdit.setAmount(e.getAmount());
-                   expenseToEdit.setDescription(e.getDescription());
-                   expenseToEdit.setReceiver(e.getReceiver());
-                   expenseToEdit.setDate(e.getDate());
-                   expenseToEdit.setCurrency(e.getCurrency());
-                   expenseToEdit.setTag(e.getTag());
-                   expenseToEdit.setGivers(e.getGivers());
+                    expenseToEdit.setAmount(e.getAmount());
+                    expenseToEdit.setDescription(e.getDescription());
+                    expenseToEdit.setReceiver(e.getReceiver());
+                    expenseToEdit.setDate(e.getDate());
+                    expenseToEdit.setCurrency(e.getCurrency());
+                    expenseToEdit.setTag(e.getTag());
+                    expenseToEdit.setGivers(e.getGivers());
 
-                   server.updateExpense(expenseToEdit.getId(), expenseToEdit);
+                    server.updateExpense(expenseToEdit.getId(), expenseToEdit);
 
-                   if (!event.containsExpense(expenseToEdit))
-                     event.addExpense(expenseToEdit);
+                    if (!event.containsExpense(expenseToEdit))
+                        event.addExpense(expenseToEdit);
 
-                   server.send("/app/events", event);
-                   statusLabel.setText(expenseEditedSuccess);
-               }
-               else {
-                   //server.send("/app/expenses", e);
-                   event.addExpense(e);
-                   server.send("/app/events", event);
-                   statusLabel.setText(expenseCreatedSuccess);
-               }
+                    server.send("/app/events", event);
+                    statusLabel.setText(expenseEditedSuccess);
+                }
+                else {
+                    //server.send("/app/expenses", e);
+                    event.addExpense(e);
+                    //event.calculateDebts(event.getExpenses());
+                    server.send("/app/events", event);
+                    statusLabel.setText(expenseCreatedSuccess);
+                }
 
 
-               System.out.println("Created expense");
+                System.out.println("Created expense");
                 System.out.println(e);
 
-               statusLabel.setTextFill(Color.BLACK);
-               clearFields();
+                statusLabel.setTextFill(Color.BLACK);
+                clearFields();
             }
             else{
                 payerComboBox.cancelEdit();
@@ -314,7 +315,7 @@ public class AddExpenseCtrl {
             }
             else {
                 String name = getPayerData().getFirstName() + " " +
-                              getPayerData().getLastName();
+                        getPayerData().getLastName();
                 System.out.println(name);
                 for (CheckBox box : checkBoxes) {
                     box.setDisable(true);
@@ -443,10 +444,11 @@ public class AddExpenseCtrl {
         if (tagColorPicker == null || tagColorPicker.getValue() == null || Objects.equals(tagColorPicker.getValue().toString(), ""))
             return;
         Tag tag = (new Tag(tagColorPicker.getValue().toString(), tagNameField.getText()));
+        tag = server.addTag(tag);
         tags.add(tag);
         typeComboBox.getItems().add(tag.getType());
         this.event.addTag(tag);
-        server.addTag(tag);
+        this.server.updateEvent(this.event.getId(), this.event);
         tagColorPicker.setDisable(true);
         tagColorPicker.setVisible(false);
         tagNameField.clear();
