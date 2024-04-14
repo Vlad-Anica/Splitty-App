@@ -322,7 +322,7 @@ public class Expense {
         StringBuilder emptyString = new StringBuilder();
         emptyString.append(" ".repeat(Math.max(0, (this.getTag().getType().length() + 1) * 2)));
         return emptyString + receiver.getFirstName() + " " + receiver.getLastName() + " paid " + truncatedAmount +
-                currency + " for " + this.getTag().getType() + description + " at " + parsedDate;
+                currency + " for " + this.getTag().getType() + " " + description + " at " + parsedDate;
     }
 }
 

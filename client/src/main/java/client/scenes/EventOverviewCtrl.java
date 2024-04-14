@@ -176,8 +176,6 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void refresh() {
-        Stage stage = (Stage) goHomeButton.getScene().getWindow();
-        stage.setTitle(event.getName());
         event = server.getEvent(eventId);
         var expenses = event.getExpenses();
         var participants = event.getParticipants();
