@@ -30,17 +30,9 @@ public class HomeCtrl {
     @FXML
     private Label mainPageTestLabel;
     @FXML
-    private Button goDebtsButton;
-    @FXML
-    private Button goHomeButton;
-    @FXML
     private Button goSettingsButton;
     @FXML
     private Button goEventButton;
-    @FXML
-    private Button addParticipantButton;
-    @FXML
-    private Button addExpenseButton;
     @FXML
     private Button addLanguageButton;
     @FXML
@@ -181,14 +173,10 @@ public class HomeCtrl {
         welcomeText = resourceBundle.getString("WelcomeText");
         homeWelcomeLabel.setText(welcomeText + " " + firstName + "!");
         inviteCodeText.setPromptText(resourceBundle.getString("InviteCode"));
-        goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         createEventBtn.setText(resourceBundle.getString("CreateEvent"));
-        goHomeButton.setText(resourceBundle.getString("Home"));
         goSettingsButton.setText(resourceBundle.getString("Settings"));
         goEventButton.setText(resourceBundle.getString("Submit"));
         eventList.setPromptText(resourceBundle.getString("SelectEvent"));
-        addParticipantButton.setText(resourceBundle.getString("AddParticipant"));
-        addExpenseButton.setText(resourceBundle.getString("AddExpense"));
         addLanguageButton.setText(resourceBundle.getString("AddLanguage"));
         mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("Home"));
         adminPasswordField.setPromptText(resourceBundle.getString("AdminPassword"));
@@ -214,22 +202,6 @@ public class HomeCtrl {
 
     public void goToSettings() {
         mainCtrl.showSettings();
-    }
-
-
-    public void goToAddParticipant(ActionEvent event) throws IOException {
-    }
-
-    public void goToAddExpense(ActionEvent event) throws IOException {
-
-    }
-
-    public void goToDebts(ActionEvent event) throws IOException {
-        mainCtrl.showOpenDebts();
-    }
-
-    public void goHome(ActionEvent event) throws IOException {
-        refresh();
     }
 
     public void goToAddLanguage(ActionEvent event) throws IOException {
