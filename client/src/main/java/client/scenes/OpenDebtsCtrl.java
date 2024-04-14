@@ -3,28 +3,18 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Debt;
 import commons.Event;
-import commons.Expense;
 import commons.Person;
 import jakarta.inject.Inject;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /***
@@ -48,31 +38,18 @@ public class OpenDebtsCtrl {
     private Scene scene;
     @FXML
     private Parent root;
-    @FXML
-    private AnchorPane debtsPane;
-    @FXML
-    private TableColumn<Debt, String> columnReceiver;
 
     @FXML
-    private TableColumn<Debt, Integer> columnAmount;
-
-    @FXML
-    private TableColumn<Debt, String> columnGiver;
-
-    @FXML
-    private TableColumn<Debt, Long> columnId;
-
-    @FXML
-    private TableColumn<Debt, String> columnRemind;
-
-    @FXML
-    private TableColumn<Debt, String> columnSettle;
-
-    @FXML
-    private TableView<Debt> table;
+    private Accordion debtList;
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
+    private String owesString;
+    private String bankInfo;
+    private String emailConfigConfirmation;
+    private String badNumberInput;
+    String emailTitle, emailMessage;
+    Event event;
 
     @Inject
     public OpenDebtsCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -80,94 +57,93 @@ public class OpenDebtsCtrl {
         this.server = server;
     }
 
-    public void setup() {
+    public void setup(Event event) {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+
         setTextLanguage();
-//        List<Debt> debts = server.getDebts(); //gets debt from server but for now uses debts from list created below for testing
-        List<Person> persons = server.getPersonsByUserId(mainCtrl.getUserId());
-        for (Person p: persons
-             ) {
-            System.out.println(p);
-        }
-        List<Debt> debtTest = server.getDebtsByUserId(mainCtrl.getUserId());
-        System.out.println(debtTest.size());
-        for (Debt d:debtTest) {
-            System.out.println(d);
-        }
-        Expense e = new Expense();
-        e.setDescription("We do that stuff");
-        List<Debt> testDebts = List.of(new Debt(new Person("Frank", "Verkoren"), new Person("Duco", "Lam"), new Event(), 2.50), new Debt(new Person("Duco", "Lam"), new Person("Frank", "Verkoren"), new Event(), 404));
-        ObservableList<Debt> debtsList = FXCollections.observableList(testDebts.stream().filter(x -> !x.getSettled()).toList());
-        columnReceiver.setCellValueFactory(cellData -> {
-            SimpleStringProperty property = new SimpleStringProperty();
-            if (cellData.getValue() != null && cellData.getValue().getReceiver() != null) {
-                property.set(cellData.getValue().getReceiver().getFirstName() + " " + cellData.getValue().getReceiver().getLastName());
-            }
-            return property;
-        });
-        columnGiver.setCellValueFactory(cellData -> {
-            SimpleStringProperty property = new SimpleStringProperty();
-            if (cellData.getValue() != null && cellData.getValue().getGiver() != null) {
-                property.set(cellData.getValue().getGiver().getFirstName() + " " + cellData.getValue().getGiver().getLastName());
-            }
-            return property;
-        });
-        columnAmount.setCellValueFactory(new PropertyValueFactory<Debt, Integer>("amount"));
-        columnId.setCellValueFactory(new PropertyValueFactory<Debt, Long>("id"));
-        Callback<TableColumn<Debt, String>, TableCell<Debt, String>> cellFactoryRemind
-                = //
-                new Callback<>() {
-                    public TableCell call(final TableColumn<Debt, String> param) {
-                        final TableCell<Debt, String> cell = new TableCell<>() {
-                            Button btn = new Button(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("Remind"));
+        this.event = event;
 
-                            public void updateItem(String item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (empty) {
-                                    setGraphic(null);
-                                    setText(null);
-                                } else {
-                                    btn.setStyle("-fx-font: 10 system;");
-                                    btn.setOnAction(event -> {
-                                        long giverId = getTableView().getItems().get(getIndex()).getGiver().getId();
-                                        long receiverId = getTableView().getItems().get(getIndex()).getReceiver().getId();
-                                        System.out.println("giver id: " + giverId + " receiver id: " + receiverId);
-                                        System.out.println("An email needs to be sent");
-                                    });
-                                    setGraphic(btn);
-                                }
-                            }
-                        };
-                        return cell;
-                    }
-                };
-        columnRemind.setCellFactory(cellFactoryRemind);
-        Callback<TableColumn<Debt, String>, TableCell<Debt, String>> cellFactorySettle
-                = //
-                new Callback<>() {
-                    public TableCell call(final TableColumn<Debt, String> param) {
-                        final TableCell<Debt, String> cell = new TableCell<>() {
-                            Button btn = new Button(ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath()).getString("Settle"));
+        for (int i = 0; i < event.getDebts().size(); i++) {
+            VBox vbox = new VBox();
+            Debt debt = event.getDebts().get(i);
+            TitledPane debtTitle = new TitledPane(getDebtTitle(debt), vbox);
 
-                            public void updateItem(String item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (empty) {
-                                    setGraphic(null);
-                                    setText(null);
-                                } else {
-                                    btn.setStyle("-fx-font: 10 system;");
-                                    btn.setOnAction(event -> {
-                                        long id = getTableView().getItems().get(getIndex()).getId();
-                                        System.out.println("debt with the id '" + id + "' needs to be settled");
-                                    });
-                                    setGraphic(btn);
-                                }
-                            }
-                        };
-                        return cell;
-                    }
-                };
-        columnSettle.setCellFactory(cellFactorySettle);
-        table.setItems(debtsList);
+            if (hasBankInfo(debt.getReceiver())) {
+                bankInfo = "BIC: " + debt.getReceiver().getBIC() + "\n" + "IBAN: " +
+                        debt.getReceiver().getIBAN() + "\n";
+            } else {
+                bankInfo = resourceBundle.getString("NoBankInfo");
+            }
+            Button btnReminder = new Button("Reminder");
+            if (hasMail(debt.getReceiver()) &&  mainCtrl.checkEmailConfig()) {
+                emailConfigConfirmation = resourceBundle.getString("EmailIsConfigured");
+                btnReminder.setOnAction(event1 -> {
+                    emailTitle = resourceBundle.getString("DebtTo") + " " + debt.getReceiver().getFirstName() +
+                            " " + debt.getReceiver().getFirstName();
+                    emailMessage = resourceBundle.getString("PayTo") + " " + debt.getReceiver().getFirstName() +
+                            " " + debt.getReceiver().getFirstName() + " " + debt.getAmount() + debt.getCurrency();
+                    mainCtrl.sendEmailFromCurrentUser(debt.getReceiver().getEmail(), emailMessage, emailTitle);
+                });
+            } else {
+                btnReminder.setDisable(true);
+                emailConfigConfirmation = resourceBundle.getString("EmailNotConfigured");
+            }
+
+            Button btnSettle = new Button(resourceBundle.getString("Settle"));
+            btnSettle.setOnAction(event1 -> {
+                server.settleDebt(debt.getId());
+                setup(server.getEvent(event.getId()));
+            });
+
+            TextField partialPay = new TextField();
+            partialPay.setPromptText("Partial amount");
+
+            Button btnPayPartially = new Button(resourceBundle.getString("PayPartially"));
+            btnPayPartially.setOnAction(event1 -> {
+                try {
+                    final double amt = Double.parseDouble(partialPay.getText());
+                    server.payDebtPartially(debt.getId(), amt);
+                    setup(server.getEvent(event.getId()));
+                } catch (NumberFormatException e) {
+                    warnNumber();
+                } catch (NullPointerException e) {
+                    warnNumber();
+                }
+
+            });
+
+            vbox.getChildren().add(new Label(bankInfo));
+            vbox.getChildren().add(new Label(emailConfigConfirmation));
+            vbox.getChildren().add(partialPay);
+            vbox.getChildren().add(btnPayPartially);
+            vbox.getChildren().add(btnReminder);
+            vbox.getChildren().add(btnSettle);
+            debtList.getPanes().add(debtTitle);
+        }
+
+    }
+
+    public String getDebtTitle(Debt debt) {
+        return debt.getGiver().getFirstName() + " " + debt.getGiver().getLastName()
+                + " " + owesString + " " + debt.getReceiver().getFirstName() + " " +
+                debt.getReceiver().getLastName() + " " + debt.getAmount() + debt.getCurrency();
+    }
+
+    public void warnNumber() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
+
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(resourceBundle.getString("BadNumberInput"));
+        alert.setContentText(resourceBundle.getString("BadNumberInput"));
+        alert.showAndWait();
+    }
+
+    public boolean hasBankInfo(Person p) {
+        return (p.getIBAN() != null && !p.getIBAN().isEmpty()
+                && p.getBIC() != null && !p.getBIC().isEmpty());
+    }
+    public boolean hasMail(Person p) {
+        return (p.getEmail() != null && !p.getEmail().isEmpty());
     }
 
     public void setTextLanguage() {
@@ -178,12 +154,7 @@ public class OpenDebtsCtrl {
         goBackButton.setText(resourceBundle.getString("Back"));
         openDebtsTitle.setText(resourceBundle.getString("OpenDebts"));
         mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("OpenDebts"));
-        columnReceiver.setText(resourceBundle.getString("Receiver"));
-        columnAmount.setText(resourceBundle.getString("Amount"));
-        columnGiver.setText(resourceBundle.getString("Giver"));
-        columnId.setText(resourceBundle.getString("Id"));
-        columnRemind.setText(resourceBundle.getString("Remind"));
-        columnSettle.setText(resourceBundle.getString("Settle"));
+        owesString = resourceBundle.getString("Owes");
     }
 
     //need a way to show open debts from the database
