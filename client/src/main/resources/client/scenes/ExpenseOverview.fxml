@@ -17,7 +17,7 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#72a4ff" height="38.0" layoutX="234.0" layoutY="241.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="132.0" />
       <Circle fill="#bcb8b3" layoutX="146.0" layoutY="222.0" radius="44.0" stroke="BLACK" strokeType="INSIDE" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="25.0" layoutX="514.0" layoutY="36.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="72.0" />
-        <Button fx:id="btnSearchEvent" layoutX="512.0" layoutY="32.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Go Back" textFill="WHITE" />
+        <Button fx:id="goBackButtonExpenses" layoutX="512.0" layoutY="32.0" mnemonicParsing="false" onAction="#goBackToEvent" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Go Back" textFill="WHITE" />
       <Circle fill="#bcb8b3" layoutX="146.0" layoutY="169.0" radius="27.0" stroke="BLACK" strokeType="INSIDE" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffaf4" height="50.0" layoutX="100.0" layoutY="217.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="95.0" />
       <Circle fill="#e6e1dc" layoutX="446.0" layoutY="222.0" radius="44.0" stroke="BLACK" strokeType="INSIDE" />
@@ -27,7 +27,7 @@
       <Polygon fill="#5982c9" layoutX="291.0" layoutY="174.0" points="-31.333328247070312, 40.0, 20.0, 40.0, -5.6666717529296875, -20.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <Polygon fill="#72a4ff" layoutX="328.0" layoutY="174.0" points="-31.333328247070312, 40.0, 20.0, 40.0, -5.6666717529296875, -20.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <Polygon fill="#aac9ff" layoutX="366.0" layoutY="174.0" points="-31.333328247070312, 40.0, 20.0, 40.0, -5.6666717529296875, -20.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-      <Label fx:id="NameFromLabel" layoutX="93.0" layoutY="230.0" text="{Name From}">
+      <Label fx:id="NameFromLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="80.0" layoutY="231.0" prefHeight="20.0" prefWidth="132.0" text="{Name From}" textAlignment="CENTER">
          <font>
             <Font name="Rowdies Regular" size="16.0" />
          </font>
@@ -37,32 +37,32 @@
             <Font name="Rowdies Regular" size="16.0" />
          </font>
       </Label>
-      <Label fx:id="ExpenseNameLabel" layoutX="177.0" layoutY="26.0" text="{Expense Name}">
+      <Label fx:id="ExpenseNameLabel" alignment="CENTER" layoutX="111.0" layoutY="28.0" prefHeight="42.0" prefWidth="383.0" style="-fx-alignment: CENTER; -fx-text-alignment: CENTER;" text="{Expense Name}" wrapText="true">
          <font>
             <Font name="Rowdies Regular" size="33.0" />
          </font>
       </Label>
-      <Label fx:id="EventNameLabel" layoutX="259.0" layoutY="71.0" text="{Event Name}">
+      <Label fx:id="EventNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="245.0" layoutY="70.0" prefHeight="15.0" prefWidth="111.0" text="{Event Name}" textAlignment="CENTER">
          <font>
             <Font name="Rowdies Regular" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="AmountLabel" layoutX="262.0" layoutY="250.0" text="{Amount}" textFill="WHITE">
+      <Label fx:id="AmountLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="240.0" layoutY="250.0" prefHeight="20.0" prefWidth="124.0" text="{Amount}" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="Rowdies Regular" size="16.0" />
          </font>
       </Label>
-      <Label fx:id="TimeLabel" layoutX="279.0" layoutY="127.0" text="{Time}">
+      <Label fx:id="TimeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="181.0" layoutY="127.0" prefHeight="15.0" prefWidth="242.0" text="{Time}" textAlignment="CENTER" textOverrun="CLIP">
          <font>
             <Font name="Rowdies Light" size="12.0" />
          </font>
       </Label>
       <Rectangle arcWidth="5.0" fill="DODGERBLUE" height="57.0" layoutX="-3.0" layoutY="320.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="603.0" />
-      <Label fx:id="EventNameLabel1" layoutX="99.0" layoutY="337.0" text="{Tag Name}" textFill="WHITE">
+      <Label fx:id="TagNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="68.0" layoutY="336.0" prefHeight="26.0" prefWidth="157.0" text="{Tag Name}" textFill="WHITE">
          <font>
             <Font name="Rowdies Regular" size="20.0" />
          </font>
       </Label>
-      <ListView editable="true" layoutX="375.0" layoutY="221.0" prefHeight="170.0" prefWidth="143.0" style="-fx-background-color: #fffaf4; -fx-border-color: #e6e1dc; -fx-border-radius: 4px;" />
+      <ListView fx:id="ToListView" editable="true" layoutX="375.0" layoutY="221.0" prefHeight="170.0" prefWidth="143.0" style="-fx-background-color: #fffaf4; -fx-border-color: #e6e1dc; -fx-border-radius: 4px;" />
     </children>
 </AnchorPane>

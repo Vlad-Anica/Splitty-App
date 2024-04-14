@@ -398,6 +398,16 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)//
 				.get(new GenericType<List<Expense>>(){});
 	}
+
+	public Expense getExpenseById(long expenseId){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("/api/expenses/" + expenseId)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<Expense>(){});
+	}
+
+
 	public User addUser(String firstName, String lastName, String email, Currency preferredCurency){
 		System.out.println("Server: " + getSERVER());
 

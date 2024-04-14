@@ -613,7 +613,7 @@ public class MainCtrl {
 
     public void showExpenseOverview(Long eventId, Long expenseId){
         expenseOverviewCtrl.setup(eventId, expenseId);
-        primaryStage.setTitle("Expense");
+        primaryStage.setTitle("Expense: " + server.getExpenseById(expenseId).getDescription());
         primaryStage.setScene(expenseOverviewScene);
     }
 
