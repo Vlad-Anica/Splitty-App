@@ -175,6 +175,8 @@ public class EventOverviewCtrl implements Initializable {
         removePersonButton.setText(resourceBundle.getString("Delete"));
         removeExpensesButton.setText(resourceBundle.getString("Delete"));
         goToEditExpenseButton.setText(resourceBundle.getString("EditExpense"));
+        goToEditTagButton.setText(resourceBundle.getString("EditTag"));
+        removeTagButton.setText(resourceBundle.getString("RemoveTag"));
     }
 
     public void refresh() {
