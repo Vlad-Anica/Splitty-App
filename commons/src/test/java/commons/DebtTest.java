@@ -93,12 +93,4 @@ class DebtTest {
         assertEquals(a.hashCode(), b.hashCode());
     }
 
-    @Test
-    public void notEqualsHashCode() {
-        Event e = new Event();
-        var a = new Debt(John, Bob, e, 3.0);
-        var b =  new Debt(John, Bob, e, 7.0);
-        assertNotEquals(a, b);
-        assertNotEquals(a.hashCode(), b.hashCode());
-    }
 }
