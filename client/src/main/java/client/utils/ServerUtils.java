@@ -51,6 +51,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
 public class ServerUtils {
 
@@ -411,6 +412,16 @@ public class ServerUtils {
 				.post(Entity.entity(new User(firstName,lastName,email,preferredCurency), APPLICATION_JSON), User.class);
 	}
 
+	public User saveUser(User user){
+		System.out.println("Server: " + getSERVER());
+
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("/user/add")
+				.request(APPLICATION_JSON)
+				.post(Entity.entity(user, APPLICATION_JSON), User.class);
+	}
+
 	/**
 	 * Returns an Event Object associated with the iD if possible. TO-DO FINISH
 	 * @param eventID long, representing the Event's ID
@@ -662,6 +673,25 @@ public class ServerUtils {
 		res.close();
 		client.close();
 	}
+
+	public void downloadLanguageTemplate() throws URISyntaxException, IOException {
+
+		Client client = ClientBuilder.newClient();
+		Response res = client.target(SERVER).path("api/downloads/languageTemplate")
+				.request(TEXT_PLAIN)
+				.accept(TEXT_PLAIN)
+				.get();
+
+		if (res.getStatus() == Response.Status.OK.getStatusCode()) {
+			Desktop.getDesktop().browse(new URI(SERVER + "api/downloads/languageTemplate"));
+		}
+		else {
+			System.out.println(res.getStatus());
+		}
+
+		res.close();
+		client.close();
+	}
 	public List<Person> getPersonsByUserId(long id){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER)
@@ -669,5 +699,6 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<>(){});
+
 	}
 }

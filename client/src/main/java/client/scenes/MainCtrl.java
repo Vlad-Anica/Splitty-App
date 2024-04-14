@@ -20,6 +20,10 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Person;
+import commons.User;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,10 +34,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 
 public class MainCtrl {
 
@@ -59,6 +60,7 @@ public class MainCtrl {
     //open debts scene and controller
     private OpenDebtsCtrl openDebtsCtrl;
     private Scene openDebtsScene;
+
 
     private StartPageCtrl startPageCtrl;
     private Scene startPageScene;
@@ -100,6 +102,8 @@ public class MainCtrl {
     private boolean restart = false;
     private String currentIPAddress;
     private File userConfig;
+    private Integer currentPort;
+    private String emailAddress, smtp, emailPort, emailPassword;
 
     private final Image logo = new Image("/logos/splittyLogo256.png");
 
@@ -111,15 +115,16 @@ public class MainCtrl {
                            Pair<StartPageCtrl, Parent> startPage, Pair<SeeEventsAsAdminCtrl, Parent> seeEventsAsAdmin,
                            Pair<CreateEventCtrl, Parent> createEvent, Pair<SelectServerCtrl, Parent> selectServer,
                            ServerUtils server) {
+        this.emailAddress = "";
+        this.emailPort = "";
+        this.smtp = "";
+        this.emailPassword = "";
+        this.userId = -1;
         File languageFile = new File("./src/main/resources/languages/languages.txt");
         System.out.println(languageFile.getAbsolutePath());
         if (languageFile.exists()) {
             Pair<Integer, List<String>> pair = readFromFile(languageFile.getAbsolutePath());
-            if (pair == null) {
-                System.out.println("NULLLLLL");
-            }
             assert pair != null;
-
             this.languages = pair.getValue();
         } else {
             languages = new ArrayList<>();
@@ -209,19 +214,42 @@ public class MainCtrl {
 
     public void getLastKnownInfo() {
         if (!userConfig.exists()) {
-            languageIndex = 0;
-            userId = -1;
+            setLanguageIndex(0);
         } else {
             Scanner fileScanner = null;
             try {
                 fileScanner = new Scanner(userConfig);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                ;
             }
-            languageIndex = fileScanner.nextInt();
-            userId = fileScanner.nextLong();
+            languageIndex = Integer.parseInt(fileScanner.nextLine());
+            userId = Long.parseLong(fileScanner.nextLine());
+            emailAddress = fileScanner.nextLine();
+            emailPort = fileScanner.nextLine();
+            smtp = fileScanner.nextLine();
+            emailPassword = fileScanner.nextLine();
         }
+    }
+
+    public void updateUserConfig() {
+        if (!userConfig.exists()) {
+            return;
+        }
+
+        try {
+            PrintWriter writer = new PrintWriter(userConfig);
+            writer.println(languageIndex);
+            writer.println(userId);
+            writer.println(emailAddress);
+            writer.println(emailPort);
+            writer.println(smtp);
+            writer.println(emailPassword);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+
     }
 
     public int getLanguageIndex() {
@@ -246,17 +274,30 @@ public class MainCtrl {
 
     public void setLanguageIndex(int languageIndex) {
         this.languageIndex = languageIndex;
-
-
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter(userConfig);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        pw.println(this.languageIndex);
-        pw.println(this.userId);
-        pw.close();
+        updateUserConfig();
+    }
+    public void setUserId(long userId) {
+        this.userId = userId;
+        updateUserConfig();
+    }
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+        User u = server.getUserById(userId);
+        u.setEmail(emailAddress);
+        server.saveUser(u);
+        updateUserConfig();
+    }
+    public void setSmtp(String smtp) {
+        this.smtp = smtp;
+        updateUserConfig();
+    }
+    public void setEmailPort(String emailPort) {
+        this.emailPort = emailPort;
+        updateUserConfig();
+    }
+    public void setEmailPassword(String emailPassword) {
+        this.emailPassword = emailPassword;
+        updateUserConfig();
     }
 
     /**
@@ -293,9 +334,24 @@ public class MainCtrl {
         }
 
         while (scanner.hasNextLine()) {
-            IPAddresses.add(scanner.nextLine());
+            IPAddresses.add((scanner.nextLine().split(" ")[0]));
         }
         return IPAddresses;
+    }
+    public List<Integer> getUsedPorts() {
+        File file = getOrCreateFile("./src/main/resources/userInfo/IPAddresses.txt");
+        List<Integer> ports = new ArrayList<>();
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        while (scanner.hasNextLine()) {
+            ports.add(Integer.parseInt(scanner.nextLine().split(" ")[1]));
+        }
+        return ports;
     }
 
     /**
@@ -304,8 +360,16 @@ public class MainCtrl {
      * @param IPAddress the provided IP address
      * @return true if the user has been connected to it before
      */
-    public boolean hasBeenConnected(String IPAddress) {
-        return getUsedIPAddresses().contains(IPAddress);
+    public boolean hasBeenConnected(String IPAddress, Integer port) {
+        List<String> IPAddresses = getUsedIPAddresses();
+        List<Integer> ports = getUsedPorts();
+
+        for (int i = 0; i < ports.size(); i++) {
+            if (IPAddresses.get(i).equals(IPAddress) && ports.get(i).equals(port)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -313,9 +377,11 @@ public class MainCtrl {
      *
      * @param IPAddress the IP address provided
      */
-    public void addNewIPAddress(String IPAddress) {
+    public void addNewServerInfo(String IPAddress, Integer port) {
         List<String> IPAddresses = getUsedIPAddresses();
         IPAddresses.add(IPAddress);
+        List<Integer> ports = getUsedPorts();
+        ports.add(port);
         File file = getOrCreateFile("./src/main/resources/userInfo/IPAddresses.txt");
         PrintWriter writer = null;
         try {
@@ -324,12 +390,12 @@ public class MainCtrl {
             e.printStackTrace();
         }
 
-        for (String address : IPAddresses) {
-            assert writer != null;
-            writer.println(address);
+        assert writer != null;
+        for (int i = 0; i < ports.size(); i++) {
+            writer.println(IPAddresses.get(i) + " " + ports.get(i));
         }
         writer.close();
-        setIPAddress(IPAddress);
+        setServerInfo(IPAddress, port);
     }
 
     /**
@@ -338,8 +404,16 @@ public class MainCtrl {
      * @param IPAddress
      * @return
      */
-    public int getIPAddressPosition(String IPAddress) {
-        return getUsedIPAddresses().indexOf(IPAddress);
+    public int getServerInfoPosition(String IPAddress, Integer port) {
+        List<String> IPAddresses = getUsedIPAddresses();
+        List<Integer> ports = getUsedPorts();
+
+        for (int i = 0; i < ports.size(); i++) {
+            if (IPAddresses.get(i).equals(IPAddress) && ports.get(i).equals(port)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public void setLanguage(String language) {
@@ -396,6 +470,7 @@ public class MainCtrl {
         primaryStage.setTitle("Create new Event");
         primaryStage.setScene(createEventScene);
         createEventCtrl.setup();
+        createEventScene.getStylesheets().add("client/css/createEvent.css");
         createEventScene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 System.out.println("Trying to create a new event!");
@@ -429,6 +504,25 @@ public class MainCtrl {
         homeCtrl.refresh();
     }
 
+    public void setFirstName(String firstName) {
+        User u = server.getUserById(userId);
+        u.setFirstName(firstName);
+        server.saveUser(u);
+    }
+
+    public void setLastName(String lastName) {
+        User u = server.getUserById(userId);
+        u.setLastName(lastName);
+        server.saveUser(u);
+    }
+
+    public String getFirstName() {
+        return server.getUserById(userId).getFirstName();
+    }
+
+    public String getLastName() {
+        return server.getUserById(userId).getLastName();
+    }
     public void showOpenDebts() {
         primaryStage.setScene(openDebtsScene);
         openDebtsCtrl.setup();
@@ -555,8 +649,132 @@ public class MainCtrl {
         return userConfig;
     }
 
-    public void setIPAddress(String IPAddress) {
+
+
+    public void setServerInfo(String IPAddress, Integer port) {
         this.currentIPAddress = IPAddress;
-        this.userConfig = new File("userConfig" + getIPAddressPosition(IPAddress));
+        this.currentPort = port;
+        this.userConfig = new File("userConfig" + getServerInfoPosition(IPAddress, port));
+        try {
+            userConfig.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean sendEmail(String fromEmailAddress, String smtp, String password, String port
+            , String toEmailAddress, String mailMessage, String mailSubject) {
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", smtp);
+        prop.put("mail.smtp.port", port);
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+        Session session = Session.getInstance(prop,
+                new jakarta.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(fromEmailAddress, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(emailAddress));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(toEmailAddress)
+            );
+
+            message.setSubject(mailSubject);
+            message.setText(mailMessage);
+
+            Transport.send(message);
+        }catch (MessagingException e) {
+            //e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkEmailConfig() {
+        return sendEmail(getEmailAddress(), getSmtp(), getEmailPassword(),
+                getEmailPort(), "use.splitty@gmail.com", "",
+                "test connection");
+    }
+
+
+    public void sendWelcomeMail(String mailAddress, String Name){
+        final String username = "use.splitty";
+        final String password = "sbfs akue pjrj oiqt";
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(prop,
+                new jakarta.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("use.splitty@gmail.com", "Splitty App"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(mailAddress)
+            );
+            message.setSubject("Welcome to Splitty " + Name + "!");
+            message.setText(
+                    "We're thrilled to have you here " + Name +",\n" +
+                            "\n" +
+                            "Welcome to Splitty, your go-to app for managing and processing expenses with ease! We're thrilled to have you on board as a new user, and we can't wait for you to experience the convenience and efficiency that Splitty offers.\n" +
+                            "\n" +
+                            "Here's what you can expect from Splitty:\n" +
+                            "\n" +
+                            "Simplified Expense Management: Say goodbye to the hassle of tracking and managing expenses manually. With Splitty, you can effortlessly track your expenses, split debts, and keep your finances organized in one place.\n" +
+                            "\n" +
+                            "Seamless Debt Splitting: Whether you're splitting bills with friends, family, or colleagues, Splitty makes it simple to divide expenses and settle debts fairly. No more awkward conversations or endless calculations – Splitty does the hard work for you.\n" +
+                            "\n" +
+                            "Secure and Private: We take the security and privacy of your financial data seriously. Rest assured that your information is safe and encrypted, so you can use Splitty with confidence.\n" +
+                            "\n" +
+                            "User-Friendly Interface: Splitty is designed with simplicity and ease of use in mind. Our intuitive interface makes it easy for you to navigate the app and access all its features effortlessly.\n" +
+                            "\n" +
+                            "If you have any questions or need assistance, our dedicated support team is here to help. Feel free to reach out to us at use.splitty@gmail.com – we're always happy to assist you.\n" +
+                            "\n" +
+                            "Once again, welcome to Splitty! We're excited to embark on this financial journey with you.\n" +
+                            "\n" +
+                            "Best regards,\n" +
+                            "The Splitty Team\n" +
+                            "\n" +
+                            "Email: use.splitty@gmail.com");
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getEmailAddress(){
+        return emailAddress;
+    }
+    public String getSmtp() {
+        return smtp;
+    }
+    public String getEmailPort() {
+        return emailPort;
+    }
+    public String getEmailPassword() {
+        return emailPassword;
     }
 }

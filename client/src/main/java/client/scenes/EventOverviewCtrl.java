@@ -199,7 +199,7 @@ public class EventOverviewCtrl implements Initializable {
         inviteCodeLabel.setText("<<CODE>>");
     }
 
-    /**
+    /***
      * Method that refreshes an Event's invite code and reflects it on the Server.
      * @param event event that triggers the method
      */
