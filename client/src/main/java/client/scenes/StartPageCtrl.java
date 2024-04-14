@@ -63,7 +63,7 @@ public class StartPageCtrl {
             alert.setContentText(alertText);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                String emailHolder = "-1";
+                String emailHolder = "";
                 if (!(email.getText().isEmpty())) {
                     emailHolder = email.getText();
                     //sendWelcomeMail(emailHolder, firstname.getText());
@@ -74,8 +74,6 @@ public class StartPageCtrl {
                 mainCtrl.setEmailAddress(emailHolder);
 
                 System.out.println("User Created Successfully !!!");
-
-                System.out.println("Saved email in the mailConfig.txt!");
 
                 String userMail = mainCtrl.getEmailAddress();
                 mainCtrl.sendWelcomeMail(userMail, u.getFirstName());

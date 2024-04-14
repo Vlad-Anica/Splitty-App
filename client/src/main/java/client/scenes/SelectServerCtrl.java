@@ -69,13 +69,14 @@ public class SelectServerCtrl {
             showErrorMessage("ServerNotFound");
             return;
         }
-        mainCtrl.setServerInfo(IPAddress, port);
         if (mainCtrl.hasBeenConnected(IPAddress, port)) {
             mainCtrl.getLastKnownInfo();
+            mainCtrl.setServerInfo(IPAddress, port);
             mainCtrl.showHome();
         } else {
             System.out.println("SIUUUU");
             mainCtrl.addNewServerInfo(IPAddress, port);
+            mainCtrl.setServerInfo(IPAddress, port);
             mainCtrl.showStartPage();
         }
 
