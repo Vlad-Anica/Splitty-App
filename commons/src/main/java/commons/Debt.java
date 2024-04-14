@@ -117,6 +117,9 @@ public class Debt {
     public void setSettled(Boolean value){
         settled = value;
     }
+    public Currency getCurrency() {
+        return Currency.EUR;
+    }
 
     @Override
     public boolean equals(Object obj) {

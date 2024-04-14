@@ -150,6 +150,11 @@ public class Event {
 
     }
 
+    public List<Debt> getDebts() {
+        return debts;
+    }
+
+
     /**
      * Method that removes a Debt from its association to an Event,
      * @param debt Debt to remove.
