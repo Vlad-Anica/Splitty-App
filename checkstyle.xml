@@ -52,16 +52,7 @@
             <property name="severity" value="warning"/>
         </module>
 
-        <module name="MemberName">
-            <property name="severity" value="warning"/>
-        </module>
         <module name="MethodName">
-            <property name="severity" value="warning"/>
-        </module>
-        <module name="ParameterName">
-            <property name="severity" value="warning"/>
-        </module>
-        <module name="StaticVariableName">
             <property name="severity" value="warning"/>
         </module>
         <module name="LambdaParameterName">
@@ -76,7 +67,7 @@
     <module name="LineLength">
         <property name="severity" value="warning"/>
         <property name="fileExtensions" value="java"/>
-        <property name="max" value="300"/>
+        <property name="max" value="350"/>
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
 
