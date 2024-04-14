@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -22,6 +23,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.swing.text.View;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -185,6 +187,7 @@ public class EventOverviewCtrl implements Initializable {
                 participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
         );
         showAllParticipantsInEventComboBox.setItems(participantData);
+        showAllParticipantsInEventComboBox.setStyle("-fx-background-color: #72a4ff;-fx-text-background-color: #72a4ff;-fx-text-fill: #fffaf4;");
         showAllExpensesInEvent(new ActionEvent());
 
     }
@@ -506,17 +509,6 @@ public class EventOverviewCtrl implements Initializable {
      * Method that resets the parameters of the expense filtering pane as needed.
      */
     private void resetExpenseFilteringPane() {
-
-        CheckBox box = new CheckBox();
-        Label label = new Label();
-        for (Object element : this.filteringExpensesPane.getChildren()) {
-            if (element.getClass() == box.getClass()) {
-                ((CheckBox) element).setVisible(false);
-            }
-            if (element.getClass() == label.getClass()) {
-                ((Label) element).setVisible(false);
-            }
-        }
         this.filteringExpensesPane.getChildren().removeAll();
         this.filteringExpensesPane.setLayoutX(175);
         this.filteringExpensesPane.setLayoutY(170);
@@ -638,24 +630,6 @@ public class EventOverviewCtrl implements Initializable {
                 System.out.println("The Event has no such Expenses associated with it.");
             }
             expenseListView.setItems(FXCollections.observableList(selectedExpenses));
-            int y = 5;
-            for(Expense expense: selectedExpenses) {
-                Label label = new Label();
-                Tag t = expense.getTag();
-                String tagColour;
-                System.out.println(t);
-                if (t.getColor().equals("red") || t.getColor().equals("blue") || t.getColor().equals("green")) {
-                    tagColour = t.getColor();
-                } else {
-                    tagColour = "#" + t.getColor().substring(2);
-                }
-
-                label.setText(t.getType());
-                label.setStyle("-fx-background-color:" + tagColour + ";-fx-text-fill: white;");
-                filteringExpensesPane.getChildren().add(label);
-                label.setLayoutY(y);
-                y += 25;
-            }
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
