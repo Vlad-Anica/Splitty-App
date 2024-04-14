@@ -68,14 +68,6 @@ class UserControllerTest {
         assertEquals(user2, users.get(1));
     }
 
-    //Find out what connects user and event to create these tests
-    //@Test
-    //public void testGetEvent(){
-    //}
-
-    //@Test
-    //public void testGetExpense(){
-    //}
 
     @Test
     public void testGetById() {

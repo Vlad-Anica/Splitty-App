@@ -207,20 +207,6 @@ public class EventTest {
         assertFalse(ev.removeParticipant(p1));
     }
 
-//    @Test
-//    public void addExpenseTest() {
-//        Date dateTest = new Date(1,2,3,4,5,6);
-//        Person p3 = new Person("Senator", "Armstrong",
-//                "usa@email.com", "AM420", "NITUL42",
-//                Currency.EUR, 0.0, new Event(), new User());
-//        debts.add(debt2);
-//        Tag t = new Tag("blue", "food");
-//        Expense e3 = new Expense("amongUs", 5, dateTest, p3, persons1, Currency.USD, t  );
-//        assertFalse(ev.containsExpense(e3));
-//        assertTrue(ev.addExpense(e3));
-//        assertTrue(ev.containsExpense(e3));
-//    }
-
     @Test
     public void addExpenseNullTest() {
         assertFalse(ev.addExpense(null));
@@ -230,20 +216,6 @@ public class EventTest {
     public void containsExpenseNullTest() {
         assertFalse(ev.containsExpense(null));
     }
-
-//    @Test
-//    public void removeExpenseTest() {
-//        Date dateTest = new Date(1,2,3,4,5,6);
-//        Person p3 = new Person("Senator", "Armstrong",
-//                "usa@email.com", "AM420", "NITUL42",
-//                Currency.EUR, 0.0, new Event(), new User());
-//        debts.add(debt2);
-//        Tag t = new Tag("blue", "food");
-//        Expense e3 = new Expense("amongUs", 5, dateTest, p3, persons1, Currency.USD, t  );
-//        ev.addExpense(e3);
-//        assertTrue(ev.removeExpense(e3));
-//        assertFalse(ev.containsExpense(e3));
-//    }
 
     @Test
     public void removeExpenseNullTest() {
@@ -256,26 +228,6 @@ public class EventTest {
         ev.refreshInviteCode();
         assertNotEquals(previousCode, ev.getInviteCode());
     }
-
-    /*
-    @Test
-    public void equalsTest() {
-        Person pe1 = new Person("Adam", "James",
-                "email@email.com", "NL33");
-        Person pe2 = new Person("John", "Doe",
-                "email2@email.com", "RO420", "MIDLGB22");
-        String e1 = "food";
-        String e2 = "waiters";
-        ArrayList<Person> personList = new ArrayList<>();
-        personList.add(p1);
-        personList.add(p2);
-        ArrayList<String> expenseList = new ArrayList<>();
-        expenseList.add(e1);
-        expenseList.add(e2);
-        Event ev2 = new Event("Dinner Party", "Bob's Celebration Dinner", "celebration", new Date(1, 14, 5, 2006, 4, 30 ), personList, expenseList);
-        assertEquals(ev2, ev);
-    }
-    */
 
     @Test
     public void eventHashCodeEqualsSameTest() {

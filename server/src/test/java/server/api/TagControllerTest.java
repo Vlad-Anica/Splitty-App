@@ -86,18 +86,6 @@ public class TagControllerTest {
         assertEquals(tag2, tagController.getById(2L).getBody());
     }
 
-    /*
-    @Test
-    public void testUpdate() {
-
-        when(tagService.add(tag1)).thenReturn(ResponseEntity.ok(tag1));
-        tagController.add(tag1);
-        when (tagService.update(tag1.getId(), tag2)).thenReturn(ResponseEntity.ok(tag2));
-        tagController.update(tag1.getId(), tag2);
-        when(tagService.findById(1L)).thenReturn(ResponseEntity.ok(tag2));
-        assertEquals(tag2, tagController.getById(1L).getBody());
-    }
-    */
 
     @Test
     public void testDelete() {

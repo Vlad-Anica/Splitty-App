@@ -122,10 +122,4 @@ public class UserServiceTest {
 
     }
 
- /*   @Test
-    public void testFindByID() {
-        when(repo.findById(1L)).thenReturn(Optional.of(user1));
-        assertEquals(user1, userService.findById(1L).get());
-    }*/
-
 }
