@@ -389,8 +389,8 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void choosePersonsVisibilityCheck() {
-            this.goToEditPersonButton.setVisible(true);
-            this.removePersonButton.setVisible(true);
+        this.goToEditPersonButton.setVisible(true);
+        this.removePersonButton.setVisible(true);
     }
 
     /**
@@ -645,6 +645,7 @@ public class EventOverviewCtrl implements Initializable {
                 Label label = new Label();
                 Tag t = expense.getTag();
                 String tagColour;
+                System.out.println(t);
                 if (t.getColor().equals("red") || t.getColor().equals("blue") || t.getColor().equals("green")) {
                     tagColour = t.getColor();
                 } else {
@@ -761,9 +762,9 @@ public class EventOverviewCtrl implements Initializable {
      * based on whether they should logically be shown.
      */
     public void tagsVisibilityCheck() {
-            this.chooseTagsPane.setVisible(true);
-            this.goToEditTagButton.setVisible(true);
-            this.removeTagButton.setVisible(true);
+        this.chooseTagsPane.setVisible(true);
+        this.goToEditTagButton.setVisible(true);
+        this.removeTagButton.setVisible(true);
     }
 
     /**
@@ -891,7 +892,7 @@ public class EventOverviewCtrl implements Initializable {
                 }
                 for (Expense expense : this.event.getExpenses()) {
                     if (expense.getTag().equals(tag)) {
-                        System.out.println("Cannot proceed with deletion as Tag <\" + tag.getType() + \"> is currently in use or is default.");
+                        System.out.println("Cannot proceed with deletion as Tag <" + tag.getType() + "> is currently in use or is default.");
                         return;
                     }
                 }

@@ -142,7 +142,7 @@ public class HomeCtrl {
                     setTextLanguage();
                 }
 
-        });}
+            });}
         languageList.setCellFactory(c -> new LanguageListListCell());
         List<Event> events = server.getEvents(mainCtrl.getUserId());
         eventNames = new ArrayList<>();
@@ -182,6 +182,12 @@ public class HomeCtrl {
         User currentUser = server.getUserById(mainCtrl.getUserId());
         Person person = new Person(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getIBAN(),
                 currentUser.getBIC(), currentUser.getPreferredCurrency(), 0.0, event, currentUser);
+        for(Person participant : event.getParticipants()) {
+            if(participant.getUser().equals(currentUser)) {
+                System.out.println("Cannot join Event as the User is already a participant.");
+                return;
+            }
+        }
         server.addPerson(person);
         mainCtrl.showEventOverview(event.getId());
     }
