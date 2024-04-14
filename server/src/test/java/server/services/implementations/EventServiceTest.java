@@ -3,7 +3,9 @@ package server.services.implementations;
 import commons.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
 import server.database.PersonRepository;
@@ -16,7 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-
+@ExtendWith(MockitoExtension.class)
 class EventServiceTest {
     private EventService eventService;
     @Mock
