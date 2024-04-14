@@ -51,6 +51,8 @@ public class HomeCtrl {
     @FXML
     private Parent root;
     @FXML
+    private Button downloadBtn;
+    @FXML
     private ComboBox<String> languageList;
     @FXML
     private ComboBox<String> eventList;
@@ -72,9 +74,14 @@ public class HomeCtrl {
     ListView<Event> eventsListView;
     @FXML
     ListView<String> expenseListView;
+    @FXML
+    private Label eventsLabel;
+    @FXML
+    private Label expensesLabel;
     List<String> languages;
     List<String> eventNames;
     List<Long> eventIds;
+
     ObservableList<Event> eventData;
     ObservableList<Expense> expenseData;
 
@@ -108,39 +115,35 @@ public class HomeCtrl {
             });
 
         });
-
+        downloadBtn.setOnAction(e -> {
+            try {
+                downloadTemplate();
+            } catch (IOException | URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         System.out.println("!!!!! " + server.getAllEvents().size());
         setTextLanguage();
         languages = mainCtrl.getLanguages();
         System.out.println("Combobox: " + languages);
         languageList.setButtonCell(new LanguageListListCell());
         if(mainCtrl.getRestart()){
+
             languageList.setItems(FXCollections.observableList(List.of("Restart")));
             languageList.getSelectionModel().select(0);
-        }else{
 
+        }else{
             languageList.setItems(FXCollections.observableList(languages));
             languageList.getSelectionModel().select(mainCtrl.getLanguageIndex());
-            languageList.getItems().add(downloadString);
             languageList.setOnAction(event -> {
-                if (languageList.getValue().equals(downloadString)) {
-                    try {
-                        downloadTemplate();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException(e);
+                    int selection = languageList.getSelectionModel().getSelectedIndex();
+                    System.out.println("selection: " + selection);
+                    if (selection >= 0) {
+                        mainCtrl.setLanguageIndex(selection);
+                        mainCtrl.setLanguage(languages.get(selection));
+                        mainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
+                        setTextLanguage();
                     }
-                    return;
-                }
-                int selection = languageList.getSelectionModel().getSelectedIndex();
-                System.out.println("selection: " + selection);
-                if (selection >= 0) {
-                    mainCtrl.setLanguageIndex(selection);
-                    mainCtrl.setLanguage(languages.get(selection));
-                    mainCtrl.save(new Pair<>(mainCtrl.getLanguageIndex(), mainCtrl.getLanguages()));
-                    setTextLanguage();
-                }
 
             });}
         languageList.setCellFactory(c -> new LanguageListListCell());
@@ -156,17 +159,22 @@ public class HomeCtrl {
     }
 
     public void refresh() {
-        var events = server.getEvents(mainCtrl.getUserId());
-        var expenses = server.getExpensesForUser(mainCtrl.getUserId());
-        eventData = FXCollections.observableList(events);
-        eventIds = events.stream().map(e -> e.getId()).toList();
+        try {
 
-        //eventList.setItems(FXCollections.observableList(eventData.stream().map(Event::getName).toList()));
-        eventsListView.setItems(eventData);
-        expenseData = FXCollections.observableList(expenses);
-        expenseListView.setItems(FXCollections.observableList(
-                expenseData.stream().map(this::showExpenseDate).toList())
-        );
+            var events = server.getEvents(mainCtrl.getUserId());
+            var expenses = server.getExpensesForUser(mainCtrl.getUserId());
+            eventData = FXCollections.observableList(events);
+            eventIds = events.stream().map(e -> e.getId()).toList();
+            eventsListView.setItems(eventData);
+            expenseData = FXCollections.observableList(expenses);
+            expenseListView.setItems(FXCollections.observableList(
+                    expenseData.stream().map(this::showExpenseDate).toList())
+            );
+        } catch (NullPointerException e)
+        {
+            System.out.println("No expenses associated with the user");
+        }
+
 
     }
     public void setUserName(long userId){
@@ -205,7 +213,8 @@ public class HomeCtrl {
         createEventBtn.setText(resourceBundle.getString("CreateEvent"));
         goSettingsButton.setText(resourceBundle.getString("Settings"));
         goEventButton.setText(resourceBundle.getString("Submit"));
-        //eventList.setPromptText(resourceBundle.getString("SelectEvent"));
+        eventsLabel.setText(resourceBundle.getString("Events"));
+        expensesLabel.setText(resourceBundle.getString("YourExpenses"));
         addLanguageButton.setText(resourceBundle.getString("AddLanguage"));
         mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("Home"));
         adminPasswordField.setPromptText(resourceBundle.getString("AdminPassword"));
@@ -215,6 +224,7 @@ public class HomeCtrl {
         alertTitle = resourceBundle.getString("AdminLoginAlert");
         alertText = resourceBundle.getString("Doyouwanttologinasadmin");
         downloadString = resourceBundle.getString("DownloadTemplate");
+        downloadBtn.setText(downloadString);
         if (!adminPasswordMessage.getText().isEmpty()) {
             adminPasswordMessage.setText(resourceBundle.getString("IncorrectPassword"));
         }

@@ -76,7 +76,8 @@ public class StartPageCtrl {
                 System.out.println("User Created Successfully !!!");
 
                 String userMail = mainCtrl.getEmailAddress();
-                mainCtrl.sendWelcomeMail(userMail, u.getFirstName());
+                if (userMail != null)
+                  mainCtrl.sendWelcomeMail(userMail, u.getFirstName());
 
                 mainCtrl.getLastKnownInfo();
                 mainCtrl.showHome();
