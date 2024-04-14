@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -27,6 +28,7 @@ public class SelectServerCtrl {
     Button btnConnect;
     @FXML
     StackPane pane;
+
     private String warningTitle;
     private String warningText;
     @Inject
