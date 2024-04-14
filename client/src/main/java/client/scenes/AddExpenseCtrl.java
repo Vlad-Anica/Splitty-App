@@ -273,6 +273,7 @@ public class AddExpenseCtrl {
                 else {
                     //server.send("/app/expenses", e);
                     event.addExpense(e);
+                    //event.calculateDebts(event.getExpenses());
                     server.send("/app/events", event);
                     statusLabel.setText(expenseCreatedSuccess);
                 }

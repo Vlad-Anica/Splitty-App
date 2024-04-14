@@ -5,6 +5,7 @@ import commons.Debt;
 import commons.Event;
 import commons.Person;
 import jakarta.inject.Inject;
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -41,6 +43,8 @@ public class OpenDebtsCtrl {
 
     @FXML
     private Accordion debtList;
+    @FXML
+    Label confirmationText;
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
@@ -63,6 +67,7 @@ public class OpenDebtsCtrl {
         setTextLanguage();
         this.event = event;
 
+        debtList.getPanes().clear();
         for (int i = 0; i < event.getDebts().size(); i++) {
             VBox vbox = new VBox();
             Debt debt = event.getDebts().get(i);
@@ -79,10 +84,20 @@ public class OpenDebtsCtrl {
                 emailConfigConfirmation = resourceBundle.getString("EmailIsConfigured");
                 btnReminder.setOnAction(event1 -> {
                     emailTitle = resourceBundle.getString("DebtTo") + " " + debt.getReceiver().getFirstName() +
-                            " " + debt.getReceiver().getFirstName();
-                    emailMessage = resourceBundle.getString("PayTo") + " " + debt.getReceiver().getFirstName() +
-                            " " + debt.getReceiver().getFirstName() + " " + debt.getAmount() + debt.getCurrency();
-                    mainCtrl.sendEmailFromCurrentUser(debt.getReceiver().getEmail(), emailMessage, emailTitle);
+                            " " + debt.getReceiver().getLastName();
+                    emailMessage = resourceBundle.getString("PayPerson") + " " + debt.getReceiver().getFirstName() +
+                            " " + debt.getReceiver().getLastName() + " " + debt.getAmount() + debt.getCurrency();
+                   if ( mainCtrl.sendEmailFromCurrentUser(debt.getGiver().getEmail(), emailMessage, emailTitle)) {
+                       confirmationText.setText(resourceBundle.getString("EmailSent") + " " + debt.getGiver().getFirstName() +
+                               " " + debt.getGiver().getLastName());
+                   } else {
+                       confirmationText.setText(resourceBundle.getString("EmailNotSent"));
+                   }
+                    PauseTransition delay = new PauseTransition(Duration.seconds(5));
+                    delay.setOnFinished(event2 -> {
+                        confirmationText.setText("");
+                    });
+                    delay.play();
                 });
             } else {
                 btnReminder.setDisable(true);
@@ -91,7 +106,9 @@ public class OpenDebtsCtrl {
 
             Button btnSettle = new Button(resourceBundle.getString("Settle"));
             btnSettle.setOnAction(event1 -> {
-                server.settleDebt(debt.getId());
+                server.settleDebt(debt);
+                debtList.getPanes().remove(debtTitle);
+                System.out.println("IS SETTLED: " + debt.getSettled());
                 setup(server.getEvent(event.getId()));
             });
 
