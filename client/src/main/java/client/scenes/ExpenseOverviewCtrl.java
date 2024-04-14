@@ -3,6 +3,7 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Person;
+import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +11,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
 import java.net.URL;
@@ -33,6 +37,11 @@ public class ExpenseOverviewCtrl implements Initializable {
     ListView<String> ToListView;
     @FXML
     Button goBackButtonExpenses;
+    @FXML
+    Rectangle upperLine;
+    @FXML
+    Rectangle lowerLine;
+
 
 
 
@@ -83,10 +92,19 @@ public class ExpenseOverviewCtrl implements Initializable {
             } catch (Exception e){
                 System.out.println("There was an issue setting the data into the scene!");
             }
+            try {
+                Tag expenseTag = currentExpense.getTag();
+                String color = expenseTag.getColor();
+                String tagName = expenseTag.getType();
+                TagNameLabel.setText(tagName);
+                upperLine.setFill(Color.web(color));
+                lowerLine.setFill(Color.web(color));
+                System.out.println(color);
+                System.out.println(tagName);
+            } catch (Exception e){
+                System.out.println("An error has occured whilst setting up tags!");
+            }
 
-//            Tag expenseTag = currentExpense.getTag();
-//            String color = expenseTag.getColor();
-//            String tagName = expenseTag.getType();
         } catch (Exception e){
             System.out.println("There was an error whilst fetching expense Data");
         }
@@ -101,7 +119,6 @@ public class ExpenseOverviewCtrl implements Initializable {
     public void goBackToEvent(){
         mainCtrl.showEventOverview(eventId);
     }
-
 
     public void setTagColor(){
 
