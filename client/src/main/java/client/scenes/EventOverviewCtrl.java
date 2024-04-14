@@ -994,7 +994,7 @@ public class EventOverviewCtrl implements Initializable {
      *
      * @param event event that triggers the method
      */
-    public void UpdateTitle(ActionEvent event) {
+    public void updateTitle(ActionEvent event) {
         String newTitle = editTitleTextField.getText();
         if (newTitle.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
