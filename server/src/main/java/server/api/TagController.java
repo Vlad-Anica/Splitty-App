@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import server.services.interfaces.TagService;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/tags")
@@ -35,10 +36,16 @@ public class TagController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tag> update(@PathVariable long id, @RequestBody Tag updatedTag) {
+    public ResponseEntity<Tag> update(@PathVariable("id") Long id, @RequestBody Tag newTag) {
 
-        return service.update(id, updatedTag);
+        if (!Objects.equals(newTag.getId(), id))
+            return ResponseEntity.badRequest().build();
+        if (!service.existsById(id))
+            return add(newTag);
+        return ResponseEntity.ok(service.save(newTag));
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Tag> delete(@PathVariable long id) {

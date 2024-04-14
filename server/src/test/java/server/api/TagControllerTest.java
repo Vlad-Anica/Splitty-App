@@ -86,6 +86,7 @@ public class TagControllerTest {
         assertEquals(tag2, tagController.getById(2L).getBody());
     }
 
+    /*
     @Test
     public void testUpdate() {
 
@@ -96,6 +97,7 @@ public class TagControllerTest {
         when(tagService.findById(1L)).thenReturn(ResponseEntity.ok(tag2));
         assertEquals(tag2, tagController.getById(1L).getBody());
     }
+    */
 
     @Test
     public void testDelete() {

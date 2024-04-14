@@ -28,7 +28,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @Entity
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="EXPENSE_ID")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "EXPENSE_ID")
 public class Expense {
 
     @Id
@@ -59,6 +59,7 @@ public class Expense {
     public void onUpdate() {
         this.updatedAt = new java.util.Date();
     }
+
     private String description;
     private double amount;
     private Date date;
@@ -96,7 +97,7 @@ public class Expense {
     /***
      * empty constuctor
      */
-    public Expense(){
+    public Expense() {
 
     }
 
@@ -110,6 +111,7 @@ public class Expense {
 
     /**
      * Method that returns creation time of the object.
+     *
      * @return Util Date
      */
     public java.util.Date getCreatedAt() {
@@ -118,6 +120,7 @@ public class Expense {
 
     /**
      * Method that returns update time of the object.
+     *
      * @return Util Date
      */
     public java.util.Date getUpdatedAt() {
@@ -218,7 +221,9 @@ public class Expense {
      */
     public void setGivers(List<Person> givers) {
         this.givers = givers;
-    };
+    }
+
+    ;
 
     /***
      * updates currency
@@ -235,11 +240,12 @@ public class Expense {
 
     /**
      * Returns a List of Persons representing all people involved with the given expense.
+     *
      * @return List of Persons representing the involved parties.
      */
     public List<Person> getInvolved() {
         ArrayList<Person> persons = new ArrayList<>();
-        if(this.getReceiver() != null) {
+        if (this.getReceiver() != null) {
             persons.add(this.getReceiver());
         }
         persons.addAll(givers);
@@ -249,7 +255,7 @@ public class Expense {
     /***
      * updates the amount number depending on the currency
      */
-    public void convertCurrency(Currency newCurrency){
+    public void convertCurrency(Currency newCurrency) {
 //        switch (this.currency){
 //            case EUR: {
 //                switch(newCurrency){
@@ -312,10 +318,12 @@ public class Expense {
                 .toLocalDate();
         String truncatedAmount = BigDecimal.valueOf(amount)
                 .setScale(2, RoundingMode.HALF_UP)
-                .doubleValue()+"";
+                .doubleValue() + "";
         String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
-        return receiver.getFirstName() + " " + receiver.getLastName() + " paid " + truncatedAmount +
-                currency + " for " + description + " at " + parsedDate;
+        StringBuilder emptyString = new StringBuilder();
+        emptyString.append(" ".repeat(Math.max(0, (this.getTag().getType().length() + 1) * 2)));
+        return emptyString + receiver.getFirstName() + " " + receiver.getLastName() + " paid " + truncatedAmount +
+                currency + " for " + this.getTag().getType() + description + " at " + parsedDate;
     }
 }
 

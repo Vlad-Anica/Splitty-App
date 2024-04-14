@@ -43,6 +43,15 @@ public class TagServiceImpl implements TagService {
             return ResponseEntity.ok(tag.get());
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    @Override
+    public Tag save(Tag tag) {
+        return db.save(tag);
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return db.existsById(id);
+    }
 
     public ResponseEntity<Tag> add(Tag tag) {
         if (tag == null || isNullOrEmpty(tag.getColor()) ||
