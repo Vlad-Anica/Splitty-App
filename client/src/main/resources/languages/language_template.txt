@@ -154,3 +154,14 @@ Edit =
 Delete =
 EditExpense =
 DownloadTemplate =
+Totalamounts
+PersonsOwed
+PersonsAreOwed
+Owes
+NoBankInfo
+BadNumberInput
+PayPartially
+DebtTo
+PayPerson
+EmailSent
+EmailNotSent
