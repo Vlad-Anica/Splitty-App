@@ -474,6 +474,9 @@ public class EventOverviewCtrl implements Initializable {
             }
         }
         this.event.removeParticipant(person);
+        if(person.getUpdatedAt().after(event.getUpdatedAt())) {
+            event.setUpdatedAt(person.getUpdatedAt());
+        }
         server.send("/app/events", this.event);
         refresh();
         server.deletePerson(person.getId());
@@ -725,6 +728,9 @@ public class EventOverviewCtrl implements Initializable {
             return false;
         }
         this.event.removeExpense(expense);
+        if(expense.getUpdatedAt().after(event.getUpdatedAt())) {
+            event.setUpdatedAt(expense.getUpdatedAt());
+        }
         server.send("/app/events", event);
         server.deleteExpense(expense.getId());
         this.setup(eventId);

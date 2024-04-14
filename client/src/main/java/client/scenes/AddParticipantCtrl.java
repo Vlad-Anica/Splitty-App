@@ -159,8 +159,9 @@ public class AddParticipantCtrl {
                     participantToEdit.setIBAN(p.getIBAN());
                     participantToEdit.setBIC(p.getBIC());
                     server.updatePerson(participantToEdit.getId(), participantToEdit);
-                    if (!currentEvent.getParticipants().contains(participantToEdit))
-                     currentEvent.getParticipants().add(participantToEdit);
+                    if (!currentEvent.getParticipants().contains(participantToEdit)) {
+                        currentEvent.getParticipants().add(participantToEdit);
+                    }
                     participantAdded.setText(participantEditedSuccess);
                 }
                 else {
