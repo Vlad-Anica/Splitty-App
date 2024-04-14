@@ -69,9 +69,8 @@ public class SelectServerCtrl {
             showErrorMessage("ServerNotFound");
             return;
         }
-
+        mainCtrl.setServerInfo(IPAddress, port);
         if (mainCtrl.hasBeenConnected(IPAddress, port)) {
-            mainCtrl.setServerInfo(IPAddress, port);
             mainCtrl.getLastKnownInfo();
             mainCtrl.showHome();
         } else {
@@ -81,6 +80,7 @@ public class SelectServerCtrl {
         }
 
     }
+
 
     /**
      * displays and error message at the bottom of the page
