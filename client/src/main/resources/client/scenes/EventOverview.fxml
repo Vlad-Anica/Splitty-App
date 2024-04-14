@@ -17,6 +17,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EventOverviewCtrl">
     <children>
+        <Button fx:id="showExpenseOverviewButton" layoutX="300.0" layoutY="450.0" mnemonicParsing="false" onAction="#showExpenseOverview" prefHeight="40.0" prefWidth="225.0" text="Expense Details" />
         <Button fx:id="goHomeButton" layoutX="675.0" layoutY="15.0" mnemonicParsing="false" onAction="#goHome" prefHeight="33.0" prefWidth="100.0" text="Home" />
         <Button fx:id="inviteButton" alignment="CENTER" layoutX="475.0" layoutY="82.0" mnemonicParsing="false" onAction="#sendInvite" prefHeight="25.0" prefWidth="150.0" text="Invite" />
         <Button fx:id="showAllExpensesButton" layoutX="175.0" layoutY="142.0" mnemonicParsing="false" onAction="#showAllExpensesInEvent" prefHeight="27.0" prefWidth="100.0" style="-fx-border-color: rgb(128,128,128);" text="All" />
@@ -41,8 +42,8 @@
             <Insets top="2.0" />
          </opaqueInsets>
       </Label>
-      <Button fx:id="goToEditExpenseButton" layoutX="175.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditExpense" prefHeight="40.0" prefWidth="250.0" style="-fx-border-color: rgb(128,128,128);" text="Edit the Expense!" />
-      <Button fx:id="removeExpensesButton" layoutX="425.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeExpenses" prefHeight="40.0" prefWidth="200.0" text="Delete">
+      <Button fx:id="goToEditExpenseButton" layoutX="175.0" layoutY="450.0" mnemonicParsing="false" onAction="#goToEditExpense" prefHeight="40.0" prefWidth="125.0" style="-fx-border-color: rgb(128,128,128);" text="Edit the Expense!" />
+      <Button fx:id="removeExpensesButton" layoutX="525.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeExpenses" prefHeight="40.0" prefWidth="100.0" text="Delete">
          <font>
             <Font name="Arial Nova Cond" size="12.0" />
          </font></Button>

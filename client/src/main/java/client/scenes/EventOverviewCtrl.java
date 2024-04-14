@@ -106,6 +106,8 @@ public class EventOverviewCtrl implements Initializable {
     private Button SubmitEditButton;
     @FXML
     private Button hideEditPage;
+    @FXML
+    private Button showExpenseOverviewButton;
 
     @FXML
     private Pane tagPane;
@@ -357,7 +359,10 @@ public class EventOverviewCtrl implements Initializable {
                 this.goToEditPersonButton.setVisible(true);
                 this.removePersonButton.setVisible(true);
             }
-            this.filteringExpensesPane.setVisible(true);
+            this.filteringExpensesPane.setVisible(false);
+            this.goToEditExpenseButton.setVisible(false);
+            this.removeExpensesButton.setVisible(false);
+            this.showExpenseOverviewButton.setVisible(false);
 
             this.goToEditTagButton.setVisible(false);
             this.removeTagButton.setVisible(false);
@@ -487,6 +492,7 @@ public class EventOverviewCtrl implements Initializable {
         this.filteringExpensesPane.setVisible(true);
         this.goToEditExpenseButton.setVisible(true);
         this.removeExpensesButton.setVisible(true);
+        this.showExpenseOverviewButton.setVisible(true);
     }
 
     /**
@@ -1038,6 +1044,17 @@ public class EventOverviewCtrl implements Initializable {
             }
             mainCtrl.showEventOverview(eventId);
         }
+    }
+
+    public void showExpenseOverview(ActionEvent event){
+        Expense selectedExpense = expenseListView.getSelectionModel().getSelectedItem();
+        if (selectedExpense == null) {
+            System.out.println("Cannot show expense as none was selected!");
+            return;
+        }
+
+        System.out.println(selectedExpense);
+        mainCtrl.showExpenseOverview(eventId, selectedExpense.getId());
     }
 
 }
