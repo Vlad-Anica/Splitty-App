@@ -47,6 +47,10 @@ public class Event {
     public void onUpdate() {
         this.updatedAt = new java.util.Date();
     }
+
+    public void setUpdatedAt(Date date) {
+        this.updatedAt = date;
+    }
     private String name;
     private String description;
     @ManyToMany(cascade = CascadeType.ALL)

@@ -319,10 +319,8 @@ public class Expense {
                 .setScale(2, RoundingMode.HALF_UP)
                 .doubleValue() + "";
         String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
-        StringBuilder emptyString = new StringBuilder();
-        emptyString.append(" ".repeat(Math.max(0, (this.getTag().getType().length() + 1) * 2)));
-        return emptyString + receiver.getFirstName() + " " + receiver.getLastName() + " paid " + truncatedAmount +
-                currency + " for " + this.getTag().getType() + " " + description + " at " + parsedDate;
+        return "Expense of type: " + this.getTag().getType() + ". " + receiver.getFirstName() + " " + receiver.getLastName() + " paid " + truncatedAmount +
+                currency + " for " + description + " at " + parsedDate;
     }
 }
 
