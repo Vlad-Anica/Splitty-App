@@ -152,7 +152,7 @@ public class ServerUtils {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String jsonEvent = objectMapper.writeValueAsString(newEvent);
-			System.out.println("Received Event object: " + jsonEvent);
+			//System.out.println("Received Event object: " + jsonEvent);
 			return ClientBuilder.newClient(new ClientConfig())
 					.target(SERVER).path("api/events/" + id)
 					.request(APPLICATION_JSON)
@@ -241,35 +241,16 @@ public class ServerUtils {
 		}
 
 	}
-	public Debt settleDebt(long id) {
-		try {
-			Debt debt = ClientBuilder.newClient(new ClientConfig())//
-					.target(SERVER).path("api/debts/" + id)//
-					.request(APPLICATION_JSON)//
-					.accept(APPLICATION_JSON)//
-					.get(new GenericType<Debt>() {
-					});
+	public Debt settleDebt(Debt debt) {
 
 			debt.setSettled(true);
+			Event event = debt.getEvent();
+			event.removeDebt(debt);
+			System.out.println("event debts: " +  event.getDebts().size());
+			System.out.println("EVENT: " + debt.getReceiver().getEvent().getName());
+			updateEvent(event.getId(), event);
 
-			Person giver = getPersonById(debt.getGiver().getId());
-			giver.removeDebt(debt);
-			Person receiver = getPersonById(debt.getReceiver().getId());
-			receiver.removeDebt(debt);
-			updatePerson(giver.getId(), giver);
-
-			ObjectMapper objectMapper = new ObjectMapper();
-			String jsonDebt = objectMapper.writeValueAsString(debt);
-
-			return ClientBuilder.newClient(new ClientConfig())//
-					.target(SERVER).path("api/debts/" + id)//
-					.request(APPLICATION_JSON)//
-					.accept(APPLICATION_JSON)//
-					.put(Entity.entity(jsonDebt, MediaType.APPLICATION_JSON), Debt.class);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			return null;
-		}
+			return debt;
 	}
 
 	public Debt payDebtPartially(long id, double amount) {

@@ -4,6 +4,8 @@ import client.sceneSupportClasses.EventInfo;
 import client.utils.ServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
+import commons.Expense;
+import commons.Person;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -149,9 +151,28 @@ public class SeeEventsAsAdminCtrl {
         }, 1000L, 5000L);
     }
 
+
+    public void computeUpdatedAt() {
+        ArrayList<Event> eList = (ArrayList<Event>) server.getAllEvents();
+        for(Event event : eList) {
+            for(Person person : event.getParticipants()) {
+                if(person.getUpdatedAt().after(event.getUpdatedAt())) {
+                    event.setUpdatedAt(person.getUpdatedAt());
+                }
+            }
+            for(Expense expense : event.getExpenses()) {
+                if(expense.getUpdatedAt().after(event.getUpdatedAt())) {
+                    event.setUpdatedAt(expense.getUpdatedAt());
+                }
+            }
+            server.updateEvent(event.getId(), event);
+        }
+
+    }
     public void printSortedEvents() {
         int selection = selectOrdering.getSelectionModel().getSelectedIndex();
         if (selection >= 0) {
+                computeUpdatedAt();
             if (selection == 0) {
                 events = server.getEventsOrderedByName();
             } else if (selection == 1) {

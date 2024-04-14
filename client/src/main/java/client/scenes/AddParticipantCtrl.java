@@ -159,8 +159,9 @@ public class AddParticipantCtrl {
                     participantToEdit.setIBAN(p.getIBAN());
                     participantToEdit.setBIC(p.getBIC());
                     server.updatePerson(participantToEdit.getId(), participantToEdit);
-                    if (!currentEvent.getParticipants().contains(participantToEdit))
-                     currentEvent.getParticipants().add(participantToEdit);
+                    if (!currentEvent.getParticipants().contains(participantToEdit)) {
+                        currentEvent.getParticipants().add(participantToEdit);
+                    }
                     participantAdded.setText(participantEditedSuccess);
                 }
                 else {
@@ -194,14 +195,18 @@ public class AddParticipantCtrl {
         Person p;
         if (email == null || email.getText().isEmpty())
         {
-            p = new Person(firstName.getText(), lastName.getText(), null,
-                    IBAN.getText(), BIC.getText(), Currency.EUR, 0.0, currentEvent, null);
+            p = new Person(firstName.getText(), lastName.getText(), "",
+                    IBAN.getText(), BIC.getText(), Currency.EUR, participantToEdit.getTotalDebt(),
+                    currentEvent, participantToEdit.getUser());
         }
         else
         {
             p = new Person(firstName.getText(), lastName.getText(), email.getText(),
-                    IBAN.getText(), BIC.getText(), Currency.EUR, 0.0, currentEvent, null);
+                    IBAN.getText(), BIC.getText(), Currency.EUR, participantToEdit.getTotalDebt(),
+                    currentEvent, participantToEdit.getUser());
         }
+        p.setDebtList(participantToEdit.getDebtList());
+        p.setEvent(participantToEdit.getEvent());
 
         return p;
     }

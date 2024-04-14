@@ -528,9 +528,9 @@ public class MainCtrl {
     public String getLastName() {
         return server.getUserById(userId).getLastName();
     }
-    public void showOpenDebts() {
+    public void showOpenDebts(Event event) {
         primaryStage.setScene(openDebtsScene);
-        openDebtsCtrl.setup();
+        openDebtsCtrl.setup(event);
         openDebtsScene.getStylesheets().add("/client/css/opendebts.css");
 
         openDebtsScene.setOnKeyPressed(e -> {
@@ -671,6 +671,11 @@ public class MainCtrl {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean sendEmailFromCurrentUser(String toEmailAddress, String mailMessage, String mailSubject) {
+        return sendEmail(this.emailAddress, this.smtp, this.emailPassword, this.emailPort, toEmailAddress,
+                mailMessage, mailSubject);
     }
 
     public boolean sendEmail(String fromEmailAddress, String smtp, String password, String port

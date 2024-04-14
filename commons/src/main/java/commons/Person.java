@@ -90,7 +90,7 @@ public class Person {
 	//@JsonBackReference
 	private User user;
 
-	@OneToMany
+	@ManyToMany
 	//@JsonManagedReference
 	private List<Debt> debtList;
 	@SuppressWarnings("unused")
@@ -208,15 +208,19 @@ public class Person {
 			totalDebt -= debt.getAmount();
 		}
 		debtList.add(debt);
-		debt.setGiver(this);
 	}
 	public void removeDebt(Debt debt) {
-		if (!debtList.contains(debt))
+		System.out.println("PERSON " + getFirstName());
+		if (!debtList.contains(debt)) {
 			return;
+		}
+		System.out.println("if1");
 		if (debt.getGiver().equals(this)) {
 			totalDebt -= debt.getAmount();
+			System.out.println("if2");
 		} else {
 			totalDebt += debt.getAmount();
+			System.out.println("if3");
 		}
 		debtList.remove(debt);
 	}

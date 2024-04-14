@@ -27,6 +27,7 @@ public class SelectServerCtrl {
     Button btnConnect;
     @FXML
     StackPane pane;
+
     private String warningTitle;
     private String warningText;
     @Inject
@@ -69,8 +70,8 @@ public class SelectServerCtrl {
             showErrorMessage("ServerNotFound");
             return;
         }
-        mainCtrl.setServerInfo(IPAddress, port);
         if (mainCtrl.hasBeenConnected(IPAddress, port)) {
+            mainCtrl.setServerInfo(IPAddress, port);
             mainCtrl.getLastKnownInfo();
             mainCtrl.showHome();
         } else {
