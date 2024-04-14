@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import commons.Event;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -394,11 +395,17 @@ public class ServerUtils {
 
 	public List<Expense> getExpensesForUser(long userId) {
 
-		return ClientBuilder.newClient(new ClientConfig())//
-				.target(SERVER).path("user/" + userId + "/expenses")//
-				.request(APPLICATION_JSON)//
-				.accept(APPLICATION_JSON)//
-				.get(new GenericType<List<Expense>>(){});
+		try {
+			return ClientBuilder.newClient(new ClientConfig())//
+					.target(SERVER).path("user/" + userId + "/expenses")//
+					.request(APPLICATION_JSON)//
+					.accept(APPLICATION_JSON)//
+					.get(new GenericType<List<Expense>>(){});
+		} catch (NotFoundException e) {
+			System.out.println("No expenses found");
+			return null;
+		}
+
 	}
 
 	public Expense getExpenseById(long expenseId){

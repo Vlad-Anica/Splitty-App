@@ -79,7 +79,8 @@ public class StartPageCtrl {
                 System.out.println("Saved email in the mailConfig.txt!");
 
                 String userMail = mainCtrl.getEmailAddress();
-                mainCtrl.sendWelcomeMail(userMail, u.getFirstName());
+                if (userMail != null)
+                  mainCtrl.sendWelcomeMail(userMail, u.getFirstName());
 
                 mainCtrl.getLastKnownInfo();
                 mainCtrl.showHome();

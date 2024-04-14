@@ -15,19 +15,19 @@
 
 <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="448.0" prefWidth="643.0" style="-fx-background-color: fffaf4;" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
     <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="23.0" layoutX="531.0" layoutY="31.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="65.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="23.0" layoutX="548.0" layoutY="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="65.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="25.0" layoutX="389.0" layoutY="408.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="72.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="23.0" layoutX="20.0" layoutY="53.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="99.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="23.0" layoutX="156.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="99.0" />
       <Pane layoutX="164.0" layoutY="368.0" />
-        <Label fx:id="mainPageTestLabel" alignment="CENTER" layoutX="243.0" layoutY="45.0" prefHeight="61.0" prefWidth="130.0" style="-fx-font-family: Rowdies; -fx-font-size: 38.0" text="Splitty!" textAlignment="CENTER" textFill="#394d72" wrapText="false">
+        <Label fx:id="mainPageTestLabel" alignment="CENTER" layoutX="223.0" layoutY="45.0" prefHeight="61.0" prefWidth="170.0" style="-fx-font-family: Rowdies; -fx-font-size: 38.0" text="Splitty!" textAlignment="CENTER" textFill="#394d72" wrapText="false">
         </Label>
-        <Button fx:id="goSettingsButton" layoutX="531.0" layoutY="22.0" mnemonicParsing="false" onAction="#goToSettings" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Settings" textFill="WHITE" />
+        <Button fx:id="goSettingsButton" layoutX="548.0" layoutY="15.0" mnemonicParsing="false" onAction="#goToSettings" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Settings" textFill="WHITE" />
         <Button fx:id="goEventButton" layoutX="19.0" layoutY="359.0" mnemonicParsing="false" onAction="#goToEvent" prefHeight="11.0" prefWidth="80.0" style="-fx-background-color: #e6e1dc; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Submit" textFill="#394d72" />
         <ComboBox fx:id="languageList" layoutX="13.0" layoutY="14.0" prefHeight="25.0" prefWidth="130.0" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693;" styleClass="LanguageScrollPane" />
         <PasswordField fx:id="adminPasswordField" layoutX="14.0" layoutY="405.0" onAction="#adminLogIn" prefHeight="28.0" prefWidth="142.0" promptText="Admin Password" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693; -fx-font-family: Rowdies; -fx-font-size: 12.0" styleClass="homePageTextBox">
             </PasswordField>
         <Label fx:id="adminPasswordMessage" layoutX="223.0" layoutY="372.0" prefHeight="17.0" prefWidth="59.0" />
-        <Button fx:id="addLanguageButton" layoutX="12.0" layoutY="52.0" mnemonicParsing="false" onAction="#goToAddLanguage" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Add Language" textFill="WHITE" />
+        <Button fx:id="addLanguageButton" layoutX="152.0" layoutY="15.0" mnemonicParsing="false" onAction="#goToAddLanguage" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Add Language" textFill="WHITE" />
         <Button fx:id="createEventBtn" layoutX="170.0" layoutY="177.0" mnemonicParsing="false" onAction="#goToCreateEvent" style="-fx-background-color: #e6e1dc; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Create Event" textFill="#394d72" />
         <TextField fx:id="inviteCodeText" layoutX="468.0" layoutY="405.0" prefHeight="28.0" prefWidth="142.0" promptText="Invite Code" style="-fx-background-color: #e6e1dc; -fx-border-radius: 3px; -fx-border-color: #999693; -fx-font-family: Rowdies; -fx-font-size: 12.0" styleClass="homePageTextBox">
             </TextField>
@@ -46,15 +46,17 @@
       </ScrollPane>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="23.0" layoutX="173.0" layoutY="409.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="51.0" />
         <Button fx:id="adminLogInButton" layoutX="171.0" layoutY="406.0" mnemonicParsing="false" onAction="#adminLogIn" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Log in" textFill="WHITE" />
-      <Label alignment="CENTER" layoutX="20.0" layoutY="177.0" prefHeight="25.0" prefWidth="116.0" text="Events">
+      <Label fx:id="eventsLabel" alignment="CENTER" layoutX="20.0" layoutY="177.0" prefHeight="25.0" prefWidth="116.0" text="Events">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="357.0" layoutY="181.0" prefHeight="25.0" prefWidth="233.0" text="Your Expenses">
+      <Label fx:id="expensesLabel" alignment="CENTER" layoutX="357.0" layoutY="181.0" prefHeight="25.0" prefWidth="233.0" text="Your Expenses">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#394d72" height="23.0" layoutX="19.0" layoutY="53.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="142.0" />
+      <Button fx:id="downloadBtn" layoutX="14.0" layoutY="51.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="142.0" style="-fx-background-color: #72a4ff; -fx-font-family: Rowdies;" styleClass="homePageButton" text="Download template..." textFill="WHITE" />
     </children>
 </AnchorPane>
