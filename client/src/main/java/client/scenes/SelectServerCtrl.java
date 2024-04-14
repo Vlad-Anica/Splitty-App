@@ -70,13 +70,12 @@ public class SelectServerCtrl {
             return;
         }
         if (mainCtrl.hasBeenConnected(IPAddress, port)) {
-            mainCtrl.getLastKnownInfo();
             mainCtrl.setServerInfo(IPAddress, port);
+            mainCtrl.getLastKnownInfo();
             mainCtrl.showHome();
         } else {
             System.out.println("SIUUUU");
             mainCtrl.addNewServerInfo(IPAddress, port);
-            mainCtrl.setServerInfo(IPAddress, port);
             mainCtrl.showStartPage();
         }
 

@@ -163,7 +163,7 @@ public class OpenDebtsCtrl {
     //For Now, the back button is the same as the home button, this needs changing in the future!
     @FXML
     public void goBack(ActionEvent event) throws IOException {
-        mainCtrl.showHome();
+        mainCtrl.showEventOverview(this.event.getId());
     }
 
     public void goHome(ActionEvent event) throws IOException {
