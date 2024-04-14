@@ -135,6 +135,8 @@ public class EventOverviewCtrl implements Initializable {
     private ObservableList<String> participantData;
     @FXML
     private ListView<Expense> expenseListView;
+    @FXML
+    private Button goOpenDebtsButton;
 
     @Inject
     public EventOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -147,12 +149,16 @@ public class EventOverviewCtrl implements Initializable {
 
 
     }
+    public void goOpenDebts() {
+        mainCtrl.showOpenDebts(this.event);
+    }
 
     public void setLanguageText() {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
         mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("EventOverview"));
         setLanguageIndicator();
+        goOpenDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         goHomeButton.setText(resourceBundle.getString("Home"));
         editTitleButton.setText(resourceBundle.getString("EditTitle"));
         goToStatsButton.setText(resourceBundle.getString("Stats"));
@@ -326,7 +332,7 @@ public class EventOverviewCtrl implements Initializable {
             refreshImageView.setFitWidth(20);
             refreshInviteCodeButton.setGraphic(refreshImageView);
             this.showAllParticipantsInEventComboBox.setItems(FXCollections.observableArrayList(new ArrayList<String>(List.of("Participants"))));
-            eventId = eventID;
+            this.eventId = eventID;
             this.event = server.getEvent(eventID);
             eventDateLabel.setText(event.getDate().toString());
             inviteCodeLabel.setText(event.getInviteCode());
