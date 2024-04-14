@@ -114,6 +114,11 @@ public class Event {
         for (int i = 0; i < participants.size(); i++) {
             System.out.println(participants.get(i).getFirstName() + shares.get(i));
         }
+        System.out.println("SHARES1");
+        for (int i = 0; i < shares.size(); i++) {
+            System.out.println(shares.get(i));
+        }
+        System.out.println("END SHARES1");
 
         for (Expense expense: newExpenses) {
             double share = (double) expense.getAmount() / (1.0 + expense.getGivers().size());
@@ -145,6 +150,15 @@ public class Event {
         for (int i = 0; i < participants.size(); i++) {
             System.out.println(participants.get(i).getFirstName() + shares.get(i));
         }
+        for (int i = 0; i < shares.size(); i++) {
+            participants.get(i).setTotalDebt(shares.get(i));
+        }
+
+        System.out.println("SHARES");
+        for (int i = 0; i < shares.size(); i++) {
+            System.out.println(shares.get(i));
+        }
+        System.out.println("END SHARES");
         System.out.println("FINISH");
         int j = 0;
         for (int i = 0; i < giverIndexes.size(); i++) {
@@ -153,6 +167,9 @@ public class Event {
             System.out.println(giverShare);
             System.out.println("DEBUG IN WHILE: ");
             while (giverShare > 0) {
+                System.out.println("INDEX j " + j + " " + receiverIndexes.size());
+                System.out.println("INDEX i " + i + " " + giverIndexes.size());
+                System.out.println(giverShare);
                 double receiverShare = shares.get(receiverIndexes.get(j));
                 Person receiver = participants.get(receiverIndexes.get(j));
                 System.out.println(giver.getFirstName() + " " + receiver.getFirstName());
@@ -171,9 +188,6 @@ public class Event {
         System.out.println("DEBTS: " + debts.size());
         for (int i  = 0; i < debts.size(); i++) {
             System.out.println(debts.get(i).getGiver().getFirstName() + " " + debts.get(i).getReceiver().getFirstName());
-        }
-        for (int i = 0; i < shares.size(); i++) {
-            participants.get(i).setTotalDebt(shares.get(i));
         }
 
     }
