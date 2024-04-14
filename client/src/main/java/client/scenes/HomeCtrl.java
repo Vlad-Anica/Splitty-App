@@ -4,9 +4,11 @@ package client.scenes;
 import client.sceneSupportClasses.LanguageListListCell;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
 import commons.Person;
 import commons.User;
 import jakarta.inject.Inject;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +21,12 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,17 +37,9 @@ public class HomeCtrl {
     @FXML
     private Label mainPageTestLabel;
     @FXML
-    private Button goDebtsButton;
-    @FXML
-    private Button goHomeButton;
-    @FXML
     private Button goSettingsButton;
     @FXML
     private Button goEventButton;
-    @FXML
-    private Button addParticipantButton;
-    @FXML
-    private Button addExpenseButton;
     @FXML
     private Button addLanguageButton;
     @FXML
@@ -69,10 +68,16 @@ public class HomeCtrl {
     TextField inviteCodeText;
     @FXML
     Button btnSearchEvent;
+    @FXML
+    ListView<Event> eventsListView;
+    @FXML
+    ListView<String> expenseListView;
     List<String> languages;
     List<String> eventNames;
     List<Long> eventIds;
     ObservableList<Event> eventData;
+    ObservableList<Expense> expenseData;
+
     private MainCtrl mainCtrl;
 
     private ServerUtils server;
@@ -94,11 +99,14 @@ public class HomeCtrl {
      */
     public void setup() {
 
+
         server.registerForAddition("/topic/events", Event.class, e -> {
-            eventData.add(e);
-            eventIds.add(e.getId());
-            System.out.println("refreshed");
-            refresh();
+            Platform.runLater(() -> {
+                eventData.add(e);
+                System.out.println("refreshed");
+                refresh();
+            });
+
         });
 
         System.out.println("!!!!! " + server.getAllEvents().size());
@@ -144,14 +152,21 @@ public class HomeCtrl {
             eventIds.add(event.getId());
         }
 
-        eventList.setItems(FXCollections.observableList(eventNames.stream().toList()));
+        //eventList.setItems(FXCollections.observableList(eventNames.stream().toList()));
     }
 
     public void refresh() {
         var events = server.getEvents(mainCtrl.getUserId());
+        var expenses = server.getExpensesForUser(mainCtrl.getUserId());
         eventData = FXCollections.observableList(events);
         eventIds = events.stream().map(e -> e.getId()).toList();
-        eventList.setItems(FXCollections.observableList(eventData.stream().map(Event::getName).toList()));
+
+        //eventList.setItems(FXCollections.observableList(eventData.stream().map(Event::getName).toList()));
+        eventsListView.setItems(eventData);
+        expenseData = FXCollections.observableList(expenses);
+        expenseListView.setItems(FXCollections.observableList(
+                expenseData.stream().map(this::showExpenseDate).toList())
+        );
 
     }
     public void setUserName(long userId){
@@ -181,14 +196,10 @@ public class HomeCtrl {
         welcomeText = resourceBundle.getString("WelcomeText");
         homeWelcomeLabel.setText(welcomeText + " " + firstName + "!");
         inviteCodeText.setPromptText(resourceBundle.getString("InviteCode"));
-        goDebtsButton.setText(resourceBundle.getString("OpenDebts"));
         createEventBtn.setText(resourceBundle.getString("CreateEvent"));
-        goHomeButton.setText(resourceBundle.getString("Home"));
         goSettingsButton.setText(resourceBundle.getString("Settings"));
         goEventButton.setText(resourceBundle.getString("Submit"));
-        eventList.setPromptText(resourceBundle.getString("SelectEvent"));
-        addParticipantButton.setText(resourceBundle.getString("AddParticipant"));
-        addExpenseButton.setText(resourceBundle.getString("AddExpense"));
+        //eventList.setPromptText(resourceBundle.getString("SelectEvent"));
         addLanguageButton.setText(resourceBundle.getString("AddLanguage"));
         mainCtrl.getPrimaryStage().setTitle(resourceBundle.getString("Home"));
         adminPasswordField.setPromptText(resourceBundle.getString("AdminPassword"));
@@ -204,32 +215,15 @@ public class HomeCtrl {
     }
 
     public void goToEvent() {
-        int index = eventList.getSelectionModel().getSelectedIndex();
-        if (index < 0) {
+        Event event = eventsListView.getSelectionModel().getSelectedItem();
+        if (event == null) {
             return;
         }
-        Long eventId = eventIds.get(index);
-        mainCtrl.showEventOverview(eventId);
+        mainCtrl.showEventOverview(event.getId());
     }
 
     public void goToSettings() {
         mainCtrl.showSettings();
-    }
-
-
-    public void goToAddParticipant(ActionEvent event) throws IOException {
-    }
-
-    public void goToAddExpense(ActionEvent event) throws IOException {
-
-    }
-
-    public void goToDebts(ActionEvent event) throws IOException {
-        mainCtrl.showOpenDebts();
-    }
-
-    public void goHome(ActionEvent event) throws IOException {
-        refresh();
     }
 
     public void goToAddLanguage(ActionEvent event) throws IOException {
@@ -268,5 +262,17 @@ public class HomeCtrl {
     public void downloadTemplate() throws IOException, URISyntaxException {
 
         server.downloadLanguageTemplate();
+    }
+
+    public String showExpenseDate(Expense expense) {
+        LocalDate shownDate = expense.getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        String truncatedAmount = BigDecimal.valueOf(expense.getAmount())
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue()+"";
+        String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
+        return expense.getDescription() + " " + truncatedAmount + expense.getCurrency()
+                + ", " + parsedDate + "; " + expense.getReceiver().getEvent().getName();
     }
 }

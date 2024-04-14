@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
         List<Expense> result = new ArrayList<>();
         for (Event event : events) {
             for (Expense expense : event.getExpenses()) {
-                if (expense.getInvolved().stream().anyMatch(p -> p.getUser().equals(user))) {
+                if (expense.getReceiver().getUser().equals(user)) {
                     result.add(expense);
                 }
             }

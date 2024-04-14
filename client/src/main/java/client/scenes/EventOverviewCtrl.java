@@ -109,6 +109,17 @@ public class EventOverviewCtrl implements Initializable {
     @FXML
     private Button showExpenseOverviewButton;
 
+    @FXML
+    private Pane tagPane;
+    @FXML
+    private TextField tagNameField;
+    @FXML
+    private ColorPicker tagColorPicker;
+    @FXML
+    private Button okButton;
+    @FXML
+    private Button tagCancelButton;
+
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
@@ -123,8 +134,10 @@ public class EventOverviewCtrl implements Initializable {
     private List<Tag> selectedTags;
 
     private ObservableList<Expense> expenseData;
+    private ObservableList<String> participantData;
     @FXML
     private ListView<Expense> expenseListView;
+
     @Inject
     public EventOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.server = server;
@@ -136,6 +149,7 @@ public class EventOverviewCtrl implements Initializable {
 
 
     }
+
     public void setLanguageText() {
         String language = mainCtrl.getLanguage();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages.language_" + mainCtrl.getLanguageWithoutImagePath());
@@ -158,13 +172,21 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void refresh() {
+        Stage stage = (Stage) goHomeButton.getScene().getWindow();
+        stage.setTitle(event.getName());
         event = server.getEvent(eventId);
         var expenses = event.getExpenses();
+        var participants = event.getParticipants();
         expenseData = FXCollections.observableList(expenses);
         expenseListView.setItems(expenseData);
+        participantData = FXCollections.observableList(
+                participants.stream().map(p -> p.getFirstName() + " " + p.getLastName()).toList()
+        );
+        showAllParticipantsInEventComboBox.setItems(participantData);
         showAllExpensesInEvent(new ActionEvent());
 
     }
+
     public void setLanguageIndicator() {
         ImageView flagImage = new ImageView(mainCtrl.getPathToFlagImage());
         flagImage.setFitWidth(20);
@@ -176,6 +198,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Action that opens up the Stats Page for the associated Event.
+     *
      * @param event event that triggers the method
      * @throws IOException Possible IO Exception due to bad arguments
      */
@@ -195,6 +218,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /***
      * Method that refreshes an Event's invite code and reflects it on the Server.
+     *
      * @param event event that triggers the method
      */
     public void refreshInviteCode(ActionEvent event) {
@@ -205,6 +229,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Getter for the current Event shown on the page.
+     *
      * @return Event object being shown.
      */
     public Event getEvent() {
@@ -237,6 +262,7 @@ public class EventOverviewCtrl implements Initializable {
     /**
      * Method that whenever is called adds/removes the respective Expense argument from
      * the list of currently selected Expenses.
+     *
      * @param expense Expense to add
      */
     public void toggleInSelectedExpenses(Expense expense) {
@@ -252,6 +278,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Method that whenever is called adds/removes the respective Tag argument from the list of currently selected Tags
+     *
      * @param tag Tag to add/remove
      */
     public void toggleInSelectedTags(Tag tag) {
@@ -264,6 +291,7 @@ public class EventOverviewCtrl implements Initializable {
             this.selectedTags.add(tag);
         }
     }
+
     /**
      * Method that initialises the page and other useful fields.
      *
@@ -271,7 +299,6 @@ public class EventOverviewCtrl implements Initializable {
      */
     public void setup(Long eventID) {
         setLanguageText();
-
         server.registerForAddition("/topic/expenses", Expense.class, e -> {
             Platform.runLater(() -> {
                 expenseData.add(e);
@@ -282,6 +309,13 @@ public class EventOverviewCtrl implements Initializable {
         server.registerForUpdate("/topic/events", Expense.class, e -> {
             Platform.runLater(() -> {
                 expenseData.add(e);
+                refresh();
+            });
+        });
+
+        server.registerForUpdate("/topic/events", Person.class, p -> {
+            Platform.runLater(() -> {
+                participantData.add(p.getFirstName() + " " + p.getLastName());
                 refresh();
             });
         });
@@ -318,7 +352,6 @@ public class EventOverviewCtrl implements Initializable {
                 computeSelectedPerson();
                 showAllParticipantsInEvent(e);
             });
-            //showAllParticipantsInEventComboBox.setOnAction(this::showAllParticipantsInEvent);
 
             this.goToEditPersonButton.setVisible(false);
             this.removePersonButton.setVisible(false);
@@ -344,7 +377,7 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void refreshLastVisited() {
-        for (Person person: participants) {
+        for (Person person : participants) {
             if (person.getUser().getId() == mainCtrl.getUserId()) {
                 person.updateLastVisited();
                 System.out.println("REFRESHED!!! " + person.getLastVisited());
@@ -355,17 +388,13 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     public void choosePersonsVisibilityCheck() {
-        if (this.selectedPerson == null) {
-            this.goToEditPersonButton.setVisible(false);
-            this.removePersonButton.setVisible(false);
-        } else {
             this.goToEditPersonButton.setVisible(true);
             this.removePersonButton.setVisible(true);
-        }
     }
 
     /**
      * Method that handles all logic for selecting a Person and all buttons related to it.
+     *
      * @param event event that triggers the method
      */
     public void showAllParticipantsInEvent(ActionEvent event) {
@@ -375,6 +404,7 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Method that redirects the User to another Page where they can edit the Details of the selected Person.
+     *
      * @param event event that triggers the method
      * @throws IOException Possible IOException due to bad arguments
      */
@@ -389,6 +419,7 @@ public class EventOverviewCtrl implements Initializable {
     /**
      * Method that removes the Selected Person, if possible, from the associated Event and persists the change
      * to the Database.
+     *
      * @param event event that triggers the method
      * @throws IOException Possible IOException due to bad arguments
      */
@@ -404,6 +435,7 @@ public class EventOverviewCtrl implements Initializable {
     /**
      * Method that removes any association a Person has with the current Event and persists the change
      * to the database.
+     *
      * @param person Person to remove from the Event.
      */
     public void severPersonConnection(Person person) {
@@ -420,16 +452,16 @@ public class EventOverviewCtrl implements Initializable {
             return;
         }
         List<Expense> expenseList = new ArrayList<>(event.getExpenses());
-        for(Expense expense : expenseList) {
-            if(expense.getInvolved().contains(person)) {
-                if(expense.getReceiver().equals(person)) {
+        for (Expense expense : expenseList) {
+            if (expense.getInvolved().contains(person)) {
+                if (expense.getReceiver().equals(person)) {
                     expense.setReceiver(null);
                     server.updateExpense(expense.getId(), expense);
                     severExpenseConnection(expense);
                 } else {
                     List<Person> persons = expense.getInvolved();
                     persons.remove(expense.getReceiver());
-                    if(persons.size() == 1) {
+                    if (persons.size() == 1) {
                         expense.setReceiver(null);
                         server.updateExpense(expense.getId(), expense);
                         severExpenseConnection(expense);
@@ -438,7 +470,8 @@ public class EventOverviewCtrl implements Initializable {
             }
         }
         this.event.removeParticipant(person);
-        server.updateEvent(this.event.getId(), this.event);
+        server.send("/app/events", this.event);
+        refresh();
         server.deletePerson(person.getId());
         this.setup(eventId);
     }
@@ -447,16 +480,9 @@ public class EventOverviewCtrl implements Initializable {
      * Method that sets or resets visibility to buttons related to filtering and selecting Expenses.
      */
     public void expenseFilteringVisibilityCheck() {
-        if (this.selectedPerson == null) {
-            resetExpenseFilteringPane();
-            this.filteringExpensesPane.setVisible(false);
-            this.goToEditExpenseButton.setVisible(false);
-            this.removeExpensesButton.setVisible(false);
-        } else {
-            this.filteringExpensesPane.setVisible(true);
-            this.goToEditExpenseButton.setVisible(true);
-            this.removeExpensesButton.setVisible(true);
-        }
+        this.filteringExpensesPane.setVisible(true);
+        this.goToEditExpenseButton.setVisible(true);
+        this.removeExpensesButton.setVisible(true);
     }
 
     /**
@@ -612,12 +638,25 @@ public class EventOverviewCtrl implements Initializable {
             }
             if (selectedExpenses.isEmpty()) {
                 System.out.println("The Event has no such Expenses associated with it.");
-                Label label = new Label("There's nothing to display, silly!");
-                filteringExpensesPane.getChildren().add(label);
-                label.setLayoutY(5);
             }
-
             expenseListView.setItems(FXCollections.observableList(selectedExpenses));
+            int y = 5;
+            for(Expense expense: selectedExpenses) {
+                Label label = new Label();
+                Tag t = expense.getTag();
+                String tagColour;
+                if (t.getColor().equals("red") || t.getColor().equals("blue") || t.getColor().equals("green")) {
+                    tagColour = t.getColor();
+                } else {
+                    tagColour = "#" + t.getColor().substring(2);
+                }
+
+                label.setText(t.getType());
+                label.setStyle("-fx-background-color:" + tagColour + ";-fx-text-fill: white;");
+                filteringExpensesPane.getChildren().add(label);
+                label.setLayoutY(y);
+                y += 25;
+            }
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -644,7 +683,7 @@ public class EventOverviewCtrl implements Initializable {
             return false;
         }
         this.event.addExpense(newExpense);
-        server.updateEvent(this.event.getId(), this.event);
+        server.send("/app/events", event);
         return true;
     }
 
@@ -672,13 +711,16 @@ public class EventOverviewCtrl implements Initializable {
         System.out.println(selectedExpense);
         mainCtrl.showAddExpense(event.getId(), true, selectedExpense);
     }
+
     /**
      * Method that removes the Selected Expense from the Event.
+     *
      * @param event event that triggers the method
      */
     public void removeExpenses(ActionEvent event) throws IOException {
         Expense selectedExpense = expenseListView.getSelectionModel().getSelectedItem();
         if (selectedExpense == null) {
+            System.out.println("No Expenses have been selected to remove.");
             return;
         }
 
@@ -708,41 +750,38 @@ public class EventOverviewCtrl implements Initializable {
             return false;
         }
         this.event.removeExpense(expense);
-        server.updateEvent(this.event.getId(), this.event);
+        server.send("/app/events", event);
         server.deleteExpense(expense.getId());
         this.setup(eventId);
         return true;
     }
 
     /**
-     * Method that toggles between visible and invisible modes for several UI elements related to Tag selection
+     * Method that toggles visibility for several UI elements related to Tag selection
      * based on whether they should logically be shown.
      */
     public void tagsVisibilityCheck() {
-        if (this.goToEditTagButton.isVisible()) {
-            resetTagsPane();
-            this.chooseTagsPane.setVisible(false);
-            this.goToEditTagButton.setVisible(false);
-            this.removeTagButton.setVisible(false);
-        } else {
             this.chooseTagsPane.setVisible(true);
             this.goToEditTagButton.setVisible(true);
             this.removeTagButton.setVisible(true);
-        }
     }
 
-    /**4
+    /**
+     * 4
      * Method that shows all the Tags in the Event as CheckBoxes.
+     *
      * @param event event that triggers the method
      */
     public void showAllTagsInEvent(ActionEvent event) {
         tagsVisibilityCheck();
         resetTagsPane();
+        this.selectedTags = new ArrayList<>();
         showAllTags(this.event.getTags());
     }
 
     /**
      * Method that populates and displays CheckBoxes filled with Tags on the Page to allow for selection.
+     *
      * @param tags tags to populate the Pane with.
      */
     public void showAllTags(List<Tag> tags) {
@@ -750,6 +789,15 @@ public class EventOverviewCtrl implements Initializable {
         for (Tag t : tags) {
             CheckBox newBox = new CheckBox(t.getType());
             newBox.setOnAction(event -> toggleInSelectedTags(t));
+            String tagColour;
+            if (t.getColor().equals("red") || t.getColor().equals("blue") || t.getColor().equals("green")) {
+                tagColour = t.getColor();
+            } else {
+                tagColour = "#" + t.getColor().substring(2);
+            }
+
+            newBox.setStyle("-fx-background-color:" + tagColour + ";-fx-text-fill: white;");
+
             chooseTagsPane.getChildren().add(newBox);
             newBox.setLayoutY(y);
             y += 25;
@@ -758,10 +806,11 @@ public class EventOverviewCtrl implements Initializable {
     }
 
     /**
-     * Method that redirects the User to a page to modify their selected Tag.
+     * Method that pops up a smaller page for the User to modify their selected Tag.
+     *
      * @param event event that triggers the method
      */
-    public void goToEditTag(ActionEvent event) {
+    public void showEditTag(ActionEvent event) {
         if (selectedTags == null || selectedTags.isEmpty()) {
             System.out.println("Cannot edit tag as none was selected!");
             return;
@@ -770,53 +819,126 @@ public class EventOverviewCtrl implements Initializable {
             System.out.println("Cannot edit tag as multiple tags have been selected at once.");
             return;
         }
-        //goToEdiTag stuff tbi
+        if (selectedTags.get(0).equalsWithoutId(Event.foodTag) || selectedTags.get(0).equalsWithoutId(Event.entranceFeesTag) || selectedTags.get(0).equalsWithoutId(Event.travelTag)) {
+            System.out.println("Cannot edit Tag as it is a basic one.");
+            return;
+        }
+        tagPane.setDisable(false);
+        tagPane.setVisible(true);
+        tagColorPicker.setDisable(false);
+        tagColorPicker.setVisible(true);
+    }
+
+    /**
+     * Method that hides the Edit Tag page.
+     *
+     * @param event Event that triggered the Action.
+     */
+    public void hideEditTag(ActionEvent event) {
+        tagColorPicker.setDisable(true);
+        tagColorPicker.setVisible(false);
+        tagNameField.clear();
+        tagPane.setDisable(true);
+        tagPane.setVisible(false);
+    }
+
+    /**
+     * Method that saves the newly edited Tag
+     *
+     * @param event Event that triggered the method
+     */
+    public void saveTag(ActionEvent event) {
+
+        if (tagNameField == null || tagNameField.getText().isEmpty())
+            return;
+        if (tagColorPicker == null || tagColorPicker.getValue() == null || Objects.equals(tagColorPicker.getValue().toString(), ""))
+            return;
+        for (Tag tag : this.event.getTags()) {
+            if (tag.equalsWithoutId(selectedTags.get(0))) {
+                tag.setColor(tagColorPicker.getValue().toString());
+                tag.setType(tagNameField.getText());
+                server.updateTag(tag.getId(), tag);
+                tagColorPicker.setDisable(true);
+                tagColorPicker.setVisible(false);
+                tagNameField.clear();
+                if(chooseTagsPane.isVisible()) {
+                    showAllTagsInEvent(new ActionEvent());
+                    showAllTagsInEvent(new ActionEvent());
+                } else {
+                    showAllTagsInEvent(new ActionEvent());
+                }
+                this.refresh();
+                return;
+            }
+        }
     }
 
     /**
      * Method that removes the Selected Tags from the Event. Is only carried out if no Expenses are associated with said
      * Tags. If they are, the method will remove elements in the order they were selected until a Tag in use is
      * discovered.
+     *
      * @param event event that triggers the method
      */
     public void removeTags(ActionEvent event) {
         if (this.selectedTags == null || this.selectedTags.isEmpty()) {
             System.out.println("Cannot remove Tag as none was selected.");
         } else {
-            for (Tag tag : this.event.getTags()) {
+            for (Tag tag : selectedTags) {
+                if (tag.equalsWithoutId(Event.foodTag) || tag.equalsWithoutId(Event.travelTag) || tag.equalsWithoutId(Event.entranceFeesTag)) {
+                    System.out.println("Cannot proceed with deletion as Tag <" + tag.getType() + "> is a default one.");
+                    return;
+                }
                 for (Expense expense : this.event.getExpenses()) {
                     if (expense.getTag().equals(tag)) {
-                        System.out.println("Cannot proceed with operation as Tag is currently in use.");
+                        System.out.println("Cannot proceed with deletion as Tag <\" + tag.getType() + \"> is currently in use or is default.");
                         return;
                     }
-                    this.severTagConnection(tag);
-                    System.out.println("Successfully severed the connection with a Tag of the type: " + tag.getType());
                 }
+                if (this.severTagConnection(tag)) {
+                    System.out.println("Successfully severed the connection with a Tag of the type: " + tag.getType());
+                    for (Object element : this.chooseTagsPane.getChildren()) {
+                        CheckBox box = new CheckBox();
+                        if (element.getClass() == box.getClass()) {
+                            if (((CheckBox) element).getText().equals(tag.getType())) {
+                                ((CheckBox) element).setVisible(false);
+                            }
+                        }
+                    }
+                } else {
+                    System.out.println("Could not successfully sever the connection with the Tag of type " + tag.getType());
+                }
+                showAllTagsInEvent(new ActionEvent());
+                refresh();
             }
+
         }
+
     }
 
     /**
      * Method that removes a specified Tag from an Event. Does not check if it is in use, only if it is associated
      * with the Event's List of Tags
+     *
      * @param tag Tag to remove.
      */
-    public void severTagConnection(Tag tag) {
+    public boolean severTagConnection(Tag tag) {
         if (this.event == null) {
             System.out.println("Event is null!");
-            return;
+            return false;
         }
         if (tag == null) {
             System.out.println("Tag is null!");
-            return;
+            return false;
         }
         if (!this.event.containsTag(tag)) {
             System.out.println("Event doesn't contain the Tag!");
-            return;
+            return false;
         }
         this.event.deprecateTag(tag);
-        server.updateEvent(this.event.getId(), this.event);
+        server.send("/app/events", event);
         this.setup(eventId);
+        return true;
     }
 
     public String getExpenseShownData(Expense e) {
@@ -824,12 +946,14 @@ public class EventOverviewCtrl implements Initializable {
         Double realAmount = BigDecimal.valueOf(e.getAmount() / 1.168958841856)
                 .setScale(2, RoundingMode.HALF_UP)
                 .doubleValue();
-       return e.getReceiver().getFirstName() + " paid " + realAmount +
-                        e.getCurrency() + " for " + e.getDescription();
+        return e.getReceiver().getFirstName() + " paid " + realAmount +
+                e.getCurrency() + " for " + e.getDescription();
 
     }
+
     /**
      * Method that provides the currently selected Event's name
+     *
      * @return String, representing the Event's name
      */
 
@@ -864,29 +988,31 @@ public class EventOverviewCtrl implements Initializable {
 
     /**
      * Sends out an email to the specified Address in order to give an invite to the Event.
-     * @param mail mail field that's filled in by the User. Represents the email address to send an invite to
+     *
+     * @param mail       mail field that's filled in by the User. Represents the email address to send an invite to
      * @param inviteCode invite code to the current event to provide in the email
-     * @param eventName name of the Event to use within the invite email
+     * @param eventName  name of the Event to use within the invite email
      */
-    public void sendMailToParticipants(String mail, String inviteCode, String eventName){
+    public void sendMailToParticipants(String mail, String inviteCode, String eventName) {
         CreateEventCtrl.sendInviteMailToParticipants(mail, inviteCode, eventName, server);
     }
 
     /**
      * Method that shows the popup for editing an Event's name.
+     *
      * @param event event that triggers the method
      */
-    public void showEditPage(ActionEvent event){
-        if (EditTitlePane.isVisible()){
+    public void showEditPage(ActionEvent event) {
+        if (EditTitlePane.isVisible()) {
             EditTitlePane.setVisible(false);
-        }
-        else {
+        } else {
             EditTitlePane.setVisible(true);
         }
     }
 
     /**
      * Method that updates the Title of the Event within the popup.
+     *
      * @param event event that triggers the method
      */
     public void UpdateTitle(ActionEvent event) {
@@ -911,7 +1037,8 @@ public class EventOverviewCtrl implements Initializable {
             }
             currentEvent.setName(newTitle);
             try {
-                server.updateEvent(currentEvent);
+                server.send("/app/events", currentEvent);
+                refresh();
             } catch (Exception e) {
                 System.out.println("An error occurred whilst trying to persist the event!");
             }

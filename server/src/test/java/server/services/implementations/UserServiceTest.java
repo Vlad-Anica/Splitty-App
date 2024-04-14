@@ -17,6 +17,7 @@ import server.services.interfaces.UserService;
 import java.util.ArrayList;
 import java.util.List;
 //import java.util.Optional;
+//import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -120,5 +121,11 @@ public class UserServiceTest {
         assertEquals(result2, result1);
 
     }
+
+ /*   @Test
+    public void testFindByID() {
+        when(repo.findById(1L)).thenReturn(Optional.of(user1));
+        assertEquals(user1, userService.findById(1L).get());
+    }*/
 
 }
