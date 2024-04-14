@@ -7,6 +7,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
@@ -511,6 +514,17 @@ public class Event {
         return Objects.hash(id, name, description, tags, date, participants, expenses);
     }
 
+    @Override
+    public String toString() {
+        if (getDate() == null) return getName();
+
+        LocalDate shownDate = getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        String parsedDate = shownDate.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
+        return getName() + ", " + parsedDate;
+
+    }
 }
 
 
