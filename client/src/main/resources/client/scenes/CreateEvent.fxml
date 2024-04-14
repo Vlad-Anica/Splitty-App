@@ -43,6 +43,5 @@
       <Button fx:id="clearBtn" layoutX="431.0" layoutY="380.0" mnemonicParsing="false" onAction="#clearFields" text="Clear" />
       <Button fx:id="homeBtn" layoutX="512.0" layoutY="27.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
       <Label fx:id="statusLabel" layoutX="135.0" layoutY="384.0" prefHeight="17.0" prefWidth="276.0" />
-      <ComboBox fx:id="tagComboBox" layoutX="342.0" layoutY="198.0" prefHeight="25.0" prefWidth="127.0" promptText="Default Tags" />
    </children>
 </AnchorPane>

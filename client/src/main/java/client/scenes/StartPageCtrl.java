@@ -66,13 +66,12 @@ public class StartPageCtrl {
                 String emailHolder = "-1";
                 if (!(email.getText().isEmpty())) {
                     emailHolder = email.getText();
-                    mainCtrl.setEmailAddress(emailHolder);
                     //sendWelcomeMail(emailHolder, firstname.getText());
                 }
                 User u = new User(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData());
                 u = server.addUser(firstname.getText(), lastname.getText(), emailHolder, getCurrencyData());
-
                 mainCtrl.setUserId(u.getId());
+                mainCtrl.setEmailAddress(emailHolder);
 
                 System.out.println("User Created Successfully !!!");
 
