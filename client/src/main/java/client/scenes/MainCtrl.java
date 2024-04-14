@@ -470,6 +470,7 @@ public class MainCtrl {
         primaryStage.setTitle("Create new Event");
         primaryStage.setScene(createEventScene);
         createEventCtrl.setup();
+        createEventScene.getStylesheets().add("client/css/createEvent.css");
         createEventScene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 System.out.println("Trying to create a new event!");
