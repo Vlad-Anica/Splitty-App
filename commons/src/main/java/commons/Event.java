@@ -106,6 +106,10 @@ public class Event {
         for (Person participant: participants) {
             shares.add(participant.getTotalDebt());
         }
+        System.out.println("DEBTS CALCULATED");
+        for (int i = 0; i < participants.size(); i++) {
+            System.out.println(participants.get(i).getFirstName() + shares.get(i));
+        }
 
         for (Expense expense: newExpenses) {
             double share = (double) expense.getAmount() / (1.0 + expense.getGivers().size());
@@ -117,35 +121,55 @@ public class Event {
                 shares.set(giverIndex, shares.get(giverIndex) + share);
             }
         }
+        for (int i = 0; i < participants.size(); i++) {
+            System.out.println(participants.get(i).getFirstName() + " " + shares.get(i));
+        }
 
         removeAllDebts();
         List<Integer> giverIndexes = new ArrayList<>();
         List<Integer> receiverIndexes = new ArrayList<>();
-
+        System.out.println("DEBUG IN INDEX PARTIONING");
         for (int i = 0; i < participants.size(); i++) {
             if (shares.get(i) > 0) {
+                System.out.println("giver: " + participants.get(i).getFirstName());
                 giverIndexes.add(i);
             } else if (shares.get(i) < 0) {
+                System.out.println("receiver: " + participants.get(i).getFirstName());
                 receiverIndexes.add(i);
             }
         }
-
+        for (int i = 0; i < participants.size(); i++) {
+            System.out.println(participants.get(i).getFirstName() + shares.get(i));
+        }
+        System.out.println("FINISH");
+        int j = 0;
         for (int i = 0; i < giverIndexes.size(); i++) {
             double giverShare = shares.get(giverIndexes.get(i));
             Person giver = participants.get(giverIndexes.get(i));
+            System.out.println(giverShare);
+            System.out.println("DEBUG IN WHILE: ");
+            while (giverShare > 0) {
+                double receiverShare = shares.get(receiverIndexes.get(j));
+                Person receiver = participants.get(receiverIndexes.get(j));
+                System.out.println(giver.getFirstName() + " " + receiver.getFirstName());
 
-            while (giverShare < 0) {
-                double receiverShare = shares.get(receiverIndexes.get(i));
-                Person receiver = participants.get(receiverIndexes.get(i));
-
-                if (receiverShare > -giverShare) {
-                    addDebt(new Debt(giver, receiver, this, -giverShare));
-                    shares.set(receiverIndexes.get(i), receiverShare + giverShare);
+                if (-receiverShare > giverShare) {
+                    addDebt(new Debt(giver, receiver, this, giverShare));
+                    shares.set(receiverIndexes.get(j), receiverShare + giverShare);
+                    giverShare = 0;
                 } else {
-                    addDebt(new Debt(giver, receiver, this, receiverShare));
+                    addDebt(new Debt(giver, receiver, this, -receiverShare));
                     giverShare += receiverShare;
+                    j++;
                 }
             }
+        }
+        System.out.println("DEBTS: " + debts.size());
+        for (int i  = 0; i < debts.size(); i++) {
+            System.out.println(debts.get(i).getGiver().getFirstName() + " " + debts.get(i).getReceiver().getFirstName());
+        }
+        for (int i = 0; i < shares.size(); i++) {
+            participants.get(i).setTotalDebt(shares.get(i));
         }
 
     }
@@ -161,10 +185,12 @@ public class Event {
      */
     public void removeDebt(Debt debt) {
         if (!debts.contains(debt)) {
+            System.out.println("IESE!!");
             return;
         }
         debt.getReceiver().removeDebt(debt);
         debt.getGiver().removeDebt(debt);
+
         debts.remove(debt);
     }
     /**
@@ -173,6 +199,7 @@ public class Event {
      * @param debt Debt to add.
      */
     public void addDebt(Debt debt) {
+        System.out.println("ADD DEBT: " + debt.getReceiver().getFirstName() + " " + debt.getGiver().getFirstName());
         debt.getReceiver().addDebt(debt);
         debt.getGiver().addDebt(debt);
         debts.add(debt);
@@ -478,7 +505,7 @@ public class Event {
         }
         removeAllDebts();
         this.getExpenses().remove(expense);
-        calculateDebts(new ArrayList<>(List.of(expense)));
+        calculateDebts(expenses);
         return true;
     }
 

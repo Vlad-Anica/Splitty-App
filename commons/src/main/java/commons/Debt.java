@@ -118,11 +118,20 @@ public class Debt {
         settled = value;
     }
     public Currency getCurrency() {
-        return Currency.EUR;
+        return currency;
     }
+    Currency currency = Currency.EUR;
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() == this.getClass()) {
+            if (((Debt)obj).getId() == this.getId()) {
+                return true;
+            }
+        }
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
