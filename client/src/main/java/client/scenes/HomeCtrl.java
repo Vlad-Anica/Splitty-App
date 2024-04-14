@@ -99,6 +99,7 @@ public class HomeCtrl {
      */
     public void setup() {
 
+
         server.registerForAddition("/topic/events", Event.class, e -> {
             Platform.runLater(() -> {
                 eventData.add(e);
