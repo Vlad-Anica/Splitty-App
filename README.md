@@ -1,7 +1,7 @@
 # OOPP Template Project
 
 # Description:
-This app's purpoes is to help users manage shared expenses during events such as a grill or a get-together with friends. People can create events, add others to those events and create expenses which happened during those events. The app gives the users an overview of how much money was spent on different categories and helps users settle their debts between each other. It is a very easy to use app, since there is no log in required.
+This app's purpoes is to help users manage shared expenses during events such as a grill or a get-together with friends. People can create events, add others to those events and create expenses for those events. The app gives the users an overview of how much money was spent on different categories and helps users settle their debts between each other. It is a very easy to use app, since there is no log in required.
 
 # Features:
 - Connect to a server of your choice
