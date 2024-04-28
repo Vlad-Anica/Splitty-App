@@ -1,6 +1,37 @@
 # OOPP Template Project
 
-This repository contains the template for the OOPP project. Please extend this README.md with instructions on how to run your project.
+# Features:
+-connect to a server of your choice
+-create a profile on the app 
+-choose the language you want the app to be in (choice persists throughout multiple sessions)
+-create a language of your own choosing for the app to be in
+-create an event
+-join an event via an invite code
+-send others an email (through the app) with the invite code to a certain event
+-edit an event participant's information
+-remove a participant from an event
+-add an expense to an event (specify who made the payment and a list of people who benefitted from that payment)
+-within an event, see a list of debts between people which were made as a result of the created expenses
+-add a tag to an expense (there are three basic tags, but a user can add other tags - tags have a name and a color)
+-edit the details of an expense (people who participated in it or the amount paid or its description or any other detail)
+-within an event, see a statistics page (with a pie chart) which reflects the amount of money spent on different categories (tags) and also how much each person in the group owes/is owed
+-in the home page you can see all events and expenses you are part of
+-you can download a language template - a list of all the words used in throughout the app - which you can fill and send to the developers so it can be added in the next patch
+-as a user, you can go to the settings page where :
+  -you can change your first name and last name
+  -you can configure your email: you can just write the address or if you want the app to send emails on your behalf, you can also write the password for the email, the smtp and the port number (in the bottom of the page you will get confirmation if the app is able to send emails on your behalf)
+  -you can change the server you are on
+-there is also an admin side of the app:
+  -as an admin, you will see a password in the server terminal which can be written in the appropriate field in the home page
+  -when logged in to the admin side, you are able to see some information about the servers
+  -you can see all of the created events and the number of participants in each of them (this can help to see how populated an event is) - the numbers are updated in real time, via long polling
+  -you can sort the events by their name, their creation date and by the date they were last updated (this way, an admin can see when an event is no longer active)
+  -you can delete an event 
+  -you can create a backup of the event (in JSON format)
+  -you can import an event (in JSON format)
+  -the import and backup features are used in case an admin deletes an event by accident
+
+
 # How to run the project
 ## Software prerequisites:
 ### How to install Java:
@@ -45,4 +76,5 @@ This should start running the server and once you see the admin password in the 
 ![Run the client](images/gradleIcon.png)
 ![Run the client](images/gradleClientRun.png)
 - A new window has now opened with the application running!
-- If you are using the standard server you can connect to it using localhost and the port 8080, have fun!
+- If you are using the standard server you can connect to it using localhost and the port 8080 (write 'localhost' for the IP address and '8080' for the port), have fun!
+- Do not worry if it takes a little bit longer to start - first time it is run, it takes a little to start.
