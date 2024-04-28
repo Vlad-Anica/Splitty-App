@@ -1,8 +1,0 @@
--Short introduction
--Presenting starter page
--Presenting main/home page (including language switch and settings)
--Presenting createEvent page
--Showcase joining event via invite code
--Presenting addExpense page
--Show admin side of the app
-
