@@ -21,7 +21,7 @@ public class DownloadController {
     }
     @GetMapping("/languageTemplate")
     public ResponseEntity<InputStreamResource>  downloadTemplate() throws IOException {
-        return service.download("client/src/main/resources/languages/language_template.txt");
+        return service.download("./src/main/resources/languages/language_template.txt");
     }
 
 }
